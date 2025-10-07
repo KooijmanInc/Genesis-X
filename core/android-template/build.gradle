@@ -1,0 +1,107 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        //noinspection AndroidGradlePluginVersion
+        classpath 'com.android.tools.build:gradle:8.8.0'
+        classpath 'com.google.gms:google-services:4.4.2'
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+allprojects {
+    repositories {
+        google()
+    }
+}
+
+apply plugin: qtGradlePluginType
+apply plugin: 'com.google.gms.google-services'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    //noinspection GradleDependency
+    implementation 'androidx.core:core:1.13.1'
+}
+
+android {
+    /*******************************************************
+     * The following variables:
+     * - androidBuildToolsVersion,
+     * - androidCompileSdkVersion
+     * - qtAndroidDir - holds the path to qt android files
+     *                   needed to build any Qt application
+     *                   on Android.
+     * - qtGradlePluginType - whether to build an app or a library
+     *
+     * are defined in gradle.properties file. This file is
+     * updated by QtCreator and androiddeployqt tools.
+     * Changing them manually might break the compilation!
+     *******************************************************/
+
+    namespace androidPackageName
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+    ndkVersion androidNdkVersion
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = [qtAndroidDir + '/src', 'src', 'java']
+            aidl.srcDirs = [qtAndroidDir + '/src', 'src', 'aidl']
+            res.srcDirs = [qtAndroidDir + '/res', 'res']
+            resources.srcDirs = ['resources']
+            renderscript.srcDirs = ['src']
+            assets.srcDirs = ['assets']
+            jniLibs.srcDirs = ['libs']
+       }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.incremental = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    // Do not compress Qt binary resources file
+    aaptOptions {
+        noCompress 'rcc'
+    }
+
+    defaultConfig {
+        resConfig "en"
+        minSdkVersion qtMinSdkVersion
+        targetSdkVersion qtTargetSdkVersion
+        ndk.abiFilters = qtTargetAbiList.split(",")
+    }
+}
+
+println ("genesisx.firebase_cpp_sdk_dir = ${project.findProperty('firebase_cpp_sdk_dir')}")
+println ("baseDir              = ${project.findProperty('baseDir')}")
+
+apply from: project.property('baseDir')
+apply from: "${project.property('firebase_cpp_sdk_dir')}/Android/firebase_dependencies.gradle"
+
+
+//println(">> gradle.firebase is: ${firebase_cpp_sdk_dir} and baseDir is: ${baseDir}")
+//apply from: baseDir
+//apply from: "$firebase_cpp_sdk_dir/Android/firebase_dependencies.gradle"
+firebaseCpp.dependencies {
+    auth
+    messaging
+}

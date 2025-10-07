@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "485296395009",
+    "project_id": "age-gap-dating",
+    "storage_bucket": "age-gap-dating.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485296395009:android:83a6ebf14818f92d76c100",
+        "android_client_info": {
+          "package_name": "nl.agegap.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV6ys680QchKnsUM8sEBnpidkwEOyNvzY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

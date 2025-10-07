@@ -1,0 +1,18 @@
+# Ignore 3rdparty
+3rdparty/firebase_cpp_sdk
+!3rdparty/.keep
+
+# Ignore build artifacts
+build-*/
+build/
+*.o
+*.so
+*.dll
+
+# Ignore IDE
+*.user
+.idea/
+.vscode/
+
+# Ignore generated files
+core/android-template/gradle.properties

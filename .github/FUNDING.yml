@@ -1,0 +1,11 @@
+# GitHub Sponsors & funding links
+# Fill in the handles/ids you actually use, then place this file at .github/FUNDING.yml
+
+github: []            # e.g. ["kooijmaninc"]
+patreon: ""           # e.g. "kooijman"
+open_collective: ""   # e.g. "genesis-x"
+ko_fi: ""             # e.g. "kooijman"
+tidelift: ""          # e.g. "pypi/genesis-x"
+custom:               # direct links (PayPal, Stripe, Buy Me a Coffee, etc.)
+  - ""                # e.g. "https://buymeacoffee.com/<handle>"
+  - ""                # e.g. "https://paypal.me/<handle>"
