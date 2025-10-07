@@ -14,6 +14,7 @@ DISTFILES += \
     BACKERS.md \
     LICENSE \
     .github/FUNDING.yml \
+    .gitlab-ci.yml \
     mkspecs/modules/qt_lib_genesisx.pri \
     mkspecs/modules/qt_lib_genesisx_physics.pri \
     mkspecs/features/gx_app_root.prf \
@@ -21,6 +22,8 @@ DISTFILES += \
     config/deps.json \
     scripts/bootstrap.bat \
     scripts/bootstrap.sh \
+    scripts/release.bat \
+    scripts/release.sh \
     scripts/packages/firebase.bat \
     scripts/packages/firebase.sh \
     tools/update_gradle_props.ps1.in
