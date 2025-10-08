@@ -33,9 +33,9 @@ win32-g++: QMAKE_LFLAGS_SHLIB += -Wl,--out-implib,$$DESTDIR/lib$${TARGET}.a
 # Physics links to core; search same central dir
 QMAKE_LIBDIR += $$DESTDIR
 android {
-    LIBS += -lGenesisX_arm64-v8a
+    LIBS += -lgenesisx_arm64-v8a
 } else {
-    LIBS += -lGenesisX
+    LIBS += -lgenesisx
 }
 
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/physics/include/GenesisX

@@ -41,6 +41,12 @@ private:
     void ensureTray();
     bool eventFilter(QObject*, QEvent* e);
 #endif
+
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // Keep last id so a new notification can replace the previous one (optional)
+    uint m_linuxReplacesId = 0;
+    void showLinuxNotification(const QString& title, const QString& body, int msec);
+#endif
 };
 
 }

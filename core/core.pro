@@ -3,6 +3,7 @@
 
 QT -= gui
 QT += core qml widgets
+linux:!android: QT += dbus
 TEMPLATE = lib
 TARGET = genesisx
 CONFIG += c++23
