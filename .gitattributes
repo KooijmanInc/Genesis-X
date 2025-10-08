@@ -1,0 +1,29 @@
+# Normalize line endings and avoid spurious diffs
+* text=auto
+
+# Force LF where tools expect it
+*.sh text eol=lf
+*.bash text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.gradle text eol=lf
+*.kts text eol=lf
+*.groovy text eol=lf
+*.pro text eol=lf
+*.pri text eol=lf
+*.qml text eol=lf
+*.ps1 text eol=lf
+*.py text eol=lf
+*.rb text eol=lf
+*.pl text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.xml text eol=lf
+*.qrc text eol=lf
+*.ui text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+
+# Batch stays CRLF (Windows-native)
+*.bat text eol=crlf
+*.cmd text eol=crlf

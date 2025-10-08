@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
-# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
-
 set -euo pipefail
 
-# Run from repo root (GitHub Actions does this automatically).
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 if [[ -z "$ROOT" ]]; then
   echo "Run inside a Git repository." >&2
@@ -15,7 +11,6 @@ cd "$ROOT"
 declare -a FILES missing bom
 
 # Gather all tracked files
-# We'll filter later
 while IFS= read -r -d '' f; do
   FILES+=("$f")
 done < <(git ls-files -z)
@@ -57,12 +52,12 @@ for f in "${FILES[@]}"; do
 done
 
 rc=0
-if ((${#missing[@]:-0})); then
+if ((${#missing[@]})); then
   echo "❌ Files missing SPDX header:"
   printf ' - %s\n' "${missing[@]}"
   rc=1
 fi
-if ((${#bom[@]:-0})); then
+if ((${#bom[@]})); then
   echo "❌ Files contain UTF-8 BOM (not allowed):"
   printf ' - %s\n' "${bom[@]}"
   rc=1
