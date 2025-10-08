@@ -19,12 +19,6 @@ Options:
       --delete             Perform deletion (default: dry-run)
   -n, --dry-run            Dry-run (explicit)
   -h, --help               Show this help
-
-Examples:
-  $(basename "$0")                       # list chore/* merged into staging on origin+gitlab
-  $(basename "$0") --delete              # delete them
-  $(basename "$0") -b main -p '^(feat|fix)/' --delete
-  $(basename "$0") -r origin --delete
 EOF
 }
 
@@ -42,8 +36,18 @@ done
 
 PROTECTED=("main" "master" "staging" "$BASE")
 
+remote_exists() {
+  git remote | grep -qx "$1"
+}
+
 cleanup_remote() {
   local remote="$1"
+  if ! remote_exists "$remote"; then
+    echo "== Remote: $remote =="
+    echo "Skipping: remote not configured in this repo."
+    return
+  fi
+
   echo "== Remote: $remote =="
   git fetch "$remote" --prune
 
