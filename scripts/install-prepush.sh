@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # Install the pre-push hook into a repo-local hooks directory (.githooks)
 set -euo pipefail
 ROOT="$(git rev-parse --show-toplevel)"

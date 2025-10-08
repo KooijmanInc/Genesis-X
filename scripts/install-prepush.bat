@@ -1,3 +1,6 @@
+:: SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+:: Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 @echo off
 REM Install the pre-push hook into a repo-local hooks directory (.githooks)
 for /f "delims=" %%i in ('git rev-parse --show-toplevel') do set ROOT=%%i

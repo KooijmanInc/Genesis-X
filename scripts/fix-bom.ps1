@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # Remove UTF-8 BOM from tracked text files (qmake-safe)
 $ErrorActionPreference = "Stop"
 

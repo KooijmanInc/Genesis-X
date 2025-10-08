@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
+<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
+
 # Contributing to Genesis‑X
 
 Thanks for taking the time to contribute! This guide explains how we work and how to get your changes merged smoothly.

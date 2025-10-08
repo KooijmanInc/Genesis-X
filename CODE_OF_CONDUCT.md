@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
+<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
+
 # Code of Conduct — Genesis‑X
 
 We want Genesis‑X to be a welcoming, professional community. This Code of Conduct explains what we expect from everyone who participates (maintainers, contributors, users).
