@@ -1,3 +1,6 @@
+:: SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+:: Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 @echo off
 set ver=%1
 set msg=%2
@@ -12,3 +15,4 @@ goto :eof
 :usage
 echo usage: scripts\release.bat vX.Y.Z "message"
 exit /b 1
+

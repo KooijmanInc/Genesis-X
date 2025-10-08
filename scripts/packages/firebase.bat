@@ -1,3 +1,6 @@
+:: SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+:: Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
@@ -70,3 +73,4 @@ move "%TMP%\firebase_cpp_sdk" "%DEST%" >nul
 echo ✅ Firebase C++ SDK v%VER% ready at: %DEST%
 
 endlocal
+

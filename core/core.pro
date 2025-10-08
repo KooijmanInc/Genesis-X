@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 QT -= gui
 QT += core qml widgets
 TEMPLATE = lib
@@ -97,3 +100,4 @@ exists($$GRADLE_PROPS_IN) {
 
 GRADLE_PROPS_DST = $$ANDROID_TPL_SRC_DIR/gradle.properties
 QMAKE_POST_LINK += $$QMAKE_COPY $$shell_path($$GRADLE_PROPS_GEN) $$shell_path($$GRADLE_PROPS_DST)
+

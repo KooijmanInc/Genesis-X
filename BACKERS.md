@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
+<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
+
 # 💖 Backers & Sponsors
 
 Thanks for supporting **Genesis-X** — a Qt library by **Kooijman Incorporate Holding B.V.**  
@@ -118,3 +121,4 @@ They are **not tax‑deductible donations**. For company invoices/VAT, follow th
 ---
 
 Thank you for keeping Genesis‑X growing! 💚
+

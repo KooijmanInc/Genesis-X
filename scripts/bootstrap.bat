@@ -1,3 +1,6 @@
+:: SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+:: Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
@@ -42,3 +45,4 @@ exit /b 1
 
 :eof
 endlocal
+

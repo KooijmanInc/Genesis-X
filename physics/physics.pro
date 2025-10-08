@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 QT += core
 
 TEMPLATE = lib
@@ -57,3 +60,4 @@ SOURCES += $$files($$PWD/src/*.cpp)
 DISTFILES += \
     common/genesisx_physics.pri \
     physics.json
+

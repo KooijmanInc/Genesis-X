@@ -1,5 +1,5 @@
-// Copyright (C) 2025 The Kooijman Incorporate Holding B.V.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 The Kooijman Incorporate Holding B.V.
 #ifndef GENESISX_GLOBAL_H
 #define GENESISX_GLOBAL_H
 

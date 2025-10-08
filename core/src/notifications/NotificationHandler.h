@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #ifndef NOTIFICATION_HANDLER_H
 #define NOTIFICATION_HANDLER_H
 
@@ -43,3 +46,4 @@ private:
 }
 
 #endif // NOTIFICATION_HANDLER_H
+

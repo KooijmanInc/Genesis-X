@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 QT += core
 TEMPLATE = lib
 QT      += core
@@ -20,3 +23,4 @@ DESTDIR  = $$GENESISX_BUILD_ROOT/plugins/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCE
 
 QMAKE_LIBDIR += $$GENESISX_OUT_BIN
 LIBS += -lgenesisx_physics -lgenesisx
+
