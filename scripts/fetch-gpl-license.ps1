@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # Fetch GPL-3.0-only full license text into LICENSES/GPL-3.0-only.txt
 $ErrorActionPreference = "Stop"
 $dest = Join-Path -Path (Get-Location) -ChildPath "LICENSES"

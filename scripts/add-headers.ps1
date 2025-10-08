@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # Add SPDX + copyright headers to tracked files (Windows/PowerShell)
 # Writes files as UTF-8 *without* BOM (qmake-safe) and skips missing paths.
 $ErrorActionPreference = "Stop"
