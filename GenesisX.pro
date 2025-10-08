@@ -42,6 +42,9 @@ DISTFILES += \
     scripts/add-headers.sh \
     scripts/add-headers.ps1 \
     scripts/add-headers.bat \
+    scripts/cleanup-merged-branches.sh \
+    scripts/cleanup-merged-branches.ps1 \
+    scripts/cleanup-merged-branches.bat \
     scripts/fetch-gpl-license.sh \
     scripts/fetch-gpl-license.ps1 \
     scripts/fetch-gpl-license.bat \
