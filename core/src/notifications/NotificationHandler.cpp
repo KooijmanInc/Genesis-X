@@ -14,6 +14,10 @@
 #include <QApplication>
 #endif
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <QtDBus/QtDBus>
+#endif
+
 using namespace gx;
 
 
@@ -23,6 +27,10 @@ void NotificationHandler::show(const QString &title, const QString &body, int ms
     ensureTray();
     // You must have a visible tray icon for balloons to appear:
     m_tray->showMessage(title, body, qApp->windowIcon(), msec);
+#endif
+
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    showLinuxNotification(title, body, msec);
 #endif
 }
 
@@ -71,6 +79,50 @@ QString NotificationHandler::fcmToken() const
     return {};
 #endif
 }
+
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+void NotificationHandler::showLinuxNotification(const QString &title, const QString &body, int msec)
+{
+    // org.freedesktop.Notifications → Notify(app_name, replaces_id, app_icon, summary, body, actions, hints, expire_timeout)
+    if (!QDBusConnection::sessionBus().isConnected()) {
+        qWarning() << "[GX Notify] D-Bus session bus not available; cannot show notification.";
+        return;
+    }
+
+    const QString appName = QCoreApplication::applicationName().isEmpty()
+                                ? QStringLiteral("GenesisX")
+                                : QCoreApplication::applicationName();
+
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        QStringLiteral("org.freedesktop.Notifications"),
+        QStringLiteral("/org/freedesktop/Notifications"),
+        QStringLiteral("org.freedesktop.Notifications"),
+        QStringLiteral("Notify"));
+
+    const QString appIcon = QString();         // You can set a themed icon name or absolute file path here
+    const QStringList actions;                 // e.g. {"default", "Open"} if you later wire ActionInvoked
+    QVariantMap hints;                         // e.g. hints["urgency"] = (byte)1;
+
+    msg << appName
+        << static_cast<uint>(m_linuxReplacesId)
+        << appIcon
+        << title
+        << body
+        << actions
+        << hints
+        << static_cast<int>(msec);             // -1 uses server default
+
+    QDBusMessage reply = QDBusConnection::sessionBus().call(msg, QDBus::Block);
+    if (reply.type() == QDBusMessage::ReplyMessage && !reply.arguments().isEmpty()) {
+        // Returned id lets us replace on next Notify()
+        m_linuxReplacesId = reply.arguments().at(0).toUInt();
+        qInfo() << "[GX Notify] D-Bus Notify success";
+    } else {
+        qWarning() << "[GX Notify] D-Bus Notify() failed:" << reply.errorMessage();
+    }
+}
+#endif
+
 #ifdef Q_OS_WIN
 void NotificationHandler::ensureTray()
 {
