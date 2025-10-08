@@ -21,9 +21,15 @@ if (-not $root) { Write-Error "Run inside a Git repository."; exit 1 }
 Set-Location $root
 
 $protected = @("main","master","staging",$Base)
+$configuredRemotes = (& git remote) | ForEach-Object { $_.Trim() }
 
 function Cleanup-Remote([string]$r) {
   Write-Host "== Remote: $r =="
+  if (-not ($configuredRemotes -contains $r)) {
+    Write-Host "Skipping: remote not configured in this repo."
+    return
+  }
+
   git fetch $r --prune | Out-Null
 
   $merged = (& git branch -r --merged "$r/$Base") -replace '^[ *]*','' | Where-Object { $_ -like "$r/*" }
