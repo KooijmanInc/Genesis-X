@@ -1,0 +1,7 @@
+GNU General Public License v3.0 (only)
+
+This file is a placeholder. To comply with REUSE best practices, include the full, unmodified text
+of GPL-3.0-only here. You can fetch it with the helper scripts below.
+
+Reference: https://www.gnu.org/licenses/gpl-3.0.txt
+SPDX-Identifier: GPL-3.0-only

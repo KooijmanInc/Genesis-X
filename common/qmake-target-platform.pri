@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # ---------- OS ----------
 equals(QMAKE_HOST.os, Windows) {
     PLATFORM_PATH = windows
@@ -57,3 +60,4 @@ APP_OUTPUT_DIR = $$ANDROID_PACKAGE_SOURCE_DIR
 
 # Debug echo
 message(Platform: $$PLATFORM_PATH  |  Spec: $$SPEC  |  CXX: $$QMAKE_CXX  |  ProcessorPath: $$PROCESSOR_PATH  |  Arch: $$ARCH)
+

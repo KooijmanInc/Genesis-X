@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #ifndef NOTIFICATIONSQML_H
 #define NOTIFICATIONSQML_H
 
@@ -12,3 +15,4 @@ void registerGenesisXNotifications();
 // static void initGenesisXResources();
 
 #endif // NOTIFICATIONSQML_H
+

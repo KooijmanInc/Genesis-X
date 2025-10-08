@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # ---- GenesisX (core) qmake module ----
 # mkspecs/modules/qt_lib_genesisx.pri
 
@@ -386,3 +389,4 @@
 
 #     message([genesisx] libdirs = $$genesisx.libdir.debug | $$genesisx.libdir.release | $$genesisx.libdir.profile)
 # }
+

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 FIREBASE_HOME = $$clean_path($$PWD/../firebase_cpp_sdk)
 
 !isEmpty(FIREBASE_CPP_SDK_DIR): FIREBASE_HOME = $$clean_path($$FIREBASE_CPP_SDK_DIR)
@@ -19,3 +22,4 @@ android {
         warning([Firebase] SDK not found at $$FIREBASE_HOME - set $$FIREBASE_CPP_SDK_DIR or place the SDK under 3rdparty/firebase_cpp_sdk)
     }
 }
+

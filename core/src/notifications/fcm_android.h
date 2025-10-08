@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #ifndef FCM_ANDROID_H
 #define FCM_ANDROID_H
 
@@ -89,3 +92,4 @@ class GENESISX_EXPORT FcmLFcmListener {};
 }
 
 #endif // FCM_ANDROID_H
+

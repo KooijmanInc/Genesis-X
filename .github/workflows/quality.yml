@@ -1,0 +1,16 @@
+name: Quality checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  spdx_bom_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run SPDX & BOM checks
+        run: |
+          bash scripts/ci/check-spdx-and-bom.sh

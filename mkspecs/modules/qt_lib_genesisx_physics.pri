@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # ---- GenesisX Physics qmake module ----
 # mkspecs/modules/qt_lib_genesisx_physics.pri
 
@@ -318,3 +321,4 @@
 
 #     message([genesisx_physics] libdirs = $$genesisx_physics.libdir.debug | $$genesisx_physics.libdir.release | $$genesisx_physics.libdir.profile)
 # }
+
