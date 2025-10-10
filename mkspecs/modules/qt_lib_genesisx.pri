@@ -7,6 +7,10 @@
 !defined(__GX_CORE_PRI_INCLUDED__, var) {
     # QMAKEFEATURES += D:/projects/qt/progs/learning/qtfeatures
     load(gx_app_root)
+
+    #for (plp, ANDROID_PACKAGE_SOURCE_DIR) {
+    #    message(different project paths $$plp)
+    #}
     # load(gx_app_root)
     __GX_CORE_PRI_INCLUDED__ = 1
     message([genesisx] module loaded from $$PWD)
@@ -29,7 +33,7 @@
     genesisx.libdir.profile = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/profile
     QMAKE_LIBDIR += $$genesisx.libdir.debug $$genesisx.libdir.release $$genesisx.libdir.profile
 
-message(LIBDIRS: $$genesisx.libdir.debug $$genesisx.libdir.release $$genesisx.libdir.profile)
+#message(LIBDIRS: $$genesisx.libdir.debug $$genesisx.libdir.release $$genesisx.libdir.profile)
     # Android vs Desktop library names
     GX_ANDROID =
     android: GX_ANDROID = 1
@@ -127,40 +131,74 @@ message(LIBDIRS: $$genesisx.libdir.debug $$genesisx.libdir.release $$genesisx.li
         }
     }
 
+    contains(QMAKE_HOST.os, Darwin) {
+        QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
+        QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
+        QMAKE_MAC_XCODE_SETTINGS += SEPARATE_HEADERMAP=YES
 
-    # contains(QMAKE_HOST.os, Linux) {
-    #     # Where Genesis-X builds its libs
-    #     GX_LIB_BASE = $$clean_path($$GENESISX_BUILD_ROOT/bin/linux/$$COMPILER_PATH/$$PROCESSOR_PATH)
-    #     GX_LIB_BASE = $$replace(GX_LIB_BASE, \\\\, /)
+        LIBS += -framework UserNotifications
+        macos: LIBS += -framework AppKit
+        ios: LIBS += -framework UIKit
+        macos: LIBS += -framework Cocoa
+        LIBS += -framework Foundation
+        QMAKE_LFLAGS += -ObjC
+        QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+        QMAKE_OBJECTIVE_CXXFLAGS += -fobjc-arc
+        macos: QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
 
-    #     # Where the app binaries live
-    #     GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH)
-    #     GX_APP_BASE = $$replace(GX_APP_BASE, \\\\, /)
+        # Where Genesis-X builds its libs
+        GX_LIB_BASE = $$clean_path($$GENESISX_BUILD_ROOT/bin/osx/$$COMPILER_PATH/$$PROCESSOR_PATH)
+        GX_LIB_BASE = $$replace(GX_LIB_BASE, \\\\, /)
 
-    #     # Ensure runtime can find .so next to the exe
-    #     QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+        # Where your app binaries live
+        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH)
+        GX_APP_BASE = $$replace(GX_APP_BASE, \\\\, /)
 
-    #     message(for linux activated?)
-    #     # for(build, "debug" "release" "profile") {
-    #         SRC_DIR = $$GX_LIB_BASE/debug
-    #         DST_DIR = $$GX_APP_BASE/debug
+        # Make the runtime loader search the exe directory
+        # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+        # QMAKE_LFLAGS += -rpath
 
-    #         # Make sure destination exists (won’t error if it already does)
-    #         QMAKE_POST_LINK += $$escape_expand(\\n\\t)mkdir -p "$$DST_DIR"
-    #         message(SRC_DIR $$SRC_DIR DST_DIR $$DST_DIR)
-    #         # Copy ALL soname variants (*.so, *.so.1, *.so.1.0.0) — ignore if nothing matches
-    #         QMAKE_POST_LINK += $$escape_expand(\\n\\t)sh -c 'cp -f "$$SRC_DIR"/libgenesisx.so* "$$DST_DIR"/ 2>/dev/null || true'
-    #         QMAKE_POST_LINK += $$escape_expand(\\n\\t)sh -c 'cp -f "$$SRC_DIR"/libgenesisx_physics.so* "$$DST_DIR"/ 2>/dev/null || true'
-    #     # }
-    # }
+        builds = debug
+        builds += release
+        builds += profile
+        for (build, builds) {
+            SRC_DIR = $$GX_LIB_BASE/$$build
+            DST_DIR = $$GX_APP_BASE/$$build
+            # Expand the actual files *now* (qmake time). This returns only existing files.
+            SO_LIST = $$files($$SRC_DIR/libgenesisx*)
+            SO_LIST += $$files($$SRC_DIR/libgenesisx_physics*)
 
-    linux:!android {
+            # message([genesisx] Linux copy from $$SRC_DIR -> $$DST_DIR)
+            # message([genesisx] Linux libs: $$SO_LIST)
+
+            # Ensure destination exists
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)mkdir -p $$shell_quote($$DST_DIR)
+
+            # Emit one cp command per file (no shell loops; robust in Makefiles)
+            for(f, SO_LIST) {
+                # exists($$f) {
+                    QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DST_DIR)/
+                # }
+            }
+        }
+    }
+
+    linux:!android {message(also comming here ???????????????????????????????????)
         # Embed a runpath that points to the exe directory at runtime
         QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
         # (Optional) also add specific config dirs if you want:
         QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
         QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
         QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
+    }
+
+    contains(QMAKE_HOST.os, Darwin) {
+        # Embed a runpath that points to the exe directory at runtime
+        # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+        # (Optional) also add specific config dirs if you want:
+        # QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
+        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
+        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
     }
 
     # contains(QMAKE_HOST.os, Linux) {
