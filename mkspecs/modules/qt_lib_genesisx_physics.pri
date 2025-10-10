@@ -118,6 +118,47 @@
         }
     }
 
+    contains(QMAKE_HOST.os, Darwin) {
+        #LIBS += -framework UserNotifications
+        #ios: LIBS += -framework UIKit
+        #macos: LIBS += -framework AppKit UIKit Cocoa
+        # Where Genesis-X builds its libs
+        # QMAKE_MAC_XCODE_SETTINGS += OTHER_LDFLAGS="$(inherited) -ObjC"
+        GX_LIB_BASE = $$clean_path($$GENESISX_BUILD_ROOT/bin/osx/$$COMPILER_PATH/$$PROCESSOR_PATH)
+        GX_LIB_BASE = $$replace(GX_LIB_BASE, \\\\, /)
+
+        # Where your app binaries live
+        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH)
+        GX_APP_BASE = $$replace(GX_APP_BASE, \\\\, /)
+
+        # Make the runtime loader search the exe directory
+        # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+
+        builds = debug
+        builds += release
+        builds += profile
+        for (build, builds) {
+            SRC_DIR = $$GX_LIB_BASE/$$build
+            DST_DIR = $$GX_APP_BASE/$$build
+            # Expand the actual files *now* (qmake time). This returns only existing files.
+            SO_LIST = $$files($$SRC_DIR/libgenesisx*)
+            SO_LIST += $$files($$SRC_DIR/libgenesisx_physics*)
+
+            # message([genesisx] Linux copy from $$SRC_DIR -> $$DST_DIR)
+            # message([genesisx] Linux libs: $$SO_LIST)
+
+            # Ensure destination exists
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)mkdir -p $$shell_quote($$DST_DIR)
+
+            # Emit one cp command per file (no shell loops; robust in Makefiles)
+            for(f, SO_LIST) {
+                # exists($$f) {
+                    QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DST_DIR)/
+                # }
+            }
+        }
+    }
+
     linux:!android {
         # Embed a runpath that points to the exe directory at runtime
         QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
@@ -125,6 +166,15 @@
         QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
         QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
         QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
+    }
+
+    contains(QMAKE_HOST.os, Darwin) {
+        # Embed a runpath that points to the exe directory at runtime
+        # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+        # (Optional) also add specific config dirs if you want:
+        # QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
+        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
+        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
     }
 
     # contains(QMAKE_HOST.os, Linux) {

@@ -38,10 +38,14 @@ android {
     LIBS += -lgenesisx
 }
 
-INCLUDEPATH += $$GENESISX_BUILD_ROOT/physics/include/GenesisX
+INCLUDEPATH += $$GENESISX_BUILD_ROOT/physics/include
 
-HEADERS += $$files($$PWD/include/GenesisX/physics/*.h)
-SOURCES += $$files($$PWD/src/*.cpp)
+HEADERS += $$files($$PWD/include/GenesisX/physics/*.h) \
+    include/GenesisX/genesisx_physics_global.h \
+    include/GenesisX/vehicles/vehicle4w.h
+SOURCES += $$files($$PWD/src/*.cpp) \
+    src/vehicles/vehicle4w.cpp
+    #src/placeholder.cpp
 
 # QMAKE_LIBDIR += $$GENESISX_OUT_BIN
 # LIBS += -lgenesisx   # depends on core

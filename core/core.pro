@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-QT -= gui
+# QT -= gui
 QT += core qml widgets
 linux:!android: QT += dbus
 TEMPLATE = lib
@@ -9,8 +9,38 @@ TARGET = genesisx
 CONFIG += c++23
 
 ios {
+    QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
+    QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
+    QMAKE_MAC_XCODE_SETTINGS += SEPARATE_HEADERMAP=YES
     CONFIG -= dll shared
     CONFIG += staticlib
+    LIBS += -framework UserNotifications
+    LIBS += -framework UIKit
+    LIBS += -framework Foundation
+    QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+    QMAKE_OBJECTIVE_CXXFLAGS += -fobjc-arc
+
+    QMAKE_LFLAGS += -ObjC
+    OBJECTIVE_SOURCES += \
+        $$PWD/src/notifications/NotificationHandler_apple.mm \
+        $$PWD/src/notifications/GXAppDelegate+Push_ios.mm
+} else:macos {
+    QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
+    QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
+    QMAKE_MAC_XCODE_SETTINGS += SEPARATE_HEADERMAP=YES
+    CONFIG += shared staticlib
+    LIBS += -framework UserNotifications
+    LIBS += -framework AppKit
+    LIBS += -framework Cocoa
+    LIBS += -framework Foundation
+    QMAKE_LFLAGS += -ObjC
+    QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+    QMAKE_OBJECTIVE_CXXFLAGS += -fobjc-arc
+    QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
+    QMAKE_MAC_XCODE_SETTINGS += OTHER_LDFLAGS="$(inherited) -ObjC"
+    OBJECTIVE_SOURCES += \
+        $$PWD/src/notifications/NotificationHandler_apple.mm \
+        $$PWD/src/notifications/GXPushBridge.mm
 } else {
     CONFIG += shared
 }
@@ -41,7 +71,8 @@ HEADERS += $$files($$PWD/include/GenesisX/core/*.h) \
     $$PWD/include/GenesisX/NotificationsQml.h \
     $$PWD/include/GenesisX/genesisx_global.h \
     $$PWD/src/notifications/NotificationHandler.h \
-    $$PWD/src/notifications/fcm_android.h
+    $$PWD/src/notifications/fcm_android.h \
+    src/notifications/NotificationHandler_apple_bridge.h
 SOURCES += $$files($$PWD/src/*.cpp) \
     $$PWD/src/notifications/NotificationHandler.cpp \
     $$PWD/src/notifications/NotificationsQml.cpp \
@@ -101,4 +132,3 @@ exists($$GRADLE_PROPS_IN) {
 
 GRADLE_PROPS_DST = $$ANDROID_TPL_SRC_DIR/gradle.properties
 QMAKE_POST_LINK += $$QMAKE_COPY $$shell_path($$GRADLE_PROPS_GEN) $$shell_path($$GRADLE_PROPS_DST)
-

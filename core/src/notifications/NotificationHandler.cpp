@@ -23,6 +23,7 @@ using namespace gx;
 
 void NotificationHandler::show(const QString &title, const QString &body, int msec)
 {
+    qDebug() << title << body << msec;
 #ifdef Q_OS_WIN
     ensureTray();
     // You must have a visible tray icon for balloons to appear:
@@ -31,6 +32,10 @@ void NotificationHandler::show(const QString &title, const QString &body, int ms
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     showLinuxNotification(title, body, msec);
+#endif
+
+#if defined(Q_OS_MACOS)
+    showAppleNotification(title, body, msec);
 #endif
 }
 
@@ -44,6 +49,10 @@ void NotificationHandler::initialize(const QVariantMap &options)
     connect(&fcm, &gx::android::FcmBridge::messageReceived, this, &NotificationHandler::notificationReceived);
 connect(&fcm, &gx::android::FcmBridge::tokenChanged, this, &NotificationHandler::tokenChanged);
     fcm.initialize();
+#elif defined(Q_OS_MACOS) || defined(Q_OS_IOS)
+    appleInitialize(options);
+#else
+    Q_UNUSED(options);
 #endif
 
     m_initialized = true;
@@ -78,6 +87,16 @@ QString NotificationHandler::fcmToken() const
 #else
     return {};
 #endif
+}
+
+void NotificationHandler::appleDidReceiveToken(const QString &token)
+{
+    emit tokenChanged(token);
+}
+
+void NotificationHandler::appleDidReceiveRemote(const QString &title, const QString &body, const QVariantMap &data)
+{
+    emit notificationReceived(title, body, data);
 }
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
