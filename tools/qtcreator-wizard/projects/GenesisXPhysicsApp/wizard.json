@@ -8,7 +8,7 @@
     "trDisplayName": "Genesis-X physics App (soon, in development)",
     "trDisplayCategory": "Genesis-X (Qt library for your application)",
     "trDescription": "The Physics module is in development, you can choose it but it isn't working for all classes etc. You have been warned",
-    "icon": "../icon.png",
+    "icon": "../genesisx-xcore.png",
     "featuresRequired": [ "QtSupport.Wizards.FeatureQt" ],
     "enabled": "%{JS: isAnyPluginRunning(['qmakeprojectmanager'])}",
 

@@ -67,7 +67,7 @@
         # Base directory where DLLs are built
         GX_LIB_BASE = $$GENESISX_BUILD_ROOT/bin/windows/$$COMPILER_PATH/$$PROCESSOR_PATH
 
-
+        message(is for winddows???????????????)
         # Target DLLs for all build types
         GX_DLL_DEBUG    = $$shell_path($$GX_LIB_BASE/debug/genesisx.dll)
         GX_DLL_RELEASE  = $$shell_path($$GX_LIB_BASE/release/genesisx.dll)
@@ -78,13 +78,13 @@
         GX_PHYS_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/genesisx_physics.dll)
 
         # To DLLs for all build types
-        GX_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
-        GX_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
-        GX_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
+        GX_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/../bin/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
+        GX_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/../bin/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
+        GX_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/../bin/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
 
-        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/../bin/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/../bin/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/../bin/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
 
         # Post-link copy (only copy those that exist)
         exists($$GX_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_DEBUG) $$shell_quote($$GX_DLL_DEST_DEBUG)
@@ -261,12 +261,12 @@
             $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GBUILD_SRC) $$shell_quote($$GX_GBUILD_DST) \
             $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GPROPERTIES_SRC) $$shell_quote($$GX_GPROPERTIES_DST)
 
-        isEmpty(GX_GSERV_DST) {
+        if (!exists($$GX_GSERV_DST)) {
             QMAKE_PRE_LINK += \
                 $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GSERV_SRC) $$shell_quote($$GX_GSERV_DST)
-            message([genesisx] will copy google-services.json from: $$GX_GSERV_SRC)
+            message([genesisx!!!!] will copy google-services.json from: $$GX_GSERV_SRC to: $$GX_GSERV_DST)
         } else {
-            message([genesisx] WARNING: google-services.json not found in template or existing in app)
+            message([genesisx] WARNING: google-services.json not found in template or existing in app to: $$GX_GSERV_DST)
         }
 
         # ---------- Optional manual target (handy for testing) ----------
@@ -276,12 +276,12 @@
         gx_prepare_android.commands += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GBUILD_SRC) $$shell_quote($$GX_GBUILD_DST)
         gx_prepare_android.commands += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GPROPERTIES_SRC) $$shell_quote($$GX_GPROPERTIES_DST)
 
-        !isEmpty(GX_GSERV_SRC) {
-            gx_prepare_android.commands += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GSERV_SRC) $$shell_quote($$GX_GSERV_DST)
-            message([genesisx] will copy google-services.json from: $$GX_GSERV_SRC)
-        } else {
-            message([genesisx] WARNING: google-services.json not found in app or template)
-        }
+        # !isEmpty(GX_GSERV_SRC) {
+        #     gx_prepare_android.commands += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GSERV_SRC) $$shell_quote($$GX_GSERV_DST)
+        #     message([genesisx] will copy google-services.json from: $$GX_GSERV_SRC)
+        # } else {
+        #     message([genesisx] WARNING: google-services.json not found in app or template)
+        # }
         QMAKE_EXTRA_TARGETS += gx_prepare_android
         # first.depends += prepare_android_genesisx
     }

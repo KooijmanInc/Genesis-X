@@ -22,7 +22,7 @@ namespace gx::android {
 
 class FcmBridge;
 
-class GENESISX_EXPORT FcmListener final : public ::firebase::messaging::Listener
+class GENESISX_CORE_EXPORT FcmListener final : public ::firebase::messaging::Listener
 {
 public:
     explicit FcmListener(FcmBridge* owner) : m_owner(owner) {}
@@ -33,7 +33,7 @@ private:
     FcmBridge* m_owner = nullptr;
 };
 
-class GENESISX_EXPORT FcmBridge : public QObject
+class GENESISX_CORE_EXPORT FcmBridge : public QObject
 {
     Q_OBJECT
 
@@ -69,7 +69,7 @@ private:
     std::unique_ptr<FcmListener> m_listener;
 };
 #else
-class GENESISX_EXPORT FcmBridge
+class GENESISX_CORE_EXPORT FcmBridge
 {
 public:
     static FcmBridge& instance() {
@@ -86,7 +86,7 @@ private:
     Q_DISABLE_COPY_MOVE(FcmBridge)
 };
 
-class GENESISX_EXPORT FcmLFcmListener {};
+class GENESISX_CORE_EXPORT FcmLFcmListener {};
 #endif
 
 }

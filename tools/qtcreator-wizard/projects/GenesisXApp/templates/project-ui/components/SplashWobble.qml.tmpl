@@ -1,0 +1,105 @@
+// Genesis-X skeleton
+import QtQuick
+import QtQuick.Controls
+import QtQuick3D
+
+Item {
+    id: root
+    width: 960
+    height: 540
+    property url logoSource: "qrc:/assets/genesisx-xcore.svg"   // swap to your SVG/PNG
+    property color gunmetal: "#12191F"
+    property bool autoClose: true
+    property int  durationMs: 2600
+    signal finished()
+
+    // optional auto close
+    Timer {
+        running: root.autoClose
+        interval: root.durationMs
+        onTriggered: root.finished()
+    }
+
+    View3D {
+        id: view
+        anchors.fill: parent
+
+        environment: SceneEnvironment {
+            clearColor: root.gunmetal
+            backgroundMode: SceneEnvironment.Color
+            // a touch of bloom for the glow
+            tonemapMode: SceneEnvironment.TonemapModeFilmic
+        }
+
+        PerspectiveCamera {
+            id: cam
+            z: 500; y: 0; x: 0
+        }
+
+        // Moving light that “lights up” the logo
+        PointLight {
+            id: moverLight
+            color: "#00C58E"                    // Emerald
+            brightness: 120
+            y: 80; z: 200
+            x: 200
+            SequentialAnimation on x {
+                loops: Animation.Infinite
+                NumberAnimation { to: -200; duration: 1400; easing.type: Easing.InOutSine }
+                NumberAnimation { to:  200; duration: 1400; easing.type: Easing.InOutSine }
+            }
+            SequentialAnimation on z {
+                loops: Animation.Infinite
+                NumberAnimation { to:  50;  duration: 1500; easing.type: Easing.InOutSine }
+                NumberAnimation { to: 200;  duration: 1500; easing.type: Easing.InOutSine }
+            }
+        }
+
+        // The logo plane
+        Model {
+            id: logo
+            source: "#Rectangle"
+            scale: Qt.vector3d(2.8, 2.8, 1)
+            eulerRotation.x: -8
+            eulerRotation.y: 0
+            materials: PrincipledMaterial {
+                id: mat
+                baseColorMap: Texture {
+                    source: root.logoSource
+                    mappingMode: Texture.UV
+                    // keep SVG crisp
+                    mipFilter: Texture.None
+                    minFilter: Texture.Linear
+                    magFilter: Texture.Linear
+                }
+                opacity: 0.5
+                metalness: 0.0
+                roughness: 0.6
+                emissiveFactor: 0.08
+            }
+
+            // gentle wobble
+            SequentialAnimation on eulerRotation.y {
+                loops: Animation.Infinite
+                NumberAnimation { to: 6;  duration: 900;  easing.type: Easing.InOutSine }
+                NumberAnimation { to: -6; duration: 900;  easing.type: Easing.InOutSine }
+            }
+            SequentialAnimation on eulerRotation.x {
+                loops: Animation.Infinite
+                NumberAnimation { to: -4; duration: 1200; easing.type: Easing.InOutSine }
+                NumberAnimation { to: -8; duration: 1200; easing.type: Easing.InOutSine }
+            }
+        }
+
+        // optional subtle vignette overlay for drama
+        Rectangle {
+            anchors.fill: parent
+            color: "transparent"
+            layer.enabled: true
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#00000000" }
+                GradientStop { position: 1.0; color: "#66000000" }
+            }
+        }
+    }
+}
