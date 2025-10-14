@@ -65,13 +65,13 @@
         GX_PHYS_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/genesisx_physics.dll)
 
         # To DLLs for all build types
-        GX_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
-        GX_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
-        GX_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
+        GX_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
+        GX_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
+        GX_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
 
-        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
 
         # Post-link copy (only copy those that exist)
         exists($$GX_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_DEBUG) $$shell_quote($$GX_DLL_DEST_DEBUG)
@@ -89,7 +89,7 @@
         GX_LIB_BASE = $$replace(GX_LIB_BASE, \\\\, /)
 
         # Where your app binaries live
-        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH)
+        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH)
         GX_APP_BASE = $$replace(GX_APP_BASE, \\\\, /)
 
         # Make the runtime loader search the exe directory
@@ -128,7 +128,7 @@
         GX_LIB_BASE = $$replace(GX_LIB_BASE, \\\\, /)
 
         # Where your app binaries live
-        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH)
+        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH)
         GX_APP_BASE = $$replace(GX_APP_BASE, \\\\, /)
 
         # Make the runtime loader search the exe directory
@@ -163,53 +163,10 @@
         # Embed a runpath that points to the exe directory at runtime
         QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
         # (Optional) also add specific config dirs if you want:
-        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
-        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
-        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
+        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/debug
+        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/release
+        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/profile
     }
-
-    contains(QMAKE_HOST.os, Darwin) {
-        # Embed a runpath that points to the exe directory at runtime
-        # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
-        # (Optional) also add specific config dirs if you want:
-        # QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
-        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
-        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
-    }
-
-    # contains(QMAKE_HOST.os, Linux) {
-    #     # Base directory where DLLs are built
-    #     GX_LIB_BASE = $$GENESISX_BUILD_ROOT/bin/linux/$$COMPILER_PATH/$$PROCESSOR_PATH
-
-
-    #     # Target DLLs for all build types
-    #     GX_DLL_DEBUG    = $$shell_path($$GX_LIB_BASE/debug/libgenesisx.so)
-    #     GX_DLL_RELEASE  = $$shell_path($$GX_LIB_BASE/release/libgenesisx.so)
-    #     GX_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/libgenesisx.so)
-
-    #     GX_PHYS_DLL_DEBUG    = $$shell_path($$GX_LIB_BASE/debug/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_RELEASE  = $$shell_path($$GX_LIB_BASE/release/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/libgenesisx_physics.so)
-
-    #     # To DLLs for all build types
-    #     GX_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/libgenesisx.so)
-    #     GX_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/libgenesisx.so)
-    #     GX_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/libgenesisx.so)
-
-    #     GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/libgenesisx_physics.so)
-
-    #     # Post-link copy (only copy those that exist)
-    #     exists($$GX_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_DEBUG) $$shell_quote($$GX_DLL_DEST_DEBUG)
-    #     exists($$GX_DLL_RELEASE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_RELEASE) $$shell_quote($$GX_DLL_DEST_RELEASE)
-    #     exists($$GX_DLL_PROFILE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_PROFILE) $$shell_quote($$GX_DLL_DEST_PROFILE)
-
-    #     exists($$GX_PHYS_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_PHYS_DLL_DEBUG) $$shell_quote($$GX_PHYS_DLL_DEST_DEBUG)
-    #     exists($$GX_PHYS_DLL_RELEASE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_PHYS_DLL_RELEASE) $$shell_quote($$GX_PHYS_DLL_DEST_RELEASE)
-    #     exists($$GX_PHYS_DLL_PROFILE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_PHYS_DLL_PROFILE) $$shell_quote($$GX_PHYS_DLL_DEST_PROFILE)
-    # }
-
 
     # ---- ANDROID copies ----
     !isEmpty(GX_ANDROID) {

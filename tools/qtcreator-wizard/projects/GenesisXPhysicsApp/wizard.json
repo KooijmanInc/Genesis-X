@@ -1,0 +1,49 @@
+{
+    "version": 1,
+    "supportedProjectTypes": [
+        "Qt4ProjectManager.Qt4Project"
+    ],
+    "id": "B.GenesisXPhysics.Lib",
+    "category": "D.ApplicationGenesisX",
+    "trDisplayName": "Genesis-X physics App (soon, in development)",
+    "trDisplayCategory": "Genesis-X (Qt library for your application)",
+    "trDescription": "The Physics module is in development, you can choose it but it isn't working for all classes etc. You have been warned",
+    "icon": "../icon.png",
+    "featuresRequired": [ "QtSupport.Wizards.FeatureQt" ],
+    "enabled": "%{JS: isAnyPluginRunning(['qmakeprojectmanager'])}",
+
+    "options": [
+      {
+        "key": "ProjectFile",
+        "value": "%{JS: Util.fileName(value('ProjectDirectory') + '/' + value('ProjectName'), 'pro')}"
+      }
+    ],
+
+    "pages": [
+        {
+            "typeId": "Project",
+            "trDisplayName": "Location",
+            "trShortTitle": "Location",
+            "data": { "trDescription": "%{trDescription}" }
+        },
+        {
+            "typeId": "Kits",
+            "trDisplayName": "Kit Selection",
+            "trShortTitle": "Kits",
+            "data": {
+                "projectFilePath": "%{ProjectFile}",
+                "requiredFeatures": [ "%{FeatureQt}" ]
+            }
+        }
+    ],
+
+    "generators": [
+        {
+            "typeId": "File",
+            "data": [
+              { "source": "templates/.qmake.conf.tmpl", "target": "%{ProjectDirectory}/.qmake.conf" },
+              { "source": "templates/project.pro", "target": "%{ProjectDirectory}/project.pro" }
+            ]
+        }
+    ]
+}

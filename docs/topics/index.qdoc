@@ -1,0 +1,51 @@
+/*!
+    \page index.html
+    \title Genesis-X SDK
+    \brief Cross-platform C++/Qt library. Current focus: local & push notifications.
+
+    \section1 What is Genesis-X?
+    Genesis-X is a general-purpose SDK for Qt/C++ projects. It bundles common
+    mobile/desktop features behind a single, consistent API so you can ship
+    faster across platforms.
+
+    \section1 Current features
+    \list
+      \li \b Notifications — Local and push notifications with a unified API.
+          See the C++ class \l gx::NotificationHandler for details.
+    \endlist
+
+    \section1 What’s next
+    \list
+      \li \b Remote API — A client API for talking to your backend server
+          (authentication, messaging, data sync).
+      \li \b Symfony server template — A ready-to-use Symfony package that
+          pairs with Genesis-X for an end-to-end setup (routes, DTOs, auth,
+          push webhooks). This will be published as a separate package you can
+          deploy or extend.
+    \endlist
+
+    \section1 Quick start (Notifications)
+    \section2 C++
+    \code
+    #include <GenesisX/NotificationHandler.h>
+
+    gx::NotificationHandler notifier;
+    notifier.requestPermission();
+    notifier.showLocal(QStringLiteral("Hello from Genesis-X"));
+    \endcode
+
+    \section2 QML
+    \code
+    import GenesisX.Notifications
+
+    NotificationHandler {
+        onMessageReceived: (m) => console.log(m.title, m.body)
+    }
+    \endcode
+
+    \section1 See also
+    \list
+      \li \l gx::NotificationHandler
+      \li \l {GenesisX.Notifications} (QML module)
+    \endlist
+*/
