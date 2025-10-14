@@ -78,13 +78,13 @@
         GX_PHYS_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/genesisx_physics.dll)
 
         # To DLLs for all build types
-        GX_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
-        GX_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
-        GX_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
+        GX_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
+        GX_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
+        GX_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
 
-        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
 
         # Post-link copy (only copy those that exist)
         exists($$GX_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_DEBUG) $$shell_quote($$GX_DLL_DEST_DEBUG)
@@ -102,7 +102,7 @@
         GX_LIB_BASE = $$replace(GX_LIB_BASE, \\\\, /)
 
         # Where your app binaries live
-        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH)
+        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH)
         GX_APP_BASE = $$replace(GX_APP_BASE, \\\\, /)
 
         # Make the runtime loader search the exe directory
@@ -151,7 +151,7 @@
         GX_LIB_BASE = $$replace(GX_LIB_BASE, \\\\, /)
 
         # Where your app binaries live
-        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH)
+        GX_APP_BASE = $$clean_path($$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH)
         GX_APP_BASE = $$replace(GX_APP_BASE, \\\\, /)
 
         # Make the runtime loader search the exe directory
@@ -187,52 +187,10 @@
         # Embed a runpath that points to the exe directory at runtime
         QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
         # (Optional) also add specific config dirs if you want:
-        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
-        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
-        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
+        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/debug
+        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/release
+        QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/bin/$$LOCAL_DESTINATION_PATH/profile
     }
-
-    contains(QMAKE_HOST.os, Darwin) {
-        # Embed a runpath that points to the exe directory at runtime
-        # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
-        # (Optional) also add specific config dirs if you want:
-        # QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug
-        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release
-        #QMAKE_RPATHDIR += $$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile
-    }
-
-    # contains(QMAKE_HOST.os, Linux) {
-    #     # Base directory where DLLs are built
-    #     GX_LIB_BASE = $$GENESISX_BUILD_ROOT/bin/linux/$$COMPILER_PATH/$$PROCESSOR_PATH
-
-
-    #     # Target DLLs for all build types
-    #     GX_DLL_DEBUG    = $$shell_path($$GX_LIB_BASE/debug/libgenesisx.so)
-    #     GX_DLL_RELEASE  = $$shell_path($$GX_LIB_BASE/release/libgenesisx.so)
-    #     GX_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/libgenesisx.so)
-
-    #     GX_PHYS_DLL_DEBUG    = $$shell_path($$GX_LIB_BASE/debug/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_RELEASE  = $$shell_path($$GX_LIB_BASE/release/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/libgenesisx_physics.so)
-
-    #     # To DLLs for all build types
-    #     GX_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/libgenesisx.so)
-    #     GX_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/libgenesisx.so)
-    #     GX_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/libgenesisx.so)
-
-    #     GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/debug/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/release/libgenesisx_physics.so)
-    #     GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$APP_OUTPUT_DIR/binaries/$$LOCAL_DESTINATION_PATH/profile/libgenesisx_physics.so)
-
-    #     # Post-link copy (only copy those that exist)
-    #     exists($$GX_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_DEBUG) $$shell_quote($$GX_DLL_DEST_DEBUG)
-    #     exists($$GX_DLL_RELEASE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_RELEASE) $$shell_quote($$GX_DLL_DEST_RELEASE)
-    #     exists($$GX_DLL_PROFILE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_PROFILE) $$shell_quote($$GX_DLL_DEST_PROFILE)
-
-    #     exists($$GX_PHYS_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_PHYS_DLL_DEBUG) $$shell_quote($$GX_PHYS_DLL_DEST_DEBUG)
-    #     exists($$GX_PHYS_DLL_RELEASE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_PHYS_DLL_RELEASE) $$shell_quote($$GX_PHYS_DLL_DEST_RELEASE)
-    #     exists($$GX_PHYS_DLL_PROFILE): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_PHYS_DLL_PROFILE) $$shell_quote($$GX_PHYS_DLL_DEST_PROFILE)
-    # }
 
     # ---- ANDROID copies ----
     !isEmpty(GX_ANDROID) {
@@ -330,208 +288,3 @@
 
     message([genesisx] libdirs = $$genesisx.libdir.debug | $$genesisx.libdir.release | $$genesisx.libdir.profile | BUILD_PATH = $$BUILD_PATH | abi = $${GX_ABI} and arch = $$QT_ARCH)
 }
-
-
-# !defined(__GX_CORE_PRI_INCLUDED__, var) {
-#     __GX_CORE_PRI_INCLUDED__ = 1
-#     message([genesisx] module loaded from $$PWD)
-
-#     GENESISX_BUILD_ROOT = $$clean_path($$PWD/../..)
-#     include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
-#     include($$GENESISX_BUILD_ROOT/common/qmake-destination-path.pri)
-
-#     QT.genesisx.name          = genesisx
-#     QT.genesisx.depends       = core
-#     QT.genesisx.friendly_name = GenesisX (Core)
-
-#     # headers (new layout, fallback to legacy)
-#     GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/core/include)
-#     !exists($$GX_CORE_INC_ROOT/GenesisX) {
-#         GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/include)
-#     }
-#     INCLUDEPATH += $$GX_CORE_INC_ROOT
-
-#     # ----- lib search roots (your build output tree) -----
-#     genesisx.libdir.debug   = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/debug
-#     genesisx.libdir.release = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/release
-#     genesisx.libdir.profile = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/profile
-#     QMAKE_LIBDIR += $$genesisx.libdir.debug $$genesisx.libdir.release $$genesisx.libdir.profile
-
-#     # ----- robust Android detection -----
-#     GX_ANDROID =
-
-#     # 1) canonical qmake scope
-#     android: GX_ANDROID = 1
-
-#     # 2) variables set by Android mkspecs
-#     !isEmpty(ANDROID_PLATFORM): GX_ANDROID = 1
-#     contains(QMAKE_PLATFORM, android): GX_ANDROID = 1
-#     contains(QMAKE_XSPEC, android):   GX_ANDROID = 1
-#     contains(QMAKE_SPEC, android):    GX_ANDROID = 1
-#     contains(QMAKESPEC, android):     GX_ANDROID = 1
-
-#     # 3) target kit prefix path (very reliable)
-#     QT_PREFIX = $$[QT_INSTALL_PREFIX]
-#     contains(QT_PREFIX, /android_)|contains(QT_PREFIX, \\android_) { GX_ANDROID = 1 }
-
-#     # 4) last resort: the compiler path
-#     isEmpty(GX_ANDROID) {
-#         contains(QMAKE_CXX, aarch64-linux-android) { GX_ANDROID = 1 }
-#         else: contains(QMAKE_CXX, clang\\+\\+) {
-#             # If this is the NDK clang toolchain path, treat as Android
-#             contains(QMAKE_CXX, toolchains/.*/llvm)|contains(QMAKE_CXX, android) { GX_ANDROID = 1 }
-#         }
-#     }
-
-#     # ABI name used by your filenames
-#     GX_ABI = $$QT_ARCH
-#     isEmpty(GX_ABI): GX_ABI = arm64-v8a
-#     message([GX] BUILD_PATH = $$BUILD_PATH)
-#     !isEmpty(GX_ANDROID) {
-#         message([genesisx] ANDROID build detected (ABI=$$GX_ABI) $$debug or $$release or $$profile)
-#         # Link the actual file by full path to avoid -lGenesisX
-#         CONFIG(debug, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.debug/libgenesisx_$${GX_ABI}.so)
-#         CONFIG(release, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.release/libgenesisx_$${GX_ABI}.so)
-#         CONFIG(profile, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.profile/libgenesisx_$${GX_ABI}.so)
-#     } else {
-#         message([genesisx] DESKTOP build detected)
-#         LIBS += -L$$genesisx.libdir.debug -L$$genesisx.libdir.release -L$$genesisx.libdir.profile -lGenesisX
-#     }
-
-#     # Only define this if your core really builds as static
-#     # DEFINES += GENESISX_STATIC
-
-#     win32: QT.genesisx.depends += widgets
-
-#     message([genesisx] libdirs = $$genesisx.libdir.debug | $$genesisx.libdir.release | $$genesisx.libdir.profile)
-# }
-
-
-# !defined(__GX_CORE_PRI_INCLUDED__, var) {
-#     __GX_CORE_PRI_INCLUDED__ = 1
-#     message([genesisx] module loaded from $$PWD)
-
-#     GENESISX_BUILD_ROOT = $$clean_path($$PWD/../..)
-#     include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
-#     include($$GENESISX_BUILD_ROOT/common/qmake-destination-path.pri)
-
-#     QT.genesisx.name          = genesisx
-#     QT.genesisx.depends       = core
-#     QT.genesisx.friendly_name = GenesisX (Core)
-
-#     GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/core/include)
-#     !exists($$GX_CORE_INC_ROOT/GenesisX) {
-#         GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/include)
-#     }
-#     INCLUDEPATH += $$GX_CORE_INC_ROOT
-
-#     # ---- lib search roots (built by GenesisX) ----
-#     genesisx.libdir.debug   = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/debug
-#     genesisx.libdir.release = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/release
-#     genesisx.libdir.profile = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/profile
-#     QMAKE_LIBDIR += $$genesisx.libdir.debug $$genesisx.libdir.release $$genesisx.libdir.profile
-
-#     # ---- robust Android detection (works even when Spec is empty) ----
-#     GX_ANDROID_BUILD =
-#     contains(QMAKE_XSPEC, android)|contains(QMAKE_SPEC, android)|contains(QMAKESPEC, android) {
-#         GX_ANDROID_BUILD = 1
-#     } else: contains(QMAKE_CXX, aarch64-linux-android)|contains(QMAKE_CXX, armv7a-linux-androideabi)|contains(QMAKE_CXX, android)|contains(QMAKE_CXX, Android) {
-#         GX_ANDROID_BUILD = 1
-#     }
-
-# message(qmake_xspec: $$QMAKE_XSPEC and qmake_spec: $$QMAKE_SPEC and qmakespec: $$QMAKESPEC and qmake_cxx: $$QMAKE_CXX)
-#     GX_ABI = $$QT_ARCH
-#     isEmpty(GX_ABI): GX_ABI = arm64-v8a   # sensible default for your kit
-
-#     !isEmpty(GX_ANDROID_BUILD) {message(genesisx get android build: $$GX_ANDROID_BUILD)
-#         message([genesisx] ANDROID branch active; ABI=$$GX_ABI)
-
-#         # On Android, link the actual .so file by full path (no -lGenesisX)
-#         CONFIG(debug, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.debug/libgenesisx_$${GX_ABI}.so)
-#         CONFIG(release, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.release/libgenesisx_$${GX_ABI}.so)
-#         CONFIG(profile, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.profile/libgenesisx_$${GX_ABI}.so)
-#     } else {message(genesisx get windows build: $$GX_ANDROID_BUILD)
-#         # Desktop: classic -lGenesisX
-#         LIBS += -L$$genesisx.libdir.debug -L$$genesisx.libdir.release -L$$genesisx.libdir.profile -lGenesisX
-#     }
-
-#     # If (and only if) your core is static, uncomment:
-#     # DEFINES += GENESISX_STATIC
-
-#     win32: QT.genesisx.depends += widgets
-#     message([genesisx] libdirs = $$genesisx.libdir.debug | $$genesisx.libdir.release | $$genesisx.libdir.profile)
-# }
-
-
-
-# !defined(__GX_CORE_PRI_INCLUDED__, var) {
-#     __GX_CORE_PRI_INCLUDED__ = 1
-
-#     message([genesisx] module loaded from $$PWD)
-
-#     # repo root (this file is at mkspecs/modules)
-#     GENESISX_BUILD_ROOT = $$clean_path($$PWD/../..)
-#     include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
-#     include($$GENESISX_BUILD_ROOT/common/qmake-destination-path.pri)
-
-#     # --- make qmake recognize: QT += genesisx ---
-#     QT.genesisx.name          = genesisx
-#     QT.genesisx.depends       = core          # QtCore only
-#     QT.genesisx.friendly_name = GenesisX (Core)
-
-#     # headers (new layout, with fallback)
-#     GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/core/include)
-#     !exists($$GX_CORE_INC_ROOT/GenesisX) {
-#         GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/include)
-#     }
-#     INCLUDEPATH += $$GX_CORE_INC_ROOT
-
-#     # library search paths
-#     genesisx.libdir.debug   = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/debug
-#     genesisx.libdir.release = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/release
-#     genesisx.libdir.profile = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/profile
-#     QMAKE_LIBDIR += $$genesisx.libdir.debug $$genesisx.libdir.release $$genesisx.libdir.profile
-
-#     android {message(using this one????)
-#         # qmake names Android libs: libgenesisx_<abi>.so
-#         GENESISX_ABI = $$QT_ARCH
-#         isEmpty(GENESISX_ABI): GENESISX_ABI = arm64-v8a
-
-#         CONFIG(debug, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.debug/libgenesisx_$${GENESISX_ABI}.so)
-#         CONFIG(release, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.release/libgenesisx_$${GENESISX_ABI}.so)
-#         CONFIG(profile, debug|release|profile): \
-#             LIBS += $$quote($$genesisx.libdir.profile/libgenesisx_$${GENESISX_ABI}.so)
-#     } else {message(or the win??)
-#         LIBS += -L$$genesisx.libdir.debug -L$$genesisx.libdir.release -L$$genesisx.libdir.profile -lGenesisX
-#     }
-#     # msvc:CONFIG(debug,debug|release): LIBS += -lGenesisXd   # if your debug lib has a 'd' suffix
-
-#     # QML imports (core-only; avoids physics QML)
-#     GENESISX_QML_IMPORT = $$clean_path($$GENESISX_BUILD_ROOT/core/qml)
-#     !exists($$GENESISX_QML_IMPORT) {
-#         # optional legacy fallback; safe if you kept core-only QML here
-#         GENESISX_QML_IMPORT = $$clean_path($$GENESISX_BUILD_ROOT/qml)
-#     }
-#     exists($$GENESISX_QML_IMPORT) {
-#         QML_IMPORT_PATH += $$GENESISX_QML_IMPORT
-#         DEFINES += GENESISX_QML_DIR=\\\"$$GENESISX_QML_IMPORT\\\"
-#     }
-
-#     # static build toggle (only if true for your build)
-#     DEFINES += GENESISX_STATIC
-
-#     win32 {
-#         QT.genesisx.depends += widgets
-#     }
-
-#     message([genesisx] libdirs = $$genesisx.libdir.debug | $$genesisx.libdir.release | $$genesisx.libdir.profile)
-# }
-

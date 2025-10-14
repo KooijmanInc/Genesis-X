@@ -1,0 +1,15 @@
+# QDoc build outputs
+docs/out/
+docs/*.qch
+docs/*qhp
+docs/*.index
+docs/*-tags
+docs/.qdoccache/
+
+# Local build files
+docs/Makefile
+docs/Makefile.Debug
+docs/Makefile.Release
+docs/debug/
+docs/release/
+docs/.qmake.stash

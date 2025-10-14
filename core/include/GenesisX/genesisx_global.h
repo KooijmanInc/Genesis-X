@@ -5,6 +5,9 @@
 
 #include <QtCore/qglobal.h>
 
+/*!
+ *  \namespace gx
+ */
 #if defined(GENESISX_STATIC)
 #  define GENESISX_EXPORT
 #elif defined(GENESISX_LIBRARY)

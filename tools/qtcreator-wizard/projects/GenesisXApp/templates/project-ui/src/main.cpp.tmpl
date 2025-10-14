@@ -1,0 +1,24 @@
+// Genesis-X skeleton
+#include <QQmlApplicationEngine>
+#include <QApplication>
+#include <QIcon>
+
+#include <GenesisX/NotificationsQml.h>
+
+int main (int argc, char* argv[])
+{
+    QApplication app(argc, argv);
+
+    app.setWindowIcon(QIcon(":/icons/favicon.ico"));
+
+    QQmlApplicationEngine engine;
+    engine.addImportPath("qrc:/");
+
+    gx::registerGenesisXNotifications();
+
+    engine.load(QStringLiteral("qrc:/views/MasterView.qml"));
+
+    if (engine.rootObjects().isEmpty()) return -1;
+
+    return app.exec();
+}

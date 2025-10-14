@@ -1,0 +1,5 @@
+/*!
+ *  \namespace gx
+ *  \inmodule GenesisX
+ *  \brief Core C++ namespace for the Genesis-X API.
+ */

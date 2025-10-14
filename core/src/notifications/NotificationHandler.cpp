@@ -18,8 +18,63 @@
 #include <QtDBus/QtDBus>
 #endif
 
-using namespace gx;
+/*!
+ *  \class gx::NotificationHandler
+ *  \inmodule Core
+ *  \since 6.10
+ *  \brief Main class for local and push notifications.
+ *
+ *  code snippet shows the correct usage pattern:
+ *  \code
+ *  #include <QGuiApplication>
+ *  #include <QQmlApplicationEngine>
+ *  #include <GenesisX/NotificationsQml.h>
+ *
+ *  int main(int argc, char *argv[])
+ *  {
+ *      QGuiApplication app(argc, argv);
+ *
+ *      gx::registerGenesisXNotifications();
+ *
+ *      QQmlApplicationEngine engine;
+ *
+ *      engine.load(QStringLiteral("qrc:/views/MasterView.qml"));
+ *
+ *      if (engine.rootObjects().isEmpty()) return -1;
+ *
+ *      return app.exec();
+ *  }
+ *  \endcode
+ *  \brief And implementing it in qml
+ *
+ *  code snippet shows the correct usage pattern:
+ *  \code
+ *  import QtQuick
+ *  import GenesisX.Notifications 1.0
+ *
+ *  Window {
+ *      id: root
+ *      visible: true
+ *      width: 1024
+ *      height: 768
+ *
+ *      Component.onCompleted: {
+ *          notify.show("Hello from GenesisX", "Windows tray balloon :-)")
+ *      }
+ *
+ *      NotificationHandler {
+ *          id: notify
+ *          onNotificationReceived: (title, body, data) => {
+ *              console.log("[QML] got notification:", title, body, JSON.stringify(data))
+ *          }
+ *          onTokenChanged: t => console.log("New token found in qml:", t)
+ *          Component.onCompleted: initialize()
+ *      }
+ *  }
+ *  \endcode
+ */
 
+using namespace gx;
 
 void NotificationHandler::show(const QString &title, const QString &body, int msec)
 {

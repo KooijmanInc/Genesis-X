@@ -9,10 +9,6 @@
 
 namespace gx {
 
-// void registerNotificationsQmlTypes(const char* uri, int maj, int min)
-// {
-//     qmlRegisterType<gx::NotificationHandler>(uri, maj, min, "NotificationHandler");
-// }
 void registerGenesisXNotifications() {
     qmlRegisterType<gx::NotificationHandler>("GenesisX.Notifications", 1, 0, "NotificationHandler");
 }

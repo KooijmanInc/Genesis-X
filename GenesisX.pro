@@ -53,8 +53,35 @@ DISTFILES += \
     scripts/ci/check-spdx-and-bom.sh \
     scripts/ci/check-spdx-and-bom.ps1 \
     scripts/ci/check-spdx-and-bom.bat \
+    tools/qtcreator-wizard/projects/GenesisXApp/postcreate.bat \
     tools/update_gradle_props.ps1.in
-    # mkspecs/modules/qt_lib_genesisx-physics.pri
+
+OTHER_FILES += $$files(tools/*, true)
+
+OTHER_FILES += $$files(docs/*, true)
+
+#DISTFILES += \
+#    tools/qtcreator-wizard/install-wizard.bat
+
+#DISTFILES += \
+#    tools/qtcreator-wizard/projects/GenesisXApp/wizard.json \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/.qmake.conf.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project.pro \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/.gitignore.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/features/gx_app_root.prf.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/ui.pro.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/src/main.cpp.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/views.qrc.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/views/MasterView.qml.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/icons.qrc.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/icons/favicon.ico \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/apple/ios/Info.plist.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/apple/ios/Entitlements.plist.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/apple/macos/Info.plist.tmpl \
+#    tools/qtcreator-wizard/projects/GenesisXApp/templates/project-ui/apple/macos/Entitlements.plist.tmpl
+
+#DISTFILES += \
+#    tools/qtcreator-wizard/projects/GenesisXPhysicsApp/wizard.json
 
 # build physics too:
 # qmake genesisx.pro "CONFIG+=genesisx_build_physics"
