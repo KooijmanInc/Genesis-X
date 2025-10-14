@@ -57,7 +57,7 @@ if not exist "%QTC%" (
 
 if exist "%QTC%" (
   echo [RUN] "%QTC%"
-  start "" "%QTC%" -customwizard-verbose
+  start "" "%QTC%"
 ) else (
   echo [WARN] Could not find Qt Creator automatically.
   echo        Set QT_CREATOR_EXE to qtcreator.exe and rerun, or start it manually.

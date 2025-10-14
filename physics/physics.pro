@@ -10,11 +10,17 @@ CONFIG += c++23
 ios {
     CONFIG -= dll shared
     CONFIG += staticlib
+} else:macos {
+    CONFIG += shared staticlib
 } else {
     CONFIG += shared
 }
 
-DEFINES += GENESISX_PHYSICS_BUILD
+contains(CONFIG, staticlib) {
+    DEFINES += GENESISX_PHYSICS_STATIC
+} else {
+    DEFINES += GENESISX_PHYSICS_LIBRARY
+}
 
 GENESISX_BUILD_ROOT = $$clean_path($$PWD/..)
 include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)

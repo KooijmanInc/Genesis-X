@@ -10,8 +10,6 @@ QMAKE_TARGET_COPYRIGHT   = "© %{CopyrightYear} %{OrgName}"
 QMAKE_TARGET_BUNDLE_PREFIX = "%{Domain}"
 
 win32 {
-    ICON += icons/favicon.ico
-    RC_ICONS += icons/favicon.ico
     VERSION = 1.0.0
 
     # Ensures the metadata gets embedded for MinGW/LLVM-MinGW too
@@ -50,6 +48,8 @@ CONFIG(debug, debug|release|profile) {
 
 DESTDIR = $$PWD/../bin/$$LOCAL_DESTINATION_PATH/$$BUILD_PATH
 
+QML_IMPORT_PATH += $$PWD
+
 contains(ANDROID_TARGET_ARCH,arm64-v8a) {
     ANDROID_PACKAGE_SOURCE_DIR = \\
         $$PWD/android
@@ -57,10 +57,23 @@ contains(ANDROID_TARGET_ARCH,arm64-v8a) {
 
 RESOURCES += \\
     views.qrc \\
-    icons.qrc
+    assets.qrc \\
+    components.qrc
 
 DISTFILES += \\
+    android/AndroidManifest.xml \\
+    android/build.gradle \\
+    android/gradle.properties \\
+    android/google-services.json \\
+    android/gradle/wrapper/gradle-wrapper.jar \\
+    android/gradle/wrapper/gradle-wrapper.properties \\
+    android/gradlew \\
+    android/gradlew.bat \\
+    android/res/values/libs.xml \\
+    android/res/xml/qtprovider_paths.xml \\
     apple/ios/Info.plist \\
     apple/ios/Entitlements.plist \\
+    apple/ios/GoogleService-Info.plist \\
     apple/macos/Info.plist \\
     apple/macos/Entitlements.plist \\
+    apple/macos/GoogleService-Info.plist \\

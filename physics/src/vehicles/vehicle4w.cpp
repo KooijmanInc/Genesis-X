@@ -5,7 +5,13 @@
 
 using namespace gx::physics;
 
-Vehicle4W::Vehicle4W(QObject* parent)
+// Vehicle4W::Vehicle4W(QObject* parent)
+//     : QObject{parent}
+// {
+
+// }
+
+Vehicle4W::Vehicle4W(QObject *parent)
     : QObject{parent}
 {
 

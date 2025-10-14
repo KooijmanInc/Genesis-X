@@ -65,13 +65,13 @@
         GX_PHYS_DLL_PROFILE  = $$shell_path($$GX_LIB_BASE/profile/genesisx_physics.dll)
 
         # To DLLs for all build types
-        GX_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
-        GX_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
-        GX_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
+        GX_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/../bin/$$LOCAL_DESTINATION_PATH/debug/genesisx.dll)
+        GX_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/../bin/$$LOCAL_DESTINATION_PATH/release/genesisx.dll)
+        GX_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/../bin/$$LOCAL_DESTINATION_PATH/profile/genesisx.dll)
 
-        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
-        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/bin/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_DEBUG    = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/../bin/$$LOCAL_DESTINATION_PATH/debug/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_RELEASE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/../bin/$$LOCAL_DESTINATION_PATH/release/genesisx_physics.dll)
+        GX_PHYS_DLL_DEST_PROFILE  = $$shell_path($$ANDROID_PACKAGE_SOURCE_DIR/../bin/$$LOCAL_DESTINATION_PATH/profile/genesisx_physics.dll)
 
         # Post-link copy (only copy those that exist)
         exists($$GX_DLL_DEBUG): QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_DEBUG) $$shell_quote($$GX_DLL_DEST_DEBUG)

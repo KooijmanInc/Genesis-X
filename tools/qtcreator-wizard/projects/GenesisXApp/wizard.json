@@ -5,7 +5,7 @@
     "trDisplayName": "Genesis-X App",
     "trDisplayCategory": "Genesis-X (Qt library for your application)",
     "trDescription": "Creates a basic qml-based Qt application that is wired with the Genesis-X library, standard equipted with notifications for windows, android, linux, macos and ios. \n\nIt supports the former mentioned platforms and they are tested.",
-    "icon": "../icon.png",
+    "icon": "../genesisx-xcore.png",
     "supportedProjectTypes": [ "Qt4ProjectManager.Qt4Project" ],
     "featuresRequired": [ "QtSupport.Wizards.FeatureQt" ],
     "enabled": "%{JS: isPluginRunning('qmakeprojectmanager')}",
@@ -124,18 +124,50 @@
                     "target": "%{UiDir}/views/MasterView.qml"
                 },
                 {
-                    "source": "templates/project-ui/icons.qrc.tmpl",
-                    "target": "%{UiDir}/icons.qrc"
+                    "source": "templates/project-ui/assets.qrc.tmpl",
+                    "target": "%{UiDir}/assets.qrc"
                 },
                 {
-                    "source": "templates/project-ui/icons/favicon.ico",
-                    "target": "%{UiDir}/icons/favicon.ico",
+                    "source": "templates/project-ui/assets/genesisx-xcore.svg",
+                    "target": "%{UiDir}/assets/genesisx-xcore.svg",
                     "binary": true,
                     "isBinary": true
                 },
                 {
+                    "source": "templates/project-ui/assets/qmldir.tmpl",
+                    "target": "%{UiDir}/assets/qmldir"
+                },
+                {
+                    "source": "templates/project-ui/assets/Style.qml.tmpl",
+                    "target": "%{UiDir}/assets/Style.qml"
+                },
+                {
+                    "source": "templates/project-ui/components.qrc.tmpl",
+                    "target": "%{UiDir}/components.qrc"
+                },
+                {
+                    "source": "templates/project-ui/components/qmldir.tmpl",
+                    "target": "%{UiDir}/components/qmldir"
+                },
+                {
+                    "source": "templates/project-ui/components/SplashWobble.qml.tmpl",
+                    "target": "%{UiDir}/components/SplashWobble.qml"
+                },
+                {
+                    "source": "templates/project-ui/android/AndroidManifest.xml.tmpl",
+                    "target": "%{UiDir}/android/AndroidManifest.xml"
+                },
+                {
+                    "source": "templates/project-ui/android/google-services.json.tmpl",
+                    "target": "%{UiDir}/android/google-services.json"
+                },
+                {
                     "source": "templates/project-ui/apple/ios/Info.plist.tmpl",
                     "target": "%{UiDir}/apple/ios/Info.plist"
+                },
+                {
+                    "source": "templates/project-ui/apple/GoogleService-Info.plist.tmpl",
+                    "target": "%{UiDir}/apple/ios/GoogleService-Info.plist"
                 },
                 {
                     "source": "templates/project-ui/apple/ios/Entitlements.plist.tmpl",
@@ -144,6 +176,10 @@
                 {
                     "source": "templates/project-ui/apple/macos/Info.plist.tmpl",
                     "target": "%{UiDir}/apple/macos/Info.plist"
+                },
+                {
+                    "source": "templates/project-ui/apple/GoogleService-Info.plist.tmpl",
+                    "target": "%{UiDir}/apple/macos/GoogleService-Info.plist"
                 },
                 {
                     "source": "templates/project-ui/apple/macos/Entitlements.plist.tmpl",

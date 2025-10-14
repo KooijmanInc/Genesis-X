@@ -5,15 +5,12 @@
 
 #include <QtCore/qglobal.h>
 
-/*!
- *  \namespace gx
- */
-#if defined(GENESISX_STATIC)
-#  define GENESISX_EXPORT
-#elif defined(GENESISX_LIBRARY)
-#  define GENESISX_EXPORT Q_DECL_EXPORT
+#if defined(GENESISX_CORE_STATIC)
+#  define GENESISX_CORE_EXPORT
+#elif defined(GENESISX_CORE_LIBRARY)
+#  define GENESISX_CORE_EXPORT Q_DECL_EXPORT
 #else
-#  define GENESISX_EXPORT Q_DECL_IMPORT
+#  define GENESISX_CORE_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // GENESISX_GLOBAL_H

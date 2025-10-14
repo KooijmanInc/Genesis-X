@@ -1,6 +1,7 @@
 // Genesis-X skeleton
 import QtQuick
 import GenesisX.Notifications 1.0
+import components 1.0
 
 Window {
     id: root
@@ -8,24 +9,32 @@ Window {
     width: 1024
     height: 768
 
+    title: qsTr("Genesis-X Template App")
+
     Component.onCompleted: {
        notify.show("Hello from GenesisX", "Windows tray balloon :-)")
     }
 
     NotificationHandler {
        id: notify
-               onNotificationReceived: (title, body, data) => {
-                   console.log("[QML] got notification:", title, body, JSON.stringify(data))
-               }
-               onTokenChanged: t => console.log("New token found in qml:", t)
-               Component.onCompleted: {
-                   initialize()
+       onNotificationReceived: (title, body, data) => {
+           console.log("[QML] got notification:", title, body, JSON.stringify(data))
+       }
+       onTokenChanged: t => console.log("New token found in qml:", t)
+       Component.onCompleted: {
+           initialize()
 
-                   console.log(fcmToken())
-               }
+           console.log(fcmToken())
+       }
 
-               onInitializedChanged: {
-                   console.log("is initialized in qml", fcmToken())
-               }
+       onInitializedChanged: {
+           console.log("is initialized in qml", fcmToken())
+       }
+    }
+
+    SplashWobble {
+        id: splash
+        anchors.fill: parent
+        logoSource: "qrc:/assets/genesisx-xcore.svg"
     }
 }
