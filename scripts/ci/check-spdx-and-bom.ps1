@@ -15,7 +15,36 @@ $files = & git ls-files
 $missing = New-Object System.Collections.Generic.List[string]
 $bom     = New-Object System.Collections.Generic.List[string]
 
-$exclude = [regex]'(^LICENSE(S)?/)|(\.gitignore$)|(\.gitattributes$)|(.*firebase_cpp_sdk/)|(.*node_modules/)|(.*build/)|(.*dist/)'
+$excludeParts = @(
+  '^LICENSE(S)?/',     # top-level LICENSE/ or LICENSES/
+  '\.gitignore$',
+  '\.gitattributes$',
+  '.*firebase_cpp_sdk/',
+  '.*node_modules/',
+  '.*build/',
+  '.*dist/',
+  '.*templates/',      # templates (your new excludes)
+  '.*scaffolds/',
+  '.*examples/',
+  '.*3rdparty/',
+  '.*qtcreator-wizard/projects/',
+  '.*docs/out/',
+  '.*docs/debug/',
+  '.*docs/release/',
+  '.*docs/profile/',
+  '.*docs/\.qdoccache/',
+  '.*docs/.*\.qch$',
+  '.*docs/.*\.qhp$',
+  '.*docs/.*\.index$',
+  '.*docs/\.qmake\.stash$',
+  '.*docs/Makefile$',
+  '.*docs/Makefile\.Debug$',
+  '.*docs/Makefile\.Release$',
+  '.*docs/Makefile\.Profile$'
+)
+$exclude = [regex]($excludeParts -join '|')
+
+#$exclude = [regex]'(^LICENSE(S)?/)|(\.gitignore$)|(\.gitattributes$)|(.*firebase_cpp_sdk/)|(.*node_modules/)|(.*build/)|(.*dist/)'
 $spdx = [regex]'^(c|cc|cxx|cpp|h|hh|hpp|qml|js|ts|java|kt|m|mm|gradle|groovy|kts|sh|bash|ps1|py|rb|pl|pro|pri|yml|yaml|toml|ini|cfg|conf|properties|cmake|xml|qrc|ui|plist|html|htm|md|markdown|bat|cmd)$'
 $bomSens = [regex]'^(pro|pri|qml|qrc|ui|gradle|kts|groovy|sh|ps1|bat|cmd|yml|yaml|xml|md|txt)$'
 
