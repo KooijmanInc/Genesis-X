@@ -21,7 +21,36 @@ while IFS= read -r -d '' f; do
 done < <(git ls-files -z)
 
 # Exclusions
-EXCLUDE_REGEX='(^LICENSE(S)?/)|(\.gitignore$)|(\.gitattributes$)|(.*firebase_cpp_sdk/)|(.*node_modules/)|(.*build/)|(.*dist/)'
+EXCLUDE_REGEX_PARTS=(
+  '^LICENSE(S)?/'      # top-level LICENSE/ or LICENSES/
+  '\.gitignore$'
+  '\.gitattributes$'
+  '.*firebase_cpp_sdk/'
+  '.*node_modules/'
+  '.*build/'
+  '.*dist/'
+  '.*templates/'       # templates (your new excludes)
+  '.*scaffolds/'
+  '.*examples/'
+  '.*3rdparty/'
+  '.*qtcreator-wizard/projects/'
+  '.*docs/out/'
+  '.*docs/debug/'
+  '.*docs/release/'
+  '.*docs/profile/'
+  '.*docs/\.qdoccache/'
+  '.*docs/.*\.qch$'
+  '.*docs/.*\.qhp$'
+  '.*docs/.*\.index$'
+  '.*docs/\.qmake\.stash$'
+  '.*docs/Makefile$'
+  '.*docs/Makefile\.Debug$'
+  '.*docs/Makefile\.Release$'
+  '.*docs/Makefile\.Profile$'
+)
+EXCLUDE_REGEX="$(IFS='|'; echo "${EXCLUDE_REGEX_PARTS[*]}")"
+
+#EXCLUDE_REGEX='(^LICENSE(S)?/)|(\.gitignore$)|(\.gitattributes$)|(.*firebase_cpp_sdk/)|(.*node_modules/)|(.*build/)|(.*dist/)'
 
 # Extensions that should carry SPDX headers
 SPDX_EXTS='^(c|cc|cxx|cpp|h|hh|hpp|qml|js|ts|java|kt|m|mm|gradle|groovy|kts|sh|bash|ps1|py|rb|pl|pro|pri|yml|yaml|toml|ini|cfg|conf|properties|cmake|xml|qrc|ui|plist|html|htm|md|markdown|bat|cmd)$'
