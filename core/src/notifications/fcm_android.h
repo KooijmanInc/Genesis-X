@@ -69,8 +69,9 @@ private:
     std::unique_ptr<FcmListener> m_listener;
 };
 #else
-class GENESISX_CORE_EXPORT FcmBridge
+class GENESISX_CORE_EXPORT FcmBridge : public QObject
 {
+    Q_OBJECT
 public:
     static FcmBridge& instance() {
         static FcmBridge s;
@@ -81,12 +82,16 @@ public:
     void subscribe(const QString&) {}
     void unsubscribe(const QString&) {}
 
+signals:
+    void tokenChanged(const QString& token);
+    void messageReceived(const QString& title, const QString& body, const QVariantMap& data);
+
 private:
     FcmBridge() = default;
     Q_DISABLE_COPY_MOVE(FcmBridge)
 };
 
-class GENESISX_CORE_EXPORT FcmLFcmListener {};
+// class GENESISX_CORE_EXPORT FcmLFcmListener {};
 #endif
 
 }

@@ -1,21 +1,4 @@
 # Sets GENESISX_APP_ROOT to the app's .pro directory (once),
 # exports it to sub-projects, and caches it for the next qmake run.
 
-isEmpty(GENESISX_APP_ROOT) {
-    # When a feature is loaded from an app .pro,
-    # _PRO_FILE_PWD_ is defined and points to that .pro's dir.
-    !isEmpty(_PRO_FILE_PWD_) {
-        GENESISX_APP_ROOT = $$clean_path($$_PRO_FILE_PWD_)
-    } else: !isEmpty(QMAKE_PROJECT_FILE) {
-        # Fallback: top-level .pro absolute path
-        __gx_pf = $$clean_path($$QMAKE_PROJECT_FILE)
-        GENESISX_APP_ROOT = $$dirname(__gx_pf)
-    } else {
-        # Last resort (shouldn’t happen in normal runs)
-        GENESISX_APP_ROOT = $$PWD
-    }
-    export(GENESISX_APP_ROOT)
-    cache(GENESISX_APP_ROOT, set, GENESISX_APP_ROOT)
-}
-
-ANDROID_PACKAGE_SOURCE_DIR = $$clean_path($$PWD/../)
+# ANDROID_PACKAGE_SOURCE_DIR = $$clean_path($$PWD/../)

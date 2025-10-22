@@ -1,0 +1,68 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+isEmpty(GX_SO) {
+    GX_SO = $$shell_path($$LIBDIRS/libgenesisx_$${GX_ABI}.so)
+    GX_SO_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_$${GX_ABI}.so)
+
+    exists($$GX_SO) {
+        QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_SO) $$shell_quote($$GX_SO_DEST)
+        message([genesisx] library .so file copied to $$DEST_LIBDIRS)
+    }
+
+    GX_FB_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/libs/android/$$GX_ABI)
+    GX_FB_LIST = \
+        $$GX_FB_ROOT/libfirebase_app.so \
+        $$GX_FB_ROOT/libfirebase_messaging.so \
+        $$GX_FB_ROOT/libfirebase_auth.so \
+        $$GX_SO
+
+    for(fb, GX_FB_LIST) {
+        exists($$fb) {
+            ANDROID_EXTRA_LIBS += $$fb
+            message([genesisx] add extra library ANDROID_EXTRA_LIBS += $$fb)
+        }
+    }
+
+    # Copy Gradle include into the app's android/ dir
+    GX_ANDROID_GRADLE_SRC = $$clean_path($$GENESISX_BUILD_ROOT/core/android-template)
+    GX_ANDROID_GRADLE_DST = $$GENESISX_APP_ROOT/android
+
+    GX_GSERV_SRC =
+    exists($$GX_ANDROID_GRADLE_DST/google-services.json) {
+        GX_GSERV_SRC = $$clean_path($$GX_ANDROID_GRADLE_DST/google-services.json)
+    } else: exists($$GX_ANDROID_GRADLE_SRC/google-services.json) {
+        GX_GSERV_SRC = $$clean_path($$GX_ANDROID_GRADLE_SRC/google-services.json)
+    }
+    GX_GSERV_DST = $$clean_path($$GX_ANDROID_GRADLE_DST/google-services.json)
+    GX_GBUILD_SRC = $$GX_ANDROID_GRADLE_SRC/build.gradle
+    GX_GBUILD_DST = $$GX_ANDROID_GRADLE_DST/build.gradle
+    GX_GPROPERTIES_SRC = $$GX_ANDROID_GRADLE_SRC/gradle.properties
+    GX_GPROPERTIES_DST = $$GX_ANDROID_GRADLE_DST/gradle.properties
+
+    GX_ANDROID_GRADLE_SRC = $$shell_path($$GX_ANDROID_GRADLE_SRC)
+    GX_ANDROID_GRADLE_DST = $$shell_path($$GX_ANDROID_GRADLE_DST)
+    GX_GSERV_SRC = $$shell_path($$GX_GSERV_SRC)
+    GX_GSERV_DST = $$shell_path($$GX_GSERV_DST)
+    GX_GBUILD_SRC = $$shell_path($$GX_GBUILD_SRC)
+    GX_GBUILD_DST = $$shell_path($$GX_GBUILD_DST)
+    GX_GPROPERTIES_SRC = $$shell_path($$GX_GPROPERTIES_SRC)
+    GX_GPROPERTIES_DST = $$shell_path($$GX_GPROPERTIES_DST)
+
+    if (!exists($$GX_ANDROID_GRADLE_DST)) {
+        QMAKE_PRE_LINK += \
+            $$escape_expand(\\n\\t)$(MKDIR) $$shell_quote($$GX_ANDROID_GRADLE_DST)
+    }
+    QMAKE_PRE_LINK += \
+        $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GBUILD_SRC) $$shell_quote($$GX_GBUILD_DST) \
+        $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GPROPERTIES_SRC) $$shell_quote($$GX_GPROPERTIES_DST)
+
+    if (!exists($$GX_GSERV_DST)) {
+        QMAKE_PRE_LINK += \
+            $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GSERV_SRC) $$shell_quote($$GX_GSERV_DST)
+
+        message([genesisx] will copy google-services.json from: $$GX_GSERV_SRC to: $$GX_GSERV_DST)
+    } else {
+        message([genesisx] WARNING: google-services.json not found in template or existing in app to: $$GX_GSERV_DST)
+    }
+}

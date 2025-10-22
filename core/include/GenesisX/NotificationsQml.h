@@ -4,12 +4,13 @@
 #ifndef NOTIFICATIONSQML_H
 #define NOTIFICATIONSQML_H
 
+#include "genesisx_global.h"
+
 namespace gx {
 
-void registerGenesisXNotifications();
-
-
+GENESISX_CORE_EXPORT void registerGenesisXNotifications();
 }
+
 // static void initGenesisXResources();
 
 #endif // NOTIFICATIONSQML_H

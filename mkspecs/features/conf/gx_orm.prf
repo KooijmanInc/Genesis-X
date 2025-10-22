@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+!defined(__GX_ORM_PRF_INCLUDED__, var) {
+    __GX_ORM_PRF_INCLUDED__ = 1
+
+    message([genesisx_orm] module loaded from $$PWD)
+
+    GX_ORM_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/orm/include)
+
+    INCLUDEPATH += $$GX_ORM_INC_ROOT $$clean_path($$GENESISX_BUILD_ROOT/core/include)
+    QMAKE_LIBDIR += $$LIBDIRS
+
+    GX_ABI = $$QT_ARCH
+    isEmpty(GX_ABI): GX_ABI = arm64-v8a
+    contains(GX_ABI, arm64): GX_ABI = arm64-v8a
+
+    android {
+        !contains(LIBS, -lgenesisx_$${GX_ABI}) {
+            LIBS += -lgenesisx_$${GX_ABI} -lgenesisx_orm_$${GX_ABI}
+
+            message([genesisx_orm] setting core lib -lgenesisx_$${GX_ABI} and orm lib -lgenesisx_orm_$${GX_ABI})
+        }
+    } else {
+        !contains(LIBS, -lgenesisx) {
+            LIBS += -lgenesisx -lgenesisx_orm -llibgenesisx -llibgenesisx_orm
+
+            message([genesisx_orm] setting core lib -lgenesisx and orm lib -lgenesisx_orm total libs: $$LIBS)
+        }
+    }
+
+    win32 {
+        GX_DLL = $$shell_path($$LIBDIRS/genesisx.dll)
+        GX_DLL_DEST = $$shell_path($$DEST_LIBDIRS/genesisx.dll)
+        GX_A = $$shell_path($$LIBDIRS/libgenesisx.a)
+        GX_DEST_A = $$shell_path($$DEST_LIBDIRS/libgenesisx.a)
+
+        GX_DLL_ORM = $$shell_path($$LIBDIRS/genesisx_orm.dll)
+        GX_DLL_ORM_DEST = $$shell_path($$DEST_LIBDIRS/genesisx_orm.dll)
+        GX_ORM_A = $$shell_path($$LIBDIRS/libgenesisx_orm.a)
+        GX_ORM_DEST_A = $$shell_path($$DEST_LIBDIRS/libgenesisx_orm.a)
+
+        exists($$GX_DLL) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL) $$shell_quote($$GX_DLL_DEST)
+            message([genesisx_orm] core library .dll file copied to $$DEST_LIBDIRS)
+        }
+        exists($$GX_A) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_A) $$shell_quote($$GX_DEST_A)
+            message([genesisx] library .a $$GX_A file copied to $$DEST_LIBDIRS)
+        }
+
+        exists($$GX_DLL_ORM) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_ORM) $$shell_quote($$GX_DLL_ORM_DEST)
+            message([genesisx_orm] orm library .dll file copied to $$DEST_LIBDIRS)
+        }
+        exists($$GX_ORM_A) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_ORM_A) $$shell_quote($$GX_ORM_DEST_A)
+            message([genesisx_orm] orm library .a $$GX_ORM_A file copied to $$DEST_LIBDIRS)
+        }
+    }
+
+    android {
+        include(gx_core_sub.prf)
+
+        GX_ORM_SO = $$shell_path($$LIBDIRS/libgenesisx_orm_$${GX_ABI}.so)
+        GX_ORM_SO_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_orm_$${GX_ABI}.so)
+        exists($$GX_ORM_SO) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_ORM_SO) $$shell_quote($$GX_ORM_SO_DEST)
+            message([genesisx_orm] library .so file copied to $$DEST_LIBDIRS)
+        }
+
+        ANDROID_EXTRA_LIBS += $$GX_ORM_SO
+    }
+}

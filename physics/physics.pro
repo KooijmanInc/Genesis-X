@@ -67,7 +67,7 @@ SOURCES += $$files($$PWD/src/*.cpp) \
 # }
 # LIBS += -lgenesisx
 
-DISTFILES += \
-    common/genesisx_physics.pri \
-    physics.json
+# DISTFILES += \
+#     common/genesisx_physics.pri \
+#     physics.json
 

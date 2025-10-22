@@ -4,6 +4,7 @@
 #ifndef NOTIFICATION_HANDLER_H
 #define NOTIFICATION_HANDLER_H
 
+#include <QtQml/qqmlregistration.h>
 #include <QObject>
 #include <QVariantMap>
 
@@ -14,14 +15,15 @@ namespace gx {
 class NotificationHandler : public QObject
 {
     Q_OBJECT
+    // QML_NAMED_ELEMENT(GenesisX.Notifications)
+    // QML_ELEMENT
     Q_PROPERTY(bool initialized READ initialized NOTIFY initializedChanged)
 
 public:
     explicit NotificationHandler(QObject *parent = nullptr) : QObject(parent) {}
 
-    Q_INVOKABLE void show(const QString& title, const QString& body, int msec = 5000);
-
     Q_INVOKABLE void initialize(const QVariantMap& options = {});
+    Q_INVOKABLE void show(const QString& title, const QString& body, int msec = 5000);
     Q_INVOKABLE void subscribe(const QString& topic);
     Q_INVOKABLE void unsubscribe(const QString& topic);
     Q_INVOKABLE QString fcmToken() const;

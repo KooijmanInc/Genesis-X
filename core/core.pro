@@ -7,6 +7,12 @@ linux:!android: QT += dbus
 TEMPLATE = lib
 TARGET = genesisx
 CONFIG += c++23
+# CONFIG += qmltypes
+# QML_IMPORT_NAME = include.GenesisX.NotificationsQml
+# QML_IMPORT_MAJOR_VERSION = 1
+# QMLTYPES_INSTALL_DIR = $$PWD/qml
+
+# INCLUDEPATH += src/notifications
 
 ios {
     QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
@@ -41,6 +47,8 @@ ios {
     OBJECTIVE_SOURCES += \
         $$PWD/src/notifications/NotificationHandler_apple.mm \
         $$PWD/src/notifications/GXPushBridge.mm
+} else:win32 {
+    CONFIG += dll
 } else {
     CONFIG += shared
 }
@@ -76,9 +84,12 @@ HEADERS += $$files($$PWD/include/GenesisX/core/*.h) \
     $$PWD/include/GenesisX/genesisx_global.h \
     $$PWD/src/notifications/NotificationHandler.h \
     $$PWD/src/notifications/fcm_android.h \
-    src/notifications/NotificationHandler_apple_bridge.h
+    $$PWD/src/notifications/NotificationHandler_apple_bridge.h \
+    include/GenesisX/Navigation/GxRouter.h \
+    include/GenesisX/NavigationQml.h
 SOURCES += $$files($$PWD/src/*.cpp) \
-    $$PWD/src/notifications/NotificationHandler.cpp \
+    src/navigation/GxRouter.cpp \
+    src/notifications/NotificationHandler.cpp \
     $$PWD/src/notifications/NotificationsQml.cpp \
     $$PWD/src/notifications/fcm_android.cpp
 
@@ -88,13 +99,18 @@ SOURCES += $$files($$PWD/src/*.cpp) \
 # target.path  = $$[QT_INSTALL_PREFIX]/lib
 # INSTALLS += headers target
 
+QML_IMPORT_PATH += $$PWD/qml
+
 DISTFILES += \
     # $$PWD/common/genesisx_core.pri \
+    $$files($$PWD/qml/*, true) \
     $$PWD/android-template/gradle.properties \
     $$PWD/android-template/gradle.properties.in \
     $$PWD/android-template/build.gradle \
     $$PWD/android-template/google-services.json \
-    $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle
+    $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle \
+    qml/GenesisX/Navigation/Link.qml \
+    qml/GenesisX/Navigation/NavHost.qml
 
 RESOURCES += \
     $$PWD/resources/core.qrc
