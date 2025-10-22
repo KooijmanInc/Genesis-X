@@ -4,6 +4,8 @@
 #include "NotificationHandler.h"
 #include <QCoreApplication>
 
+#include <GenesisX/Navigation/GxRouter.h>
+
 #ifdef Q_OS_ANDROID
 #include "fcm_android.h"
 #endif
@@ -74,7 +76,61 @@
  *  \endcode
  */
 
+/*!
+    \qmlmodule GenesisX.Notifications 1.0
+    \title Genesis-X Notifications (QML)
+    \brief QML APIs for local and push notifications.
+
+    Import this module to use the \l NotificationHandler type:
+
+    \code
+    import GenesisX
+    \endcode
+*/
+
+/*!
+    \qmltype NotificationHandler
+    \inqmlmodule GenesisX.Notifications
+    \since GenesisX.Notifications 1.0
+    \brief Handles local and push notifications with a unified API.
+
+    \section2 Example
+    \qml
+    import GenesisX
+
+    NotificationHandler {
+        onMessageReceived: (m) => console.log(m.title, m.body)
+        Component.onCompleted: requestPermission()
+    }
+    \endqml
+
+    \section2 Properties
+    \qmlproperty bool NotificationHandler::permissionGranted
+    \qmlproperty string NotificationHandler::token
+    \qmlproperty bool NotificationHandler::supported
+
+    \section2 Signals
+    \qmlsignal void NotificationHandler::tokenChanged(string token)
+    \qmlsignal void NotificationHandler::messageReceived(var message)
+    \qmlsignal void NotificationHandler::permissionChanged(bool granted)
+
+    \section2 Methods
+    \qmlmethod void NotificationHandler::requestPermission()
+    \qmlmethod void NotificationHandler::showLocal(string text)
+*/
+
+
 using namespace gx;
+using gx::navigation::router;
+
+void onFirebaseMessage(const QVariantMap& data)
+{
+    QString path = data.value("route").toString();
+    QVariantMap params = data;
+    params.remove("route");
+    qDebug() << "got the link, go to page" << path << params;
+    router()->navigate(path, params);
+}
 
 void NotificationHandler::show(const QString &title, const QString &body, int msec)
 {
@@ -102,6 +158,9 @@ void NotificationHandler::initialize(const QVariantMap &options)
 #ifdef Q_OS_ANDROID
     auto& fcm = gx::android::FcmBridge::instance();
     connect(&fcm, &gx::android::FcmBridge::messageReceived, this, &NotificationHandler::notificationReceived);
+    connect(&fcm, &gx::android::FcmBridge::messageReceived, this, [](const QString& /*title*/, const QString& /*body*/, const QVariantMap& data) {
+        onFirebaseMessage(data);
+    });
 connect(&fcm, &gx::android::FcmBridge::tokenChanged, this, &NotificationHandler::tokenChanged);
     fcm.initialize();
 #elif defined(Q_OS_MACOS) || defined(Q_OS_IOS)

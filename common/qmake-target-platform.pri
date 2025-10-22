@@ -25,12 +25,31 @@ else: contains(SPEC, g++)  { COMPILER_PATH = gcc }
 else: contains(SPEC, msvc) { COMPILER_PATH = msvc }
 
 # Fallback based on the actual compiler command
+# isEqual(COMPILER_PATH, unknown-compiler) {
+#     contains(QMAKE_CXX, clang) { COMPILER_PATH = clang }
+#     else: contains(QMAKE_CXX, clang++) { COMPILER_PATH = android-clangcc}
+#     else: contains(QMAKE_CXX, g++) { COMPILER_PATH = gcc }
+#     else: contains(QMAKE_CXX, cl) { COMPILER_PATH = msvc }
+#     # else: COMPILER_PATH = android-clangcc
+# }
+
 isEqual(COMPILER_PATH, unknown-compiler) {
-    contains(QMAKE_CXX, clang) { COMPILER_PATH = clang }
-    else: contains(QMAKE_CXX, clang++) { COMPILER_PATH = android-clangcc}
-    else: contains(QMAKE_CXX, g++) { COMPILER_PATH = gcc }
-    else: contains(QMAKE_CXX, cl) { COMPILER_PATH = msvc }
-    else: COMPILER_PATH = android-clangcc
+    equals(QMAKE_CXX, clang++) {
+        contains(PLATFORM_PATH, windows) {
+            COMPILER_PATH = clangcc
+        } else:android {
+            COMPILER_PATH = android-clangcc
+        }
+    } else:contains(QMAKE_CXX, clang) {
+        COMPILER_PATH = clang
+    } else:contains(QMAKE_CXX, g++) {
+        COMPILER_PATH = gcc
+    } else:contains(QMAKE_CXX, cl) {
+        COMPILER_PATH = msvc
+    }
+}
+isEqual(COMPILER_PATH, unknown-compiler) {
+    message($$COMPILER_PATH and $$QMAKE_CXX still to do)
 }
 
 # ---------- Architecture ----------

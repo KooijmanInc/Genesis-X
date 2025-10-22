@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>nl.kooijmaninc.genesisx</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <metaData name="version" value="1.0"/>
+    <filterSection>
+        <filterAttribute>1.0</filterAttribute>
+        <filterAttribute>GenesisX</filterAttribute>
+        <filterAttribute>Qt6</filterAttribute>
+        <toc>
+            <section ref="index.html" title="Genesis-X SDK">
+                <section ref="" title="">
+                    <section ref="genesisx-notifications-qmlmodule.html" title="Genesis-X Notifications (QML)"/>
+                    <section ref="index.html" title="Genesis-X SDK"/>
+                    <section ref="qml-genesisx-notifications-notificationhandler.html" title="NotificationHandler Type Reference">
+                        <section ref="qml-genesisx-notifications-notificationhandler-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="gx.html" title="gx Namespace Reference"/>
+                    <section ref="gx-notificationhandler.html" title="gx::NotificationHandler Class Reference"/>
+                </section>
+            </section>
+        </toc>
+        <keywords>
+            <keyword name="Genesis-X SDK" id="Genesis-X SDK" ref="index.html"/>
+            <keyword name="GenesisX.Notifications" id="QML.Notifications.GenesisX" ref="genesisx-notifications-qmlmodule.html"/>
+            <keyword name="NotificationHandler" id="gx::NotificationHandler" ref="gx-notificationhandler.html"/>
+            <keyword name="NotificationHandler" id="QML.NotificationHandler" ref="qml-genesisx-notifications-notificationhandler.html"/>
+            <keyword name="NotificationHandler" id="QML.GenesisX.Notifications1.NotificationHandler" ref="qml-genesisx-notifications-notificationhandler.html"/>
+            <keyword name="gx" id="gx" ref="gx.html"/>
+        </keywords>
+        <files>
+            <file>genesisx-notifications-qmlmodule.html</file>
+            <file>gx-notificationhandler.html</file>
+            <file>gx.html</file>
+            <file>index.html</file>
+            <file>qml-genesisx-notifications-notificationhandler-members.html</file>
+            <file>qml-genesisx-notifications-notificationhandler.html</file>
+        </files>
+    </filterSection>
+</QtHelpProject>

@@ -5,12 +5,15 @@ TEMPLATE = subdirs
 CONFIG += qt c++23
 CONFIG += ordered
 
-SUBDIRS += core physics
+SUBDIRS += core physics orm
 
 core.subdir = $$PWD/core
 
 physics.subdir  = $$PWD/physics
 physics.depends = core
+
+orm.subdir = $$PWD/orm
+orm.depends = core
 
 DISTFILES += \
     README.md \

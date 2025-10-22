@@ -4,6 +4,7 @@
 TEMPLATE = aux
 DISTFILES += \
     $$files(../docs/*, true) \
+    $$files($$PWD/../common/*, true) \
     $$files($$PWD/../tools/*, true) \
     $$files($$PWD/../mkspecs/*, true) \
     $$files($$PWD/../config/*, true) \
