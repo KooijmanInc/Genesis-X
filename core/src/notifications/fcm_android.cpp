@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #include "fcm_android.h"
 
 #ifdef Q_OS_ANDROID
@@ -73,3 +76,4 @@ firebase::InitResult FcmBridge::initThunk(firebase::App *app, void *ctx)
 }
 
 #endif
+

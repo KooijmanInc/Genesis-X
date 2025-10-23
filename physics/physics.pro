@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 QT += core
 
 TEMPLATE = lib
@@ -7,11 +10,17 @@ CONFIG += c++23
 ios {
     CONFIG -= dll shared
     CONFIG += staticlib
+} else:macos {
+    CONFIG += shared staticlib
 } else {
     CONFIG += shared
 }
 
-DEFINES += GENESISX_PHYSICS_BUILD
+contains(CONFIG, staticlib) {
+    DEFINES += GENESISX_PHYSICS_STATIC
+} else {
+    DEFINES += GENESISX_PHYSICS_LIBRARY
+}
 
 GENESISX_BUILD_ROOT = $$clean_path($$PWD/..)
 include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
@@ -30,15 +39,19 @@ win32-g++: QMAKE_LFLAGS_SHLIB += -Wl,--out-implib,$$DESTDIR/lib$${TARGET}.a
 # Physics links to core; search same central dir
 QMAKE_LIBDIR += $$DESTDIR
 android {
-    LIBS += -lGenesisX_arm64-v8a
+    LIBS += -lgenesisx_arm64-v8a
 } else {
-    LIBS += -lGenesisX
+    LIBS += -lgenesisx
 }
 
-INCLUDEPATH += $$GENESISX_BUILD_ROOT/physics/include/GenesisX
+INCLUDEPATH += $$GENESISX_BUILD_ROOT/physics/include
 
-HEADERS += $$files($$PWD/include/GenesisX/physics/*.h)
-SOURCES += $$files($$PWD/src/*.cpp)
+HEADERS += $$files($$PWD/include/GenesisX/physics/*.h) \
+    include/GenesisX/genesisx_physics_global.h \
+    include/GenesisX/vehicles/vehicle4w.h
+SOURCES += $$files($$PWD/src/*.cpp) \
+    src/vehicles/vehicle4w.cpp
+    #src/placeholder.cpp
 
 # QMAKE_LIBDIR += $$GENESISX_OUT_BIN
 # LIBS += -lgenesisx   # depends on core
@@ -54,6 +67,7 @@ SOURCES += $$files($$PWD/src/*.cpp)
 # }
 # LIBS += -lgenesisx
 
-DISTFILES += \
-    common/genesisx_physics.pri \
-    physics.json
+# DISTFILES += \
+#     common/genesisx_physics.pri \
+#     physics.json
+

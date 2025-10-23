@@ -1,17 +1,63 @@
-QT -= gui
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+# QT -= gui
 QT += core qml widgets
+linux:!android: QT += dbus
 TEMPLATE = lib
 TARGET = genesisx
 CONFIG += c++23
+# CONFIG += qmltypes
+# QML_IMPORT_NAME = include.GenesisX.NotificationsQml
+# QML_IMPORT_MAJOR_VERSION = 1
+# QMLTYPES_INSTALL_DIR = $$PWD/qml
+
+# INCLUDEPATH += src/notifications
 
 ios {
+    QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
+    QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
+    QMAKE_MAC_XCODE_SETTINGS += SEPARATE_HEADERMAP=YES
     CONFIG -= dll shared
     CONFIG += staticlib
+    LIBS += -framework UserNotifications
+    LIBS += -framework UIKit
+    LIBS += -framework Foundation
+    QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+    QMAKE_OBJECTIVE_CXXFLAGS += -fobjc-arc
+
+    QMAKE_LFLAGS += -ObjC
+    OBJECTIVE_SOURCES += \
+        $$PWD/src/notifications/NotificationHandler_apple.mm \
+        $$PWD/src/notifications/GXAppDelegate+Push_ios.mm
+} else:macos {
+    QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
+    QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
+    QMAKE_MAC_XCODE_SETTINGS += SEPARATE_HEADERMAP=YES
+    CONFIG += shared staticlib
+    LIBS += -framework UserNotifications
+    LIBS += -framework AppKit
+    LIBS += -framework Cocoa
+    LIBS += -framework Foundation
+    QMAKE_LFLAGS += -ObjC
+    QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+    QMAKE_OBJECTIVE_CXXFLAGS += -fobjc-arc
+    QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
+    QMAKE_MAC_XCODE_SETTINGS += OTHER_LDFLAGS="$(inherited) -ObjC"
+    OBJECTIVE_SOURCES += \
+        $$PWD/src/notifications/NotificationHandler_apple.mm \
+        $$PWD/src/notifications/GXPushBridge.mm
+} else:win32 {
+    CONFIG += dll
 } else {
     CONFIG += shared
 }
 
-DEFINES += GENESISX_CORE_BUILD
+contains(CONFIG, staticlib) {
+    DEFINES += GENESISX_CORE_STATIC
+} else {
+    DEFINES += GENESISX_CORE_LIBRARY
+}
 DEFINES += GENESISX_HAS_NOTIFICATIONS
 DEFINES += GX_ENABLE_STARTUP_AUTO_REGISTER
 
@@ -37,9 +83,13 @@ HEADERS += $$files($$PWD/include/GenesisX/core/*.h) \
     $$PWD/include/GenesisX/NotificationsQml.h \
     $$PWD/include/GenesisX/genesisx_global.h \
     $$PWD/src/notifications/NotificationHandler.h \
-    $$PWD/src/notifications/fcm_android.h
+    $$PWD/src/notifications/fcm_android.h \
+    $$PWD/src/notifications/NotificationHandler_apple_bridge.h \
+    include/GenesisX/Navigation/GxRouter.h \
+    include/GenesisX/NavigationQml.h
 SOURCES += $$files($$PWD/src/*.cpp) \
-    $$PWD/src/notifications/NotificationHandler.cpp \
+    src/navigation/GxRouter.cpp \
+    src/notifications/NotificationHandler.cpp \
     $$PWD/src/notifications/NotificationsQml.cpp \
     $$PWD/src/notifications/fcm_android.cpp
 
@@ -49,13 +99,18 @@ SOURCES += $$files($$PWD/src/*.cpp) \
 # target.path  = $$[QT_INSTALL_PREFIX]/lib
 # INSTALLS += headers target
 
+QML_IMPORT_PATH += $$PWD/qml
+
 DISTFILES += \
     # $$PWD/common/genesisx_core.pri \
+    $$files($$PWD/qml/*, true) \
     $$PWD/android-template/gradle.properties \
     $$PWD/android-template/gradle.properties.in \
     $$PWD/android-template/build.gradle \
     $$PWD/android-template/google-services.json \
-    $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle
+    $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle \
+    qml/GenesisX/Navigation/Link.qml \
+    qml/GenesisX/Navigation/NavHost.qml
 
 RESOURCES += \
     $$PWD/resources/core.qrc

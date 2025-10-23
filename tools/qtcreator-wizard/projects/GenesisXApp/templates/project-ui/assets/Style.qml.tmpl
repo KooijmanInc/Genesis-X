@@ -1,0 +1,23 @@
+// Genesis-X skeleton
+pragma Singleton
+import QtQuick
+
+Item {
+    function hscale(size) {
+        return Math.round(size * (widthWindow / widthWindowReference))
+    }
+    function vscale(size) {
+        return Math.round(size * (heightWindow / heightWindowReference))
+    }
+    function tscale(size) {
+        return Math.round((hscale(size) + vscale(size)) / 2)
+    }
+
+    readonly property real widthWindow: 360
+    readonly property real heightWindow: 700
+    readonly property real widthWindowReference: 360
+    readonly property real heightWindowReference: 700
+
+    readonly property color colorTextWhite: "#FFFFFF"
+    readonly property color colorTextBlack: "#000000"
+}

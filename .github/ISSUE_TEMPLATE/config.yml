@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/KooijmanInc/Genesis-X/security/policy
+    about: Please do not report security vulnerabilities in public issues.

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 # GitHub Sponsors & funding links
 # Fill in the handles/ids you actually use, then place this file at .github/FUNDING.yml
 
@@ -10,3 +13,4 @@ custom:               # direct links (PayPal, Stripe, Buy Me a Coffee, etc.)
   - https://paypal.me/kooijmaninc
   - https://buy.stripe.com/6oUfZh67X1n67FC4NVaAw01
   - https://buy.stripe.com/3cIaEXeEt1n66BybcjaAw00
+

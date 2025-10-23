@@ -1,0 +1,48 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GenesisX.NotificationHandler"
+        prototype: "QObject"
+        exports: ["GenesisX/NotificationHandler 1.0"]
+        // isCreatable: true
+        // isSingleton: false
+        Property {
+            name: "intialized"
+            type: "bool"
+            read: "initialized"
+            notify: "initializedChanged"
+        }
+
+        Method {
+            name: "initialize"
+            type: "void"
+            parameter: { name: "options"; type: "QVariantMapS" }
+        }
+
+        Method {
+            name: "show"
+            type: "void"
+            parameter: { name: "title"; type: "QString" }
+            parameter: { name: "body"; type: "QString" }
+            parameter: { name: "msec"; type: "int" }
+        }
+
+        Signal {
+            name: "notificationReceived"
+            type: "void"
+            parameter: { name: "title"; type: "QString" }
+            parameter: { name: "body"; type: "QString" }
+            parameter: { name: "data"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "initializedChanged"
+        }
+        Signal {
+            name: "tokenChanged"
+            type: "void"
+            parameter: { name: "token"; type: "QString" }
+        }
+    }
+}

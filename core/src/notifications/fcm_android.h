@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #ifndef FCM_ANDROID_H
 #define FCM_ANDROID_H
 
@@ -19,7 +22,7 @@ namespace gx::android {
 
 class FcmBridge;
 
-class GENESISX_EXPORT FcmListener final : public ::firebase::messaging::Listener
+class GENESISX_CORE_EXPORT FcmListener final : public ::firebase::messaging::Listener
 {
 public:
     explicit FcmListener(FcmBridge* owner) : m_owner(owner) {}
@@ -30,7 +33,7 @@ private:
     FcmBridge* m_owner = nullptr;
 };
 
-class GENESISX_EXPORT FcmBridge : public QObject
+class GENESISX_CORE_EXPORT FcmBridge : public QObject
 {
     Q_OBJECT
 
@@ -66,8 +69,9 @@ private:
     std::unique_ptr<FcmListener> m_listener;
 };
 #else
-class GENESISX_EXPORT FcmBridge
+class GENESISX_CORE_EXPORT FcmBridge : public QObject
 {
+    Q_OBJECT
 public:
     static FcmBridge& instance() {
         static FcmBridge s;
@@ -78,14 +82,19 @@ public:
     void subscribe(const QString&) {}
     void unsubscribe(const QString&) {}
 
+signals:
+    void tokenChanged(const QString& token);
+    void messageReceived(const QString& title, const QString& body, const QVariantMap& data);
+
 private:
     FcmBridge() = default;
     Q_DISABLE_COPY_MOVE(FcmBridge)
 };
 
-class GENESISX_EXPORT FcmLFcmListener {};
+// class GENESISX_CORE_EXPORT FcmLFcmListener {};
 #endif
 
 }
 
 #endif // FCM_ANDROID_H
+

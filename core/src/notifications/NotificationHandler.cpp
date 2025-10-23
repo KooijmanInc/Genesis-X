@@ -1,5 +1,10 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #include "NotificationHandler.h"
 #include <QCoreApplication>
+
+#include <GenesisX/Navigation/GxRouter.h>
 
 #ifdef Q_OS_ANDROID
 #include "fcm_android.h"
@@ -11,15 +16,137 @@
 #include <QApplication>
 #endif
 
-using namespace gx;
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include <QtDBus/QtDBus>
+#endif
 
+/*!
+ *  \class gx::NotificationHandler
+ *  \inmodule Core
+ *  \since 6.10
+ *  \brief Main class for local and push notifications.
+ *
+ *  code snippet shows the correct usage pattern:
+ *  \code
+ *  #include <QGuiApplication>
+ *  #include <QQmlApplicationEngine>
+ *  #include <GenesisX/NotificationsQml.h>
+ *
+ *  int main(int argc, char *argv[])
+ *  {
+ *      QGuiApplication app(argc, argv);
+ *
+ *      gx::registerGenesisXNotifications();
+ *
+ *      QQmlApplicationEngine engine;
+ *
+ *      engine.load(QStringLiteral("qrc:/views/MasterView.qml"));
+ *
+ *      if (engine.rootObjects().isEmpty()) return -1;
+ *
+ *      return app.exec();
+ *  }
+ *  \endcode
+ *  \brief And implementing it in qml
+ *
+ *  code snippet shows the correct usage pattern:
+ *  \code
+ *  import QtQuick
+ *  import GenesisX.Notifications 1.0
+ *
+ *  Window {
+ *      id: root
+ *      visible: true
+ *      width: 1024
+ *      height: 768
+ *
+ *      Component.onCompleted: {
+ *          notify.show("Hello from GenesisX", "Windows tray balloon :-)")
+ *      }
+ *
+ *      NotificationHandler {
+ *          id: notify
+ *          onNotificationReceived: (title, body, data) => {
+ *              console.log("[QML] got notification:", title, body, JSON.stringify(data))
+ *          }
+ *          onTokenChanged: t => console.log("New token found in qml:", t)
+ *          Component.onCompleted: initialize()
+ *      }
+ *  }
+ *  \endcode
+ */
+
+/*!
+    \qmlmodule GenesisX.Notifications 1.0
+    \title Genesis-X Notifications (QML)
+    \brief QML APIs for local and push notifications.
+
+    Import this module to use the \l NotificationHandler type:
+
+    \code
+    import GenesisX
+    \endcode
+*/
+
+/*!
+    \qmltype NotificationHandler
+    \inqmlmodule GenesisX.Notifications
+    \since GenesisX.Notifications 1.0
+    \brief Handles local and push notifications with a unified API.
+
+    \section2 Example
+    \qml
+    import GenesisX
+
+    NotificationHandler {
+        onMessageReceived: (m) => console.log(m.title, m.body)
+        Component.onCompleted: requestPermission()
+    }
+    \endqml
+
+    \section2 Properties
+    \qmlproperty bool NotificationHandler::permissionGranted
+    \qmlproperty string NotificationHandler::token
+    \qmlproperty bool NotificationHandler::supported
+
+    \section2 Signals
+    \qmlsignal void NotificationHandler::tokenChanged(string token)
+    \qmlsignal void NotificationHandler::messageReceived(var message)
+    \qmlsignal void NotificationHandler::permissionChanged(bool granted)
+
+    \section2 Methods
+    \qmlmethod void NotificationHandler::requestPermission()
+    \qmlmethod void NotificationHandler::showLocal(string text)
+*/
+
+
+using namespace gx;
+using gx::navigation::router;
+
+void onFirebaseMessage(const QVariantMap& data)
+{
+    QString path = data.value("route").toString();
+    QVariantMap params = data;
+    params.remove("route");
+    qDebug() << "got the link, go to page" << path << params;
+    router()->navigate(path, params);
+}
 
 void NotificationHandler::show(const QString &title, const QString &body, int msec)
 {
+    qDebug() << title << body << msec;
 #ifdef Q_OS_WIN
     ensureTray();
     // You must have a visible tray icon for balloons to appear:
     m_tray->showMessage(title, body, qApp->windowIcon(), msec);
+#endif
+
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    showLinuxNotification(title, body, msec);
+#endif
+
+#if defined(Q_OS_MACOS)
+    showAppleNotification(title, body, msec);
 #endif
 }
 
@@ -31,8 +158,15 @@ void NotificationHandler::initialize(const QVariantMap &options)
 #ifdef Q_OS_ANDROID
     auto& fcm = gx::android::FcmBridge::instance();
     connect(&fcm, &gx::android::FcmBridge::messageReceived, this, &NotificationHandler::notificationReceived);
+    connect(&fcm, &gx::android::FcmBridge::messageReceived, this, [](const QString& /*title*/, const QString& /*body*/, const QVariantMap& data) {
+        onFirebaseMessage(data);
+    });
 connect(&fcm, &gx::android::FcmBridge::tokenChanged, this, &NotificationHandler::tokenChanged);
     fcm.initialize();
+#elif defined(Q_OS_MACOS) || defined(Q_OS_IOS)
+    appleInitialize(options);
+#else
+    Q_UNUSED(options);
 #endif
 
     m_initialized = true;
@@ -68,6 +202,60 @@ QString NotificationHandler::fcmToken() const
     return {};
 #endif
 }
+
+void NotificationHandler::appleDidReceiveToken(const QString &token)
+{
+    emit tokenChanged(token);
+}
+
+void NotificationHandler::appleDidReceiveRemote(const QString &title, const QString &body, const QVariantMap &data)
+{
+    emit notificationReceived(title, body, data);
+}
+
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+void NotificationHandler::showLinuxNotification(const QString &title, const QString &body, int msec)
+{
+    // org.freedesktop.Notifications → Notify(app_name, replaces_id, app_icon, summary, body, actions, hints, expire_timeout)
+    if (!QDBusConnection::sessionBus().isConnected()) {
+        qWarning() << "[GX Notify] D-Bus session bus not available; cannot show notification.";
+        return;
+    }
+
+    const QString appName = QCoreApplication::applicationName().isEmpty()
+                                ? QStringLiteral("GenesisX")
+                                : QCoreApplication::applicationName();
+
+    QDBusMessage msg = QDBusMessage::createMethodCall(
+        QStringLiteral("org.freedesktop.Notifications"),
+        QStringLiteral("/org/freedesktop/Notifications"),
+        QStringLiteral("org.freedesktop.Notifications"),
+        QStringLiteral("Notify"));
+
+    const QString appIcon = QString();         // You can set a themed icon name or absolute file path here
+    const QStringList actions;                 // e.g. {"default", "Open"} if you later wire ActionInvoked
+    QVariantMap hints;                         // e.g. hints["urgency"] = (byte)1;
+
+    msg << appName
+        << static_cast<uint>(m_linuxReplacesId)
+        << appIcon
+        << title
+        << body
+        << actions
+        << hints
+        << static_cast<int>(msec);             // -1 uses server default
+
+    QDBusMessage reply = QDBusConnection::sessionBus().call(msg, QDBus::Block);
+    if (reply.type() == QDBusMessage::ReplyMessage && !reply.arguments().isEmpty()) {
+        // Returned id lets us replace on next Notify()
+        m_linuxReplacesId = reply.arguments().at(0).toUInt();
+        qInfo() << "[GX Notify] D-Bus Notify success";
+    } else {
+        qWarning() << "[GX Notify] D-Bus Notify() failed:" << reply.errorMessage();
+    }
+}
+#endif
+
 #ifdef Q_OS_WIN
 void NotificationHandler::ensureTray()
 {
@@ -99,3 +287,4 @@ bool NotificationHandler::eventFilter(QObject*, QEvent* e)
     return false;
 }
 #endif
+

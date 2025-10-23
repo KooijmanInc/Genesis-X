@@ -1,0 +1,175 @@
+# ---------- Project ----------
+project             = GenesisX
+description         = Genesis-X SDK
+version             = 1.0
+url                 = https://www.kooijmaninc.nl
+
+# ---------- Inputs (relative to docs/; use spaces, not semicolons) ----------
+headerdirs              = ../core/src ../core/include
+sourcedirs              = topics ../core/src
+sources.fileextensions  = "*.qdoc *.cpp *.qml"
+headers.fileextensions  = "*.h *.ch *.h++ *.hh *.hpp *.hxx"
+includepaths            = ../core/include ../physics/include
+imagedirs               = images
+
+# ---------- Output ----------
+outputdir                   = out
+outputformats               = HTML
+help                        = true
+navigation                  = true
+navigation.homepage         = index.html
+qmlmodules                  = GenesisX.NotificationHandler
+HTML.endheader = \
+"<style>\n" \
+"html, body {background-color: #262626;width: 100%;height: 100%;padding: 10px;margin: -15px -20px -5px, -10px;font: normal 400 14px/1.2 Arial;font-family: Arial, Helvetica;}" \
+".main-body {\n" \
+"background-color: #262626;\n" \
+"color: #d0d0d0;\n" \
+"margin-top: 50px;\n" \
+"}\n" \
+".main-margin {margin: 0 15px 0 15px;}" \
+"a:link {\n" \
+    "color: #1ec974;\n" \
+    "text-decoration: none;\n" \
+    "text-align: left;\n" \
+"}\n" \
+"a.qa-mark:target:before {\n" \
+    "content: \"***\";\n" \
+    "color: #ff0000;\n" \
+"}\n" \
+"a:hover {\n" \
+    "color: #1ec974;\n" \
+    "text-decoration: underline;\n" \
+    "text-align: left;\n" \
+"}\n" \
+"a:visited {\n" \
+    "color: #1ec974;\n" \
+    "text-align: left;\n" \
+"}\n" \
+"a:visited:hover {\n" \
+    "color: #1ec974;\n" \
+    "text-align: left;\n" \
+"}\n" \
+".navigationbar {\n" \
+    "display: block;\n" \
+    "position: relative;\n" \
+    "border-top: 1px solid #404142;\n" \
+    "border-bottom: 1px solid #404142;\n" \
+    "background-color: #353637;\n" \
+    "z-index: 1;\n" \
+    "height: 20px;\n" \
+    "padding-left: 10px;\n" \
+    "margin: 0px;\n" \
+    "margin-left: -15px;\n" \
+    "margin-right: -15px;\n" \
+"}\n" \
+".navigationbar ul {\n" \
+    "margin: 0;\n" \
+    "padding: 0;\n" \
+"}\n" \
+".navigationbar ul li {\n" \
+    "list-style-type: none;\n" \
+    "margin: 0;\n" \
+    "padding-top: 2px;\n" \
+    "height: 20px;\n" \
+"}\n" \
+".navigationbar ul li a, .navigationbar td a {\n" \
+    "display: block;\n" \
+    "text-decoration: none;\n" \
+    "background: url(../images/arrow_bc.png);\n" \
+    "background-repeat: no-repeat;\n" \
+    "background-position: right;\n" \
+    "padding-right: 17px;\n" \
+"}\n" \
+".navigationbar li {\n" \
+    "float: left;\n" \
+"}\n" \
+"@media screen {\n" \
+    ".title {\n" \
+        "color: #d0d0d0;\n" \
+        "font-size: 20px;\n" \
+        "font-weight: normal;\n" \
+        "left: 0;\n" \
+        "padding-bottom: 15px;\n" \
+        "padding-left: 10px;\n" \
+        "padding-top: 15px;\n" \
+        "position: absolute;\n" \
+        "right: 0;\n" \
+        "top: 0;\n" \
+        "background-color: #262626;\n" \
+        "border-bottom: 1px #404142 solid;\n" \
+        "font-weight: bold;\n" \
+        "margin-left: 10px;\n" \
+        "margin-right: 0;\n" \
+    "}\n" \
+"}\n" \
+".footer {\n" \
+    "text-align: left;\n" \
+    "padding-top: 45px;\n" \
+    "padding-left: 5px;\n" \
+    "margin-top: 45px;\n" \
+    "margin-bottom: 45px;\n" \
+    "font-size: 10px;\n" \
+    "border-top: 1px solid #404142;\n" \
+"}\n" \
+".footer p {\n" \
+    "line-height: 14px;\n" \
+    "font-size: 11px;\n" \
+    "padding: 0;\n" \
+    "margin: 0;\n" \
+"}\n" \
+".footer a[href*=\"http://\"], a[href*=\"ftp://\"],\n" \ "a[href*=\"https://\"] {\n" \
+    "font-weight: bold;\n" \
+"}\n" \
+".footerNavi {\n" \
+    "width: auto;\n" \
+    "text-align: right;\n" \
+    "margin-top: 50px;\n" \
+    "z-index: 1;\n" \
+"}\n" \
+"h2, p.h2 {\n" \
+    "font: 500 16px/1.2 Arial;\n" \
+    "font-weight: 100;\n" \
+    "background-color: #353637;\n" \
+    "padding: 4px;\n" \
+    "margin-bottom: 15px;\n" \
+    "margin-top: 30px;\n" \
+    "border-top: #404142 1px solid;\n" \
+    "border-bottom: #404142 1px solid;\n" \
+    "max-width: 99%;\n" \
+"}\n" \
+"h2:target {\n" \
+    "background-color: #F2F3D4;\n" \
+"}\n" \
+"</style>" \
+    "</head>\n"
+
+HTML.postheader = \
+    "<body class=\"main-body\"><div class=\"main-body main-margin\">\n" \
+        "<div class=\"header\" id=\"qtdocheader\">\n" \
+            "<div class=\"main\">\n" \
+                "<div class=\"main-rounded\">\n" \
+                    "<div class=\"navigationbar\">\n"
+
+HTML.postheader += "<ul>\n"
+
+HTML.postpostheader += "</ul>\n" \
+                    "</div>\n" \
+                "</div>\n" \
+                "<div class=\"content\">" \
+                    "<div class=\"line\">\n" \
+                        "<div class=\"content mainContent\">\n"
+
+HTML.footer           = "</div>\n" \
+                    "</div>\n" \
+                "</div></div>\n</div>\n<div class=\"qt-footer\">\n<p>© 2025 Kooijman Incorporate Holding B.V. — Genesis-X</p>\n</div>\n"
+
+# ---------- QHP ----------
+qhp.projects                    = GenesisX
+qhp.GenesisX.file               = GenesisX.qhp
+qhp.GenesisX.namespace          = nl.kooijmaninc.genesisx
+qhp.GenesisX.virtualFolder      = doc
+qhp.GenesisX.indexTitle         = Genesis-X SDK
+qhp.GenesisX.customFilters      = GenesisX
+qhp.GenesisX.filterAttributes   = GenesisX 1.0 Qt6
+qhp.GenesisX.description        = Genesis-X SDK Documentation
