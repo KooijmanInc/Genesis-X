@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebXML>
+    <document>
+        <group name="gx-app-notifications-classes" href="gx-app-notifications-classes.html" status="active" location="group_notifications.qdoc" filepath="D:/projects/qt/libs/Genesis-X/docs/topics/group_notifications.qdoc" lineno="1" documented="true" seen="true" title="gx::app::notifications Classes" module="GenesisX" brief="C++ classes in the gx::app::notifications namespace. * * ">
+            <description path="D:/projects/qt/libs/Genesis-X/docs/topics/group_notifications.qdoc" line="1" column="5">
+                <para>* * * *</para>
+                <brief>C++ classes in the <link raw="gx::app::notifications" href="gx-app-notifications.html" type="namespace">gx::app::notifications</link> namespace. * * <generatedlist contents="classes"/>
+                </brief>
+                <table width="100%"/>
+            </description>
+        </group>
+    </document>
+</WebXML>

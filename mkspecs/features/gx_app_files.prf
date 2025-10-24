@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_FILES
+
+message([genesisx app files] module loaded from $$PWD)

@@ -1,33 +1,72 @@
 # ---------- Project ----------
 project             = GenesisX
+module              = GenesisX
+group               = genesisx-core
+defines             += Q_QDOC
+defines             += GENESISX_CORE_EXPORT
 description         = Genesis-X SDK
 version             = 1.0
-url                 = https://www.kooijmaninc.nl
+url                 = https://genesisx.kooijmaninc.com
+
+# ---------- Make export / Qt macros harmless to QDoc's parser
+macro.GENESISX_CORE_EXPORT = 1
+macro.Q_OBJECT =
+macro.Q_INVOKABLE =
+macro.Q_PROPERTY =
+macro.Q_SIGNALS =
+macro.signals =
 
 # ---------- Inputs (relative to docs/; use spaces, not semicolons) ----------
 headerdirs              = ../core/src ../core/include
 sourcedirs              = topics ../core/src
-sources.fileextensions  = "*.qdoc *.cpp *.qml"
-headers.fileextensions  = "*.h *.ch *.h++ *.hh *.hpp *.hxx"
-includepaths            = ../core/include ../physics/include
+sources.fileextensions  = *.qdoc *.cpp *.qml
+headers.fileextensions  = *.h *.ch *.h++ *.hh *.hpp *.hxx
+includepaths            = -I../core/include -I../physics/include -I../core/src
 imagedirs               = images
+
+# ---------- Manual TOC ----------
+contentpage                 = index.html
+navigation.separatepages    = true
+navigation.homepage         = index.html
+navigation.cppclassespage   = classes.html
+navigation.cppclassestitle  = GenesisX classes
+navigation.pages            = \
+    index.html \
+    namespaces.html \
+    classes.html \
+    gx.html \
+        gx-app.html \
+            gx-app-ab.html \
+                gx-app-ab-abtesting.html \
+        gx-app-notifications.html \
+            gx-app-notifications-classes.html \
+            gx-app-notifications-notificationhandler.html \
+    qml-genesisx-notifications-qmlmodule.html \
+        qml-genesisx-notifications-notificationhandler.html \
 
 # ---------- Output ----------
 outputdir                   = out
-outputformats               = HTML
+outputformats               = WebXML HTML
+WebXML.nosubdirs            = true
+WebXML.outputsubdir         = webxml
+WebXML.quotinginformation   = true
+outputencoding              = UTF-8
 help                        = true
 navigation                  = true
-navigation.homepage         = index.html
-qmlmodules                  = GenesisX.NotificationHandler
+#navigation.homepage         = index.html
+qhp                         = true
+#qmlmodules                  = GenesisX.NotificationHandler
+qmlmodules                  = GenesisX.Notifications
+#indexes                     = out
 HTML.endheader = \
 "<style>\n" \
-"html, body {background-color: #262626;width: 100%;height: 100%;padding: 10px;margin: -15px -20px -5px, -10px;font: normal 400 14px/1.2 Arial;font-family: Arial, Helvetica;}" \
+"html, body {background-color: #262626;width: 100%;height: 100%;padding: 0 0 0 20px;margin: -20px -30px -20px -20px;font: normal 400 14px/1.2 Arial;font-family: Arial, Helvetica;}" \
 ".main-body {\n" \
 "background-color: #262626;\n" \
 "color: #d0d0d0;\n" \
 "margin-top: 50px;\n" \
 "}\n" \
-".main-margin {margin: 0 15px 0 15px;}" \
+".main-margin {margin: 0 15px 0 0px;padding: 10px;}" \
 "a:link {\n" \
     "color: #1ec974;\n" \
     "text-decoration: none;\n" \
@@ -58,9 +97,9 @@ HTML.endheader = \
     "background-color: #353637;\n" \
     "z-index: 1;\n" \
     "height: 20px;\n" \
-    "padding-left: 10px;\n" \
+    "padding-left: 30px;\n" \
     "margin: 0px;\n" \
-    "margin-left: -15px;\n" \
+    "margin-left: -35px !important;\n" \
     "margin-right: -15px;\n" \
 "}\n" \
 ".navigationbar ul {\n" \
@@ -91,7 +130,7 @@ HTML.endheader = \
         "font-weight: normal;\n" \
         "left: 0;\n" \
         "padding-bottom: 15px;\n" \
-        "padding-left: 10px;\n" \
+        "padding-left: 20px;\n" \
         "padding-top: 15px;\n" \
         "position: absolute;\n" \
         "right: 0;\n" \
@@ -127,16 +166,20 @@ HTML.endheader = \
     "margin-top: 50px;\n" \
     "z-index: 1;\n" \
 "}\n" \
+"h1 {padding-left: 40px;}" \
 "h2, p.h2 {\n" \
     "font: 500 16px/1.2 Arial;\n" \
     "font-weight: 100;\n" \
     "background-color: #353637;\n" \
     "padding: 4px;\n" \
+    "padding-left: 10px;\n" \
     "margin-bottom: 15px;\n" \
+    "margin-left: -10px;\n" \
+    "margin-right: -20px;\n" \
     "margin-top: 30px;\n" \
     "border-top: #404142 1px solid;\n" \
     "border-bottom: #404142 1px solid;\n" \
-    "max-width: 99%;\n" \
+    "max-width: 100%;\n" \
 "}\n" \
 "h2:target {\n" \
     "background-color: #F2F3D4;\n" \
@@ -167,7 +210,7 @@ HTML.footer           = "</div>\n" \
 # ---------- QHP ----------
 qhp.projects                    = GenesisX
 qhp.GenesisX.file               = GenesisX.qhp
-qhp.GenesisX.namespace          = nl.kooijmaninc.genesisx
+qhp.GenesisX.namespace          = com.kooijmaninc.genesisx
 qhp.GenesisX.virtualFolder      = doc
 qhp.GenesisX.indexTitle         = Genesis-X SDK
 qhp.GenesisX.customFilters      = GenesisX

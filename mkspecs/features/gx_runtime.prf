@@ -6,13 +6,145 @@ QML_IMPORT_PATH += $$GENESISX_BUILD_ROOT/core/qml
 
 isEmpty(DEST_LIBDIRS): DEST_LIBDIRS = $$OUT_PWD
 
+!contains(QT, genesisx) {
+    include(conf/gx_core.prf)
+}
+
 contains(QT, genesisx) {
     include(conf/gx_core.prf)
 }
 
-# contains(QT, genesisx_physics) {
-#     include(conf/gx_physics.prf)
-# }
+contains(QT, genesisx_app_ab) {
+    include(gx_app_ab.prf)
+}
+
+contains(QT, genesisx_app_analytics) {
+    include(gx_app_analytics.prf)
+}
+
+contains(QT, genesisx_app_audiorecorder) {
+    include(gx_app_audiorecorder.prf)
+}
+
+contains(QT, genesisx_app_auth) {
+    include(gx_app_auth.prf)
+}
+
+contains(QT, genesisx_app_background) {
+    include(gx_app_background.prf)
+}
+
+contains(QT, genesisx_app_billing) {
+    include(gx_app_billing.prf)
+}
+
+contains(QT, genesisx_app_biometrics) {
+    include(gx_app_biometrics.prf)
+}
+
+contains(QT, genesisx_app_calendar) {
+    include(gx_app_calendar.prf)
+}
+
+contains(QT, genesisx_app_cast) {
+    include(gx_app_cast.prf)
+}
+
+contains(QT, genesisx_app_clipboard) {
+    include(gx_app_clipboard.prf)
+}
+
+contains(QT, genesisx_app_config) {
+    include(gx_app_config.prf)
+}
+
+contains(QT, genesisx_app_connectivity) {
+    include(gx_app_connectivity.prf)
+}
+
+contains(QT, genesisx_app_contacts) {
+    include(gx_app_contacts.prf)
+}
+
+contains(QT, genesisx_app_core) {
+    include(gx_app_core.prf)
+}
+
+contains(QT, genesisx_app_crash) {
+    include(gx_app_crash.prf)
+}
+
+contains(QT, genesisx_app_deeplinks) {
+    include(gx_app_deeplinks.prf)
+}
+
+contains(QT, genesisx_app_files) {
+    include(gx_app_files.prf)
+}
+
+contains(QT, genesisx_app_haptics) {
+    include(gx_app_haptics.prf)
+}
+
+contains(QT, genesisx_app_imagepicker) {
+    include(gx_app_imagepicker.prf)
+}
+
+contains(QT, genesisx_app_intents) {
+    include(gx_app_intents.prf)
+}
+
+contains(QT, genesisx_app_location) {
+    include(gx_app_location.prf)
+}
+
+contains(QT, genesisx_app_logging) {
+    include(gx_app_logging.prf)
+}
+
+contains(QT, genesisx_app_media) {
+    include(gx_app_media.prf)
+}
+
+contains(QT, genesisx_app_notifications) {
+    include(gx_app_notifications.prf)
+}
+
+contains(QT, genesisx_app_permissions) {
+    include(gx_app_permissions.prf)
+}
+
+contains(QT, genesisx_app_preferences) {
+    include(gx_app_preferences.prf)
+}
+
+contains(QT, genesisx_app_remoteconfig) {
+    include(gx_app_remoteconfig.prf)
+}
+
+contains(QT, genesisx_app_review) {
+    include(gx_app_review.prf)
+}
+
+contains(QT, genesisx_app_securestore) {
+    include(gx_app_securestore.prf)
+}
+
+contains(QT, genesisx_app_sensors) {
+    include(gx_app_sensors.prf)
+}
+
+contains(QT, genesisx_app_share) {
+    include(gx_app_share.prf)
+}
+
+contains(QT, genesisx_app_updater) {
+    include(gx_app_updater.prf)
+}
+
+contains(QT, genesisx_physics) {
+    include(conf/gx_physics.prf)
+}
 
 contains(QT, genesisx_orm) {
     include(conf/gx_orm.prf)

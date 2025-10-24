@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_REMOTECONFIG
+
+message([genesisx app remoteconfig] module loaded from $$PWD)

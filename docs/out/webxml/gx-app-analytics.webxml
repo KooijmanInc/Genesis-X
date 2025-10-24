@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebXML>
+    <document>
+        <namespace name="analytics" fullname="gx::app::analytics" href="gx-app-analytics.html" status="active" access="public" location="analytics.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/analytics/analytics.h" lineno="11" documented="true" module="GenesisX" brief="Analytics facilities">
+            <description path="D:/projects/qt/libs/Genesis-X/docs/topics/gx-namespace.qdoc" line="21" column="4">
+                <brief>Analytics facilities.</brief>
+            </description>
+            <class name="Analytics" fullname="gx::app::analytics::Analytics" href="gx-app-analytics-analytics.html" status="active" access="public" location="analytics.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/analytics/analytics.h" lineno="13" since="6.10" documented="true" groups="genesisx-core" module="GenesisX" brief="Minimal Analytics facade (constructor-only)">
+                <description path="D:/projects/qt/libs/Genesis-X/core/src/app/analytics/analytics.cpp" line="6" column="4">
+                    <brief>Minimal Analytics facade (constructor-only).</brief>
+                    <para>
+                        <bold>Note:</bold> Linked QML module: <teletype type="highlighted">GenesisX\App\Analytics</teletype> 1.0 (singleton).</para>
+                    <para>
+                        <bold>Note:</bold> Enabled when the app uses qmake flag <teletype type="highlighted">genesisx_app_analytics</teletype></para>
+                </description>
+            </class>
+        </namespace>
+    </document>
+</WebXML>

@@ -1,0 +1,8 @@
+/*!
+ * \group genesisx-core
+ * \title Genesis-X C++ API
+ * \inmodule GenesisX
+ * \brief Public C++ classes in Genesis-X
+ *
+ * \generatelist{classes}
+ */

@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 QT += network
 TEMPLATE = lib
 TARGET = genesisx_orm
@@ -8,8 +11,8 @@ ios {
     CONFIG += staticlib
 } else:macos {
     CONFIG += shared staticlib
-} else:win32 {
-CONFIG += dll
+# } else:win32 {
+# CONFIG += dll
 } else {
     CONFIG += shared
 }

@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_AUDIORECORDER
+
+message([genesisx app audiorecorder] module loaded from $$PWD)

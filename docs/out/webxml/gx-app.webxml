@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebXML>
+    <document>
+        <namespace name="app" fullname="gx::app" href="gx-app.html" status="active" access="public" location="ABTesting.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/ab/ABTesting.h" lineno="11" documented="true" module="GenesisX" brief="Application-level APIs">
+            <description path="D:/projects/qt/libs/Genesis-X/docs/topics/gx-namespace.qdoc" line="7" column="4">
+                <brief>Application-level APIs.</brief>
+            </description>
+            <namespace name="ab" fullname="gx::app::ab" href="gx-app-ab.html" status="active" access="public" location="ABTesting.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/ab/ABTesting.h" lineno="11" documented="true" module="GenesisX" brief="A/B Testing facilities">
+                <description path="D:/projects/qt/libs/Genesis-X/docs/topics/gx-namespace.qdoc" line="14" column="4">
+                    <brief>A/B Testing facilities.</brief>
+                </description>
+                <class name="ABTesting" fullname="gx::app::ab::ABTesting" href="gx-app-ab-abtesting.html" status="active" access="public" location="ABTesting.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/ab/ABTesting.h" lineno="13" since="6.10" documented="true" groups="genesisx-core" module="GenesisX" brief="Minimal A/B testing facade (constructor-only)">
+                    <description path="D:/projects/qt/libs/Genesis-X/core/src/app/ab/ABTesting.cpp" line="6" column="4">
+                        <brief>Minimal A/B testing facade (constructor-only).</brief>
+                        <para>This class will serve as the bridge to the app's experimentation system (e.g., a simplein-house variant allocator or a remote a/b provider).</para>
+                        <para>
+                            <bold>Note:</bold> Linked QML module: <teletype type="highlighted">GenesisX\App\ABTesting</teletype> 1.0 (singleton).</para>
+                        <para>
+                            <bold>Note:</bold> Enabled when the app uses qmake flag <teletype type="highlighted">genesisx_app_ab</teletype></para>
+                    </description>
+                </class>
+            </namespace>
+            <namespace name="analytics" fullname="gx::app::analytics" href="gx-app-analytics.html" status="active" access="public" location="analytics.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/analytics/analytics.h" lineno="11" documented="true" module="GenesisX" brief="Analytics facilities">
+                <description path="D:/projects/qt/libs/Genesis-X/docs/topics/gx-namespace.qdoc" line="21" column="4">
+                    <brief>Analytics facilities.</brief>
+                </description>
+                <class name="Analytics" fullname="gx::app::analytics::Analytics" href="gx-app-analytics-analytics.html" status="active" access="public" location="analytics.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/analytics/analytics.h" lineno="13" since="6.10" documented="true" groups="genesisx-core" module="GenesisX" brief="Minimal Analytics facade (constructor-only)">
+                    <description path="D:/projects/qt/libs/Genesis-X/core/src/app/analytics/analytics.cpp" line="6" column="4">
+                        <brief>Minimal Analytics facade (constructor-only).</brief>
+                        <para>
+                            <bold>Note:</bold> Linked QML module: <teletype type="highlighted">GenesisX\App\Analytics</teletype> 1.0 (singleton).</para>
+                        <para>
+                            <bold>Note:</bold> Enabled when the app uses qmake flag <teletype type="highlighted">genesisx_app_analytics</teletype></para>
+                    </description>
+                </class>
+            </namespace>
+            <namespace name="notifications" fullname="gx::app::notifications" href="gx-app-notifications.html" status="active" access="public" location="NotificationHandler.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/notifications/NotificationHandler.h" lineno="16" documented="true" module="GenesisX" brief="Notifications facilities">
+                <description path="D:/projects/qt/libs/Genesis-X/docs/topics/gx-namespace.qdoc" line="28" column="4">
+                    <brief>Notifications facilities.</brief>
+                </description>
+                <class name="NotificationHandler" fullname="gx::app::notifications::NotificationHandler" href="gx-app-notifications-notificationhandler.html" status="active" access="public" location="NotificationHandler.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/notifications/NotificationHandler.h" lineno="18" since="6.10" documented="true" groups="genesisx-core" module="GenesisX" brief="Main class for local and push notifications">
+                    <description path="D:/projects/qt/libs/Genesis-X/core/src/app/notifications/NotificationHandler.cpp" line="23" column="4">
+                        <brief>Main class for local and push notifications.</brief>
+                        <para>code snippet shows the correct usage pattern:</para>
+                        <code>#include &lt;QGuiApplication&gt;
+#include &lt;QQmlApplicationEngine&gt;
+#include &lt;GenesisX/CoreQml.h&gt;
+
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
+
+    GXCore::registerEnabledQmlModules(&amp;engine);
+
+    QQmlApplicationEngine engine;
+
+    engine.load(QStringLiteral(&quot;qrc:/views/MasterView.qml&quot;));
+
+    if (engine.rootObjects().isEmpty()) return -1;
+
+    return app.exec();
+}</code>
+                        <brief>Optional you can autoload only the used modules.</brief>
+                        <para>code snippet setting modules list in qmake:</para>
+                        <code>GX_LOADED_MODULES = $$QT
+GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, &quot;,&quot;)
+DEFINES += GX_LOADED_MODULES=\\\&quot;$$GX_LOADED_MODULES_CSV\\\&quot;</code>
+                        <brief>And set in main.cpp.</brief>
+                        <code>GXCore::registerEnabledQmlModules(&amp;engine, GX_LOADED_MODULES);</code>
+                        <brief>And implementing it in qml.</brief>
+                        <para>code snippet shows the correct usage pattern:</para>
+                        <code>import QtQuick
+import GenesisX.Notifications 1.0
+
+Window {
+    id: root
+    visible: true
+    width: 1024
+    height: 768
+
+    Component.onCompleted: {
+        notify.show(&quot;Hello from GenesisX&quot;, &quot;Windows tray balloon :-)&quot;)
+    }
+
+    NotificationHandler {
+        id: notify
+        onNotificationReceived: (title, body, data) =&gt; {
+            console.log(&quot;[QML] got notification:&quot;, title, body, JSON.stringify(data))
+        }
+        onTokenChanged: t =&gt; console.log(&quot;New token found in qml:&quot;, t)
+        Component.onCompleted: initialize()
+    }
+}</code>
+                    </description>
+                </class>
+            </namespace>
+        </namespace>
+    </document>
+</WebXML>

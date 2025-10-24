@@ -4,7 +4,7 @@
 !defined(__GX_CORE_PRF_INCLUDED__, var) {
     __GX_CORE_PRF_INCLUDED__ = 1
 
-    message([genesisx] module loaded from $$PWD)
+    message([genesisx] module loaded from $$PWD and path is: $$PLATFORM_PATH)
 
     GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/core/include)
 
@@ -21,18 +21,18 @@
         LIBS += -lgenesisx
     }
 
-    win32 {
+    win32 {message(this is activated)
         GX_DLL = $$shell_path($$LIBDIRS/genesisx.dll)
         GX_DLL_DEST = $$shell_path($$DEST_LIBDIRS/genesisx.dll)
         GX_A = $$shell_path($$LIBDIRS/libgenesisx.a)
-        GX_DEST_A = $$shell_path($$DEST_LIBDIRS/libgenesisx.a)
+        GX_A_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx.a)
 
         exists($$GX_DLL) {
             QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL) $$shell_quote($$GX_DLL_DEST)
             message([genesisx] library .dll file copied to $$DEST_LIBDIRS)
         }
         exists($$GX_A) {
-            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_A) $$shell_quote($$GX_DEST_A)
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_A) $$shell_quote($$GX_A_DEST)
             message([genesisx] library .a file copied to $$DEST_LIBDIRS)
         }
     }
