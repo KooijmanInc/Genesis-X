@@ -9,8 +9,9 @@ QT.genesisx.friendly_name = GenesisX (Core)
 GENESISX_BUILD_ROOT = $$clean_path($$PWD/../..)
 include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
 include($$GENESISX_BUILD_ROOT/common/qmake-destination-path.pri)
-
-QML_IMPORT_PATH += $$GENESISX_BUILD_ROOT/core/qml
+DEFINES += GX_LOADED_FEATURES
+# GX_LOADED_FEATURES = $$QT
+# QML_IMPORT_PATH += $$GENESISX_BUILD_ROOT/core/qml
 #     GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/core/include)
 #     !exists($$GX_CORE_INC_ROOT/GenesisX) { GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/include) }
 #     INCLUDEPATH += $$GX_CORE_INC_ROOT

@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_CAMERA
+
+message([genesisx app camera] module loaded from $$PWD)

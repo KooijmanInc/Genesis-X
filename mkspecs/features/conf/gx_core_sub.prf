@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-isEmpty(GX_SO) {
+isEmpty(GX_SO) {message(and arrived here????)
     GX_SO = $$shell_path($$LIBDIRS/libgenesisx_$${GX_ABI}.so)
     GX_SO_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_$${GX_ABI}.so)
 

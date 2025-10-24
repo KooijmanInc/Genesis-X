@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_INTENTS
+
+message([genesisx app intents] module loaded from $$PWD)

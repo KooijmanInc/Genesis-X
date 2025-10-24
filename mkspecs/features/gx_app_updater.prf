@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_UPDATER
+
+message([genesisx app updater] module loaded from $$PWD)

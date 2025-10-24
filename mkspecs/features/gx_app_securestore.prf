@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_SECURESTORE
+
+message([genesisx app securestore] module loaded from $$PWD)

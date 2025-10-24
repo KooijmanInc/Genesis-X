@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_CONNECTIVITY
+
+message([genesisx app connectivity] module loaded from $$PWD)

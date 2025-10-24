@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_BACKGROUND
+
+message([genesisx app background] module loaded from $$PWD)

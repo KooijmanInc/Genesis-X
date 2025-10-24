@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #include "include/GenesisX/Orm/ConnectionCheck.h"
 
 #include <GenesisX/Orm/ConnectionController.h>

@@ -1,7 +1,8 @@
 /*!
-    \page index.html
-    \title Genesis-X SDK
-    \brief Cross-platform C++/Qt library. Current focus: local & push notifications.
+ *  \page index.html
+ *  \title Genesis-X SDK
+ *  \inmodule GenesisX
+ *  \brief Cross-platform C++/Qt library. Current focus: local & push notifications.
 
     \section1 What is Genesis-X?
     Genesis-X is a general-purpose SDK for Qt/C++ projects. It bundles common
@@ -11,7 +12,7 @@
     \section1 Current features
     \list
       \li \b Notifications — Local and push notifications with a unified API.
-          See the C++ class \l gx::NotificationHandler for details.
+          See the C++ class \l {gx::app::notifications::NotificationHandler} for details.
     \endlist
 
     \section1 What’s next
@@ -29,7 +30,7 @@
     \code
     #include <GenesisX/NotificationHandler.h>
 
-    gx::NotificationHandler notifier;
+    NotificationHandler notifier;
     notifier.requestPermission();
     notifier.showLocal(QStringLiteral("Hello from Genesis-X"));
     \endcode
@@ -45,7 +46,9 @@
 
     \section1 See also
     \list
-      \li \l gx::NotificationHandler
+      \li \l {classes.html} {C++ Classes}
+      \li \l {namespaces.html} {Namespaces}
+      \li \l {gx::app::notifications::NotificationHandler}
       \li \l {GenesisX.Notifications} (QML module)
     \endlist
 */

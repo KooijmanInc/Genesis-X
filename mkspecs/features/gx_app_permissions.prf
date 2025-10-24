@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_PERMISSIONS
+
+message([genesisx app permissions] module loaded from $$PWD)

@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_SHARE
+
+message([genesisx app share] module loaded from $$PWD)

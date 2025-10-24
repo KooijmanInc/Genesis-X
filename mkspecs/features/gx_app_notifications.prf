@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_NOTIFICATIONS
+
+message([genesisx app notifications] module loaded from $$PWD)

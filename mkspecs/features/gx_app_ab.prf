@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_AB
+
+message([genesisx app ab] module loaded from $$PWD)
