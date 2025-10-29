@@ -9,6 +9,7 @@
 
 #include "genesisx_orm_global.h"
 
+#include "TransportConfig.h"
 #include "AuthCredentials.h"
 #include "HttpResponse.h"
 #include "HttpConfig.h"
@@ -24,6 +25,8 @@ class GENESISX_ORM_EXPORT ConnectionController : public QObject
 public:
     explicit ConnectionController(QObject* parent = nullptr);
     ~ConnectionController();
+
+    void applyTransport(const TransportConfig& tcfg);
 
     void setConfig(const HttpConfig& cfg);
     HttpConfig config() const;

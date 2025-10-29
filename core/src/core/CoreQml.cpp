@@ -5,10 +5,12 @@
 
 #include <QQmlEngine>
 
+#include "src/utils/SystemInfoQml.h"
 #include "src/navigation/NavigationQml.h"
 
 #include "src/app/notifications/NotificationsQml.h"
 
+void registerGenesisXSystemInfo(QQmlEngine*);
 void registerGenesisXNavigation(QQmlEngine*);
 void registerGenesisXNotifications(QQmlEngine*);
 
@@ -58,6 +60,7 @@ inline QStringList gxValidFeatureKeys()
 */
 void registerEnabledQmlModules(QQmlEngine* engine, QString features)
 {
+    registerGenesisXSystemInfo(engine);
     registerGenesisXNavigation(engine);
 
     QSet<QString> include, exclude;

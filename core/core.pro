@@ -75,16 +75,9 @@ INCLUDEPATH += $$GENESISX_BUILD_ROOT/core/include
 
 HEADERS += \
     $$files($$PWD/include/GenesisX/*.h, true) \
-    $$files($$PWD/src/*.h, true) \
-    src/app/analytics.h
+    $$files($$PWD/src/*.h, true)
 SOURCES += \
-    $$files($$PWD/src/*.cpp, true) \
-    src/app/analytics.cpp
-    # src/app/ab/ABTesting.cpp \
-    # src/navigation/GxRouter.cpp \
-    # src/notifications/NotificationHandler.cpp \
-    # $$PWD/src/notifications/NotificationsQml.cpp \
-    # $$PWD/src/notifications/fcm_android.cpp
+    $$files($$PWD/src/*.cpp, true)
 
 # Optional install
 # headers.path = $$[QT_INSTALL_PREFIX]/include/GenesisX/core
@@ -102,7 +95,9 @@ DISTFILES += \
     $$PWD/android-template/build.gradle \
     $$PWD/android-template/google-services.json \
     $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle \
-    qml/GenesisX/Core/Navigation/qmldir
+    qml/GenesisX/Core/Navigation/qmldir \
+    qml/GenesisX/Core/SystemInfo/qmldir \
+    qml/GenesisX/Core/SystemInfo/systeminfo.qmltypes
 
 RESOURCES += \
     $$PWD/resources/core.qrc \

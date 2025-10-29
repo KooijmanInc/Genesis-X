@@ -16,5 +16,7 @@
 
 namespace gx { namespace orm { } }
 namespace GXOrm = gx::orm;
+namespace gx { namespace orm { namespace codegen { } } }
+namespace GXOrmCodeGen = gx::orm::codegen;
 
 #endif // GENESISX_ORM_GLOBAL_H

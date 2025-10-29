@@ -26,5 +26,7 @@ namespace gx { namespace core { } }
 namespace GXCore = gx::core;
 namespace gx { namespace navigation { } }
 namespace GXNav = gx::navigation;
+namespace gx { namespace utils { } }
+namespace GXUtl = gx::utils;
 
 #endif // GENESISX_GLOBAL_H

@@ -1,0 +1,27 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "gx::utils::SystemInfo"
+        prototype: "QObject"
+        exports: ["GenesisX.Core.SystemInfo/SystemInfo 1.0"]
+        singleton: true
+        Method {
+            name: "ensureAppUuid"
+            type: "string"
+        }
+        Method {
+            name: "operatingSystem"
+            type: "string"
+        }
+        Method {
+            name: "platform"
+            type: "string"
+        }
+        Method {
+            name: "systemLanguage"
+            type: "string"
+        }
+    }
+}

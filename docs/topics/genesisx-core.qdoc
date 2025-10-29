@@ -6,3 +6,13 @@
  *
  * \generatelist{classes}
  */
+
+
+/*!
+ * \group genesisx-orm
+ * \title Genesis-X C++ API
+ * \inmodule GenesisX/Orm
+ * \brief Public C++ classes in Genesis-X Orm
+ *
+ * \generatelist{classes}
+ */
