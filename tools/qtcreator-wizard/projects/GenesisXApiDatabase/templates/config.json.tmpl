@@ -1,0 +1,52 @@
+{
+    "backend": "http",
+    "api": {
+        "baseUrl": "https://api.example.com",
+        "appVersion": "",
+        "userLanguage": "",
+        "timeoutMs": "",
+        "retryCount": "",
+        "allowInsecureDev": false,
+        "appKey": "",
+        "apiToken": "",
+        "bearerToken": "",
+        "headers": {
+            "Accept": "application/json"
+        }
+    },
+    "sql": {
+        "driver": "",
+        "host": "",
+        "port": 3306,
+        "database": "",
+        "user": "",
+        "password": "",
+        "options": {}
+    },
+    "dev": {
+        "override": false,
+        "http": {
+            "baseUrl": "https://api.example.localhost",
+            "allowInsecureDev": true
+        },
+        "sql": {
+            "host": "127.0.0.1",
+            "port": 3306,
+            "user": "dev",
+            "password": "secret"
+        }
+    },
+    "staging": {
+        "override": false,
+        "http": {
+            "baseUrl": "https://staging.api.example.com",
+            "allowInsecureDev": false
+        },
+        "sql": {
+            "host": "https://www.example.com",
+            "port": 3306,
+            "user": "staging",
+            "password": "secret"
+        }
+    }
+}

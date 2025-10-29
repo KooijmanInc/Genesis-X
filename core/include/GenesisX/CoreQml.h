@@ -4,7 +4,6 @@
 #ifndef COREQML_H
 #define COREQML_H
 
-#include <QtCore/qglobal.h>
 #include <QString>
 
 #include "genesisx_global.h"

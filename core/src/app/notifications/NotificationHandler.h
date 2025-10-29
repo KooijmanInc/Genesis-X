@@ -4,11 +4,11 @@
 #ifndef NOTIFICATION_HANDLER_H
 #define NOTIFICATION_HANDLER_H
 
-// #include "include/GenesisX/genesisx_global.h"
 #include <GenesisX/genesisx_global.h>
 
 #include <QtQml/qqmlregistration.h>
 #include <QObject>
+#include <QTimer>
 #include <QVariantMap>
 
 class QSystemTrayIcon;
@@ -18,9 +18,10 @@ namespace gx::app::notifications {
 class GENESISX_CORE_EXPORT NotificationHandler : public QObject
 {
     Q_OBJECT
-    // QML_NAMED_ELEMENT(GenesisX.Notifications)
-    // QML_ELEMENT
+
     Q_PROPERTY(bool initialized READ initialized NOTIFY initializedChanged)
+    // Q_PROPERTY(bool pushSupported READ pushSupported CONSTANT)
+    // Q_PROPERTY(bool tokenReady READ tokenReady NOTIFY tokenReadyChanged)
 
 public:
     explicit NotificationHandler(QObject *parent = nullptr) : QObject(parent) {}
@@ -32,6 +33,8 @@ public:
     Q_INVOKABLE QString fcmToken() const;
 
     bool initialized() const { return m_initialized; }
+    // bool pushSupported() const { return m_supported; }
+    // bool tokenReady() const { return !m_token.isEmpty(); }
 
     void appleDidReceiveToken(const QString& token);
     void appleDidReceiveRemote(const QString& title, const QString&body, const QVariantMap&data = {});
@@ -40,9 +43,16 @@ signals:
     void initializedChanged();
     void notificationReceived(const QString& title, const QString& body, const QVariantMap& data);
     void tokenChanged(const QString& token);
+    // void tokenReadyChanged();
+    // void tokenTimeout();
 
 private:
+    // void startWatchDog(int ms = 5000);
+
     bool m_initialized = false;
+    // bool m_supported = false;
+    // QString m_token;
+    // QTimer* m_watchDog = nullptr;
 
 #ifdef Q_OS_WIN
     QSystemTrayIcon* m_tray = nullptr;

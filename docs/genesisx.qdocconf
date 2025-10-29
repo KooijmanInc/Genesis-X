@@ -17,11 +17,11 @@ macro.Q_SIGNALS =
 macro.signals =
 
 # ---------- Inputs (relative to docs/; use spaces, not semicolons) ----------
-headerdirs              = ../core/src ../core/include
-sourcedirs              = topics ../core/src
+headerdirs              = ../core/src ../core/include ../orm/src ../orm/include
+sourcedirs              = topics ../core/src ../orm/src
 sources.fileextensions  = *.qdoc *.cpp *.qml
 headers.fileextensions  = *.h *.ch *.h++ *.hh *.hpp *.hxx
-includepaths            = -I../core/include -I../physics/include -I../core/src
+includepaths            = -I../core/include -I../physics/include -I../orm/include -I../core/src -I../physics/src -I../oem/src
 imagedirs               = images
 
 # ---------- Manual TOC ----------

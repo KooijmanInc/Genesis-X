@@ -31,3 +31,17 @@
  * \title gx::app::notifications Namespace
  * \brief Notifications facilities.
  */
+
+/*!
+ *  \namespace gx::orm
+ *  \inmodule GenesisX/Orm
+ *  \title gx::orm Namespace
+ *  \brief Module-level APIs.
+ */
+
+/*!
+ *  \namespace gx::orm::codegen
+ *  \inmodule GenesisX/Orm
+ *  \title gx::orm Namespace
+ *  \brief Module-level APIs.
+ */

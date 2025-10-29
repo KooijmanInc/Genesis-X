@@ -5,7 +5,8 @@ TEMPLATE = subdirs
 CONFIG += qt c++23
 CONFIG += ordered
 
-SUBDIRS += core physics orm
+SUBDIRS += core physics orm \
+    tools/gxgen
 
 core.subdir = $$PWD/core
 
@@ -14,6 +15,8 @@ physics.depends = core
 
 orm.subdir = $$PWD/orm
 orm.depends = core
+
+tools/gxgen.depends = orm
 
 DISTFILES += \
     README.md \

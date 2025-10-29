@@ -12,7 +12,7 @@
                 <section ref="" title="">
                     <section ref="classes.html" title="C++ Classes"/>
                     <section ref="coreqml-h.html" title="CoreQml.h"/>
-                    <section ref="genesisx-core.html" title="Genesis-X C++ API"/>
+                    <section ref="genesisx-orm.html" title="Genesis-X C++ API"/>
                     <section ref="genesisx-notifications-qmlmodule.html" title="Genesis-X Notifications (QML)"/>
                     <section ref="index.html" title="Genesis-X SDK"/>
                     <section ref="namespaces.html" title="Namespaces"/>
@@ -36,6 +36,7 @@
             <keyword name="Analytics" id="analytics::Analytics" ref="gx-app-analytics-analytics.html"/>
             <keyword name="C++ Classes" id="C++ Classes" ref="classes.html"/>
             <keyword name="Genesis-X C++ API" id="Genesis-X C++ API" ref="genesisx-core.html"/>
+            <keyword name="Genesis-X C++ API" id="Genesis-X C++ API" ref="genesisx-orm.html"/>
             <keyword name="Genesis-X SDK" id="Genesis-X SDK" ref="index.html"/>
             <keyword name="GenesisX.Notifications" id="QML.Notifications.GenesisX" ref="genesisx-notifications-qmlmodule.html"/>
             <keyword name="Namespaces" id="Namespaces" ref="namespaces.html"/>
@@ -54,6 +55,7 @@
             <file>coreqml-h.html</file>
             <file>genesisx-core.html</file>
             <file>genesisx-notifications-qmlmodule.html</file>
+            <file>genesisx-orm.html</file>
             <file>gx-app-ab-abtesting.html</file>
             <file>gx-app-ab.html</file>
             <file>gx-app-analytics-analytics.html</file>

@@ -3,7 +3,7 @@
 <INDEX url="https://genesisx.kooijmaninc.com" title="Genesis-X SDK" version="1.0" project="GenesisX">
     <namespace name="" status="active" access="public" module="genesisx">
         <page name="classes.html" href="classes.html" status="active" location="classes.qdoc" filepath="D:/projects/qt/libs/Genesis-X/docs/topics/classes.qdoc" lineno="1" documented="true" groups="genesisx-core" subtype="page" title="C++ Classes" fulltitle="C++ Classes" subtitle="" brief="App C++ classes in Genesis-X * * "/>
-        <header name="CoreQml.h" href="coreqml-h.html" status="active" since="6.10" documented="true" module="GenesisX" brief="Register all enabled GenesisX QML modules on engine. * * Which modules are registered depends on your qmake QT, * e.g. genesisx_app_notifications, genesisx_app_ab, etc. * * code snippet setting modules list in qmake. *" title="CoreQml.h" fulltitle="CoreQml.h" subtitle=""/>
+        <header name="CoreQml.h" href="coreqml-h.html" status="active" since="6.10" documented="true" module="GenesisX" brief="Register all enabled GenesisX QML modules on engine. * * Which modules are registered depends on your qmake QT, * e.g. genesisx_app_notifications, genesisx_app_ab, etc. * * code snippet setting modules list in qmake: *" title="CoreQml.h" fulltitle="CoreQml.h" subtitle=""/>
         <page name="index.html" href="index.html" status="active" location="index.qdoc" filepath="D:/projects/qt/libs/Genesis-X/docs/topics/index.qdoc" lineno="1" documented="true" subtype="page" title="Genesis-X SDK" fulltitle="Genesis-X SDK" subtitle="" brief="Cross-platform C++/Qt library. Current focus: local &amp; push notifications">
             <contents name="what-is-genesis-x" title="What is Genesis-X?" level="1"/>
             <contents name="current-features" title="Current features" level="1"/>
@@ -34,8 +34,10 @@
             </namespace>
         </namespace>
         <group name="genesisx-core" href="genesisx-core.html" status="active" location="genesisx-core.qdoc" filepath="D:/projects/qt/libs/Genesis-X/docs/topics/genesisx-core.qdoc" lineno="1" documented="true" seen="true" title="Genesis-X C++ API" module="GenesisX" brief="Public C++ classes in Genesis-X * * "/>
+        <group name="genesisx-orm" href="genesisx-orm.html" status="active" location="genesisx-core.qdoc" filepath="D:/projects/qt/libs/Genesis-X/docs/topics/genesisx-core.qdoc" lineno="11" documented="true" seen="true" title="Genesis-X C++ API" module="GenesisX/Orm" brief="Public C++ classes in Genesis-X Orm"/>
         <group name="gx-app-notifications-classes" href="gx-app-notifications-classes.html" status="active" location="group_notifications.qdoc" filepath="D:/projects/qt/libs/Genesis-X/docs/topics/group_notifications.qdoc" lineno="1" documented="true" seen="true" title="gx::app::notifications Classes" module="GenesisX" brief="C++ classes in the gx::app::notifications namespace. * * "/>
         <module name="GenesisX" href="genesisx-module.html" status="internal" seen="false" title=""/>
+        <module name="GenesisX/Orm" href="genesisx-orm-module.html" status="internal" seen="false" title=""/>
         <qmlmodule name="GenesisX.Notifications" qml-module-name="GenesisX.Notifications" qml-module-version="1.0" href="genesisx-notifications-qmlmodule.html" status="active" documented="true" seen="true" title="Genesis-X Notifications (QML)" brief="QML APIs for local and push notifications"/>
     </namespace>
 </INDEX>
