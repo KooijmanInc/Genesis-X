@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_LOGGING
+
+message([genesisx app logging] module loaded from $$PWD)

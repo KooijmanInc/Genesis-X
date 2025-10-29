@@ -3,3 +3,45 @@
  *  \inmodule GenesisX
  *  \brief Core C++ namespace for the Genesis-X API.
  */
+
+/*!
+ *  \namespace gx::app
+ *  \inmodule GenesisX
+ *  \title gx::app Namespace
+ *  \brief Application-level APIs.
+ */
+
+/*!
+ * \namespace gx::app::ab
+ * \inmodule GenesisX
+ * \title gx::app::ab Namespace
+ * \brief A/B Testing facilities.
+ */
+
+/*!
+ * \namespace gx::app::analytics
+ * \inmodule GenesisX
+ * \title gx::app::analytics Namespace
+ * \brief Analytics facilities.
+ */
+
+/*!
+ * \namespace gx::app::notifications
+ * \inmodule GenesisX
+ * \title gx::app::notifications Namespace
+ * \brief Notifications facilities.
+ */
+
+/*!
+ *  \namespace gx::orm
+ *  \inmodule GenesisX/Orm
+ *  \title gx::orm Namespace
+ *  \brief Module-level APIs.
+ */
+
+/*!
+ *  \namespace gx::orm::codegen
+ *  \inmodule GenesisX/Orm
+ *  \title gx::orm Namespace
+ *  \brief Module-level APIs.
+ */

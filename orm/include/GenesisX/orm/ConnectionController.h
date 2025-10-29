@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #ifndef CONNECTIONCONTROLLER_H
 #define CONNECTIONCONTROLLER_H
 
@@ -6,6 +9,7 @@
 
 #include "genesisx_orm_global.h"
 
+#include "TransportConfig.h"
 #include "AuthCredentials.h"
 #include "HttpResponse.h"
 #include "HttpConfig.h"
@@ -21,6 +25,8 @@ class GENESISX_ORM_EXPORT ConnectionController : public QObject
 public:
     explicit ConnectionController(QObject* parent = nullptr);
     ~ConnectionController();
+
+    void applyTransport(const TransportConfig& tcfg);
 
     void setConfig(const HttpConfig& cfg);
     HttpConfig config() const;

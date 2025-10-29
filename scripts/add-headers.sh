@@ -79,7 +79,7 @@ process_file() {
 }
 
 # Tracked files only; exclude license files and common generated/vendor dirs
-mapfile -d '' FILES < <(git ls-files -z   ':!LICENSE' ':!LICENSE.*' ':!NOTICE' ':!NOTICE.*'   ':!LICENSES/**' ':!**/*.json' ':!.gitignore' ':!.gitattributes'   ':!**/firebase_cpp_sdk/**' ':!**/node_modules/**' ':!**/build/**' ':!**/dist/**' )
+mapfile -d '' FILES < <(git ls-files -z   ':!LICENSE' ':!LICENSE.*' ':!NOTICE' ':!NOTICE.*' ':!docs' ':!docs.*'   ':!LICENSES/**' ':!**/*.json' ':!.gitignore' ':!.gitattributes'   ':!**/firebase_cpp_sdk/**' ':!**/node_modules/**' ':!**/build/**' ':!**/dist/**' )
 
 for f in "${FILES[@]}"; do
   if is_text "$f"; then

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebXML>
+    <document>
+        <header name="CoreQml.h" href="coreqml-h.html" status="active" since="6.10" documented="true" module="GenesisX" brief="Register all enabled GenesisX QML modules on engine. * * Which modules are registered depends on your qmake QT, * e.g. genesisx_app_notifications, genesisx_app_ab, etc. * * code snippet setting modules list in qmake: *" title="CoreQml.h" fulltitle="CoreQml.h" subtitle="">
+            <description path="D:/projects/qt/libs/Genesis-X/core/src/core/CoreQml.cpp" line="35" column="4">
+                <para>* * * *</para>
+                <brief>Register all enabled GenesisX QML modules on <argument>engine</argument>. * * Which modules are registered depends on your qmake QT, * e.g. genesisx_app_notifications, genesisx_app_ab, etc. * * code snippet setting modules list in qmake: *</brief>
+                <code>*  GX_LOADED_MODULES = $$QT
+*  GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, &quot;,&quot;)
+*  DEFINES += GX_LOADED_MODULES=\\\&quot;$$GX_LOADED_MODULES_CSV\\\&quot;
+*</code>
+                <para>*</para>
+                <brief>And set in main.cpp. *</brief>
+                <code>*  GXCore::registerEnabledQmlModules(&amp;engine, GX_LOADED_MODULES);
+*</code>
+                <para>*</para>
+                <brief>Optionally you can load everything by setting. *</brief>
+                <code>*  GXCore::registerEnabledQmlModules(&amp;engine);
+*</code>
+            </description>
+        </header>
+    </document>
+</WebXML>

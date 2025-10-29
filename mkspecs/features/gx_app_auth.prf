@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_AUTH
+
+message([genesisx app auth] module loaded from $$PWD)

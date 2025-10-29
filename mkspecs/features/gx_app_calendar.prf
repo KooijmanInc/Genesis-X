@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_CALENDAR
+
+message([genesisx app calendar] module loaded from $$PWD)

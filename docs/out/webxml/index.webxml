@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebXML>
+    <document>
+        <page name="index.html" href="index.html" status="active" location="index.qdoc" filepath="D:/projects/qt/libs/Genesis-X/docs/topics/index.qdoc" lineno="1" documented="true" subtype="page" title="Genesis-X SDK" fulltitle="Genesis-X SDK" subtitle="" brief="Cross-platform C++/Qt library. Current focus: local &amp; push notifications">
+            <contents name="what-is-genesis-x" title="What is Genesis-X?" level="1"/>
+            <contents name="current-features" title="Current features" level="1"/>
+            <contents name="what-s-next-0a20c90d" title="What’s next" level="1"/>
+            <contents name="quick-start-notifications" title="Quick start (Notifications)" level="1"/>
+            <contents name="c" title="C++" level="2"/>
+            <contents name="qml" title="QML" level="2"/>
+            <contents name="see-also" title="See also" level="1"/>
+            <description path="D:/projects/qt/libs/Genesis-X/docs/topics/index.qdoc" line="1" column="5">
+                <para>* * * *</para>
+                <brief>Cross-platform C++/Qt library. Current focus: local &amp; push notifications.</brief>
+                <section id="what-is-genesis-x">
+                    <heading level="1">What is Genesis-X?</heading>
+                    <para>Genesis-X is a general-purpose SDK for Qt/C++ projects. It bundles common mobile/desktop features behind a single, consistent API so you can ship faster across platforms.</para>
+                </section>
+                <section id="current-features">
+                    <heading level="1">Current features</heading>
+                    <list type="bullet">
+                        <item>
+                            <para>
+                                <bold>Notifications</bold> — Local and push notifications with a unified API. See the C++ class <link raw="gx::app::notifications::NotificationHandler" href="gx-app-notifications-notificationhandler.html" type="class">gx::app::notifications::NotificationHandler</link> for details.</para>
+                        </item>
+                    </list>
+                </section>
+                <section id="what-s-next-0a20c90d">
+                    <heading level="1">What’s next</heading>
+                    <list type="bullet">
+                        <item>
+                            <para>
+                                <bold>Remote</bold> API — A client API for talking to your backend server (authentication, messaging, data sync).</para>
+                        </item>
+                        <item>
+                            <para>
+                                <bold>Symfony</bold> server template — A ready-to-use Symfony package that pairs with Genesis-X for an end-to-end setup (routes, DTOs, auth, push webhooks). This will be published as a separate package you can deploy or extend.</para>
+                        </item>
+                    </list>
+                </section>
+                <section id="quick-start-notifications">
+                    <heading level="1">Quick start (Notifications)</heading>
+                </section>
+                <section id="c">
+                    <heading level="2">C++</heading>
+                    <code>#include &lt;GenesisX/NotificationHandler.h&gt;
+
+NotificationHandler notifier;
+notifier.requestPermission();
+notifier.showLocal(QStringLiteral(&quot;Hello from Genesis-X&quot;));</code>
+                </section>
+                <section id="qml">
+                    <heading level="2">QML</heading>
+                    <code>import GenesisX.Notifications
+
+NotificationHandler {
+    onMessageReceived: (m) =&gt; console.log(m.title, m.body)
+}</code>
+                </section>
+                <section id="see-also">
+                    <heading level="1">See also</heading>
+                    <list type="bullet">
+                        <item>
+                            <para>
+                                <link raw="classes.html" href="classes.html" type="page" page="C++ Classes">C++ Classes</link></para>
+                        </item>
+                        <item>
+                            <para>
+                                <link raw="namespaces.html" href="namespaces.html" type="page" page="Namespaces">Namespaces</link></para>
+                        </item>
+                        <item>
+                            <para>
+                                <link raw="gx::app::notifications::NotificationHandler" href="gx-app-notifications-notificationhandler.html" type="class">gx::app::notifications::NotificationHandler</link></para>
+                        </item>
+                        <item>
+                            <para>
+                                <link raw="GenesisX.Notifications" href="genesisx-notifications-qmlmodule.html" type="">GenesisX.Notifications</link> (QML module)</para>
+                        </item>
+                    </list>
+                </section>
+            </description>
+        </page>
+    </document>
+</WebXML>

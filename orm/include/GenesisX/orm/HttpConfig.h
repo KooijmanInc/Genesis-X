@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
 #ifndef HTTPCONFIG_H
 #define HTTPCONFIG_H
 
@@ -16,6 +19,10 @@ struct GENESISX_ORM_EXPORT HttpConfig
     int timeoutMs = 15000;
     int retryCount = 0;
     QHash<QByteArray, QByteArray> defaultHeaders;
+    QString appKey;
+    QString apiToken;
+    QString bearerToken;
+    bool hasAuth() const { return !appKey.isEmpty() || !apiToken.isEmpty() || !bearerToken.isEmpty(); }
 
     bool allowInsecureDev = false;
 };

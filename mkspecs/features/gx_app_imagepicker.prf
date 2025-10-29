@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_IMAGEPICKER
+
+message([genesisx app imagepicker] module loaded from $$PWD)

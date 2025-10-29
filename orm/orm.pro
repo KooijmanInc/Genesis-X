@@ -1,4 +1,7 @@
-QT += network
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+QT += network sql qml
 TEMPLATE = lib
 TARGET = genesisx_orm
 CONFIG += c++23
@@ -8,8 +11,8 @@ ios {
     CONFIG += staticlib
 } else:macos {
     CONFIG += shared staticlib
-} else:win32 {
-CONFIG += dll
+# } else:win32 {
+# CONFIG += dll
 } else {
     CONFIG += shared
 }
@@ -19,7 +22,7 @@ contains(CONFIG, staticlib) {
 } else {
     DEFINES += GENESISX_ORM_LIBRARY
 }
-
+message(DEFINES: $$DEFINES)
 GENESISX_BUILD_ROOT = $$clean_path($$PWD/..)
 include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
 include($$GENESISX_BUILD_ROOT/common/qmake-destination-path.pri)
@@ -45,17 +48,6 @@ android {
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/orm/include
 
 HEADERS += $$files($$PWD/include/GenesisX/Orm/*.h) \
-    # include/GenesisX/Orm/ApiClient.h \
-    # include/GenesisX/Orm/AuthCredentials.h \
-    # include/GenesisX/Orm/CommandController.h \
-    # include/GenesisX/Orm/ConnectionCheck.h \
-    # include/GenesisX/Orm/ConnectionController.h \
-    # include/GenesisX/Orm/HttpConfig.h \
-    # include/GenesisX/Orm/HttpResponse.h \
-    # include/GenesisX/Orm/genesisx_orm_global.h
+    $$files($$PWD/src/*.h, true)
 
-SOURCES += $$files($$PWD/src/core/*.cpp)\
-    # src/core/ApiClient.cpp \
-    # src/core/CommandController.cpp \
-    # src/core/ConnectionController.cpp \
-    # src/core/HttpConnectionChecker.cpp
+SOURCES += $$files($$PWD/src/*.cpp, true)

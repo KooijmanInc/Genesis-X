@@ -1,0 +1,51 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "Router"
+        prototype: "QObject"
+        exports: ["GenesisX.Core.Navigation/Router 1.0"]
+        isSingleton: true
+        Property {
+            name: "currentPath"
+            type: "string"
+            read: "currentPath"
+            notify: "currentChanged"
+        }
+        Property {
+            name: "currentComponent"
+            type: "url"
+            read: "currentComponent"
+            notify: "currentChanged"
+        }
+        Property {
+            name: "currentParams"
+            type: "variantmap"
+            read: "currentParams"
+            notify: "currentChanged"
+        }
+
+        Method {
+            name: "clearRoutes"
+            type: "void"
+        }
+        Method {
+            name: "registerRoute"
+            type: "void"
+            parameter: { name: "name"; type: "QString" }
+            parameter: { name: "path"; type: "QString" }
+            parameter: { name: "componentUrl"; type: "QUrl" }
+        }
+
+        Signal {
+            name: "beforeNavigate"
+            type: "void"
+            parameter: { name: "toPath"; type: "QString" }
+            parameter: { name: "params"; type: "QVariantMap" }
+        }
+        Signal {
+            name: "currentChanged"
+        }
+    }
+}

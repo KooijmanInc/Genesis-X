@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebXML>
+    <document>
+        <namespace name="ab" fullname="gx::app::ab" href="gx-app-ab.html" status="active" access="public" location="ABTesting.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/ab/ABTesting.h" lineno="11" documented="true" module="GenesisX" brief="A/B Testing facilities">
+            <description path="D:/projects/qt/libs/Genesis-X/docs/topics/gx-namespace.qdoc" line="14" column="4">
+                <brief>A/B Testing facilities.</brief>
+            </description>
+            <class name="ABTesting" fullname="gx::app::ab::ABTesting" href="gx-app-ab-abtesting.html" status="active" access="public" location="ABTesting.h" filepath="D:/projects/qt/libs/Genesis-X/core/src/app/ab/ABTesting.h" lineno="13" since="6.10" documented="true" groups="genesisx-core" module="GenesisX" brief="Minimal A/B testing facade (constructor-only)">
+                <description path="D:/projects/qt/libs/Genesis-X/core/src/app/ab/ABTesting.cpp" line="6" column="4">
+                    <brief>Minimal A/B testing facade (constructor-only).</brief>
+                    <para>This class will serve as the bridge to the app's experimentation system (e.g., a simplein-house variant allocator or a remote a/b provider).</para>
+                    <para>
+                        <bold>Note:</bold> Linked QML module: <teletype type="highlighted">GenesisX\App\ABTesting</teletype> 1.0 (singleton).</para>
+                    <para>
+                        <bold>Note:</bold> Enabled when the app uses qmake flag <teletype type="highlighted">genesisx_app_ab</teletype></para>
+                </description>
+            </class>
+        </namespace>
+    </document>
+</WebXML>

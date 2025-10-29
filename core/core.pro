@@ -7,12 +7,6 @@ linux:!android: QT += dbus
 TEMPLATE = lib
 TARGET = genesisx
 CONFIG += c++23
-# CONFIG += qmltypes
-# QML_IMPORT_NAME = include.GenesisX.NotificationsQml
-# QML_IMPORT_MAJOR_VERSION = 1
-# QMLTYPES_INSTALL_DIR = $$PWD/qml
-
-# INCLUDEPATH += src/notifications
 
 ios {
     QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
@@ -47,8 +41,8 @@ ios {
     OBJECTIVE_SOURCES += \
         $$PWD/src/notifications/NotificationHandler_apple.mm \
         $$PWD/src/notifications/GXPushBridge.mm
-} else:win32 {
-    CONFIG += dll
+#} else:win32 {
+#    CONFIG += dll
 } else {
     CONFIG += shared
 }
@@ -79,19 +73,11 @@ win32-g++: QMAKE_LFLAGS_SHLIB += -Wl,--out-implib,$$DESTDIR/lib$${TARGET}.a
 
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/core/include
 
-HEADERS += $$files($$PWD/include/GenesisX/core/*.h) \
-    $$PWD/include/GenesisX/NotificationsQml.h \
-    $$PWD/include/GenesisX/genesisx_global.h \
-    $$PWD/src/notifications/NotificationHandler.h \
-    $$PWD/src/notifications/fcm_android.h \
-    $$PWD/src/notifications/NotificationHandler_apple_bridge.h \
-    include/GenesisX/Navigation/GxRouter.h \
-    include/GenesisX/NavigationQml.h
-SOURCES += $$files($$PWD/src/*.cpp) \
-    src/navigation/GxRouter.cpp \
-    src/notifications/NotificationHandler.cpp \
-    $$PWD/src/notifications/NotificationsQml.cpp \
-    $$PWD/src/notifications/fcm_android.cpp
+HEADERS += \
+    $$files($$PWD/include/GenesisX/*.h, true) \
+    $$files($$PWD/src/*.h, true)
+SOURCES += \
+    $$files($$PWD/src/*.cpp, true)
 
 # Optional install
 # headers.path = $$[QT_INSTALL_PREFIX]/include/GenesisX/core
@@ -109,11 +95,13 @@ DISTFILES += \
     $$PWD/android-template/build.gradle \
     $$PWD/android-template/google-services.json \
     $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle \
-    qml/GenesisX/Navigation/Link.qml \
-    qml/GenesisX/Navigation/NavHost.qml
+    qml/GenesisX/Core/Navigation/qmldir \
+    qml/GenesisX/Core/SystemInfo/qmldir \
+    qml/GenesisX/Core/SystemInfo/systeminfo.qmltypes
 
 RESOURCES += \
-    $$PWD/resources/core.qrc
+    $$PWD/resources/core.qrc \
+    qml/core_modules.qrc
 
 # --- Define values BEFORE QMAKE_SUBSTITUTES runs ---
 GENESISX_ROOT_ABS            = $$clean_path($$PWD/..)

@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_ANALYTICS
+
+message([genesisx app analytics] module loaded from $$PWD)

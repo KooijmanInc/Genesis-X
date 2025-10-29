@@ -1,0 +1,3 @@
+DEFINES += GX_USE_APP_CONTACTS
+
+message([genesisx app contacts] module loaded from $$PWD)

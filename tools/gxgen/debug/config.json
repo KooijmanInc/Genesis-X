@@ -1,0 +1,11 @@
+{
+    "driver": "QODBC",
+    "flavor": "mysql",
+    "host": "atlantian.nl",
+    "ns": "App",
+    "out": "D:/projects/qt/progs/LoungeVX/lvx-ui",
+    "pass": "S_heha_0904",
+    "port": "43306",
+    "schema": "",
+    "user": "external"
+}
