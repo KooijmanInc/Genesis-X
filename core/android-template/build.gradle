@@ -33,6 +33,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     //noinspection GradleDependency
     implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.biometric:biometric:1.1.0'
 }
 
 android {
@@ -65,6 +66,8 @@ android {
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
+            java.srcDirs += ["${gxBaseDir}/core/src/app/Biometrics/android/src/main/java"]
+            java.srcDirs += ["${gxBaseDir}/core/src/app/Permissions/android/src/main/java"]
        }
     }
 
@@ -92,6 +95,12 @@ android {
         targetSdkVersion qtTargetSdkVersion
         ndk.abiFilters = qtTargetAbiList.split(",")
     }
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+//        }
+//    }
 }
 
 println ("genesisx.firebase_cpp_sdk_dir = ${project.findProperty('firebase_cpp_sdk_dir')}")

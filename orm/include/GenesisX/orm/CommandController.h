@@ -8,10 +8,16 @@
 #include <QFuture>
 #include <QJsonObject>
 
-#include "genesisx_orm_global.h"
+#include <GenesisX/Orm/genesisx_orm_global.h>
 
 #include <GenesisX/Orm/HttpResponse.h>
 
+/*!
+    \namespace gx::orm
+    \inmodule GenesisX.Orm
+    \title gx::orm Namespace
+    \brief Module-level APIs.
+ */
 namespace gx::orm {
 
 class ConnectionController;

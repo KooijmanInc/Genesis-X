@@ -1,0 +1,145 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "gx::app::Permissions"
+        prototype: "QObject"
+        exports: ["GenesisX.App.Permissions/Permissions 1.0"]
+        Property {
+            name: "notificaitonsEnabled"
+            type: "bool"
+            read: "notificaitonsEnabled"
+            notify: "notificationsEnabledChanged"
+        }
+        Property {
+            name: "CAMERA"
+            type: "string"
+            read: "camera"
+        }
+        Property {
+            name: "RECORD_AUDIO"
+            type: "string"
+            read: "recordAudio"
+        }
+        Property {
+            name: "ACCESS_FINE_LOCATION"
+            type: "string"
+            read: "fineLocation"
+        }
+        Property {
+            name: "ACCESS_COARSE_LOCATION"
+            type: "string"
+            read: "coarseLocation"
+        }
+        Property {
+            name: "BLUETOOTH_CONNECT"
+            type: "string"
+            read: "btConnect"
+        }
+        Property {
+            name: "BLUETOOTH_SCAN"
+            type: "string"
+            read: "btScan"
+        }
+        Property {
+            name: "READ_MEDIA_IMAGES"
+            type: "string"
+            read: "readMediaImages"
+        }
+        Property {
+            name: "READ_MEDIA_VIDEO"
+            type: "string"
+            read: "readMediaVideo"
+        }
+        Property {
+            name: "READ_MEDIA_AUDIO"
+            type: "string"
+            read: "readMediaAudio"
+        }
+        Property {
+            name: "READ_MEDIA_VISUAL_USER_SELECTED"
+            type: "string"
+            read: "readMediaUserSelected"
+        }
+        Property {
+            name: "ACCESS_BACKGROUND_LOCATION"
+            type: "string"
+            read: "accessBackgroundLocation"
+        }
+        Property {
+            name: "ACTIVITY_RECOGNITION"
+            type: "string"
+            read: "activityRecognition"
+        }
+        Property {
+            name: "BODY_SENSORS"
+            type: "string"
+            read: "bodySensors"
+        }
+        Property {
+            name: "BODY_SENSORS_BACKGROUND"
+            type: "string"
+            read: "bodySensorsBackground"
+        }
+        Property {
+            name: "NEARBY_WIFI_DEVICES"
+            type: "string"
+            read: "nearbyWifiDevices"
+        }
+
+        Method {
+            name: "has"
+            type: "bool"
+            parameter: {
+                name: "permission"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "request"
+            type: "void"
+            parameter: {
+                name: "perms"
+                type: "QVariant"
+            }
+        }
+        Method {
+            name: "notificationsEnabled"
+            type: "bool"
+        }
+        Method {
+            name: "requestNotifications"
+            type: "void"
+        }
+        Method {
+            name: "openNotificationSettings"
+            type: "void"
+        }
+        Method {
+            name: "openAppSettings"
+            type: "void"
+        }
+        Method {
+            name: "canScheduleExactAlarms"
+            type: "bool"
+        }
+        Method {
+            name: "requestScheduleExactAlarms"
+            type: "void"
+        }
+        Method {
+            name: "isIgnoringBatteryOptimizations"
+            type: "bool"
+        }
+        Method {
+            name: "requestIgnoreBatteryOptimizations"
+            type: "void"
+        }
+
+        Signal {
+            name: "notificationsEnabledChanged"
+            type: "void"
+        }
+    }
+}

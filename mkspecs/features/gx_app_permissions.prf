@@ -1,3 +1,6 @@
-DEFINES += GX_USE_APP_PERMISSIONS
+!defined(__GX_APP_PERMISSIONS_PRF_INCLUDED__, var) {
+    __GX_APP_PERMISSIONS_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_APP_PERMISSIONS
 
 message([genesisx app permissions] module loaded from $$PWD)
+}

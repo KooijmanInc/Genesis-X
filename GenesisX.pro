@@ -6,7 +6,11 @@ CONFIG += qt c++23
 CONFIG += ordered
 
 SUBDIRS += core physics orm \
-    tools/gxgen
+
+!android:!ios {
+    SUBDIRS += tools/gxgen
+message(thisone????)
+}
 
 core.subdir = $$PWD/core
 
@@ -16,7 +20,7 @@ physics.depends = core
 orm.subdir = $$PWD/orm
 orm.depends = core
 
-tools/gxgen.depends = orm
+!android:!ios { message(orthisone????) tools/gxgen.depends = orm }
 
 DISTFILES += \
     README.md \
@@ -29,6 +33,11 @@ DISTFILES += \
     SECURITY.md \
     LICENSES/LicenseRef-KooijmanInc-Commercial.txt \
     LICENSES/GPL-3.0-only.txt \
+    docs/qt-includes.qdocconf.in \
+    docs/topics/getting-started.qdoc \
+    docs/topics/guides.qdoc \
+    docs/topics/gx-getting-started.qdoc \
+    docs/topics/gx-orm-namespace.qdoc \
     mkspecs/features/genesisx_app_core.prf \
     mkspecs/features/gx_app_ab.prf \
     mkspecs/features/gx_app_analytics.prf \

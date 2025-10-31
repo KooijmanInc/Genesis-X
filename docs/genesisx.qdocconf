@@ -1,15 +1,19 @@
 # ---------- Project ----------
 project             = GenesisX
-module              = GenesisX
+module              += GenesisX
+module              += GenesisX.Orm
 group               = genesisx-core
+group               += genesisx-orm
 defines             += Q_QDOC
 defines             += GENESISX_CORE_EXPORT
+defines             += GENESISX_ORM_EXPORT
 description         = Genesis-X SDK
 version             = 1.0
 url                 = https://genesisx.kooijmaninc.com
 
 # ---------- Make export / Qt macros harmless to QDoc's parser
 macro.GENESISX_CORE_EXPORT = 1
+macro.GENESISX_ORM_EXPORT = 1
 macro.Q_OBJECT =
 macro.Q_INVOKABLE =
 macro.Q_PROPERTY =
@@ -17,46 +21,41 @@ macro.Q_SIGNALS =
 macro.signals =
 
 # ---------- Inputs (relative to docs/; use spaces, not semicolons) ----------
-headerdirs              = ../core/src ../core/include ../orm/src ../orm/include
-sourcedirs              = topics ../core/src ../orm/src
+headerdirs              += ../core/src ../core/include
+headerdirs              += ../orm/src ../orm/include
+sourcedirs              += topics ../core/src ../orm/src
 sources.fileextensions  = *.qdoc *.cpp *.qml
 headers.fileextensions  = *.h *.ch *.h++ *.hh *.hpp *.hxx
-includepaths            = -I../core/include -I../physics/include -I../orm/include -I../core/src -I../physics/src -I../oem/src
+includepaths            = ../core/include ../physics/include ../orm/include  ../core/src ../physics/src ../orm/src
+includepaths            += -I../orm/include -I ../core/src/docs
 imagedirs               = images
+#headers                 += ../core/include/GenesisX/Auth/Auth.h
 
 # ---------- Manual TOC ----------
-contentpage                 = index.html
+#contentpage                 = index.html
+navigation                  = true
 navigation.separatepages    = true
 navigation.homepage         = index.html
-navigation.cppclassespage   = classes.html
-navigation.cppclassestitle  = GenesisX classes
+navigation.cppclassespage   = "C++ Classes"
+#navigation.cppclassestitle  = GenesisX classes
 navigation.pages            = \
-    index.html \
-    namespaces.html \
-    classes.html \
-    gx.html \
-        gx-app.html \
-            gx-app-ab.html \
-                gx-app-ab-abtesting.html \
-        gx-app-notifications.html \
-            gx-app-notifications-classes.html \
-            gx-app-notifications-notificationhandler.html \
-    qml-genesisx-notifications-qmlmodule.html \
-        qml-genesisx-notifications-notificationhandler.html \
+    out/index.html \
+        out/getting-started.html
 
 # ---------- Output ----------
 outputdir                   = out
-outputformats               = WebXML HTML
-WebXML.nosubdirs            = true
-WebXML.outputsubdir         = webxml
-WebXML.quotinginformation   = true
+outputformats               = HTML
+#WebXML.nosubdirs            = true
+#WebXML.outputsubdir         = webxml
+#WebXML.quotinginformation   = true
 outputencoding              = UTF-8
 help                        = true
 navigation                  = true
+navigation.separatepages    = true
 #navigation.homepage         = index.html
 qhp                         = true
 #qmlmodules                  = GenesisX.NotificationHandler
-qmlmodules                  = GenesisX.Notifications
+#qmlmodules                  = GenesisX.Notifications
 #indexes                     = out
 HTML.endheader = \
 "<style>\n" \

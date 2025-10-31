@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QFuture>
 
-#include "genesisx_orm_global.h"
+#include <GenesisX/Orm/genesisx_orm_global.h>
 
 #include "TransportConfig.h"
 #include "AuthCredentials.h"

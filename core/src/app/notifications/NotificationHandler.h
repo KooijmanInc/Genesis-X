@@ -27,12 +27,13 @@ public:
     explicit NotificationHandler(QObject *parent = nullptr) : QObject(parent) {}
 
     Q_INVOKABLE void initialize(const QVariantMap& options = {});
+    // note: maybe default value and both params have &
     Q_INVOKABLE void show(const QString& title, const QString& body, int msec = 5000);
     Q_INVOKABLE void subscribe(const QString& topic);
     Q_INVOKABLE void unsubscribe(const QString& topic);
     Q_INVOKABLE QString fcmToken() const;
 
-    bool initialized() const { return m_initialized; }
+    bool initialized() const;
     // bool pushSupported() const { return m_supported; }
     // bool tokenReady() const { return !m_token.isEmpty(); }
 

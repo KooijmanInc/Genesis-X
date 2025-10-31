@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-#include "include/GenesisX/Orm/CommandController.h"
+#include <GenesisX/Orm/CommandController.h>
 
 #include <GenesisX/Orm/ConnectionController.h>
 #include <GenesisX/Orm/HttpResponse.h>
@@ -10,6 +10,25 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+
+/*!
+    \namespace gx::orm
+    \inmodule GenesisX.Orm
+    \title gx::orm Namespace
+    \brief Orm facilities.
+ */
+
+/*!
+    \class gx::orm::CommandController
+    \inheaderfile GenesisX/Orm/CommandController.h
+    \inmodule GenesisX.Orm
+    \ingroup genesisx-orm
+    \title CommandController for api and database
+    \since 6.10
+    \brief Use CommandController for getting database record via sql connection or api.
+ */
+
+using namespace gx::orm;
 
 namespace gx::orm {
 

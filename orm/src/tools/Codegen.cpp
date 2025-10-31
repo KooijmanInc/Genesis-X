@@ -18,6 +18,13 @@
 #include <QDir>
 
 /*!
+    \namespace gx::orm::codegen
+    \inmodule GenesisX.Orm
+    \title gx::orm::codegen Namespace
+    \brief Code generator facilities for creating entities in app.
+ */
+
+/*!
  *  \headerfile Codegen.h
  *  \inmodule GenesisX/Orm
  *  \ingroup genesisx-orm

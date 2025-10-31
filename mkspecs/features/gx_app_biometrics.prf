@@ -1,3 +1,7 @@
-DEFINES += GX_USE_APP_BIOMETRICS
+!defined(__GX_APP_BIOMETRICS_PRF_INCLUDED__, var) {
+    __GX_APP_BIOMETRICS_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_APP_BIOMETRICS
 
-message([genesisx app biometrics] module loaded from $$PWD)
+    message([genesisx app biometrics] module loaded from $$PWD)
+
+}
