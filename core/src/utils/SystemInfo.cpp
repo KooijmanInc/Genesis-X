@@ -9,16 +9,16 @@
 #include <QUuid>
 
 /*!
- *  \struct SystemInfo
- *  \inmodule GenesisX
- *  \ingroup genesisx-core
- *  \title System information
- *  \since 6.10
- *  \brief Information about the current system.
+   \headerfile SystemInfo.h
+   \inmodule GenesisX
+   \ingroup genesisx-core
+   \title System information
+   \since 6.10
+   \brief Information about the current system.
  */
 using namespace gx::utils;
 
-/*!
+/**
  * \brief SystemInfo::ensureAppUuid
  * \return
  */
@@ -46,7 +46,7 @@ QString SystemInfo::ensureAppUuid()
     return id;
 }
 
-/*!
+/**
  * \brief SystemInfo::operatingSystem
  * \return
  */
@@ -55,7 +55,7 @@ QString SystemInfo::operatingSystem()
     return QSysInfo::kernelType();
 }
 
-/*!
+/**
  * \brief SystemInfo::platform
  * \return
  */
@@ -64,7 +64,7 @@ QString SystemInfo::platform()
     return QSysInfo::productType();
 }
 
-/*!
+/**
  * \brief SystemInfo::systemLanguage
  * \return
  */

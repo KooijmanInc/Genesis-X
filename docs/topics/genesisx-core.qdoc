@@ -1,18 +1,18 @@
 /*!
- * \group genesisx-core
- * \title Genesis-X C++ API
- * \inmodule GenesisX
- * \brief Public C++ classes in Genesis-X
- *
- * \generatelist{classes}
+    \group genesisx-core
+    \title Genesis-X C++ API
+    \inmodule GenesisX
+    \brief Public C++ classes in Genesis-X
+
+    \generatelist{classes}
  */
 
 
 /*!
- * \group genesisx-orm
- * \title Genesis-X C++ API
- * \inmodule GenesisX/Orm
- * \brief Public C++ classes in Genesis-X Orm
- *
- * \generatelist{classes}
+    \group genesisx-orm
+    \title Genesis-X Orm C++ API
+    \inmodule GenesisX.Orm
+    \brief Public C++ classes in Genesis-X Orm
+
+    \generatelist{classes}
  */

@@ -6,8 +6,7 @@ Module {
         name: "GenesisX.Core.Notifications.NotificationHandler"
         prototype: "QObject"
         exports: ["GenesisX.Core.Notifications/NotificationHandler 1.0"]
-        // isCreatable: true
-        // isSingleton: false
+
         Property {
             name: "initialized"
             type: "bool"
@@ -18,31 +17,73 @@ Module {
         Method {
             name: "initialize"
             type: "void"
-            parameter: { name: "options"; type: "QVariantMap" }
+            parameter: {
+                name: "options";
+                type: "QVariantMap"
+            }
         }
-
         Method {
             name: "show"
             type: "void"
-            parameter: { name: "title"; type: "QString" }
-            parameter: { name: "body"; type: "QString" }
-            parameter: { name: "msec"; type: "int" }
+            parameter: {
+                name: "title"
+                type: "QString"
+            }
+            parameter: {
+                name: "body";
+                type: "QString"
+            }
+            parameter: {
+                name: "msec"
+                type: "int"
+            }
+        }
+        Method {
+            name: "subscribe"
+            type: "void"
+            parameter: {
+                name: "topic"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "unsubscribe"
+            type: "void"
+            parameter: {
+                name: "topic"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "fcmToken"
+            type: "string"
         }
 
-        Signal {
-            name: "notificationReceived"
-            type: "void"
-            parameter: { name: "title"; type: "QString" }
-            parameter: { name: "body"; type: "QString" }
-            parameter: { name: "data"; type: "QVariantMap" }
-        }
         Signal {
             name: "initializedChanged"
         }
         Signal {
+            name: "notificationReceived"
+            type: "void"
+            parameter: {
+                name: "title"
+                type: "QString"
+            }
+            parameter: {
+                name: "body"
+                type: "QString"
+            }
+            parameter: {
+                name: "data"
+                type: "QVariantMap"
+            }
+        }
+        Signal {
             name: "tokenChanged"
             type: "void"
-            parameter: { name: "token"; type: "QString" }
+            parameter: { name: "token"
+                type: "QString"
+            }
         }
     }
 }

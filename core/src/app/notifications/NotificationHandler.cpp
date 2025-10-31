@@ -21,74 +21,74 @@
 #endif
 
 /*!
- *  \class gx::app::notifications::NotificationHandler
- *  \inmodule GenesisX
- *  \ingroup genesisx-core
- *  \title Notification handler
- *  \since 6.10
- *  \brief Main class for local and push notifications.
- *
- *  code snippet shows the correct usage pattern:
- *  \code
- *  #include <QGuiApplication>
- *  #include <QQmlApplicationEngine>
- *  #include <GenesisX/CoreQml.h>
- *
- *  int main(int argc, char *argv[])
- *  {
- *      QGuiApplication app(argc, argv);
- *
- *      GXCore::registerEnabledQmlModules(&engine);
- *
- *      QQmlApplicationEngine engine;
- *
- *      engine.load(QStringLiteral("qrc:/views/MasterView.qml"));
- *
- *      if (engine.rootObjects().isEmpty()) return -1;
- *
- *      return app.exec();
- *  }
- *  \endcode
- *  \brief Optional you can autoload only the used modules.
- *
- *  code snippet setting modules list in qmake:
- *  \code
- *  GX_LOADED_MODULES = $$QT
- *  GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, ",")
- *  DEFINES += GX_LOADED_MODULES=\\\"$$GX_LOADED_MODULES_CSV\\\"
- *  \endcode
- *  \brief And set in main.cpp.
- *  \code
- *  GXCore::registerEnabledQmlModules(&engine, GX_LOADED_MODULES);
- *  \endcode
- *
- *  \brief And implementing it in qml.
- *
- *  code snippet shows the correct usage pattern:
- *  \code
- *  import QtQuick
- *  import GenesisX.Notifications 1.0
- *
- *  Window {
- *      id: root
- *      visible: true
- *      width: 1024
- *      height: 768
- *
- *      Component.onCompleted: {
- *          notify.show("Hello from GenesisX", "Windows tray balloon :-)")
- *      }
- *
- *      NotificationHandler {
- *          id: notify
- *          onNotificationReceived: (title, body, data) => {
- *              console.log("[QML] got notification:", title, body, JSON.stringify(data))
- *          }
- *          onTokenChanged: t => console.log("New token found in qml:", t)
- *          Component.onCompleted: initialize()
- *      }
- *  }
- *  \endcode
+   \class gx::app::notifications::NotificationHandler
+   \inmodule GenesisX
+   \ingroup genesisx-core
+   \title Notification handler
+   \since 6.10
+   \brief Main class for local and push notifications.
+
+   code snippet shows the correct usage pattern:
+   \code
+   #include <QGuiApplication>
+   #include <QQmlApplicationEngine>
+   #include <GenesisX/CoreQml.h>
+
+   int main(int argc, char *argv[])
+   {
+       QGuiApplication app(argc, argv);
+
+       GXCore::registerEnabledQmlModules(&engine);
+
+       QQmlApplicationEngine engine;
+
+       engine.load(QStringLiteral("qrc:/views/MasterView.qml"));
+
+       if (engine.rootObjects().isEmpty()) return -1;
+
+       return app.exec();
+   }
+   \endcode
+   \brief Optional you can autoload only the used modules.
+
+   code snippet setting modules list in qmake:
+   \code
+   GX_LOADED_MODULES = $$QT
+   GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, ",")
+   DEFINES += GX_LOADED_MODULES=\\\"$$GX_LOADED_MODULES_CSV\\\"
+   \endcode
+   \brief And set in main.cpp.
+   \code
+   GXCore::registerEnabledQmlModules(&engine, GX_LOADED_MODULES);
+   \endcode
+
+   \brief And implementing it in qml.
+
+   code snippet shows the correct usage pattern:
+   \code
+   import QtQuick
+   import GenesisX.Notifications 1.0
+
+   Window {
+       id: root
+       visible: true
+       width: 1024
+       height: 768
+
+       Component.onCompleted: {
+           notify.show("Hello from GenesisX", "Windows tray balloon :-)")
+       }
+
+       NotificationHandler {
+           id: notify
+           onNotificationReceived: (title, body, data) => {
+               console.log("[QML] got notification:", title, body, JSON.stringify(data))
+           }
+           onTokenChanged: t => console.log("New token found in qml:", t)
+           Component.onCompleted: initialize()
+       }
+   }
+   \endcode
  */
 
 /*!
@@ -99,7 +99,7 @@
     Import this module to use the \l NotificationHandler type:
 
     \code
-    import GenesisX
+    import GenesisX.Core.Notifications 1.0
     \endcode
 */
 
@@ -134,10 +134,13 @@
     \qmlmethod void NotificationHandler::showLocal(string text)
 */
 
-
 using namespace gx::app::notifications;
 using gx::navigation::router;
 
+/**
+ * @brief onFirebaseMessage
+ * @param data
+ */
 void onFirebaseMessage(const QVariantMap& data)
 {
     QString path = data.value("route").toString();
@@ -147,6 +150,12 @@ void onFirebaseMessage(const QVariantMap& data)
     router()->navigate(path, params);
 }
 
+/**
+ * @brief NotificationHandler::show
+ * @param title
+ * @param body
+ * @param msec
+ */
 void NotificationHandler::show(const QString &title, const QString &body, int msec)
 {
     qDebug() << title << body << msec;
@@ -165,6 +174,10 @@ void NotificationHandler::show(const QString &title, const QString &body, int ms
 #endif
 }
 
+/**
+ * @brief NotificationHandler::initialize
+ * @param options
+ */
 void NotificationHandler::initialize(const QVariantMap &options)
 {
     Q_UNUSED(options);
@@ -189,8 +202,14 @@ connect(&fcm, &gx::android::FcmBridge::tokenChanged, this, &NotificationHandler:
     qInfo() << "[GX Notify] initialized";
 }
 
+/**
+ * @brief NotificationHandler::subscribe
+ * @param topic
+ */
 void NotificationHandler::subscribe(const QString &topic)
 {
+    Q_UNUSED(topic);
+
 #ifdef Q_OS_ANDROID
     qDebug() << "subscribe activated";
     // android::FcmBridge::instance().subscribe(topic);
@@ -199,8 +218,14 @@ void NotificationHandler::subscribe(const QString &topic)
 #endif
 }
 
+/**
+ * @brief NotificationHandler::unsubscribe
+ * @param topic
+ */
 void NotificationHandler::unsubscribe(const QString &topic)
 {
+    Q_UNUSED(topic);
+
 #ifdef Q_OS_ANDROID
     qDebug() << "unsubscribe activated";
     // android::FcmBridge::instance().unsubscribe(topic);
@@ -209,6 +234,10 @@ void NotificationHandler::unsubscribe(const QString &topic)
 #endif
 }
 
+/**
+ * @brief NotificationHandler::fcmToken
+ * @return
+ */
 QString NotificationHandler::fcmToken() const
 {
 #ifdef Q_OS_ANDROID
@@ -218,11 +247,30 @@ QString NotificationHandler::fcmToken() const
 #endif
 }
 
+/**
+ * @brief NotificationHandler::initialized
+ * @return
+ */
+bool NotificationHandler::initialized() const
+{
+    return m_initialized;
+}
+
+/**
+ * @brief NotificationHandler::appleDidReceiveToken
+ * @param token
+ */
 void NotificationHandler::appleDidReceiveToken(const QString &token)
 {
     emit tokenChanged(token);
 }
 
+/**
+ * @brief NotificationHandler::appleDidReceiveRemote
+ * @param title
+ * @param body
+ * @param data
+ */
 void NotificationHandler::appleDidReceiveRemote(const QString &title, const QString &body, const QVariantMap &data)
 {
     emit notificationReceived(title, body, data);
@@ -272,6 +320,9 @@ void NotificationHandler::showLinuxNotification(const QString &title, const QStr
 #endif
 
 #ifdef Q_OS_WIN
+/**
+ * @brief NotificationHandler::ensureTray
+ */
 void NotificationHandler::ensureTray()
 {
     if (m_tray) return;
@@ -293,6 +344,11 @@ void NotificationHandler::ensureTray()
     qApp->installEventFilter(this);
 }
 
+/**
+ * @brief NotificationHandler::eventFilter
+ * @param e
+ * @return
+ */
 bool NotificationHandler::eventFilter(QObject*, QEvent* e)
 {
     if (e->type() == QEvent::ApplicationWindowIconChange && m_tray) {

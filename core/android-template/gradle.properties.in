@@ -23,3 +23,4 @@ android.useAndroidX=true
 # Auto-generated — do not edit
 firebase_cpp_sdk_dir=$$FIREBASE_CPP_SDK_DIR
 baseDir=$$FIREBASE_DEPENDENCIES_GRADLE
+gxBaseDir=$$GENESISX_ROOT_ABS
