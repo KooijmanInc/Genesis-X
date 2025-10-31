@@ -1,11 +1,28 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
+QT += core gui qml quick
+
 TEMPLATE = aux
 
 QMAKE_EXTRA_TARGETS += docs arrange help
 
-QMAKE_DOCS = $$PWD/genesisx.qdocconf
+# QMAKE_DOCS = $$PWD/genesisx.qdocconf
+
+# QDOCCONF_IN  = $$PWD/docs/qt-includes.qdocconf.in
+
+# QMAKE_SUBSTITUTES += $$QDOCCONF_IN
+
+# QDOCCONF_OUT = $$PWD/docs/qt-includes.qdocconf
+
+# # Vars to substitute (come from the user’s Qt installation)
+# QT_HEADERS     = $$[QT_INSTALL_HEADERS]
+# QMAKE_MKSPECS  = $$[QMAKE_MKSPECS]
+
+
+
+# # Ensure the output lands where your main qdocconf can include it
+# QMAKE_SUBSTITUTES_OUTPUT = $$QDOCCONF_OUT
 
 QMAKE_DOCS_OUTPUTDIR = $$OUT_PWD/out
 QDOC        = $$[QT_INSTALL_BINS]/qdoc

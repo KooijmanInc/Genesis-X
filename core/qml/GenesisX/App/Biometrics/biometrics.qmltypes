@@ -1,0 +1,53 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "gx::app::Biometrics"
+        prototype: "QObject"
+        exports: ["GenesisX.App.Biometrics/Biometrics 1.0"]
+
+        Property {
+            name: "available"
+            type: "bool"
+            read: "available"
+            notify: "availabilityChanged"
+        }
+
+        Method {
+            name: "available"
+            type: "bool"
+        }
+
+        Method {
+            name: "status"
+            type: "int"
+        }
+
+        Method {
+            name: "authenticate"
+            type: "variant"
+            parameter: {
+                name: "reason"; type: "QString"
+            }
+        }
+
+        Signal {
+            name: "availabilityChanged"
+            type: "void"
+        }
+
+        Signal {
+            name: "authenticated"
+            type: "void"
+            parameter: {
+                name: "code"
+                type: "int"
+            }
+            parameter: {
+                name: "message"
+                type: "string"
+            }
+        }
+    }
+}

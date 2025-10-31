@@ -8,11 +8,15 @@
 #include "src/utils/SystemInfoQml.h"
 #include "src/navigation/NavigationQml.h"
 
+#include "src/app/Biometrics/BiometricsQml.h"
 #include "src/app/notifications/NotificationsQml.h"
+#include "src/app/Permissions/PermissionsQml.h"
 
 void registerGenesisXSystemInfo(QQmlEngine*);
 void registerGenesisXNavigation(QQmlEngine*);
+void registerGenesisXBiometrics(QQmlEngine*);
 void registerGenesisXNotifications(QQmlEngine*);
+void registerGenesisXPermissions(QQmlEngine*);
 
 namespace gx::core {
 
@@ -23,7 +27,9 @@ struct Feature {
 };
 
 inline const Feature kFeatures[] = {
-    {"genesisx_app_notifications", &registerGenesisXNotifications}
+    {"genesisx_app_biometrics", &registerGenesisXBiometrics},
+    {"genesisx_app_notifications", &registerGenesisXNotifications},
+    {"genesisx_app_permissions", &registerGenesisXPermissions}
 };
 
 inline QStringList gxValidFeatureKeys()
@@ -35,28 +41,28 @@ inline QStringList gxValidFeatureKeys()
 }
 
 /*!
- * \headerfile CoreQml.h
- *  \inmodule GenesisX
- *  \since 6.10
- *  \brief Register all enabled GenesisX QML modules on \a engine.
- *
- *  Which modules are registered depends on your qmake QT,
- *  e.g. genesisx_app_notifications, genesisx_app_ab, etc.
- *
- *  code snippet setting modules list in qmake:
- *  \code
- *  GX_LOADED_MODULES = $$QT
- *  GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, ",")
- *  DEFINES += GX_LOADED_MODULES=\\\"$$GX_LOADED_MODULES_CSV\\\"
- *  \endcode
- *  \brief And set in main.cpp.
- *  \code
- *  GXCore::registerEnabledQmlModules(&engine, GX_LOADED_MODULES);
- *  \endcode
- *  \brief Optionally you can load everything by setting.
- *  \code
- *  GXCore::registerEnabledQmlModules(&engine);
- *  \endcode
+  \headerfile CoreQml.h
+   \inmodule GenesisX
+   \since 6.10
+   \brief Register all enabled GenesisX QML modules on \a engine.
+
+   Which modules are registered depends on your qmake QT,
+   e.g. genesisx_app_notifications, genesisx_app_ab, etc.
+
+   code snippet setting modules list in qmake:
+   \code
+   GX_LOADED_MODULES = $$QT
+   GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, ",")
+   DEFINES += GX_LOADED_MODULES=\\\"$$GX_LOADED_MODULES_CSV\\\"
+   \endcode
+   \brief And set in main.cpp.
+   \code
+   GXCore::registerEnabledQmlModules(&engine, GX_LOADED_MODULES);
+   \endcode
+   \brief Optionally you can load everything by setting.
+   \code
+   GXCore::registerEnabledQmlModules(&engine);
+   \endcode
 */
 void registerEnabledQmlModules(QQmlEngine* engine, QString features)
 {

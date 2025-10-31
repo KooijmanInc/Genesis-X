@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+// Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+#include <GenesisX/Auth/Auth.h>
+
+/*!
+    \class gx::app::auth::Auth
+    \inheaderfile ../../../include/GenesisX/Auth/Auth.h
+    \inmodule GenesisX
+    \ingroup genesisx-core
+    \since 6.10
+    \brief Minimal Auth facade (constructor-only).
+
+    This class will serve as the bridge to the app's .
+
+    \note Linked QML module: \c GenesisX\App\Auth 1.0 (singleton).
+    \note Enabled when the app uses qmake flag \c genesisx_app_auth
+ */
+using namespace gx::app::auth;
+
+Auth::Auth(QObject *parent)
+    : QObject{parent}
+{
+
+}

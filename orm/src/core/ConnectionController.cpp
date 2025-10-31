@@ -24,6 +24,15 @@
 #include <QTimer>
 #include <QFile>
 
+/*!
+    \class gx::orm::ConnectionController
+    \inheaderfile ../../include/GenesisX/Orm/ConnectionController.h
+    \inmodule GenesisX.Orm
+    \ingroup genesisx-orm
+    \title ConnectionController connecting api and sql
+    \since 6.10
+    \brief ConnectionController connects the CommandController to database and api server.
+ */
 namespace gx::orm {
 
 struct HostsCheck {

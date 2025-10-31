@@ -1,12 +1,9 @@
-<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
-<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
 <!-- CoreQml.cpp -->
-  <meta name="description" content="Register all enabled GenesisX QML modules on engine. * * Which modules are registered depends on your qmake QT, * e.g. genesisx_app_notifications, genesisx_app_ab, etc. * * code snippet setting modules list in qmake: *">
+  <meta name="description" content="Register all enabled GenesisX QML modules on engine.">
   <title>CoreQml.h | index.html 1.0</title>
 <style>
 html, body {background-color: #262626;width: 100%;height: 100%;padding: 0 0 0 20px;margin: -20px -30px -20px -20px;font: normal 400 14px/1.2 Arial;font-family: Arial, Helvetica;} .main-body {
@@ -152,7 +149,7 @@ background-color: #F2F3D4;
 <div class="sidebar-content" id="sidebar-content"></div></div>
 <h1 class="title" translate="no">CoreQml.h</h1>
 <!-- $$$CoreQml.h-brief -->
-<p>Register all enabled GenesisX QML modules on <i translate="no">engine</i>. * * Which modules are registered depends on your qmake QT, * e.g. genesisx_app_notifications, genesisx_app_ab, etc. * * code snippet setting modules list in qmake: *. <a href="#details">More...</a></p>
+<p>Register all enabled GenesisX QML modules on <i translate="no">engine</i>. <a href="#details">More...</a></p>
 <!-- @@@CoreQml.h -->
 <div class="table"><table class="alignedsummary requisites" translate="no">
 <tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign"> <code translate="no">#include &lt;CoreQml.h&gt;</code></td></tr>
@@ -161,17 +158,14 @@ background-color: #F2F3D4;
 <!-- $$$CoreQml.h-description -->
 <div class="descr">
 <h2 id="details">Detailed Description</h2>
-<p>* * * *</p>
-<pre class="cpp" translate="no"><span class="operator">*</span>  GX_LOADED_MODULES <span class="operator">=</span> $$QT
-<span class="operator">*</span>  GX_LOADED_MODULES_CSV <span class="operator">=</span> $$join(GX_LOADED_MODULES<span class="operator">,</span> <span class="string">&quot;,&quot;</span>)
-<span class="operator">*</span>  DEFINES <span class="operator">+</span><span class="operator">=</span> GX_LOADED_MODULES<span class="operator">=</span>\\\<span class="string">&quot;$$GX_LOADED_MODULES_CSV\\\&quot;
-*  </span></pre>
-<p>*</p>
-<pre class="cpp" translate="no"><span class="operator">*</span>  GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine<span class="operator">,</span> GX_LOADED_MODULES);
-<span class="operator">*</span></pre>
-<p>*</p>
-<pre class="cpp" translate="no"><span class="operator">*</span>  GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);
-<span class="operator">*</span></pre>
+<p>Which modules are registered depends on your qmake QT, e.g. genesisx_app_notifications, genesisx_app_ab, etc.</p>
+<p>code snippet setting modules list in qmake:</p>
+<pre class="cpp" translate="no">GX_LOADED_MODULES <span class="operator">=</span> $$QT
+GX_LOADED_MODULES_CSV <span class="operator">=</span> $$join(GX_LOADED_MODULES<span class="operator">,</span> <span class="string">&quot;,&quot;</span>)
+DEFINES <span class="operator">+</span><span class="operator">=</span> GX_LOADED_MODULES<span class="operator">=</span>\\\<span class="string">&quot;$$GX_LOADED_MODULES_CSV\\\&quot;
+</span></pre>
+<pre class="cpp" translate="no">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine<span class="operator">,</span> GX_LOADED_MODULES);</pre>
+<pre class="cpp" translate="no">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);</pre>
 </div>
 <!-- @@@CoreQml.h -->
 </div>

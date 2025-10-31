@@ -1,8 +1,19 @@
 /*!
- * \page namespaces.html
- * \title Namespaces
- * \inmodule GenesisX
- * \brief All namespaces in Genesis-X
- *
- * \generatelist{namespaces}
+    \page namespaces.html
+    \title Namespaces
+    \inmodule GenesisX
+    \ingroup genesisx-core
+    \brief All namespaces in Genesis-X
+
+    \generatelist{namespaces}
+ */
+
+/*!
+    \page namespaces-orm.html
+    \title Namespaces Orm
+    \inmodule GenesisX.Orm
+    \ingroup genesisx-orm
+    \brief All namespaces in Genesis-X
+
+    \generatelist{namespaces}
  */

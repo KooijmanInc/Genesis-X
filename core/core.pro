@@ -79,6 +79,15 @@ HEADERS += \
 SOURCES += \
     $$files($$PWD/src/*.cpp, true)
 
+android {
+    SOURCES += \
+        $$files($$PWD/src/*Android.cpp, true)
+} else {
+    SOURCES -= \
+        $$files($$PWD/src/*Android.cpp, true)
+}
+
+
 # Optional install
 # headers.path = $$[QT_INSTALL_PREFIX]/include/GenesisX/core
 # headers.files = $$HEADERS
@@ -95,9 +104,15 @@ DISTFILES += \
     $$PWD/android-template/build.gradle \
     $$PWD/android-template/google-services.json \
     $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle \
+    qml/GenesisX/App/Biometrics/qmldir \
+    qml/GenesisX/App/Permissions/permissions.qmltypes \
+    qml/GenesisX/App/Permissions/qmldir \
     qml/GenesisX/Core/Navigation/qmldir \
     qml/GenesisX/Core/SystemInfo/qmldir \
-    qml/GenesisX/Core/SystemInfo/systeminfo.qmltypes
+    qml/GenesisX/Core/SystemInfo/systeminfo.qmltypes \
+    src/app/Biometrics/android/src/main/java/biometrics/GxBiometrics.java \
+    src/app/Biometrics/android/src/main/java/org/qtproject/qt/android/QtActivityUtils.java \
+    src/app/Permissions/android/src/main/java/permissions/GxPermissions.java
 
 RESOURCES += \
     $$PWD/resources/core.qrc \

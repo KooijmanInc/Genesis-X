@@ -1,8 +1,8 @@
 /*!
- * \group gx-app-notifications-classes
- * \title gx::app::notifications Classes
- * \inmodule GenesisX
- * \brief C++ classes in the gx::app::notifications namespace.
- *
- * \generatelist{classes}
+    \group gx-app-notifications-classes
+    \title gx::app::notifications Classes
+    \inmodule GenesisX
+    \brief C++ classes in the gx::app::notifications namespace.
+
+    \generatelist{classes}
  */
