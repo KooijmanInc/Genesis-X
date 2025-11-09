@@ -1,3 +1,6 @@
-DEFINES += GX_USE_APP_BACKGROUND
+!defined(__GX_APP_BACKGROUND_PRF_INCLUDED__, var) {
+    __GX_APP_BACKGROUND_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_APP_BACKGROUND
 
-message([genesisx app background] module loaded from $$PWD)
+    message([genesisx app background] module loaded from $$PWD)
+}

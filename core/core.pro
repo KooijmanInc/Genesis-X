@@ -2,7 +2,7 @@
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
 # QT -= gui
-QT += core qml widgets
+QT += core qml quick widgets
 linux:!android: QT += dbus
 TEMPLATE = lib
 TARGET = genesisx
@@ -22,8 +22,9 @@ ios {
 
     QMAKE_LFLAGS += -ObjC
     OBJECTIVE_SOURCES += \
-        $$PWD/src/notifications/NotificationHandler_apple.mm \
-        $$PWD/src/notifications/GXAppDelegate+Push_ios.mm
+        $$PWD/src/app/Notifications/NotificationHandler_apple.mm \
+        $$PWD/src/app/Notifications/GXAppDelegate+Push_ios.mm \
+        $$PWD/src/app/Background/BackgroundAudio.mm
 } else:macos {
     QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
     QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
@@ -39,8 +40,9 @@ ios {
     QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
     QMAKE_MAC_XCODE_SETTINGS += OTHER_LDFLAGS="$(inherited) -ObjC"
     OBJECTIVE_SOURCES += \
-        $$PWD/src/notifications/NotificationHandler_apple.mm \
-        $$PWD/src/notifications/GXPushBridge.mm
+        $$PWD/src/app/Notifications/NotificationHandler_apple.mm \
+        $$PWD/src/app/Notifications/GXPushBridge.mm \
+        $$PWD/src/app/Background/BackgroundAudio.mm
 #} else:win32 {
 #    CONFIG += dll
 } else {
@@ -81,10 +83,11 @@ SOURCES += \
 
 android {
     SOURCES += \
-        $$files($$PWD/src/*Android.cpp, true)
+        # $$files($$PWD/src/*Android.cpp, true)
 } else {
     SOURCES -= \
-        $$files($$PWD/src/*Android.cpp, true)
+        $$files($$PWD/src/*Android.cpp, true) \
+        $$PWD/src/app/Background/gx_audio_service.cpp
 }
 
 
@@ -97,12 +100,9 @@ android {
 QML_IMPORT_PATH += $$PWD/qml
 
 DISTFILES += \
-    # $$PWD/common/genesisx_core.pri \
     $$files($$PWD/qml/*, true) \
-    $$PWD/android-template/gradle.properties \
-    $$PWD/android-template/gradle.properties.in \
-    $$PWD/android-template/build.gradle \
-    $$PWD/android-template/google-services.json \
+    $$files($$PWD/android-template/*, true) \
+    $$files($$PWD/apple-template/*, true) \
     $$GENESISX_BUILD_ROOT/3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle \
     qml/GenesisX/App/Biometrics/qmldir \
     qml/GenesisX/App/Permissions/permissions.qmltypes \
@@ -110,6 +110,9 @@ DISTFILES += \
     qml/GenesisX/Core/Navigation/qmldir \
     qml/GenesisX/Core/SystemInfo/qmldir \
     qml/GenesisX/Core/SystemInfo/systeminfo.qmltypes \
+    qml/GenesisX/Atoms/qmldir \
+    qml/GenesisX/Atoms/GxRaisedButton.qml \
+    src/app/Background/android/src/com/genesisx/background/GXAudioService.kt \
     src/app/Biometrics/android/src/main/java/biometrics/GxBiometrics.java \
     src/app/Biometrics/android/src/main/java/org/qtproject/qt/android/QtActivityUtils.java \
     src/app/Permissions/android/src/main/java/permissions/GxPermissions.java

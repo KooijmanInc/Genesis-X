@@ -19,6 +19,7 @@ org.gradle.parallel=true
 
 # Allow AndroidX usage
 android.useAndroidX=true
+android.enableJetifier=true
 
 # Auto-generated — do not edit
 firebase_cpp_sdk_dir=$$FIREBASE_CPP_SDK_DIR

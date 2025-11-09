@@ -37,6 +37,6 @@
     <snippet group="Text" trigger="genesisx_app_share" id="" complement="" removed="false" modified="false"></snippet>
     <snippet group="Text" trigger="genesisx_app_clipboard" id="" complement="" removed="false" modified="false"></snippet>
     <snippet group="Text" trigger="genesisx_app_preferences" id="" complement="" removed="false" modified="false"></snippet>
-    <snippet group="Text" trigger="genesisx_app_contacts" id="" complement="" removed="false" modified="false"></snippet>
-    <snippet group="Text" trigger="genesisx_app_calendar" id="" complement="" removed="false" modified="false"></snippet>
+    <snippet group="Text" trigger="genesisx_app_contacts" id="" complement="" removed="false" modified="false">genesisx_app_contacts</snippet>
+    <snippet group="Text" trigger="genesisx_app_calendar" id="" complement="" removed="false" modified="false">genesisx_app_calendar</snippet>
 </snippets>
