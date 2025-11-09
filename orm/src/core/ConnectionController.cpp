@@ -494,9 +494,11 @@ QFuture<HttpResponse> ConnectionController::login(const QString &username, const
             if (r.status >= 200 && r.status < 300) {
                 QJsonParseError jerr{};
                 const QJsonDocument doc = QJsonDocument::fromJson(r.body, &jerr);
+                qDebug() << "request token document received" << doc.object().value(QStringLiteral("token")).toString();
                 if (jerr.error == QJsonParseError::NoError && doc.isObject()) {
                     const auto tok = doc.object().value(QStringLiteral("token")).toString();
                     if (!tok.isEmpty()) {
+                        qDebug() << "Bearer token:" << tok;
                         setBearerToken(tok);
                         emit loginSucceeded(tok);
                         return r;

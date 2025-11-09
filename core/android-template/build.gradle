@@ -12,6 +12,7 @@ buildscript {
         //noinspection AndroidGradlePluginVersion
         classpath 'com.android.tools.build:gradle:8.8.0'
         classpath 'com.google.gms:google-services:4.4.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0'
     }
 }
 
@@ -23,17 +24,30 @@ repositories {
 allprojects {
     repositories {
         google()
+        mavenCentral()
     }
 }
 
 apply plugin: qtGradlePluginType
+apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     //noinspection GradleDependency
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.1.0'
+    implementation "androidx.core:core-ktx:1.13.1"
     implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.media:media:1.7.1'
     implementation 'androidx.biometric:biometric:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.media:media:1.7.1'
+    }
 }
 
 android {
@@ -68,11 +82,18 @@ android {
             jniLibs.srcDirs = ['libs']
             java.srcDirs += ["${gxBaseDir}/core/src/app/Biometrics/android/src/main/java"]
             java.srcDirs += ["${gxBaseDir}/core/src/app/Permissions/android/src/main/java"]
+            kotlin.srcDirs += ["${gxBaseDir}/core/src/app/Background/android/src"]
        }
     }
 
     tasks.withType(JavaCompile) {
         options.incremental = true
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
 
     compileOptions {
