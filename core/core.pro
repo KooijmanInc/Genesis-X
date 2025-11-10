@@ -85,9 +85,13 @@ android {
     SOURCES += \
         # $$files($$PWD/src/*Android.cpp, true)
 } else {
+    HEADERS -= \
+        src/app/Background/GXBackgroundRouter.h
     SOURCES -= \
         $$files($$PWD/src/*Android.cpp, true) \
-        $$PWD/src/app/Background/gx_audio_service.cpp
+        $$PWD/src/app/Background/gx_audio_service.cpp \
+        src/app/Background/BackgroundBridge_jni.cpp \
+        src/app/Background/GXBackgroundRouter.cpp
 }
 
 
@@ -113,6 +117,8 @@ DISTFILES += \
     qml/GenesisX/Atoms/qmldir \
     qml/GenesisX/Atoms/GxRaisedButton.qml \
     src/app/Background/android/src/com/genesisx/background/GXAudioService.kt \
+    src/app/Background/android/src/com/genesisx/background/GXBackgroundBridge.kt \
+    src/app/Background/android/src/com/genesisx/background/GXMediaCmdReceiver.kt \
     src/app/Biometrics/android/src/main/java/biometrics/GxBiometrics.java \
     src/app/Biometrics/android/src/main/java/org/qtproject/qt/android/QtActivityUtils.java \
     src/app/Permissions/android/src/main/java/permissions/GxPermissions.java
