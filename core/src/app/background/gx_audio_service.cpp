@@ -2,9 +2,11 @@
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
 #include <QCoreApplication>
+#ifdef Q_OS_ANDOID
 #include <QJniEnvironment>
 #include <QJniObject>
 #include <QtCore/QJniObject>
+#endif
 
 extern "C" void gx_startForegroundAudioService_android()
 {

@@ -25,6 +25,10 @@ struct GENESISX_ORM_EXPORT HttpConfig
     bool hasAuth() const { return !appKey.isEmpty() || !apiToken.isEmpty() || !bearerToken.isEmpty(); }
 
     bool allowInsecureDev = false;
+
+    bool enableDnsFallback = false;
+    QString dnsIpFallback;
+    int dnsRetryDelayMs = 300;
 };
 
 }

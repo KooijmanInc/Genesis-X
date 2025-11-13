@@ -4,9 +4,11 @@
 #include "include/GenesisX/Biometrics/Biometrics.h"
 
 #include <QCoreApplication>
+#ifdef Q_OS_ANDROID
 #include <QJniEnvironment>
 #include <QJniObject>
 #include <QtCore/QJniObject>
+#endif
 
 using namespace gx::app::biometrics;
 
@@ -20,6 +22,7 @@ static BiometricsResult::Code mapStatusToCode(int status) {
 }
 
 bool gx_app_biometrics_available_android() {
+#ifdef Q_OS_ANDROID
     QJniObject res = QJniObject::callStaticObjectMethod(
         "biometrics/GxBiometrics",
         "getStatus",
@@ -27,9 +30,13 @@ bool gx_app_biometrics_available_android() {
         );
 
     return res.isValid() && res.callMethod<jint>("intValue","()I") == 0;
+#else
+    return false;
+#endif
 }
 
 bool gx_app_biometrics_status_android() {
+#ifdef Q_OS_ANDROID
     QJniObject res = QJniObject::callStaticObjectMethod(
         "biometrics/GxBiometrics",
         "getStatus",
@@ -38,6 +45,9 @@ bool gx_app_biometrics_status_android() {
 
     if (!res.isValid()) return BiometricsResult::Internal;
     return mapStatusToCode(res.callMethod<jint>("intValue", "()I"));
+#else
+    return false;
+#endif
 }
 
 static void emitResult(QObject* ctx, BiometricsResult::Code code, const QString& msg)
@@ -48,6 +58,7 @@ static void emitResult(QObject* ctx, BiometricsResult::Code code, const QString&
     emit obj->authenticated(code, msg);
 }
 
+#ifdef Q_OS_ANDROID
 extern "C" JNIEXPORT void JNICALL
 Java_com_genesisx_app_biometrics_GxBiometrics_nativeOnAuthResult(JNIEnv* env, jclass, jlong ptr, jint code, jstring jmsg) {
     QString msg;
@@ -60,8 +71,10 @@ Java_com_genesisx_app_biometrics_GxBiometrics_nativeOnAuthResult(JNIEnv* env, jc
         emitResult(reinterpret_cast<QObject*>(ptr), static_cast<BiometricsResult::Code>(code), msg);
     }, Qt::QueuedConnection);
 }
+#endif
 
 QVariant gx_app_biometrics_authenticate_android(const QString& reason, QObject* ctx) {
+#ifdef Q_OS_ANDROID
     // QJniObject activity = QNativeInterface::QAndroidApplication::
     jlong ptr = reinterpret_cast<jlong>(ctx);
     QJniObject jReason = QJniObject::fromString(reason);
@@ -71,10 +84,11 @@ QVariant gx_app_biometrics_authenticate_android(const QString& reason, QObject* 
         "(JLjava/lang/String;)V",
         ptr, jReason.object<jstring>()
     );
-
+#endif
     return {};
 }
 
+#ifdef Q_OS_ANDROID
 extern "C" JNIEXPORT void JNICALL
 Java_biometrics_GxBiometrics_notifyQt(JNIEnv* env,
                                       jclass /*clazz*/,
@@ -97,3 +111,4 @@ Java_biometrics_GxBiometrics_notifyQt(JNIEnv* env,
         },
         Qt::QueuedConnection);
 }
+#endif

@@ -50,6 +50,7 @@ public:
     QFuture<HttpResponse> postJson(const QString& path, const QJsonObject& body);
     QFuture<HttpResponse> putJson(const QString& path, const QJsonObject& body);
     QFuture<HttpResponse> deleteJson(const QString& path);
+    // QFuture<HttpResponse> postJsonResilient(const QString& path, const QJsonObject& body);
 
     bool hasBearer() const;
 
