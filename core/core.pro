@@ -2,7 +2,7 @@
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
 # QT -= gui
-QT += core qml quick widgets
+QT += core qml quick widgets network
 linux:!android: QT += dbus
 TEMPLATE = lib
 TARGET = genesisx
@@ -86,12 +86,13 @@ android {
         # $$files($$PWD/src/*Android.cpp, true)
 } else {
     HEADERS -= \
-        src/app/Background/GXBackgroundRouter.h
+        # $$PWD/src/app/Background/GXBackgroundRouter.h
     SOURCES -= \
         $$files($$PWD/src/*Android.cpp, true) \
         $$PWD/src/app/Background/gx_audio_service.cpp \
-        src/app/Background/BackgroundBridge_jni.cpp \
-        src/app/Background/GXBackgroundRouter.cpp
+        $$PWD/src/app/Background/BackgroundBridge_jni.cpp \
+        $$PWD/src/app/Background/GXBackgroundRouter.cpp \
+        $$PWD/src/app/Biometrics/BiometricsAndroid.cpp
 }
 
 
@@ -121,6 +122,11 @@ DISTFILES += \
     src/app/Background/android/src/com/genesisx/background/GXMediaCmdReceiver.kt \
     src/app/Biometrics/android/src/main/java/biometrics/GxBiometrics.java \
     src/app/Biometrics/android/src/main/java/org/qtproject/qt/android/QtActivityUtils.java \
+    src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastBridge.java \
+    src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastChooserActivity.java \
+    src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastKeepAliveService.java \
+    src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastManager.java \
+    src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastOptionsProvider.java \
     src/app/Permissions/android/src/main/java/permissions/GxPermissions.java
 
 RESOURCES += \

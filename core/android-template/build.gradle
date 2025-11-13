@@ -42,6 +42,10 @@ dependencies {
     implementation 'androidx.biometric:biometric:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.work:work-runtime-ktx:2.7.1'
+    implementation 'com.google.android.gms:play-services-cast-framework:21.4.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.mediarouter:mediarouter:1.7.0'
+
 }
 
 configurations.all {
@@ -81,6 +85,7 @@ android {
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
             java.srcDirs += ["${gxBaseDir}/core/src/app/Biometrics/android/src/main/java"]
+            java.srcDirs += ["${gxBaseDir}/core/src/app/Cast/android/src/main/java"]
             java.srcDirs += ["${gxBaseDir}/core/src/app/Permissions/android/src/main/java"]
             kotlin.srcDirs += ["${gxBaseDir}/core/src/app/Background/android/src"]
        }

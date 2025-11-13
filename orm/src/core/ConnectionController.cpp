@@ -12,6 +12,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkProxyFactory>
 #include <QNetworkInterface>
+#include <QCoreApplication>
 #include <QNetworkProxy>
 #include <QJsonDocument>
 #include <QNetworkReply>
@@ -191,6 +192,10 @@ static inline void debugConnections(auto reply)
         "qt.network.ssl.warning=true\n"
         );
 
+    QHostInfo::lookupHost("api-hm2.kooijmaninc.nl", [](const QHostInfo &hi){
+        qDebug() << "[DNS]" << hi.hostName() << "addrs =" << hi.addresses();
+    });
+
     QObject::connect(reply, &QNetworkReply::sslErrors, reply,
                      [](const QList<QSslError>& errs){
                          qDebug() << "[HTTP] sslErrors" << errs;
@@ -198,6 +203,7 @@ static inline void debugConnections(auto reply)
     QObject::connect(reply, &QNetworkReply::errorOccurred, reply,
                      [reply](QNetworkReply::NetworkError e){
                          qDebug() << "[HTTP] errorOccurred" << e << reply->errorString();
+
                      });
     QObject::connect(reply, &QIODevice::bytesWritten, reply,
                      [](qint64 n){ qDebug() << "[HTTP] bytesWritten" << n; });
@@ -206,7 +212,6 @@ static inline void debugConnections(auto reply)
                      [](qint64 sent, qint64 total){
                          qDebug() << "[HTTP] uploadProgress" << sent << "/" << total;
                      });
-
     QObject::connect(reply, &QNetworkReply::finished, reply, []{
         qDebug() << "[HTTP] finished() emitted";
     });
@@ -260,6 +265,48 @@ static inline void applyHeaders(QNetworkRequest& req, const HttpConfig& cfg, con
     req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
                      QNetworkRequest::NoLessSafeRedirectPolicy);
 }
+
+// static inline QUrl makeAbs(const QUrl& base, const QString& path) {
+//     return resolvePath(base, path);
+// }
+
+// // Build a request for an IP fallback, but keep TLS/Host correct
+// static inline QNetworkRequest makeIpRequest(const QUrl& url, const QString& ip, const HttpConfig& cfg) {
+//     // Build https://<ip>/<path>?<query>
+//     const QString path = url.path() + (url.hasQuery() ? "?" + url.query() : "");
+//     QUrl ipUrl(url);
+//     ipUrl.setHost(ip);   // swap host with IP
+//     QNetworkRequest req(ipUrl);
+
+//     // Preserve headers + add Host and SNI so TLS validates
+//     applyHeaders(req, cfg, AuthCredentials{}); // base defaults, will be overridden later anyway
+//     req.setRawHeader("Host", url.host().toUtf8());
+
+//     QSslConfiguration ssl = QSslConfiguration::defaultConfiguration();
+//     ssl.setPeerVerifyName(url.host());   // SNI + hostname verify
+//     req.setSslConfiguration(ssl);
+//     return req;
+// }
+
+// template<typename SendFn, typename RetryFn>
+// static void resolveWithRetry(const QString& host, int retryDelayMs, SendFn&& send, RetryFn&& retry)
+// {
+//     QHostInfo::lookupHost(host, [=](const QHostInfo& hi){
+//         if (!hi.addresses().isEmpty()) {
+//             send(/*resolved*/ true);
+//             return;
+//         }
+//         // retry once after a brief delay
+//         QTimer::singleShot(qMax(1, retryDelayMs), qApp, [=](){
+//             QHostInfo::lookupHost(host, [=](const QHostInfo& hi2){
+//                 send(!hi2.addresses().isEmpty());
+//                 // if still empty, 'send(false)' lets caller choose fallback/IP
+//             });
+//         });
+//         // allow caller to prepare retry state if needed
+//         retry();
+//     });
+// }
 
 struct ConnectionController::Impl {
     HttpConfig cfg;
@@ -565,9 +612,78 @@ QFuture<HttpResponse> ConnectionController::deleteJson(const QString &path)
 #endif
 }
 
+// QFuture<HttpResponse> ConnectionController::postJsonResilient(const QString &path, const QJsonObject &body)
+// {
+//     const QUrl abs = makeAbs(d->cfg.baseUrl, path);
+//     QPromise<HttpResponse> promise; auto fut = promise.future(); promise.start();
+
+//     if (!abs.isValid()) {
+//         HttpResponse r; r.errorstring = QStringLiteral("Invalid URL");
+//         promise.addResult(r); promise.finish();
+//         return fut;
+//     }
+
+//     const QString host = abs.host();
+//     const QByteArray payload = QJsonDocument(body).toJson(QJsonDocument::Compact);
+//     auto doNormal = [&]() -> QFuture<HttpResponse> {
+//         QNetworkRequest req(abs);
+//         applyHeaders(req, d->cfg, d->auth);
+//         return runWithTimeout(&d->nam, d->cfg, req, [payload](QNetworkAccessManager* nam, const QNetworkRequest& r) {
+//             auto reply = nam->post(r, payload);
+//             debugConnections(reply);
+//             return reply;
+//         });
+//     };
+
+//     if (!d->cfg.enableDnsFallback) {
+//         // behave like regular postJson
+//         return doNormal();
+//     }
+//     QPointer<ConnectionController> self(this);
+//     resolveWithRetry(host, d->cfg.dnsRetryDelayMs,
+//         [=](bool resolvedOk) mutable {
+//             if (!self) return;
+//             if (resolvedOk) {
+//                 doNormal().then([promise = std::move(promise)](const HttpResponse& r) mutable {
+//                     promise.addResult(r); promise.finish();
+//                 });
+//                 return;
+//             }
+//             // No DNS: check if we have an IP fallback for this host
+//             const QString ip = self->d->cfg.dnsIpFallback;
+//             if (ip.isEmpty()) {
+//                 // No fallback configured → doNormal anyway (will likely  get HostNotFound)
+//                 doNormal().then([promise = std::move(promise)](const HttpResponse& r) mutable {
+//                     promise.addResult(r); promise.finish();
+//                 });
+//                 return;
+//             }
+//             // Use IP + Host header + SNI
+//             QNetworkRequest req = makeIpRequest(abs, ip, self->d->cfg);
+//             applyHeaders(req, self->d->cfg, self->d->auth); // re-apply app headers
+//             runWithTimeout(&self->d->nam, self->d->cfg, req, [payload](QNetworkAccessManager* nam, const QNetworkRequest& r) {
+//                 auto reply = nam->post(r, payload);
+//                 debugConnections(reply);
+//                 return reply;
+//             }).then([promise = std::move(promise)](const HttpResponse& r) mutable {
+//                 promise.addResult(r); promise.finish();
+//             });
+//         },
+//         [](){}
+//     );
+
+//     return fut;
+// }
+
 bool ConnectionController::hasBearer() const
 {
     return !d->auth.bearerToken.isEmpty();
 }
 
 }
+
+
+
+
+//     return fut;
+// }

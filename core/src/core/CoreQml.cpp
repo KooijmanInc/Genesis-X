@@ -10,6 +10,7 @@
 
 #include "src/app/Background/GXPlatformQml.h"
 #include "src/app/Biometrics/BiometricsQml.h"
+#include "src/app/Cast/CastQml.h"
 #include "src/app/Notifications/NotificationsQml.h"
 #include "src/app/Permissions/PermissionsQml.h"
 
@@ -18,6 +19,7 @@ void registerGenesisXNavigation(QQmlEngine*);
 
 void registerGenesisXBackground(QQmlEngine*);
 void registerGenesisXBiometrics(QQmlEngine*);
+void registerGenesisXCast(QQmlEngine*);
 void registerGenesisXNotifications(QQmlEngine*);
 void registerGenesisXPermissions(QQmlEngine*);
 
@@ -32,6 +34,7 @@ struct Feature {
 inline const Feature kFeatures[] = {
     {"genesisx_app_background", &registerGenesisXBackground},
     {"genesisx_app_biometrics", &registerGenesisXBiometrics},
+    {"genesisx_app_cast", &registerGenesisXCast},
     {"genesisx_app_notifications", &registerGenesisXNotifications},
     {"genesisx_app_permissions", &registerGenesisXPermissions}
 };

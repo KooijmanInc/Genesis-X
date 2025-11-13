@@ -1,3 +1,6 @@
-DEFINES += GX_USE_APP_CAST
+!defined(__GX_APP_CAST_PRF_INCLUDED__, var) {
+    __GX_APP_CAST_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_APP_CAST
 
-message([genesisx app cast] module loaded from $$PWD)
+    message([genesisx app cast] module loaded from $$PWD)
+}

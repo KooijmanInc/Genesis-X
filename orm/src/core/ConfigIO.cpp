@@ -27,6 +27,9 @@ static void mergeHttp(HttpConfig& http, const QJsonObject& api) {
     if (api.contains("appKey"))          http.appKey = api.value("appKey").toString(http.appKey);
     if (api.contains("apiToken"))        http.apiToken = api.value("apiToken").toString(http.apiToken);
     if (api.contains("bearerToken"))     http.bearerToken = api.value("bearerToken").toString(http.bearerToken);
+    if (api.contains("enableDnsFallback"))     http.enableDnsFallback = api.value("enableDnsFallback").toBool(http.enableDnsFallback);
+    if (api.contains("dnsIpFallback"))     http.dnsIpFallback = api.value("dnsIpFallback").toString(http.dnsIpFallback);
+    if (api.contains("dnsRetryDelayMs"))       http.dnsRetryDelayMs = api.value("dnsRetryDelayMs").toInt(http.dnsRetryDelayMs);
 
     if (api.contains("headers")) {
         const auto headers = api.value("headers").toObject();
