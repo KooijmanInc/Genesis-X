@@ -1,0 +1,17 @@
+/*!
+    \qmlmodule io.genesisx.orm
+    \title Genesis-X orm system
+
+    \brief The orm system
+
+    \section1 Classes
+    \list
+        \li \l {Genesis-X Orm C++ Classes}
+    \endlist
+
+    \section1 Program helper
+    Code generator that connects to your database and writes entities for the selected table in the database
+    \list
+        \li \l {Codegen.h}
+    \endlist
+ */

@@ -1,0 +1,11 @@
+/*!
+    \qmlmodule io.genesisx.app
+    \title Genesis-X app system
+
+    \brief The app system
+
+    \section1 Classes
+    \list
+        \li \l {Genesis-X App C++ Classes}
+    \endlist
+ */

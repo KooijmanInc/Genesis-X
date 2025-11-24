@@ -1,0 +1,8 @@
+/*!
+    \page core-classes.html
+    \title Genesis-X Core C++ Classes
+    \inmodule io.genesisx.core
+    \brief App C++ classes in Genesis-X
+
+    \generatelist{annotatedclasses}
+ */

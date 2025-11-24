@@ -1,0 +1,14 @@
+/*!
+    \qmlmodule io.genesisx.core 1.0
+    \title Genesis-X core system
+
+    This module contains the core QML types of Genesis-X.
+
+    \section1 Classes
+    \list
+        \li \l {CoreQml.h}
+        \li \l {Genesis-X Core C++ Classes}
+    \endlist
+
+    \section1 QML Types
+ */

@@ -1,0 +1,9 @@
+<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
+<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
+
+<RCC>
+    <qresource prefix="/qt/qml/GenesisX/Assets">
+        <file alias="qmldir">qml/GenesisX/Assets/qmldir</file>
+        <file alias="GXButton.qml">qml/GenesisX/Assets/GXButton.qml</file>
+    </qresource>
+</RCC>
