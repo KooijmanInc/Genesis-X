@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qt/qml/GenesisX/Assets">
+        <file alias="qmldir">qml/GenesisX/Assets/qmldir</file>
+        <file alias="GXButton.qml">qml/GenesisX/Assets/GXButton.qml</file>
+    </qresource>
+</RCC>

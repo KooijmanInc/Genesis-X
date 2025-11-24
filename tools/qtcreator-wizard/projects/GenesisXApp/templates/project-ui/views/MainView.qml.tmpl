@@ -1,0 +1,46 @@
+// Genesis-X skeleton
+import QtQuick
+import components 1.0
+
+import GenesisX.Notifications 1.0
+import GenesisX.Permissions 1.0
+import GenesisX.SystemInfo 1.0
+
+Window {
+    id: root
+    visible: true
+    width: 1024
+    height: 768
+
+    title: qsTr("Genesis-X Template App")
+
+    Component.onCompleted: {
+        if (SystemInfo.platform() === "android") {
+            visibility = "FullScreen"
+        }
+        if (!notify.initialized) {
+            notify.initialize()
+            if (SystemInfo.platform() !== "android") {
+                notify.show("notification from qml", "this message is send from qml", 1500)
+            }
+        }
+    }
+
+    NotificationHandler {
+       id: notify
+       onNotificationReceived: (title, body, data) => {
+           console.log("[QML] got notification:", title, body, JSON.stringify(data))
+       }
+       onTokenChanged: t => console.log("New token found in qml:", t)
+
+       onInitializedChanged: {
+           console.log("is initialized in qml", fcmToken())
+       }
+    }
+
+    SplashWobble {
+        id: splash
+        anchors.fill: parent
+        logoSource: "qrc:/assets/genesis-x.svg"
+    }
+}

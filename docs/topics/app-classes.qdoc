@@ -1,0 +1,8 @@
+/*!
+    \page app-classes.html
+    \inmodule io.genesisx.app
+    \title Genesis-X App C++ Classes
+    \brief App C++ classes in Genesis-X
+
+    \generatelist{app-classes}
+ */

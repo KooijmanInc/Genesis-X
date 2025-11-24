@@ -1,0 +1,8 @@
+/*!
+    \page orm-classes.html
+    \inmodule io.genesisx.orm
+    \title Genesis-X Orm C++ Classes
+    \brief Orm C++ classes in Genesis-X
+
+    \generatelist{orm-classes}
+ */

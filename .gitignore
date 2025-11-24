@@ -17,3 +17,12 @@ bin/
 
 # Generated files
 core/android-template/gradle.properties
+
+# docs
+docs/out/
+docs/debug/
+docs/release/
+docs/.qmake.stash
+docs/Makefile
+docs/Makefile.Debug
+docs/Makefile.Release
