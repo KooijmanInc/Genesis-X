@@ -35,24 +35,26 @@ void registerGenesisXCast(QQmlEngine *engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterSingletonInstance<gx::app::cast::CastBridge>("GenesisX.App.Cast", 1, 0, "Cast", &s_castBridge);
+    qmlRegisterSingletonInstance<gx::app::cast::CastBridge>("GenesisX.Cast", 1, 0, "Cast", &s_castBridge);
 
-    qmlRegisterSingletonInstance<gx::app::cast::GXCastState>("GenesisX.App.Cast", 1, 0, "CastState", gx::app::cast::GXCastState::instance());
+    qmlRegisterSingletonInstance<gx::app::cast::GXCastState>("GenesisX.Cast", 1, 0, "CastState", gx::app::cast::GXCastState::instance());
 
-    qmlRegisterSingletonInstance<gx::app::cast::GXCastLifecycle>("GenesisX.App.Cast", 1, 0, "GXCastLifecycle", &s_lifecycle);
+    qmlRegisterSingletonInstance<gx::app::cast::GXCastLifecycle>("GenesisX.Cast", 1, 0, "GXCastLifecycle", &s_lifecycle);
 
-    qmlRegisterSingletonInstance<gx::app::cast::GXCastControl>("GenesisX.App.Cast", 1, 0, "GXCastControl", &s_control);
+    qmlRegisterSingletonInstance<gx::app::cast::GXCastControl>("GenesisX.Cast", 1, 0, "GXCastControl", &s_control);
 }
 
 CastBridge::CastBridge(QObject *parent)
     : QObject{parent}
 {
+#ifdef Q_OS_ANDROID
     connect(&_ssdp, &QUdpSocket::readyRead, this, &CastBridge::onSsdpReadyRead);
 
     _scanTimeout.setSingleShot(true);
     connect(&_scanTimeout, &QTimer::timeout, this, &CastBridge::onScanTimeout);
 
     connect(&_nam, &QNetworkAccessManager::finished, this, &CastBridge::onHttpFinished);
+#endif
 }
 
 void CastBridge::startScan()

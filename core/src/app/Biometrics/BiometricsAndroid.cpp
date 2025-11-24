@@ -73,7 +73,10 @@ Java_com_genesisx_app_biometrics_GxBiometrics_nativeOnAuthResult(JNIEnv* env, jc
 }
 #endif
 
-QVariant gx_app_biometrics_authenticate_android(const QString& reason, QObject* ctx) {
+QVariant gx_app_biometrics_authenticate_android(const QString& reason, QObject* ctx)
+{
+    Q_UNUSED(reason);
+    Q_UNUSED(ctx);
 #ifdef Q_OS_ANDROID
     // QJniObject activity = QNativeInterface::QAndroidApplication::
     jlong ptr = reinterpret_cast<jlong>(ctx);

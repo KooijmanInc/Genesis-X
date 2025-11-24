@@ -1,2 +1,2 @@
-module GenesisX.Core.Notifications
+module GenesisX.Notifications
 typeinfo notifications.qmltypes

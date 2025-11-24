@@ -1,2 +1,2 @@
-module GenesisX.App.Biometrics
+module GenesisX.Biometrics
 typeinfo biometrics.qmltypes

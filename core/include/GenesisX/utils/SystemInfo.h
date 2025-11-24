@@ -17,6 +17,12 @@ struct GENESISX_CORE_EXPORT SystemInfo {
     static QString systemLanguage();
 };
 
+// class GENESISX_CORE_EXPORT SystemInfoQml
+// {
+// public:
+//     SystemInfoQml();
+// };
+
 }
 
 #endif // SYSTEMINFO_H

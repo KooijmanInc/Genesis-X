@@ -21,7 +21,7 @@ void registerGenesisXBackground(QQmlEngine* engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterSingletonType<gx::app::background::GXPlatform>("GenesisX.App.Background", 1, 0, "Background", [](QQmlEngine*, QJSEngine*) -> QObject* { return new GXPlatform(); });
+    qmlRegisterSingletonType<gx::app::background::GXPlatform>("GenesisX.Background", 1, 0, "Background", [](QQmlEngine*, QJSEngine*) -> QObject* { return new GXPlatform(); });
 
-    qmlRegisterSingletonInstance<gx::app::background::BackgroundMediaRouter>("GenesisX.App.BgRouter", 1, 0, "BgRouter", BackgroundMediaRouter::instance());
+    qmlRegisterSingletonInstance<gx::app::background::BackgroundMediaRouter>("GenesisX.BgRouter", 1, 0, "BgRouter", BackgroundMediaRouter::instance());
 }

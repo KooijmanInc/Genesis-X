@@ -22,7 +22,6 @@ SOURCES += \
 INCLUDEPATH += ../../orm/include
 DEPENDPATH += ../../orm/include
 
-message(QMAKE_LIBDIR: $$QMAKE_LIBDIR)
 LIBS += -L$$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/$$GX_CFG -lgenesisx_orm -lgenesisx
 
 PRE_TARGETDEPS += $$GENESISX_LIBDIR/libgenesisx_orm.a \

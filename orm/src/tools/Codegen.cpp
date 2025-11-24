@@ -25,10 +25,12 @@
  */
 
 /*!
- *  \headerfile Codegen.h
- *  \inmodule GenesisX/Orm
- *  \ingroup genesisx-orm
- *  \since 6.10
+    \headerfile Codegen.h
+    \inmodule GenesisX
+    \ingroup orm-genesisx
+    \since Qt 6.10
+
+    \brief This creates entities of the table from the selected database.
  */
 namespace gx::orm::codegen {
 

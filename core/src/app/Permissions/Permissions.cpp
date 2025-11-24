@@ -5,34 +5,37 @@
 
 /*!
     \class gx::app::permissions::Permissions
-    \inheaderfile ../../../include/GenesisX/Permissions/Permissions.h
     \inmodule GenesisX
     \ingroup genesisx-core
     \title Mobile Permissions
-    \since 6.10
+    \since Qt 6.10
     \brief Setting permissions for mobile devices.
  */
 
 /*!
-    \qmlmodule GenesisX.App.Permissions 1.0
+    \qmlmodule GenesisX.Permissions
     \title Genesis-X Permissions (QML)
+    \since Qt 6.10
+    \nativetype gx::app::permissions::Permissions
     \brief QML APIs for permissions.
 
-    Import this module to use the \l Permissions type:
+    Import this module to use the \l GenesisX.Permissions type:
     \code
-    import GenesisX.App.Permissions 1.0
+    import GenesisX.Permissions 1.0
     \endcode
  */
 
 /*!
     \qmltype Permissions
-    \inqmlmodule GenesisX.App.Permissions
-    \since GenesisX.App.Permissions 1.0
+    \inqmlmodule GenesisX.Permissions
+    \ingroup genesisx-core
+    \nativetype gx::app::permissions::Permissions
+    \since Qt 6.10
     \brief QML APIs for permissions.
 
     \section2 Example
     \qml
-    import GenesisX.App.Permissions
+    import GenesisX.Permissions
 
     Permissions {
         Component.onCompleted: {
@@ -47,8 +50,25 @@
         }
     }
     \endqml
+ */
 
-    \section2 Properties
+/*!
+    \qmlsignal void Permissions::notificationEnabledChanged()
+ */
+
+/*!
+    \qmlmethod bool Permissions::has(string permission)
+    \qmlmethod void Permissions::request(var perms)
+    \qmlmethod void Permissions::requestNotifications()
+    \qmlmethod void Permissions::openNotificationSettings()
+    \qmlmethod void Permissions::openAppSettings()
+    \qmlmethod bool Permissions::canScheduleExactAlarms()
+    \qmlmethod void Permissions::requestScheduleExactAlarms()
+    \qmlmethod bool Permissions::isIgnoringBatteryOptimizations()
+    \qmlmethod void Permissions::requestignoreBatteryOptimizations()
+ */
+
+/*!
     \qmlproperty string Permissions::notificationsEnabled
     \qmlproperty string Permissions::CAMERA
     \qmlproperty string Permissions::RECORD_AUDIO
@@ -65,20 +85,6 @@
     \qmlproperty string Permissions::BODY_SENSORS
     \qmlproperty string Permissions::BODY_SENSORS_BACKGROUND
     \qmlproperty string Permissions::NEARBY_WIFI_DEVICES
-
-    \section2 Signals
-    \qmlsignal void Permissions::notificationEnabledChanged()
-
-    \section2 Methods
-    \qmlmethod bool Permissions::has(string permission)
-    \qmlmethod void Permissions::request(var perms)
-    \qmlmethod void Permissions::requestNotifications()
-    \qmlmethod void Permissions::openNotificationSettings()
-    \qmlmethod void Permissions::openAppSettings()
-    \qmlmethod bool Permissions::canScheduleExactAlarms()
-    \qmlmethod void Permissions::requestScheduleExactAlarms()
-    \qmlmethod bool Permissions::isIgnoringBatteryOptimizations()
-    \qmlmethod void Permissions::requestignoreBatteryOptimizations()
  */
 
 using namespace gx::app::permissions;

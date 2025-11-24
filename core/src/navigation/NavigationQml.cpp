@@ -20,5 +20,5 @@ void registerGenesisXNavigation(QQmlEngine* engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterSingletonInstance("GenesisX.Core.Navigation", 1, 0, "Router", &s_router);
+    qmlRegisterSingletonInstance("GenesisX.Navigation", 1, 0, "Router", &s_router);
 }

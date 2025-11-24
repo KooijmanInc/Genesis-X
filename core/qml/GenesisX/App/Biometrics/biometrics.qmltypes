@@ -3,9 +3,9 @@ import QtQuick.tooling 1.2
 Module {
     dependencies: ["QtQml 6.0", "QtQuick 6.0"]
     Component {
-        name: "gx::app::Biometrics"
+        name: "Biometrics"
         prototype: "QObject"
-        exports: ["GenesisX.App.Biometrics/Biometrics 1.0"]
+        exports: ["GenesisX.Biometrics/Biometrics 1.0"]
 
         Property {
             name: "available"

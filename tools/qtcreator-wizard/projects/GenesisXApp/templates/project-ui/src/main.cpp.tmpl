@@ -3,22 +3,35 @@
 #include <QApplication>
 #include <QIcon>
 
-#include <GenesisX/NotificationsQml.h>
+#include <GenesisX/CoreQml.h>
+#include <GenesisX/Notifications/NotificationHandler.h>
+
+using namespace Qt::StringLiterals;
 
 int main (int argc, char* argv[])
 {
     QApplication app(argc, argv);
 
-    app.setWindowIcon(QIcon(":/assets/genesisx-xcore.svg"));
+    app.setWindowIcon(QIcon(":/assets/logo.ico"));
 
     QQmlApplicationEngine engine;
+    GXCore::registerEnabledQmlModules(&engine, GX_LOADED_MODULES);
+
+#ifndef Q_OS_ANDROID
+    GXApp::notifications::NotificationHandler noti;
+    noti.initialize();
+    noti.show("notification from c++", "this message is send from c++");
+#endif
+
     engine.addImportPath("qrc:/");
 
-    gx::registerGenesisXNotifications();
-
-    engine.load(QStringLiteral("qrc:/views/MasterView.qml"));
-
-    if (engine.rootObjects().isEmpty()) return -1;
+    const QUrl url(u"qrc:/views/MainView.qml"_s);
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+                     [url](QObject *obj, const QUrl &objUrl) {
+                         if (!obj && url == objUrl)
+                             QCoreApplication::exit(-1);
+                     }, Qt::QueuedConnection);
+    engine.load(url);
 
     return app.exec();
 }

@@ -12,6 +12,7 @@ using namespace gx::app::cast;
 GXCastLifecycle::GXCastLifecycle(QObject *parent)
     : QObject{parent}
 {
+#ifdef Q_OS_ANDROID
     connect(qApp, &QGuiApplication::applicationStateChanged, this, &GXCastLifecycle::onAppStateChanged);
     connect(qApp, &QCoreApplication::aboutToQuit, this, [this]{
         stopJavaListener();
@@ -19,6 +20,7 @@ GXCastLifecycle::GXCastLifecycle(QObject *parent)
 
     if (m_enabled && qApp->applicationState() == Qt::ApplicationActive)
         startJavaListener();
+#endif
 }
 
 void GXCastLifecycle::disconnect()

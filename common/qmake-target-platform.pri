@@ -41,7 +41,6 @@ isEqual(COMPILER_PATH, unknown-compiler) {
 
 # alternative setting compiler
 isEqual(COMPILER_PATH, unknown-compiler) {
-# message($$COMPILER_PATH and $$PLATFORM_PATH and $$QMAKE_CXX still to do)
     contains(PLATFORM_PATH, windows) {
         COMPILER_PATH = clangcc
     } else:contains(SPEC, android) {
@@ -55,7 +54,7 @@ isEqual(COMPILER_PATH, unknown-compiler) {
 ARCH = $$QT_ARCH
 isEmpty(ARCH): ARCH = $$QMAKE_TARGET.arch
 isEmpty(ARCH): ARCH = $$QMAKE_HOST.arch
-# message(hihohiero $$ARCH)
+
 PROCESSOR_PATH = unknown-processor
 contains(ARCH, arm64)|contains(ARCH, aarch64)|equals(ARCH, arm64)|equals(ARCH, arm64-v8a) {
     PROCESSOR_PATH = arm64-v8a

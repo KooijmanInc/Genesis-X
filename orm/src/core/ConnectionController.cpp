@@ -27,13 +27,30 @@
 
 /*!
     \class gx::orm::ConnectionController
-    \inheaderfile ../../include/GenesisX/Orm/ConnectionController.h
-    \inmodule GenesisX.Orm
-    \ingroup genesisx-orm
+    \inmodule GenesisX
+    \ingroup orm-classes
     \title ConnectionController connecting api and sql
     \since 6.10
-    \brief ConnectionController connects the CommandController to database and api server.
+    \brief ConnectionController connects to https.
  */
+
+/*!
+    \qmlmodule GenesisX.ConnectionController
+    \inqmlmodule io.genesisx.orm
+    \title Genesis-X ConnectionController (QML)
+    \since Qt 6.10
+    \nativetype gx::orm::ConnectionController
+    \brief QML APIs for setting commands to remote API via json or database.
+ */
+
+/*!
+    \qmltype ConnectionController
+    \inqmlmodule io.genesisx.orm
+    \since Qt 6.10
+    \nativetype gx::orm::ConnectionController
+    \brief Handles API and database commands.
+ */
+
 namespace gx::orm {
 
 struct HostsCheck {

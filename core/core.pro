@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-# QT -= gui
 QT += core qml quick widgets network
 linux:!android: QT += dbus
 TEMPLATE = lib
@@ -86,13 +85,19 @@ android {
         # $$files($$PWD/src/*Android.cpp, true)
 } else {
     HEADERS -= \
-        # $$PWD/src/app/Background/GXBackgroundRouter.h
+        $$PWD/include/GenesisX/Auth/Auth.h \
+        $$PWD/include/GenesisX/Background/gx_background_audio.h \
+        $$PWD/include/GenesisX/Biometrics/Biometrics.h \
+        $$PWD/src/app/Biometrics/BiometricsQml.h
+
     SOURCES -= \
         $$files($$PWD/src/*Android.cpp, true) \
+        $$PWD/src/app/Auth/Auth.cpp \
         $$PWD/src/app/Background/gx_audio_service.cpp \
         $$PWD/src/app/Background/BackgroundBridge_jni.cpp \
-        $$PWD/src/app/Background/GXBackgroundRouter.cpp \
-        $$PWD/src/app/Biometrics/BiometricsAndroid.cpp
+        $$PWD/src/app/Biometrics/BiometricsAndroid.cpp \
+        $$PWD/src/app/Biometrics/Biometrics.cpp \
+        $$PWD/src/app/Biometrics/BiometricsQml.cpp
 }
 
 
