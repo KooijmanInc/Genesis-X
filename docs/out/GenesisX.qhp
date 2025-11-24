@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+    <namespace>io.genesis-x.docs.1.0.0</namespace>
+    <virtualFolder>genesisx</virtualFolder>
+    <metaData name="version" value="1.0"/>
+    <filterSection>
+        <filterAttribute>GenesisX</filterAttribute>
+        <toc>
+            <section ref="index.html" title="Genesis-X Documentation">
+                <section ref="getting-started.html" title="Getting started"/>
+                <section ref="io-genesisx-core-qmlmodule.html" title="Core">
+                    <section ref="qml-io-genesisx-core-systeminfo.html" title="SystemInfo Type Reference">
+                        <section ref="qml-io-genesisx-core-systeminfo-members.html" title="List of all members"/>
+                    </section>
+                </section>
+                <section ref="io-genesisx-app-qmlmodule.html" title="App">
+                    <section ref="qml-io-genesisx-app-biometrics.html" title="Biometrics Type Reference">
+                        <section ref="qml-io-genesisx-app-biometrics-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="qml-io-genesisx-app-notificationhandler.html" title="NotificationHandler Type Reference">
+                        <section ref="qml-io-genesisx-app-notificationhandler-members.html" title="List of all members"/>
+                    </section>
+                </section>
+                <section ref="io-genesisx-orm-qmlmodule.html" title="Orm">
+                    <section ref="qml-io-genesisx-orm-commandcontroller.html" title="CommandController Type Reference">
+                        <section ref="qml-io-genesisx-orm-commandcontroller-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="qml-io-genesisx-orm-connectioncontroller.html" title="ConnectionController Type Reference">
+                        <section ref="qml-io-genesisx-orm-connectioncontroller-members.html" title="List of all members"/>
+                    </section>
+                </section>
+            </section>
+        </toc>
+        <keywords>
+            <keyword name="ABTesting" id="ab::ABTesting" ref="gx-app-ab-abtesting.html"/>
+            <keyword name="ACCESS_BACKGROUND_LOCATION" id="Permissions::ACCESS_BACKGROUND_LOCATION" ref="qml-genesisx-permissions-permissions.html#ACCESS_BACKGROUND_LOCATION-prop"/>
+            <keyword name="ACCESS_COARSE_LOCATION" id="Permissions::ACCESS_COARSE_LOCATION" ref="qml-genesisx-permissions-permissions.html#ACCESS_COARSE_LOCATION-prop"/>
+            <keyword name="ACCESS_FINE_LOCATION" id="Permissions::ACCESS_FINE_LOCATION" ref="qml-genesisx-permissions-permissions.html#ACCESS_FINE_LOCATION-prop"/>
+            <keyword name="ACTIVITY_RECOGNITION" id="Permissions::ACTIVITY_RECOGNITION" ref="qml-genesisx-permissions-permissions.html#ACTIVITY_RECOGNITION-prop"/>
+            <keyword name="Analytics" id="analytics::Analytics" ref="gx-app-analytics-analytics.html"/>
+            <keyword name="AudioRecorder" id="audiorecorder::AudioRecorder" ref="gx-app-audiorecorder-audiorecorder.html"/>
+            <keyword name="Auth" id="auth::Auth" ref="gx-app-auth-auth.html"/>
+            <keyword name="BLUETOOTH_CONNECT" id="Permissions::BLUETOOTH_CONNECT" ref="qml-genesisx-permissions-permissions.html#BLUETOOTH_CONNECT-prop"/>
+            <keyword name="BLUETOOTH_SCAN" id="Permissions::BLUETOOTH_SCAN" ref="qml-genesisx-permissions-permissions.html#BLUETOOTH_SCAN-prop"/>
+            <keyword name="BODY_SENSORS" id="Permissions::BODY_SENSORS" ref="qml-genesisx-permissions-permissions.html#BODY_SENSORS-prop"/>
+            <keyword name="BODY_SENSORS_BACKGROUND" id="Permissions::BODY_SENSORS_BACKGROUND" ref="qml-genesisx-permissions-permissions.html#BODY_SENSORS_BACKGROUND-prop"/>
+            <keyword name="Biometrics" id="biometrics::Biometrics" ref="gx-app-biometrics-biometrics.html"/>
+            <keyword name="Biometrics" id="QML.Biometrics" ref="qml-io-genesisx-app-biometrics.html"/>
+            <keyword name="Biometrics" id="QML.io.genesisx.app.Biometrics" ref="qml-io-genesisx-app-biometrics.html"/>
+            <keyword name="C++ Classes" id="C++ Classes" ref="classes.html"/>
+            <keyword name="CAMERA" id="Permissions::CAMERA" ref="qml-genesisx-permissions-permissions.html#CAMERA-prop"/>
+            <keyword name="CommandController" id="orm::CommandController" ref="gx-orm-commandcontroller.html"/>
+            <keyword name="CommandController" id="QML.CommandController" ref="qml-io-genesisx-orm-commandcontroller.html"/>
+            <keyword name="CommandController" id="QML.io.genesisx.orm.CommandController" ref="qml-io-genesisx-orm-commandcontroller.html"/>
+            <keyword name="ConnectionController" id="orm::ConnectionController" ref="gx-orm-connectioncontroller.html"/>
+            <keyword name="ConnectionController" id="QML.ConnectionController" ref="qml-io-genesisx-orm-connectioncontroller.html"/>
+            <keyword name="ConnectionController" id="QML.io.genesisx.orm.ConnectionController" ref="qml-io-genesisx-orm-connectioncontroller.html"/>
+            <keyword name="Genesis-X App C++ Classes" id="Genesis-X App C++ Classes" ref="app-classes.html"/>
+            <keyword name="Genesis-X Assets" id="Genesis-X Assets" ref="assets.html"/>
+            <keyword name="Genesis-X Core C++ Classes" id="Genesis-X Core C++ Classes" ref="core-classes.html"/>
+            <keyword name="Genesis-X Documentation" id="Genesis-X Documentation" ref="index.html"/>
+            <keyword name="Genesis-X Orm C++ Classes" id="Genesis-X Orm C++ Classes" ref="orm-classes.html"/>
+            <keyword name="Genesis-X Physics" id="Genesis-X Physics" ref="physics.html"/>
+            <keyword name="GenesisX.App.Biometrics" id="QML.Biometrics.App.GenesisX" ref="genesisx-app-biometrics-qmlmodule.html"/>
+            <keyword name="GenesisX.CommandController" id="QML.CommandController.GenesisX" ref="genesisx-commandcontroller-qmlmodule.html"/>
+            <keyword name="GenesisX.ConnectionController" id="QML.ConnectionController.GenesisX" ref="genesisx-connectioncontroller-qmlmodule.html"/>
+            <keyword name="GenesisX.Notifications" id="QML.Notifications.GenesisX" ref="genesisx-notifications-qmlmodule.html"/>
+            <keyword name="GenesisX.Permissions" id="QML.Permissions.GenesisX" ref="genesisx-permissions-qmlmodule.html"/>
+            <keyword name="GenesisX.SystemInfo" id="QML.SystemInfo.GenesisX" ref="genesisx-systeminfo-qmlmodule.html"/>
+            <keyword name="Getting started with Genesis-X" id="Getting started with Genesis-X" ref="getting-started.html"/>
+            <keyword name="NEARBY_WIFI_DEVICES" id="Permissions::NEARBY_WIFI_DEVICES" ref="qml-genesisx-permissions-permissions.html#NEARBY_WIFI_DEVICES-prop"/>
+            <keyword name="Namespaces" id="Namespaces" ref="namespaces.html"/>
+            <keyword name="Namespaces Orm" id="Namespaces Orm" ref="namespaces-orm.html"/>
+            <keyword name="NotificationHandler" id="notifications::NotificationHandler" ref="gx-app-notifications-notificationhandler.html"/>
+            <keyword name="NotificationHandler" id="QML.NotificationHandler" ref="qml-io-genesisx-app-notificationhandler.html"/>
+            <keyword name="NotificationHandler" id="QML.io.genesisx.app.NotificationHandler" ref="qml-io-genesisx-app-notificationhandler.html"/>
+            <keyword name="Permissions" id="permissions::Permissions" ref="gx-app-permissions-permissions.html"/>
+            <keyword name="Permissions" id="QML.Permissions" ref="qml-genesisx-permissions-permissions.html"/>
+            <keyword name="Permissions" id="QML.GenesisX.Permissions.Permissions" ref="qml-genesisx-permissions-permissions.html"/>
+            <keyword name="READ_MEDIA_AUDIO" id="Permissions::READ_MEDIA_AUDIO" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_AUDIO-prop"/>
+            <keyword name="READ_MEDIA_IMAGES" id="Permissions::READ_MEDIA_IMAGES" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_IMAGES-prop"/>
+            <keyword name="READ_MEDIA_VIDEO" id="Permissions::READ_MEDIA_VIDEO" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_VIDEO-prop"/>
+            <keyword name="READ_MEDIA_VISUAL_USER_SELECTED" id="Permissions::READ_MEDIA_VISUAL_USER_SELECTED" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_VISUAL_USER_SELECTED-prop"/>
+            <keyword name="RECORD_AUDIO" id="Permissions::RECORD_AUDIO" ref="qml-genesisx-permissions-permissions.html#RECORD_AUDIO-prop"/>
+            <keyword name="SystemInfo" id="QML.SystemInfo" ref="qml-io-genesisx-core-systeminfo.html"/>
+            <keyword name="SystemInfo" id="QML.io.genesisx.core1.SystemInfo" ref="qml-io-genesisx-core-systeminfo.html"/>
+            <keyword name="ab" id="app::ab" ref="gx-app-ab.html"/>
+            <keyword name="analytics" id="app::analytics" ref="gx-app-analytics.html"/>
+            <keyword name="app" id="gx::app" ref="gx-app.html"/>
+            <keyword name="audiorecorder" id="app::audiorecorder" ref="gx-app-audiorecorder.html"/>
+            <keyword name="auth" id="app::auth" ref="gx-app-auth.html"/>
+            <keyword name="authenticate" id="Biometrics::authenticate" ref="qml-io-genesisx-app-biometrics.html#authenticate-method"/>
+            <keyword name="authenticated" id="Biometrics::authenticated" ref="qml-io-genesisx-app-biometrics.html#authenticated-signal"/>
+            <keyword name="availabilityChanged" id="Biometrics::availabilityChanged" ref="qml-io-genesisx-app-biometrics.html#availabilityChanged-signal"/>
+            <keyword name="available" id="Biometrics::available" ref="qml-io-genesisx-app-biometrics.html#available-prop"/>
+            <keyword name="biometrics" id="app::biometrics" ref="gx-app-biometrics.html"/>
+            <keyword name="canScheduleExactAlarms" id="Permissions::canScheduleExactAlarms" ref="qml-genesisx-permissions-permissions.html#canScheduleExactAlarms-method"/>
+            <keyword name="cmdLogin" id="CommandController::cmdLogin" ref="qml-io-genesisx-orm-commandcontroller.html#cmdLogin-method"/>
+            <keyword name="cmdPing" id="CommandController::cmdPing" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPing-method"/>
+            <keyword name="cmdPostJson" id="CommandController::cmdPostJson" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPostJson-method"/>
+            <keyword name="cmdPostJsonBoolAsync" id="CommandController::cmdPostJsonBoolAsync" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPostJsonBoolAsync-method"/>
+            <keyword name="cmdRegister" id="CommandController::cmdRegister" ref="qml-io-genesisx-orm-commandcontroller.html#cmdRegister-method"/>
+            <keyword name="codegen" id="orm::codegen" ref="gx-orm-codegen.html"/>
+            <keyword name="core" id="gx::core" ref="gx-core.html"/>
+            <keyword name="gx" id="gx" ref="gx.html"/>
+            <keyword name="has" id="Permissions::has" ref="qml-genesisx-permissions-permissions.html#has-method"/>
+            <keyword name="initialize" id="NotificationHandler::initialize" ref="qml-io-genesisx-app-notificationhandler.html#initialize-method"/>
+            <keyword name="initialized" id="NotificationHandler::initialized" ref="qml-io-genesisx-app-notificationhandler.html#initialized-prop"/>
+            <keyword name="initializedChanged" id="NotificationHandler::initializedChanged" ref="qml-io-genesisx-app-notificationhandler.html#initializedChanged-signal"/>
+            <keyword name="io.genesisx.app" id="QML.app.genesisx.io" ref="io-genesisx-app-qmlmodule.html"/>
+            <keyword name="io.genesisx.core" id="QML.core.genesisx.io" ref="io-genesisx-core-qmlmodule.html"/>
+            <keyword name="io.genesisx.orm" id="QML.orm.genesisx.io" ref="io-genesisx-orm-qmlmodule.html"/>
+            <keyword name="isIgnoringBatteryOptimizations" id="Permissions::isIgnoringBatteryOptimizations" ref="qml-genesisx-permissions-permissions.html#isIgnoringBatteryOptimizations-method"/>
+            <keyword name="notificationEnabledChanged" id="Permissions::notificationEnabledChanged" ref="qml-genesisx-permissions-permissions.html#notificationEnabledChanged-signal"/>
+            <keyword name="notificationReceived" id="NotificationHandler::notificationReceived" ref="qml-io-genesisx-app-notificationhandler.html#notificationReceived-signal"/>
+            <keyword name="notifications" id="app::notifications" ref="gx-app-notifications.html"/>
+            <keyword name="notificationsEnabled" id="Permissions::notificationsEnabled" ref="qml-genesisx-permissions-permissions.html#notificationsEnabled-prop"/>
+            <keyword name="openAppSettings" id="Permissions::openAppSettings" ref="qml-genesisx-permissions-permissions.html#openAppSettings-method"/>
+            <keyword name="openNotificationSettings" id="Permissions::openNotificationSettings" ref="qml-genesisx-permissions-permissions.html#openNotificationSettings-method"/>
+            <keyword name="orm" id="gx::orm" ref="gx-orm.html"/>
+            <keyword name="permissions" id="app::permissions" ref="gx-app-permissions.html"/>
+            <keyword name="request" id="Permissions::request" ref="qml-genesisx-permissions-permissions.html#request-method"/>
+            <keyword name="requestFinished" id="CommandController::requestFinished" ref="qml-io-genesisx-orm-commandcontroller.html#requestFinished-signal"/>
+            <keyword name="requestNotifications" id="Permissions::requestNotifications" ref="qml-genesisx-permissions-permissions.html#requestNotifications-method"/>
+            <keyword name="requestScheduleExactAlarms" id="Permissions::requestScheduleExactAlarms" ref="qml-genesisx-permissions-permissions.html#requestScheduleExactAlarms-method"/>
+            <keyword name="requestignoreBatteryOptimizations" id="Permissions::requestignoreBatteryOptimizations" ref="qml-genesisx-permissions-permissions.html#requestignoreBatteryOptimizations-method"/>
+            <keyword name="show" id="NotificationHandler::show" ref="qml-io-genesisx-app-notificationhandler.html#show-method"/>
+            <keyword name="status" id="Biometrics::status" ref="qml-io-genesisx-app-biometrics.html#status-method"/>
+            <keyword name="subscribe" id="NotificationHandler::subscribe" ref="qml-io-genesisx-app-notificationhandler.html#subscribe-method"/>
+            <keyword name="tokenChanged" id="NotificationHandler::tokenChanged" ref="qml-io-genesisx-app-notificationhandler.html#tokenChanged-signal"/>
+            <keyword name="unsubscribe" id="NotificationHandler::unsubscribe" ref="qml-io-genesisx-app-notificationhandler.html#unsubscribe-method"/>
+            <keyword name="utils" id="gx::utils" ref="gx-utils.html"/>
+        </keywords>
+        <files>
+            <file>app-classes.html</file>
+            <file>assets.html</file>
+            <file>classes.html</file>
+            <file>codegen-h.html</file>
+            <file>core-classes.html</file>
+            <file>coreqml-h.html</file>
+            <file>genesisx-app-biometrics-qmlmodule.html</file>
+            <file>genesisx-commandcontroller-qmlmodule.html</file>
+            <file>genesisx-connectioncontroller-qmlmodule.html</file>
+            <file>genesisx-notifications-qmlmodule.html</file>
+            <file>genesisx-permissions-qmlmodule.html</file>
+            <file>genesisx-systeminfo-qmlmodule.html</file>
+            <file>getting-started.html</file>
+            <file>gx-app-ab-abtesting.html</file>
+            <file>gx-app-ab.html</file>
+            <file>gx-app-analytics-analytics.html</file>
+            <file>gx-app-analytics.html</file>
+            <file>gx-app-audiorecorder-audiorecorder.html</file>
+            <file>gx-app-audiorecorder.html</file>
+            <file>gx-app-auth-auth.html</file>
+            <file>gx-app-auth.html</file>
+            <file>gx-app-biometrics-biometrics.html</file>
+            <file>gx-app-biometrics.html</file>
+            <file>gx-app-notifications-notificationhandler.html</file>
+            <file>gx-app-notifications.html</file>
+            <file>gx-app-permissions-permissions.html</file>
+            <file>gx-app-permissions.html</file>
+            <file>gx-app.html</file>
+            <file>gx-core.html</file>
+            <file>gx-orm-codegen.html</file>
+            <file>gx-orm-commandcontroller.html</file>
+            <file>gx-orm-connectioncontroller.html</file>
+            <file>gx-orm.html</file>
+            <file>gx-utils.html</file>
+            <file>gx.html</file>
+            <file>images/arrow.png</file>
+            <file>images/arrow_bc.png</file>
+            <file>index.html</file>
+            <file>io-genesisx-app-qmlmodule.html</file>
+            <file>io-genesisx-core-qmlmodule.html</file>
+            <file>io-genesisx-orm-qmlmodule.html</file>
+            <file>namespaces-orm.html</file>
+            <file>namespaces.html</file>
+            <file>orm-classes.html</file>
+            <file>physics.html</file>
+            <file>qml-genesisx-permissions-permissions-members.html</file>
+            <file>qml-genesisx-permissions-permissions.html</file>
+            <file>qml-io-genesisx-app-biometrics-members.html</file>
+            <file>qml-io-genesisx-app-biometrics.html</file>
+            <file>qml-io-genesisx-app-notificationhandler-members.html</file>
+            <file>qml-io-genesisx-app-notificationhandler.html</file>
+            <file>qml-io-genesisx-core-systeminfo-members.html</file>
+            <file>qml-io-genesisx-core-systeminfo.html</file>
+            <file>qml-io-genesisx-orm-commandcontroller-members.html</file>
+            <file>qml-io-genesisx-orm-commandcontroller.html</file>
+            <file>qml-io-genesisx-orm-connectioncontroller-members.html</file>
+            <file>qml-io-genesisx-orm-connectioncontroller.html</file>
+            <file>style/style.css</file>
+            <file>systeminfo-h.html</file>
+        </files>
+    </filterSection>
+</QtHelpProject>

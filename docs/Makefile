@@ -92,20 +92,12 @@ Makefile: docs.pro D:/Qt/6.10.0/llvm-mingw_64/mkspecs/win32-clang-g++/qmake.conf
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_axserver_private.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_bluetooth.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_charts.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_charts_private.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_chartsqml.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_chartsqml_private.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_concurrent.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_connectivity_private.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core5compat.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core5compat_private.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core_private.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualization.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualization_private.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualizationqml.pri \
-		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualizationqml_private.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_dbus.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_dbus_private.pri \
 		D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_designer.pri \
@@ -416,20 +408,12 @@ D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_axserver.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_axserver_private.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_bluetooth.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_bluetooth_private.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_charts.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_charts_private.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_chartsqml.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_chartsqml_private.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_concurrent.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_connectivity_private.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core5compat.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core5compat_private.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_core_private.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualization.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualization_private.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualizationqml.pri:
-D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_datavisualizationqml_private.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_dbus.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_dbus_private.pri:
 D:/Qt/6.10.0/llvm-mingw_64/mkspecs/modules/qt_lib_designer.pri:

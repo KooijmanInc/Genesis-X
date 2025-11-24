@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "485296395009",
-    "project_id": "age-gap-dating",
-    "storage_bucket": "age-gap-dating.firebasestorage.app"
+    "project_number": "757322535805",
+    "project_id": "genesis-x-ab2b4",
+    "storage_bucket": "genesis-x-ab2b4.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:485296395009:android:83a6ebf14818f92d76c100",
+        "mobilesdk_app_id": "1:757322535805:android:71eb6e4731ec0ce76c3214",
         "android_client_info": {
-          "package_name": "nl.agegap.app"
+          "package_name": "io.genesisx.publicapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAV6ys680QchKnsUM8sEBnpidkwEOyNvzY"
+          "current_key": "AIzaSyB2OcOJ3uIRivn4_p5j18sKb6WxIPGMUNU"
         }
       ],
       "services": {

@@ -1,2 +1,2 @@
-module GenesisX.Core.Navigation
+module GenesisX.Navigation
 typeinfo navigation.qmltypes

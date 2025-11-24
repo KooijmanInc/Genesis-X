@@ -24,6 +24,8 @@ namespace gx { }
 namespace GX = gx;
 namespace gx { namespace core { } }
 namespace GXCore = gx::core;
+namespace gx { namespace app { } }
+namespace GXApp = gx::app;
 namespace gx { namespace navigation { } }
 namespace GXNav = gx::navigation;
 namespace gx { namespace utils { } }

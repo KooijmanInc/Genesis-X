@@ -18,5 +18,5 @@ void registerGenesisXSystemInfo(QQmlEngine* engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterSingletonType<gx::utils::SystemInfoQml>("GenesisX.Core.SystemInfo", 1, 0, "SystemInfo", [](QQmlEngine*, QJSEngine*) -> QObject* { return new gx::utils::SystemInfoQml; });
+    qmlRegisterSingletonType<gx::utils::SystemInfoQml>("GenesisX.SystemInfo", 1, 0, "SystemInfo", [](QQmlEngine*, QJSEngine*) -> QObject* { return new gx::utils::SystemInfoQml; });
 }

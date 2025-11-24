@@ -19,6 +19,7 @@ void FcmListener::OnTokenReceived(const char *token)
 
 static QVariantMap mapFromPairs(const ::firebase::messaging::Message& msg)
 {
+    Q_UNUSED(msg);
     QVariantMap out;
 #if FIREBASE_VERSION_MAJOR >= 11
     // Newer SDKs expose msg.data as std::map<std::string,std::string>
@@ -28,11 +29,10 @@ static QVariantMap mapFromPairs(const ::firebase::messaging::Message& msg)
     }
 #else
     // Fallback – some older SDKs exposed raw_data. Keep both just in case.
-    if (!msg.raw_data.empty()) {
-        qDebug() << msg.raw_data;
+    // if (!msg.raw_data.empty()) {
         // out["raw"] = QString::fromUtf8(reinterpret_cast<const char*>(msg.raw_data),
                                        // int(msg.raw_data_size));
-    }
+    // }
 #endif
     return out;
 }

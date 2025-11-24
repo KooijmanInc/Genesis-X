@@ -1,2 +1,2 @@
-module GenesisX.Core.SystemInfo
+module GenesisX.SystemInfo
 typeinfo systeminfo.qmltypes

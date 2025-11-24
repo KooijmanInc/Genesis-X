@@ -13,33 +13,33 @@ int gx_app_biometrics_status_android();
 
 /*!
     \class gx::app::biometrics::Biometrics
-    \inheaderfile ../../../include/GenesisX/Biometrics/Biometrics.h
     \inmodule GenesisX
-    \ingroup genesisx-core
+    \ingroup app-classes
     \title Mobile Biometrics
-    \since 6.10
+    \since Qt 6.10
     \brief Setting biometrics for mobile devices.
 
-    \note Linked QML module: \c GenesisX\App\Biometrics 1.0
+    \note Linked QML module: \c GenesisX\App\Biometrics
     \note Enabled when the app uses qmake flag \c genesisx_app_biometrics
  */
 
 /*!
-    \qmlmodule GenesisX.App.Biometrics 1.0
+    \qmlmodule GenesisX.App.Biometrics
+    \inqmlmodule io.genesisx.app
     \title Genesis-X Biometrics (QML)
     \brief QML APIs for biometrics.
 
     Import this module to use the \l Biometrics type:
     \code
-    import GenesisX.App.Biometrics 1.0
+    import GenesisX.App.Biometrics
     \endcode
  */
 
 /*!
     \qmltype Biometrics
     \nativetype gx::app::biometrics::Biometrics
-    \inqmlmodule GenesisX.App.Biometrics
-    \since GenesisX.App.Biometrics 1.0
+    \inqmlmodule io.genesisx.app
+    \since Qt 6.10
     \brief QML APIs for biometrics.
 
     \section2 Example
@@ -58,17 +58,11 @@ int gx_app_biometrics_status_android();
         }
     }
     \endqml
+ */
 
-    \section2 Properties
-    \qmlproperty bool available
-
-    \section2 Signals
+/*!
     \qmlsignal void Biometrics::availabilityChanged()
     \qmlsignal void Biometrics::authenticated(int code, string message)
-
-    \section2 Methods
-    \qmlmethod int Biometrics::status()
-    \qmlmethod var Biometrics::authenticate(string reason)
  */
 
 using namespace gx::app::biometrics;
@@ -85,11 +79,19 @@ Biometrics::Biometrics(QObject *parent)
     emit availabilityChanged();
 }
 
+/*!
+    \qmlproperty bool Biometrics::available
+
+    True if biometrics is available
+ */
 bool Biometrics::available() const
 {
     return m_available;
 }
 
+/*!
+    \qmlmethod int Biometrics::status()
+ */
 int Biometrics::status() const
 {
 #ifdef Q_OS_ANDROID
@@ -99,6 +101,10 @@ int Biometrics::status() const
 #endif
 }
 
+/*!
+    \qmlmethod var Biometrics::authenticate(string reason)
+    \a reason, why it isn't available
+ */
 QVariant Biometrics::authenticate(const QString &reason)
 {
 #ifdef Q_OS_ANDROID

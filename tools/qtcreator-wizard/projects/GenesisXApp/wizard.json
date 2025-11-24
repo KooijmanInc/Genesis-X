@@ -5,7 +5,7 @@
     "trDisplayName": "Genesis-X App",
     "trDisplayCategory": "Genesis-X (Qt library for your application)",
     "trDescription": "Creates a basic qml-based Qt application that is wired with the Genesis-X library, standard equipted with notifications for windows, android, linux, macos and ios. \n\nIt supports the former mentioned platforms and they are tested.",
-    "icon": "../genesisx-xcore.png",
+    "icon": "../genesis-x_icon.png",
     "supportedProjectTypes": [ "Qt4ProjectManager.Qt4Project" ],
     "featuresRequired": [ "QtSupport.Wizards.FeatureQt" ],
     "enabled": "%{JS: isPluginRunning('qmakeprojectmanager')}",
@@ -38,11 +38,7 @@
                 { "name": "UiDir", "trDisplayName": "UI subdir", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "gx-ui" } },
                 { "name": "LibPathWindows", "trDisplayName": "Genesis-X Library path windows", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "D:/<path-to>/Genesis-X" } },
                 { "name": "LibPathApple", "trDisplayName": "Genesis-X Library path apple", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/Users/<user>/<path-to>/Genesis-X" } },
-                { "name": "LibPathLinux", "trDisplayName": "Genesis-X Library path linux", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/home/<user>/<path-to>/Genesis-X" } },
-                { "name": "TargetsLabel", "type": "Label", "data": { "wordWrap": true, "trText": "Targets" } },
-                { "name": "Target_iOS", "trDisplayName": "iOS", "type": "CheckBox", "data": {"checked": true } },
-                { "name": "Target_ANDROID", "trDisplayName": "Android", "type": "CheckBox", "data": {"checked": true } },
-                { "name": "Target_DESKTOP", "trDisplayName": "Desktop", "type": "CheckBox", "data": {"checked": true } }
+                { "name": "LibPathLinux", "trDisplayName": "Genesis-X Library path linux", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/home/<user>/<path-to>/Genesis-X" } }
             ]
         },
         {
@@ -90,7 +86,7 @@
             "typeId": "File",
             "data": [
                 {
-                    "source": "templates/project.pro",
+                    "source": "templates/project.pro.tmpl",
                     "target": "%{ProjectFile}",
                     "openAsProject": true,
                     "openInEditor": true
@@ -102,10 +98,6 @@
                 {
                     "source": "templates/.gitignore.tmpl",
                     "target": ".gitignore"
-                },
-                {
-                    "source": "templates/features/gx_app_root.prf.tmpl",
-                    "target": "features/gx_app_root.prf"
                 },
                 {
                     "source": "templates/project-ui/ui.pro.tmpl",
@@ -120,16 +112,22 @@
                     "target": "%{UiDir}/src/main.cpp"
                 },
                 {
-                    "source": "templates/project-ui/views/MasterView.qml.tmpl",
-                    "target": "%{UiDir}/views/MasterView.qml"
+                    "source": "templates/project-ui/views/MainView.qml.tmpl",
+                    "target": "%{UiDir}/views/MainView.qml"
                 },
                 {
                     "source": "templates/project-ui/assets.qrc.tmpl",
                     "target": "%{UiDir}/assets.qrc"
                 },
                 {
-                    "source": "templates/project-ui/assets/genesisx-xcore.svg",
-                    "target": "%{UiDir}/assets/genesisx-xcore.svg",
+                    "source": "templates/project-ui/assets/genesis-x.svg",
+                    "target": "%{UiDir}/assets/genesis-x.svg",
+                    "binary": true,
+                    "isBinary": true
+                },
+                {
+                    "source": "templates/project-ui/assets/logo.ico",
+                    "target": "%{UiDir}/assets/logo.ico",
                     "binary": true,
                     "isBinary": true
                 },
@@ -166,7 +164,7 @@
                     "target": "%{UiDir}/apple/ios/Info.plist"
                 },
                 {
-                    "source": "templates/project-ui/apple/GoogleService-Info.plist.tmpl",
+                    "source": "templates/project-ui/apple/ios/GoogleService-Info.plist.tmpl",
                     "target": "%{UiDir}/apple/ios/GoogleService-Info.plist"
                 },
                 {
@@ -178,7 +176,7 @@
                     "target": "%{UiDir}/apple/macos/Info.plist"
                 },
                 {
-                    "source": "templates/project-ui/apple/GoogleService-Info.plist.tmpl",
+                    "source": "templates/project-ui/apple/macos/GoogleService-Info.plist.tmpl",
                     "target": "%{UiDir}/apple/macos/GoogleService-Info.plist"
                 },
                 {

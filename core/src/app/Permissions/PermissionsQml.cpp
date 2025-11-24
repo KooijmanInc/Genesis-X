@@ -15,5 +15,5 @@ void registerGenesisXPermissions(QQmlEngine* engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterType<gx::app::permissions::Permissions>("GenesisX.App.Permissions", 1, 0, "Permissions");
+    qmlRegisterType<gx::app::permissions::Permissions>("GenesisX.Permissions", 1, 0, "Permissions");
 }

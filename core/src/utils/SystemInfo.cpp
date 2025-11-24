@@ -9,18 +9,49 @@
 #include <QUuid>
 
 /*!
-   \headerfile SystemInfo.h
-   \inmodule GenesisX
-   \ingroup genesisx-core
-   \title System information
-   \since 6.10
-   \brief Information about the current system.
+    \headerfile SystemInfo.h
+    \inmodule io.genesisx.core
+    \title System information
+    \since Qt 6.10
+    \brief Information about the current system.
  */
+
+/*!
+    \qmlmodule GenesisX.SystemInfo
+    \inmodule io.genesisx.core
+    \title Genesis-X SystemInfo (QML)
+    \since Qt 6.10
+    \brief QML APIs for current system information like platform.
+
+    Import this module to use the \l SystemInfo type:
+
+    \code
+    import GenesisX.SystemInfo 1.0
+    \endcode
+*/
+
+/*!
+    \qmltype SystemInfo
+    \inqmlmodule io.genesisx.core
+    \since Qt 6.10
+    \brief Handles requests for system information.
+
+    \section2 Example
+    \qml
+    import GenesisX.SystemInfo 1.0
+
+    SystemInfo {
+        onCompleted: console.log(SystemInfo.platform())
+    }
+    \endqml
+*/
+
 using namespace gx::utils;
 
 /**
- * \brief SystemInfo::ensureAppUuid
- * \return
+    \qmlmethod string SystemInfo::ensureAppUuid()
+
+    Returns a persistant uuid to recognize known registered devices
  */
 QString SystemInfo::ensureAppUuid()
 {
@@ -56,8 +87,9 @@ QString SystemInfo::operatingSystem()
 }
 
 /**
- * \brief SystemInfo::platform
- * \return
+    \qmlmethod string SystemInfo::platform()
+
+    Returns the current platform where app is running on
  */
 QString SystemInfo::platform()
 {
@@ -65,10 +97,12 @@ QString SystemInfo::platform()
 }
 
 /**
- * \brief SystemInfo::systemLanguage
- * \return
+    \qmlmethod string SystemInfo::systemLanguage()
+
+    returns the system locale as "en-US"
  */
 QString SystemInfo::systemLanguage()
 {
     return QLocale::system().name().replace("_", "-");
 }
+

@@ -3,6 +3,7 @@
 
 TEMPLATE = aux
 DISTFILES += \
+    $$files(../assets/*, true) \
     $$files(../docs/*, true) \
     $$files($$PWD/../common/*, true) \
     $$files($$PWD/../tools/*, true) \

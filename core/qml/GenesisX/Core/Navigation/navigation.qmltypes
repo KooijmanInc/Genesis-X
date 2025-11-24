@@ -5,7 +5,7 @@ Module {
     Component {
         name: "Router"
         prototype: "QObject"
-        exports: ["GenesisX.Core.Navigation/Router 1.0"]
+        exports: ["GenesisX.Navigation/Router 1.0"]
         isSingleton: true
         Property {
             name: "currentPath"

@@ -1,8 +1,6 @@
 /*!
     \page classes.html
     \title C++ Classes
-    \inmodule GenesisX
-    \ingroup genesisx-core
     \brief App C++ classes in Genesis-X
 
     \generatelist{classes}

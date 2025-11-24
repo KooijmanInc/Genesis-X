@@ -40,7 +40,8 @@ $excludeParts = @(
   '.*docs/Makefile$',
   '.*docs/Makefile\.Debug$',
   '.*docs/Makefile\.Release$',
-  '.*docs/Makefile\.Profile$'
+  '.*docs/Makefile\.Profile$',
+  '.*tools/'
 )
 $exclude = [regex]($excludeParts -join '|')
 

@@ -9,7 +9,6 @@ SUBDIRS += core physics orm \
 
 !android:!ios {
     SUBDIRS += tools/gxgen
-message(thisone????)
 }
 
 core.subdir = $$PWD/core
@@ -20,25 +19,22 @@ physics.depends = core
 orm.subdir = $$PWD/orm
 orm.depends = core
 
-!android:!ios { message(orthisone????) tools/gxgen.depends = orm }
+!android:!ios { tools/gxgen.depends = orm }
 
 DISTFILES += \
     README.md \
     BACKERS.md \
     LICENSE \
     LICENSING.md \
+    CHANGELOG.md \
     CONTRIBUTING.md \
     CODE_OF_CONDUCT.md \
     SUPPORT.md \
     SECURITY.md \
     LICENSES/LicenseRef-KooijmanInc-Commercial.txt \
     LICENSES/GPL-3.0-only.txt \
-    docs/qt-includes.qdocconf.in \
-    docs/topics/getting-started.qdoc \
-    docs/topics/guides.qdoc \
-    docs/topics/gx-getting-started.qdoc \
-    docs/topics/gx-orm-namespace.qdoc \
     mkspecs/features/genesisx_app_core.prf \
+    mkspecs/features/genesisx_assets.prf \
     mkspecs/features/gx_app_ab.prf \
     mkspecs/features/gx_app_analytics.prf \
     mkspecs/features/gx_app_audiorecorder.prf \
@@ -102,7 +98,11 @@ DISTFILES += \
     mkspecs/modules/qt_lib_genesisx_app_securestore.pri \
     mkspecs/modules/qt_lib_genesisx_app_sensors.pri \
     mkspecs/modules/qt_lib_genesisx_app_share.pri \
-    mkspecs/modules/qt_lib_genesisx_app_updater.pri
+    mkspecs/modules/qt_lib_genesisx_app_updater.pri \
+    mkspecs/modules/qt_lib_genesisx_assets.pri \
+    scripts/install.bat \
+    scripts/install.sh \
+    tools/qtcreator-wizard/install-wizard.sh
 
 
 SUBDIRS += zdev
