@@ -5,10 +5,9 @@
 
 /*!
     \class gx::app::auth::Auth
-    \inheaderfile ../../../include/GenesisX/Auth/Auth.h
     \inmodule GenesisX
-    \ingroup genesisx-core
-    \since 6.10
+    \ingroup app-classes
+    \since Qt 6.10
     \brief Minimal Auth facade (constructor-only).
 
     This class will serve as the bridge to the app's .

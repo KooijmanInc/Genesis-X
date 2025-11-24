@@ -4,7 +4,7 @@
 #include <QtQml/qqml.h>
 #include <QQmlEngine>
 
-#include "NotificationHandler.h"
+#include <GenesisX/Notifications/NotificationHandler.h>
 #include "NotificationsQml.h"
 
 using namespace gx::app::notifications;
@@ -13,5 +13,5 @@ void registerGenesisXNotifications(QQmlEngine* engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterType<gx::app::notifications::NotificationHandler>("GenesisX.Core.Notifications", 1, 0, "NotificationHandler");
+    qmlRegisterType<gx::app::notifications::NotificationHandler>("GenesisX.Notifications", 1, 0, "NotificationHandler");
 }

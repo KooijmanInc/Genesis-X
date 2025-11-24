@@ -12,12 +12,6 @@
 
 #include <GenesisX/Orm/HttpResponse.h>
 
-/*!
-    \namespace gx::orm
-    \inmodule GenesisX.Orm
-    \title gx::orm Namespace
-    \brief Module-level APIs.
- */
 namespace gx::orm {
 
 class ConnectionController;

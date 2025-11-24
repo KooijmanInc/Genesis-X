@@ -7,13 +7,12 @@ Item {
     id: root
     width: 960
     height: 540
-    property url logoSource: "qrc:/assets/genesisx-xcore.svg"   // swap to your SVG/PNG
+    property url logoSource: "qrc:/assets/genesis-x.svg"
     property color gunmetal: "#12191F"
     property bool autoClose: true
     property int  durationMs: 2600
     signal finished()
 
-    // optional auto close
     Timer {
         running: root.autoClose
         interval: root.durationMs
@@ -27,7 +26,6 @@ Item {
         environment: SceneEnvironment {
             clearColor: root.gunmetal
             backgroundMode: SceneEnvironment.Color
-            // a touch of bloom for the glow
             tonemapMode: SceneEnvironment.TonemapModeFilmic
         }
 
@@ -36,10 +34,9 @@ Item {
             z: 500; y: 0; x: 0
         }
 
-        // Moving light that “lights up” the logo
         PointLight {
             id: moverLight
-            color: "#00C58E"                    // Emerald
+            color: "#00C58E"
             brightness: 120
             y: 80; z: 200
             x: 200
@@ -55,7 +52,6 @@ Item {
             }
         }
 
-        // The logo plane
         Model {
             id: logo
             source: "#Rectangle"
@@ -67,7 +63,6 @@ Item {
                 baseColorMap: Texture {
                     source: root.logoSource
                     mappingMode: Texture.UV
-                    // keep SVG crisp
                     mipFilter: Texture.None
                     minFilter: Texture.Linear
                     magFilter: Texture.Linear
@@ -78,7 +73,6 @@ Item {
                 emissiveFactor: 0.08
             }
 
-            // gentle wobble
             SequentialAnimation on eulerRotation.y {
                 loops: Animation.Infinite
                 NumberAnimation { to: 6;  duration: 900;  easing.type: Easing.InOutSine }
@@ -91,7 +85,6 @@ Item {
             }
         }
 
-        // optional subtle vignette overlay for drama
         Rectangle {
             anchors.fill: parent
             color: "transparent"

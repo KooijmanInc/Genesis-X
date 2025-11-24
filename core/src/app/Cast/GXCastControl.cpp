@@ -20,6 +20,10 @@ static inline QJniObject activityCtx() {
 
 void GXCastControl::load(const QString &url, const QString &contentType, const QString &title, bool autoplay)
 {
+    Q_UNUSED(url);
+    Q_UNUSED(contentType);
+    Q_UNUSED(title);
+    Q_UNUSED(autoplay);
 #ifdef Q_OS_ANDROID
     QJniObject ctx = activityCtx();
     if (!ctx.isValid()) return;
@@ -38,6 +42,7 @@ void GXCastControl::load(const QString &url, const QString &contentType, const Q
 
 void GXCastControl::queueLoadJson(const QJsonArray &list)
 {
+    Q_UNUSED(list);
 #ifdef Q_OS_ANDROID
     QJniObject ctx = activityCtx();
     if (!ctx.isValid()) return;

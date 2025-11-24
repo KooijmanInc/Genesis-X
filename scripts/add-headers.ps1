@@ -42,7 +42,7 @@ function Make-Header($style) {
 
 # Gather tracked files, excluding some
 $files = & git ls-files -- `
-  ':!LICENSE' ':!LICENSE.*' ':!NOTICE' ':!NOTICE.*' ':!docs' ':!docs.*' `
+  ':!LICENSE' ':!LICENSE.*' ':!NOTICE' ':!NOTICE.*' ':!docs' ':!docs.*' ':!tools/qtcreator-snippets' ':!tools/qtcreator-snippets.*'`
   ':!LICENSES/**' ':!**/*.json' ':!.gitignore' ':!.gitattributes' `
   ':!**/firebase_cpp_sdk/**' ':!**/node_modules/**' ':!**/build/**' ':!**/dist/**'
 

@@ -9,7 +9,7 @@
 #include "src/navigation/NavigationQml.h"
 
 #include "src/app/Background/GXPlatformQml.h"
-#include "src/app/Biometrics/BiometricsQml.h"
+// #include "src/app/Biometrics/BiometricsQml.h"
 #include "src/app/Cast/CastQml.h"
 #include "src/app/Notifications/NotificationsQml.h"
 #include "src/app/Permissions/PermissionsQml.h"
@@ -18,7 +18,7 @@ void registerGenesisXSystemInfo(QQmlEngine*);
 void registerGenesisXNavigation(QQmlEngine*);
 
 void registerGenesisXBackground(QQmlEngine*);
-void registerGenesisXBiometrics(QQmlEngine*);
+// void registerGenesisXBiometrics(QQmlEngine*);
 void registerGenesisXCast(QQmlEngine*);
 void registerGenesisXNotifications(QQmlEngine*);
 void registerGenesisXPermissions(QQmlEngine*);
@@ -33,7 +33,7 @@ struct Feature {
 
 inline const Feature kFeatures[] = {
     {"genesisx_app_background", &registerGenesisXBackground},
-    {"genesisx_app_biometrics", &registerGenesisXBiometrics},
+    // {"genesisx_app_biometrics", &registerGenesisXBiometrics},
     {"genesisx_app_cast", &registerGenesisXCast},
     {"genesisx_app_notifications", &registerGenesisXNotifications},
     {"genesisx_app_permissions", &registerGenesisXPermissions}
@@ -48,31 +48,39 @@ inline QStringList gxValidFeatureKeys()
 }
 
 /*!
-  \headerfile CoreQml.h
-   \inmodule GenesisX
-   \since 6.10
-   \brief Register all enabled GenesisX QML modules on \a engine.
+    \headerfile CoreQml.h
+    \inmodule io.genesisx.core
+    \title Core qml register types
+    \since Qt 6.10
+    \brief Register all enabled GenesisX QML modules on \a engine.
 
+    Via \l CoreQml.h you link the different modules.
    Which modules are registered depends on your qmake QT,
    e.g. genesisx_app_notifications, genesisx_app_ab, etc.
 
-   code snippet setting modules list in qmake:
+   \section2 code snippet setting modules list in qmake:
    \code
    GX_LOADED_MODULES = $$QT
    GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, ",")
    DEFINES += GX_LOADED_MODULES=\\\"$$GX_LOADED_MODULES_CSV\\\"
    \endcode
-   \brief And set in main.cpp.
+
+   \section2 And set in main.cpp.
    \code
    GXCore::registerEnabledQmlModules(&engine, GX_LOADED_MODULES);
    \endcode
-   \brief Optionally you can load everything by setting.
+
+   \section2 Optionally you can load everything by setting.
    \code
    GXCore::registerEnabledQmlModules(&engine);
    \endcode
 */
+
 void registerEnabledQmlModules(QQmlEngine* engine, QString features)
 {
+    // qInfo().noquote() << "[GX] registerEnabledQmlModules called with features:"
+                      // << (features.isEmpty() ? "<empty>" : features);
+
     registerGenesisXSystemInfo(engine);
     registerGenesisXNavigation(engine);
 
@@ -98,13 +106,21 @@ void registerEnabledQmlModules(QQmlEngine* engine, QString features)
     for (const auto& f : kFeatures) {
         const QString key = f.name;
         const bool take = (takeAll || include.contains(key)) && !exclude.contains(key);
+
+        // qInfo().noquote() << "[GX] considering feature:" << key
+                          // << "take =" << (take ? "yes" : "no");
+
         if (take && f.fn) {
+            // qInfo().noquote() << "[GX] about to register feature:" << key;
             f.fn(engine);
+            // qInfo().noquote() << "[GX] registered feature:" << key;
             registered << key;
         }
         requested.remove(key);
     }
     requested.remove(QStringLiteral("all"));
+    requested.remove(QStringLiteral("genesisx"));
+    requested.remove(QStringLiteral("genesisx_assets"));
 
     qInfo().noquote() << "[GX] QML modules requested:" << include.values().join(',');
     qInfo().noquote() << "[GX] QML modules registered:" << registered.join(',');
@@ -113,8 +129,6 @@ void registerEnabledQmlModules(QQmlEngine* engine, QString features)
 
     if (qEnvironmentVariableIsSet("GX_LIST_FEATURE_KEYS"))
         qInfo().noquote() << "[GX] Valid feature keys:" << gxValidFeatureKeys().join(',');
-
-
 }
 
 }

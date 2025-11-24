@@ -1,15 +1,14 @@
 # ---------- Project ----------
-project             = GenesisX
-module              += GenesisX
-module              += GenesisX.Orm
-group               = genesisx-core
-group               += genesisx-orm
-defines             += Q_QDOC
-defines             += GENESISX_CORE_EXPORT
-defines             += GENESISX_ORM_EXPORT
-description         = Genesis-X SDK
-version             = 1.0
-url                 = https://genesisx.kooijmaninc.com
+project         = GenesisX
+modules         = GenesisX
+module.genesisx = GenesisX index.qdoc
+moduleheader    =
+defines         += Q_QDOC
+defines         += GENESISX_CORE_EXPORT
+defines         += GENESISX_ORM_EXPORT
+description     = "Genesis-X Documentation"
+version         = 1.0
+url             = https://www.genesis-x.io
 
 # ---------- Make export / Qt macros harmless to QDoc's parser
 macro.GENESISX_CORE_EXPORT = 1
@@ -21,197 +20,82 @@ macro.Q_SIGNALS =
 macro.signals =
 
 # ---------- Inputs (relative to docs/; use spaces, not semicolons) ----------
-headerdirs              += ../core/src ../core/include
-headerdirs              += ../orm/src ../orm/include
+headerdirs              = ../core/include ../core/src
+headerdirs              += ../orm/include ../orm/src
 sourcedirs              += topics ../core/src ../orm/src
 sources.fileextensions  = *.qdoc *.cpp *.qml
 headers.fileextensions  = *.h *.ch *.h++ *.hh *.hpp *.hxx
-includepaths            = ../core/include ../physics/include ../orm/include  ../core/src ../physics/src ../orm/src
-includepaths            += -I../orm/include -I ../core/src/docs
+includepaths            = -I../core/include -I../core/src
+includepaths            += -I../orm/include -I../orm/src
 imagedirs               = images
-#headers                 += ../core/include/GenesisX/Auth/Auth.h
 
 # ---------- Manual TOC ----------
-#contentpage                 = index.html
 navigation                  = true
 navigation.separatepages    = true
 navigation.homepage         = index.html
-navigation.cppclassespage   = "C++ Classes"
-#navigation.cppclassestitle  = GenesisX classes
-navigation.pages            = \
-    out/index.html \
-        out/getting-started.html
+navigation.hometitle        = Genesis-X
+navigation.landingpage      = Genesis-X Documentation
+
+navigation.cppclassespage   = Genesis-X App C++ Classes
 
 # ---------- Output ----------
-outputdir                   = out
-outputformats               = HTML
-#WebXML.nosubdirs            = true
-#WebXML.outputsubdir         = webxml
-#WebXML.quotinginformation   = true
-outputencoding              = UTF-8
-help                        = true
-navigation                  = true
-navigation.separatepages    = true
-#navigation.homepage         = index.html
-qhp                         = true
-#qmlmodules                  = GenesisX.NotificationHandler
-#qmlmodules                  = GenesisX.Notifications
-#indexes                     = out
-HTML.endheader = \
-"<style>\n" \
-"html, body {background-color: #262626;width: 100%;height: 100%;padding: 0 0 0 20px;margin: -20px -30px -20px -20px;font: normal 400 14px/1.2 Arial;font-family: Arial, Helvetica;}" \
-".main-body {\n" \
-"background-color: #262626;\n" \
-"color: #d0d0d0;\n" \
-"margin-top: 50px;\n" \
-"}\n" \
-".main-margin {margin: 0 15px 0 0px;padding: 10px;}" \
-"a:link {\n" \
-    "color: #1ec974;\n" \
-    "text-decoration: none;\n" \
-    "text-align: left;\n" \
-"}\n" \
-"a.qa-mark:target:before {\n" \
-    "content: \"***\";\n" \
-    "color: #ff0000;\n" \
-"}\n" \
-"a:hover {\n" \
-    "color: #1ec974;\n" \
-    "text-decoration: underline;\n" \
-    "text-align: left;\n" \
-"}\n" \
-"a:visited {\n" \
-    "color: #1ec974;\n" \
-    "text-align: left;\n" \
-"}\n" \
-"a:visited:hover {\n" \
-    "color: #1ec974;\n" \
-    "text-align: left;\n" \
-"}\n" \
-".navigationbar {\n" \
-    "display: block;\n" \
-    "position: relative;\n" \
-    "border-top: 1px solid #404142;\n" \
-    "border-bottom: 1px solid #404142;\n" \
-    "background-color: #353637;\n" \
-    "z-index: 1;\n" \
-    "height: 20px;\n" \
-    "padding-left: 30px;\n" \
-    "margin: 0px;\n" \
-    "margin-left: -35px !important;\n" \
-    "margin-right: -15px;\n" \
-"}\n" \
-".navigationbar ul {\n" \
-    "margin: 0;\n" \
-    "padding: 0;\n" \
-"}\n" \
-".navigationbar ul li {\n" \
-    "list-style-type: none;\n" \
-    "margin: 0;\n" \
-    "padding-top: 2px;\n" \
-    "height: 20px;\n" \
-"}\n" \
-".navigationbar ul li a, .navigationbar td a {\n" \
-    "display: block;\n" \
-    "text-decoration: none;\n" \
-    "background: url(../images/arrow_bc.png);\n" \
-    "background-repeat: no-repeat;\n" \
-    "background-position: right;\n" \
-    "padding-right: 17px;\n" \
-"}\n" \
-".navigationbar li {\n" \
-    "float: left;\n" \
-"}\n" \
-"@media screen {\n" \
-    ".title {\n" \
-        "color: #d0d0d0;\n" \
-        "font-size: 20px;\n" \
-        "font-weight: normal;\n" \
-        "left: 0;\n" \
-        "padding-bottom: 15px;\n" \
-        "padding-left: 20px;\n" \
-        "padding-top: 15px;\n" \
-        "position: absolute;\n" \
-        "right: 0;\n" \
-        "top: 0;\n" \
-        "background-color: #262626;\n" \
-        "border-bottom: 1px #404142 solid;\n" \
-        "font-weight: bold;\n" \
-        "margin-left: 10px;\n" \
-        "margin-right: 0;\n" \
-    "}\n" \
-"}\n" \
-".footer {\n" \
-    "text-align: left;\n" \
-    "padding-top: 45px;\n" \
-    "padding-left: 5px;\n" \
-    "margin-top: 45px;\n" \
-    "margin-bottom: 45px;\n" \
-    "font-size: 10px;\n" \
-    "border-top: 1px solid #404142;\n" \
-"}\n" \
-".footer p {\n" \
-    "line-height: 14px;\n" \
-    "font-size: 11px;\n" \
-    "padding: 0;\n" \
-    "margin: 0;\n" \
-"}\n" \
-".footer a[href*=\"http://\"], a[href*=\"ftp://\"],\n" \ "a[href*=\"https://\"] {\n" \
-    "font-weight: bold;\n" \
-"}\n" \
-".footerNavi {\n" \
-    "width: auto;\n" \
-    "text-align: right;\n" \
-    "margin-top: 50px;\n" \
-    "z-index: 1;\n" \
-"}\n" \
-"h1 {padding-left: 40px;}" \
-"h2, p.h2 {\n" \
-    "font: 500 16px/1.2 Arial;\n" \
-    "font-weight: 100;\n" \
-    "background-color: #353637;\n" \
-    "padding: 4px;\n" \
-    "padding-left: 10px;\n" \
-    "margin-bottom: 15px;\n" \
-    "margin-left: -10px;\n" \
-    "margin-right: -20px;\n" \
-    "margin-top: 30px;\n" \
-    "border-top: #404142 1px solid;\n" \
-    "border-bottom: #404142 1px solid;\n" \
-    "max-width: 100%;\n" \
-"}\n" \
-"h2:target {\n" \
-    "background-color: #F2F3D4;\n" \
-"}\n" \
-"</style>" \
-    "</head>\n"
+outputdir       = out
+cleandirs       = out
+outputformats   = HTML
+qhp             = true
 
+HTML.nonavigationbar    = false
+HTML.extraimages        = images/arrow.png
+HTML.extraimages        += images/arrow_bc.png
+HTML.stylesheets    = style/style.css
+HTML.headerstyles   = "<link rel=\"stylesheet\" type=\"text/css\" href=\"style/style.css\"/>\n"
 HTML.postheader = \
-    "<body class=\"main-body\"><div class=\"main-body main-margin\">\n" \
-        "<div class=\"header\" id=\"qtdocheader\">\n" \
-            "<div class=\"main\">\n" \
-                "<div class=\"main-rounded\">\n" \
-                    "<div class=\"navigationbar\">\n"
+    "<div class=\"navigationbar\">\n" \
+    "  <ul class=\"navigationbar\">\n"
 
-HTML.postheader += "<ul>\n"
+HTML.postpostheader += "</ul>\n</div>\n"
+HTML.footer         = \
+    "<div class=\"qt-footer\">\n<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href=\"https://www.genesis-x.io\">Genesis-X</a></p></center>\n</div>\n"
 
-HTML.postpostheader += "</ul>\n" \
-                    "</div>\n" \
-                "</div>\n" \
-                "<div class=\"content\">" \
-                    "<div class=\"line\">\n" \
-                        "<div class=\"content mainContent\">\n"
+indexpage           = index.qdoc
 
-HTML.footer           = "</div>\n" \
-                    "</div>\n" \
-                "</div></div>\n</div>\n<div class=\"qt-footer\">\n<p>© 2025 Kooijman Incorporate Holding B.V. — Genesis-X</p>\n</div>\n"
+HTML.extraFiles     += templates/footer.html
 
 # ---------- QHP ----------
-qhp.projects                    = GenesisX
-qhp.GenesisX.file               = GenesisX.qhp
-qhp.GenesisX.namespace          = com.kooijmaninc.genesisx
-qhp.GenesisX.virtualFolder      = doc
-qhp.GenesisX.indexTitle         = Genesis-X SDK
-qhp.GenesisX.customFilters      = GenesisX
-qhp.GenesisX.filterAttributes   = GenesisX 1.0 Qt6
-qhp.GenesisX.description        = Genesis-X SDK Documentation
+qhp.projects                        = GenesisX
+
+qhp.GenesisX.file                   += GenesisX.qhp
+qhp.GenesisX.namespace              = io.genesis-x.docs.1.0.0
+qhp.GenesisX.virtualFolder          = genesisx
+qhp.GenesisX.indexTitle             = Genesis-X Documentation
+qhp.GenesisX.filterAttributes       = GenesisX
+qhp.GenesisX.customFilters          = GenesisXFilter
+
+qhp.GenesisX.extraFiles             = style/style.css
+qhp.GenesisX.extraFiles             += images/arrow.png
+qhp.GenesisX.extraFiles             += images/arrow_bc.png
+
+qhp.GenesisXFilter.name             = GenesisX
+qhp.GenesisXFilter.filterAttributes = GenesisX
+
+qhp.GenesisX.subprojects                  = gettingstarted core app orm
+
+qhp.GenesisX.subprojects.gettingstarted.title         = Getting started
+qhp.GenesisX.subprojects.gettingstarted.indexTitle    = Getting started with Genesis-X
+qhp.GenesisX.subprojects.gettingstarted.selectors     = none
+qhp.GenesisX.subprojects.gettingstarted.sortPages     = false
+
+qhp.GenesisX.subprojects.core.title         = Core
+qhp.GenesisX.subprojects.core.indexTitle    = Genesis-X core system
+qhp.GenesisX.subprojects.core.selectors     = qmlmodule:io.genesisx.core
+qhp.GenesisX.subprojects.core.sortPages     = true
+
+qhp.GenesisX.subprojects.app.title       = App
+qhp.GenesisX.subprojects.app.indexTitle  = Genesis-X app system
+qhp.GenesisX.subprojects.app.selectors     = qmlmodule:io.genesisx.app
+qhp.GenesisX.subprojects.app.sortPages   = true
+
+qhp.GenesisX.subprojects.orm.title       = Orm
+qhp.GenesisX.subprojects.orm.indexTitle  = Genesis-X orm system
+qhp.GenesisX.subprojects.orm.selectors     = qmlmodule:io.genesisx.orm
+qhp.GenesisX.subprojects.orm.sortPages   = true

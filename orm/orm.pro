@@ -22,7 +22,7 @@ contains(CONFIG, staticlib) {
 } else {
     DEFINES += GENESISX_ORM_LIBRARY
 }
-message(DEFINES: $$DEFINES)
+
 GENESISX_BUILD_ROOT = $$clean_path($$PWD/..)
 include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
 include($$GENESISX_BUILD_ROOT/common/qmake-destination-path.pri)

@@ -1,2 +1,2 @@
-module GenesisX.App.Permissions
+module GenesisX.Permissions
 typeinfo permissions.qmltypes

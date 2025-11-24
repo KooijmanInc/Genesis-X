@@ -1,12 +1,218 @@
 /*!
     \page getting-started.html
-    \title Getting Started
-    \ingroup GenesisX.Guides
-    \inmodule GenesisX.Guides
+    \title Getting started with Genesis-X
 
-    \section1 Install
-    steps...
+    \brief Installation, configuration, and first project setup.
 
-    \section1 Build
-    steps...
+    \section1 Overview
+
+    This guide walks you through installing Genesis-X, enabling the
+    modules in your Qt project, and integrating the documentation and
+    tools into Qt Creator.
+
+    By the end of this page you will have:
+
+    \list
+        \li Genesis-X installed on your system.
+        \li Documentation registered in Qt Creator / Qt Assistant.
+        \li A minimal project using the Genesis-X Core module.
+        \li Optional: QML assets and ORM enabled.
+    \endlist
+
+    \section1 Requirements
+
+    \list
+        \li Qt 6.5 or later (Genesis-X is tested with Qt 6.9 / 6.10).
+        \li Qt Creator (recommended for best integration).
+        \li A supported compiler toolchain per your Qt version.
+        \li CMake or qmake; Genesis-X focuses on qmake integration.
+    \endlist
+
+    \section1 Installation
+
+    Genesis-X is distributed with an installer script:
+
+    \list
+        \li \c install.sh for Linux and macOS.
+        \li \c install.bat for Windows (or \c install.sh in a bash
+            environment such as Git Bash).
+    \endlist
+
+    Run the installer from a terminal:
+
+    \code
+    # Linux / macOS
+    chmod +x install.sh
+    ./install.sh
+    \endcode
+
+    On Windows (CMD or PowerShell):
+
+    \code
+    install.bat
+    \endcode
+
+    The installer guides you through:
+
+    \list
+        \li Installing Genesis-X libraries and headers.
+        \li Installing QDoc / Qt help files.
+        \li Registering documentation in Qt Creator.
+        \li Installing Qt Creator snippets.
+        \li Installing Qt Creator wizard templates.
+        \li Optionally installing third-party integrations (for example,
+            Firebase support).
+    \endlist
+
+    \section1 Qt Creator integration
+
+    If you chose to install documentation and tools, the installer
+    automatically updates Qt Creator configuration so that:
+
+    \list
+        \li Genesis-X documentation appears under
+            \uicontrol {Help > Contents}.
+        \li The search index includes Genesis-X types and topics.
+        \li Qt Creator snippets become available for QML and C++.
+        \li Wizard templates appear in
+            \uicontrol {File > New Project}.
+    \endlist
+
+    If needed, you can manually add the documentation by opening:
+
+    \list
+        \li \uicontrol {Tools > Options > Help > Documentation}
+        \li Click \uicontrol {Add...}
+        \li Select the \c genesisx.qch file installed by Genesis-X.
+    \endlist
+
+    \section1 Adding Genesis-X to a qmake project
+
+    To use Genesis-X in an existing qmake-based project, open the
+    \c .pro file and add the required modules.
+
+    At minimum, add the Core module:
+
+    \code
+    QT += genesisx
+    \endcode
+
+    Enable additional modules as needed:
+
+    \code
+    QT += genesisx-utils      # helpers and utilities
+    QT += genesisx-orm        # ORM and HTTP controllers (optional)
+    QT += genesisx-physics    # physics for View3D (optional)
+    \endcode
+
+    Then run qmake again (or trigger a reconfigure in Qt Creator) and
+    rebuild the project.
+
+    \section1 Using the QML design system (assets)
+
+    The Genesis-X design system is shipped as a QML module, typically
+    under the name \c assets.
+
+    In your QML files:
+
+    \code
+    import QtQuick
+    import QtQuick.Controls
+    import assets 1.0
+
+    ApplicationWindow {
+        width: 800
+        height: 600
+        visible: true
+
+        // Example usage of a design-system component
+        Column {
+            anchors.centerIn: parent
+
+            AppTitle {
+                text: "Hello, Genesis-X"
+            }
+
+            PrimaryButton {
+                text: "Continue"
+            }
+        }
+    }
+    \endcode
+
+    The exact components available depend on the version of the assets
+    module shipped with your Genesis-X distribution. Refer to the
+    \l{Genesis-X Assets}{Assets Module} documentation for the full API.
+
+    \section1 Minimal C++ setup example
+
+    The following example shows a minimal C++ \c main.cpp that uses
+    Genesis-X alongside Qt Quick:
+
+    \code
+    #include <QGuiApplication>
+    #include <QQmlApplicationEngine>
+
+    #include <GenesisX/Core/GenesisXApplication.h>
+
+    int main(int argc, char *argv[])
+    {
+        QGuiApplication app(argc, argv);
+
+        gx::core::GenesisXApplication gxApp;
+        gxApp.initialize();
+
+        QQmlApplicationEngine engine;
+        const QUrl url(u"qrc:/main.qml"_qs);
+
+        QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                         &app, [url](QObject *obj, const QUrl &objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+        }, Qt::QueuedConnection);
+
+        engine.load(url);
+
+        return app.exec();
+    }
+    \endcode
+
+    The exact C++ entry classes (for example \c GenesisXApplication)
+    may vary depending on your installed Genesis-X version and chosen
+    modules. Check the \l{Genesis-X core system}{Core Module} documentation for
+    the authoritative API reference.
+
+    \section1 Creating a new project using the wizard
+
+    When the wizard templates are installed, you can create a new
+    Genesis-X project directly from Qt Creator:
+
+    \list 1
+        \li Open Qt Creator.
+        \li Select \uicontrol {File > New Project}.
+        \li In the left-hand \uicontrol {Projects} tree, locate the
+            \e {Genesis-X} category.
+        \li Choose a Genesis-X application template (for example,
+            \e {Genesis-X Quick Application}).
+        \li Follow the wizard steps to configure the kit, build location,
+            and project options.
+    \endlist
+
+    The generated project already contains the correct \c QT += genesisx
+    entries and a minimal QML / C++ setup.
+
+    \section1 Next steps
+
+    After completing this guide, explore the following topics:
+
+    \list
+        \li \l{Genesis-X core system}{Core module overview}
+        \li \l{Genesis-X app system}{App Module}
+        \li \l{Genesis-X orm system}{Building HTTP / API backends}
+        \li \l{Genesis-X Assets}{Design system and QML components}
+        \li \l{Genesis-X Physics}{Physics and 3D integration}
+    \endlist
+
+    You can also use the search field in Qt Creator’s Help mode to
+    quickly navigate to Genesis-X classes, QML types, and topics.
  */

@@ -7,6 +7,13 @@
 
 #include "src/core/CommandControllerQml.h"
 
+/*!
+    \namespace gx::orm
+    \inmodule GenesisX
+    \title gx::orm Namespace
+    \brief Orm facilities.
+ */
+
 namespace gx::orm {
 
 void registerGenesisXCommandController(QQmlEngine*);

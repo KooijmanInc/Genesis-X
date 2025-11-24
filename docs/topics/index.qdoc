@@ -1,69 +1,145 @@
 /*!
     \page index.html
-    \title Genesis-X SDK
-    \inmodule GenesisX
-    \brief Cross-platform C++/Qt library. Current focus: local & push notifications.
+    \title Genesis-X Documentation
+    \brief Overview of the Genesis-X Framework for Qt 6.
 
-    \section1 What is Genesis-X?
-    Genesis-X is a general-purpose SDK for Qt/C++ projects. It bundles common
-    mobile/desktop features behind a single, consistent API so you can ship
-    faster across platforms.
+    \section1 Introduction
 
-    \section1 Current features
+    Genesis-X is a modular, high-performance application framework designed
+    for Qt 6. It provides production-ready tooling, fully integrated
+    developer utilities, and advanced modules to accelerate development
+    for desktop, mobile, and embedded platforms.
+
+    Genesis-X is created and maintained by
+    \e {Kooijman Incorporate Holding B.V.}, with a focus on real-world
+    developer experience, QML productivity, and clean modular extensibility.
+
+    This documentation provides an overview of all Genesis-X modules and
+    includes detailed C++, QML, tooling, and workflow references.
+
+    \section1 Features
+
+    Genesis-X contains several key modules:
+
     \list
-      \li \b Notifications — Local and push notifications with a unified API.
-          See the C++ class \l {gx::app::notifications::NotificationHandler} for details.
+        \li \b Core
+            Fundamental utilities, logging, configuration, and the
+            Genesis-X application environment.
+        \li \b Utils
+            Cross-platform helpers, platform abstractions, and additional
+            C++ convenience APIs.
+        \li \b Orm
+            A lightweight, high-level ORM layer with support for HTTP
+            controllers, request handling, response objects, and future
+            database connectors.
+        \li \b Assets (QML Design System) (In development)
+            A QML-based UI toolkit with components, typography, spacing,
+            color tokens, and layout helpers.
+        \li \b Physics (In development)
+            A modern physics extension intended for Qt Quick 3D View3D
+            applications.
+        \li \b Snippets (Developer Tools)
+            Qt Creator snippets for faster QML and C++ development.
+        \li \b Wizard Templates
+            Project templates integrated into Qt Creator’s “New Project”
+            wizard.
     \endlist
 
-    \section1 What’s next
-    \list
-      \li \b Remote API — A client API for talking to your backend server
-          (authentication, messaging, data sync).
-      \li \b Symfony server template — A ready-to-use Symfony package that
-          pairs with Genesis-X for an end-to-end setup (routes, DTOs, auth,
-          push webhooks). This will be published as a separate package you can
-          deploy or extend.
-    \endlist
+    \section1 Getting Started
 
-    \section1 Quick start (Notifications)
-    \section2 C++
+    To begin using Genesis-X, include the desired modules in your qmake
+    project:
+
     \code
-    #include <GenesisX/NotificationHandler.h>
-
-    NotificationHandler notifier;
-    notifier.requestPermission();
-    notifier.showLocal(QStringLiteral("Hello from Genesis-X"));
+    QT += genesisx
+    QT += genesisx_app_notifications
+    QT += genesisx_assets
+    QT += genesisx_orm        # optional
+    QT += genesisx_physics    # in development
     \endcode
 
-    \section2 QML
+    In your main.cpp add:
     \code
-    import GenesisX.Notifications
+    #include <GenesisX/CoreQml.h>
 
-    NotificationHandler {
-        onMessageReceived: (m) => console.log(m.title, m.body)
+    int main(int argc, char* argv[])
+    {
+        QApplication app(argc, argv);
+
+        GXCore::registerEnabledQmlModules(&engine);
     }
     \endcode
 
+    This will register the qmltypes of the chosen features.
+
+    In QML, import modules using:
+
+    \code
+    import GenesisX.Notifications 1.0
+    \endcode
+
+    \note If you select a feature like genesisx_app_notifications the you don't have to add the feature genesisx, this is always included when selecting a feature.
+
+    Refer to the \l {Getting started with Genesis-X} {Getting Started Guide}
+    for installation steps, module usage, and editor integration.
+
+    \section1 Module Overviews
+
+    \list
+
+        \li \l{Genesis-X core system}{Core Module}
+        \li \l{Genesis-X app system}{App Module}
+        \li \l{Genesis-X orm system}{ORM Module}
+        \li \l{Genesis-X Assets}{Assets UI Module (In development)}
+        \li \l{Genesis-X Physics}{Physics Module (In development)}
+
+    \endlist
+
+    \section1 Developer Tools
+
+    Genesis-X ships with several productivity tools:
+
+    \list
+        \li Qt Creator Snippets
+            Auto-completion helpers for common QML / C++ patterns.
+
+        \li Qt Creator Wizard Templates
+            Create new Genesis-X applications directly from
+            \uicontrol {File > New Project}.
+
+        \li QDoc / Qt Assistant Integration
+            This documentation is auto-registered in Qt Creator when the
+            installer is run.
+    \endlist
+
+    \tableofcontents
+
     \section1 See also
     \list
-        \li \l {Getting Started}
         \li \l {C++ Classes}
         \li \l {Namespaces}
         \li \l {Namespaces Orm}
-        \li \l {CoreQml.h}
-        \li \l {SystemInfo.h}
-        \li \l {gx::app::notifications::NotificationHandler}
-        \li \l {GenesisX.Notifications} (QML module)
-        \li \l {gx::app::ab::ABTesting}
-        \li \l {gx::app::analytics::Analytics}
-        \li \l {GenesisX.App.Biometrics} (QML module)
-        \li \l {gx::app::biometrics::Biometrics}
-        \li \l {GenesisX.App.Permissions} (QML module)
-        \li \l {gx::app::permissions::Permissions}
-
-        \li \l {gx::orm::CommandController}
-        \li \l {gx::orm::ConnectionController}
+        \li \l {getting-started.html}{Getting started with Genesis-X}
     \endlist
 
-*/
+    \section1 License
 
+    Genesis-X is dual-licensed under:
+
+    \list
+        \li \e {KooijmanInc Commercial License}
+        \li GPL-3.0-only
+    \endlist
+
+    See \l{License}{License Information} for details.
+
+    \section1 Support and Contact
+
+    Official website:
+    \e {https://www.genesis-x.io}
+
+    For commercial inquiries, licensing questions, or integration support,
+    contact:
+
+    \e {support@genesis-x.io}
+ */

@@ -53,6 +53,8 @@ Use **Conventional Commits** to make history and changelogs useful:
 - `fix: handle null token on android`
 - `docs: add installation steps`
 - `chore: bump firebase sdk script`
+- `tooling: tools section`
+- `build: scripts section`
 
 Small focused commits > giant “mixed” commits.
 
@@ -183,6 +185,30 @@ When filing a bug or feature request, please include (as applicable):
 - For Android: output of Gradle error and the generated `core/android-template/gradle.properties`
 - Repro steps or minimal example
 - Expected vs actual result
+
+---
+
+## Versioning Strategy (Semantic Versioning)
+
+MAJOR - Breaking changes
+- Increase when a change breaks existing usage of the public API or QML types.
+- Example: removing or renaming classes, functions, modules, or changing behavior in a non-compatible way.
+
+MINOR – New features (backwards-compatible)
+- Increase when new QML components, modules, public APIs, or non-breaking capabilities are added.
+- Existing code must continue to work without modification.
+
+PATCH – Bugfixes & internal improvements
+- Increase when fixing bugs, optimizing code, improving build scripts, or making internal changes that do not alter the public API.
+
+Examples
+- Adding a new module (genesisx-physics): → 1.1.0
+- Fixing a crash in Firebase integration: → 1.0.1
+- Removing/renaming a QML type used by apps: → 2.0.0
+
+Pre-1.0 versions
+- 0.x.x means the public API is still experimental.
+- Breaking changes may occur at any time until reaching 1.0.0.
 
 ---
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!-- Genesis-X skeleton -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.kooijmaninc.genesisx" android:installLocation="auto" android:versionCode="-- %%INSERT_VERSION_CODE%% --" android:versionName="-- %%INSERT_VERSION_NAME%% --">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.genesisx.publicapp" android:installLocation="auto" android:versionCode="-- %%INSERT_VERSION_CODE%% --" android:versionName="-- %%INSERT_VERSION_NAME%% --">
     <!-- %%INSERT_PERMISSIONS -->
     <!-- %%INSERT_FEATURES -->
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true"/>
@@ -10,6 +10,7 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <meta-data android:name="android.app.background_running" android:value="true"/>
             <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
             <meta-data android:name="android.app.arguments" android:value="-- %%INSERT_APP_ARGUMENTS%% --"/>
         </activity>
@@ -17,5 +18,6 @@
         <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.qtprovider" android:exported="false" android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/qtprovider_paths"/>
         </provider>
+        <service android:name="com.genesisx.background.GXAudioService" android:exported="false" android:foregroundServiceType="mediaPlayback"/>
     </application>
 </manifest>

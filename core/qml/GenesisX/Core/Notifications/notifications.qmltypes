@@ -3,9 +3,9 @@ import QtQuick.tooling 1.2
 Module {
     dependencies: ["QtQml 6.0", "QtQuick 6.0"]
     Component {
-        name: "GenesisX.Core.Notifications.NotificationHandler"
+        name: "NotificationHandler"
         prototype: "QObject"
-        exports: ["GenesisX.Core.Notifications/NotificationHandler 1.0"]
+        exports: ["GenesisX.Notifications/NotificationHandler 1.0"]
 
         Property {
             name: "initialized"

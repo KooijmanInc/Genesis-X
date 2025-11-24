@@ -12,10 +12,39 @@ ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 DEST="$ROOT/3rdparty/firebase_cpp_sdk"
 DEPS="$ROOT/config/deps.json"
 
+if [ -d "/mnt/c" ]; then
+  JQ_BIN="$ROOT/tools/jq-windows-amd64.exe"
+  DEPS="$(wslpath -w "$DEPS")"
+else
+  JQ_BIN="jq"
+fi
+
+if ! $JQ_BIN -V >/dev/null 2>&1; then
+  echo "❌ 'jq' is required but not found."
+  echo "   Please install jq or add it to PATH."
+  echo "   - Windows (Qt terminal): put jq.exe somewhere and add it to PATH,"
+  echo "     or into tools/jq/jq.exe and adjust this script."
+  echo "   - Linux:  sudo apt-get install jq"
+  echo "   - macOS:  brew install jq"
+  exit 1
+fi
+
+#read_json() {
+#  local filter="${1:-}"
+#  if [ -z "$filter" ]; then
+#    echo "read_json: missing jq filter" >&2
+#    exit 1
+#  fi
+
+#  "$JQ_BIN" -r "$filter" "$DEPS" | tr -d '\r' | tr -d '\n'
+#}
+
+#read_json
+
 # Read from deps.json
-VER="$(jq -r '.firebase.version' "$DEPS")"
-URL="$(jq -r '.firebase.url' "$DEPS")"
-EXPECTED_SHA="$(jq -r '.firebase.sha256' "$DEPS")"
+VER="$($JQ_BIN -r '.firebase.version' "$DEPS" | tr -d '\r' | tr -d '\n')"
+URL="$($JQ_BIN -r '.firebase.url' "$DEPS" | tr -d '\r' | tr -d '\n')"
+EXPECTED_SHA="$($JQ_BIN -r '.firebase.sha256' "$DEPS" | tr -d '\r' | tr -d '\n')"
 
 mkdir -p "$ROOT/3rdparty"
 
@@ -58,8 +87,33 @@ else
   echo "⚠️  No SHA-256 provided in deps.json. Skipping verification."
 fi
 
-echo "📦 Unpacking..."
-unzip -q "$ZIP" -d "$tmp"
+echo "📦 Unpacking (this can take several minutes since average size is 8GB)..."
+unzip -q "$ZIP" -d "$tmp" &
+unzip_pid=$!
+
+# Simple spinner
+spinner='|/-\'
+i=0
+
+# Spinner loop
+while kill -0 "$unzip_pid" 2>/dev/null; do
+  i=$(( (i + 1) % 4 ))
+  printf "\r📦 Unpacking... %s" "${spinner:$i:1}"
+  sleep 0.2
+done
+
+# Make sure we get the real exit code
+wait "$unzip_pid"
+unzip_status=$?
+
+printf "\r"  # clear spinner line
+
+if [ $unzip_status -ne 0 ]; then
+  echo "❌ unzip failed with status $unzip_status"
+  exit $unzip_status
+fi
+
+echo "✅ Unpacking complete."
 
 # Google’s zip expands to a folder named 'firebase_cpp_sdk'
 if [[ ! -d "$tmp/firebase_cpp_sdk" ]]; then
@@ -67,6 +121,36 @@ if [[ ! -d "$tmp/firebase_cpp_sdk" ]]; then
   exit 1
 fi
 
+echo "🚚 Moving Firebase C++ SDK into place (this can take a moment)..."
+
+if [[ -d "$DEST" ]]; then
+  echo "✅ firebase_cpp_sdk already present at: $DEST"
+  exit 0
+fi
+
 mv "$tmp/firebase_cpp_sdk" "$DEST"
+#mv_pid=$!
+
+#spinner='|/-\'
+#i=0
+
+## Spinner while mv is running
+#while kill -0 "$mv_pid" 2>/dev/null; do
+#    i=$(( (i + 1) % 4 ))
+#    printf "\r🚚 Moving... %s" "${spinner:$i:1}"
+#    sleep 0.2
+#done
+
+## Wait for mv to finish and capture status
+#wait "$mv_pid"
+#mv_status=$?
+
+## Clear spinner line
+#printf "\r"
+
+#if [ $mv_status -ne 0 ]; then
+#    echo "❌ Moving Firebase C++ SDK failed (exit code $mv_status)"
+#    exit $mv_status
+#fi
 echo "✅ Firebase C++ SDK v$VER ready at: $DEST"
 

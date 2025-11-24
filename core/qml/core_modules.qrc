@@ -3,8 +3,6 @@
 
 <RCC>
     <qresource prefix="/qt/qml">
-        <file>GenesisX/Core/Navigation/Link.qml</file>
-        <file>GenesisX/Core/Navigation/NavHost.qml</file>
         <file>GenesisX/Core/Navigation/qmldir</file>
         <file>GenesisX/Core/Notifications/notifications.qmltypes</file>
         <file>GenesisX/Core/Notifications/qmldir</file>

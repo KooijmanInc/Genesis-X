@@ -3,199 +3,95 @@
 <head>
   <meta charset="utf-8">
 <!-- index.qdoc -->
-  <meta name="description" content="Cross-platform C++/Qt library. Current focus: local &amp; push notifications.">
-  <title>Genesis-X SDK | index.html 1.0</title>
-<style>
-html, body {background-color: #262626;width: 100%;height: 100%;padding: 0 0 0 20px;margin: -20px -30px -20px -20px;font: normal 400 14px/1.2 Arial;font-family: Arial, Helvetica;} .main-body {
-background-color: #262626;
-color: #d0d0d0;
-margin-top: 50px;
-}
-.main-margin {margin: 0 15px 0 0px;padding: 10px;} a:link {
-color: #1ec974;
-text-decoration: none;
-text-align: left;
-}
-a.qa-mark:target:before {
-content: "***";
-color: #ff0000;
-}
-a:hover {
-color: #1ec974;
-text-decoration: underline;
-text-align: left;
-}
-a:visited {
-color: #1ec974;
-text-align: left;
-}
-a:visited:hover {
-color: #1ec974;
-text-align: left;
-}
-.navigationbar {
-display: block;
-position: relative;
-border-top: 1px solid #404142;
-border-bottom: 1px solid #404142;
-background-color: #353637;
-z-index: 1;
-height: 20px;
-padding-left: 30px;
-margin: 0px;
-margin-left: -35px !important;
-margin-right: -15px;
-}
-.navigationbar ul {
-margin: 0;
-padding: 0;
-}
-.navigationbar ul li {
-list-style-type: none;
-margin: 0;
-padding-top: 2px;
-height: 20px;
-}
-.navigationbar ul li a, .navigationbar td a {
-display: block;
-text-decoration: none;
-background: url(../images/arrow_bc.png);
-background-repeat: no-repeat;
-background-position: right;
-padding-right: 17px;
-}
-.navigationbar li {
-float: left;
-}
-@media screen {
-.title {
-color: #d0d0d0;
-font-size: 20px;
-font-weight: normal;
-left: 0;
-padding-bottom: 15px;
-padding-left: 20px;
-padding-top: 15px;
-position: absolute;
-right: 0;
-top: 0;
-background-color: #262626;
-border-bottom: 1px #404142 solid;
-font-weight: bold;
-margin-left: 10px;
-margin-right: 0;
-}
-}
-.footer {
-text-align: left;
-padding-top: 45px;
-padding-left: 5px;
-margin-top: 45px;
-margin-bottom: 45px;
-font-size: 10px;
-border-top: 1px solid #404142;
-}
-.footer p {
-line-height: 14px;
-font-size: 11px;
-padding: 0;
-margin: 0;
-}
-.footer a[href*="http://"], a[href*="ftp://"],
- a[href*="https://"] {
-font-weight: bold;
-}
-.footerNavi {
-width: auto;
-text-align: right;
-margin-top: 50px;
-z-index: 1;
-}
-h1 {padding-left: 40px;} h2, p.h2 {
-font: 500 16px/1.2 Arial;
-font-weight: 100;
-background-color: #353637;
-padding: 4px;
-padding-left: 10px;
-margin-bottom: 15px;
-margin-left: -10px;
-margin-right: -20px;
-margin-top: 30px;
-border-top: #404142 1px solid;
-border-bottom: #404142 1px solid;
-max-width: 100%;
-}
-h2:target {
-background-color: #F2F3D4;
-}
-</style> </head>
-<body class="main-body"><div class="main-body main-margin">
-<div class="header" id="qtdocheader">
-<div class="main">
-<div class="main-rounded">
+  <meta name="description" content="Overview of the Genesis-X Framework for Qt 6.">
+  <title>Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
 <div class="navigationbar">
-<ul>
-<li><a href="index.html">index.html</a></li>
-<li>Genesis-X SDK</li>
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li>Genesis-X Documentation</li>
 </ul>
 </div>
-</div>
-<div class="content"> <div class="line">
-<div class="content mainContent">
-<h1 class="title">Genesis-X SDK</h1>
+<h1 class="title">Genesis-X Documentation</h1>
 <!-- $$$index.html-description -->
 <div class="descr" id="details">
-<h2 id="what-is-genesis-x">What is Genesis-X?</h2>
-<p>Genesis-X is a general-purpose SDK for Qt/C++ projects. It bundles common mobile/desktop features behind a single, consistent API so you can ship faster across platforms.</p>
-<h2 id="current-features">Current features</h2>
+<h2 id="introduction">Introduction</h2>
+<p>Genesis-X is a modular, high-performance application framework designed for Qt 6. It provides production-ready tooling, fully integrated developer utilities, and advanced modules to accelerate development for desktop, mobile, and embedded platforms.</p>
+<p>Genesis-X is created and maintained by <i>Kooijman Incorporate Holding B.V.</i>, with a focus on real-world developer experience, QML productivity, and clean modular extensibility.</p>
+<p>This documentation provides an overview of all Genesis-X modules and includes detailed C++, QML, tooling, and workflow references.</p>
+<h2 id="features">Features</h2>
+<p>Genesis-X contains several key modules:</p>
 <ul>
-<li><b>Notifications</b> &mdash; Local and push notifications with a unified API. See the C++ class <a href="gx-app-notifications-notificationhandler.html" translate="no">gx::app::notifications::NotificationHandler</a> for details.</li>
+<li><b>Core</b> Fundamental utilities, logging, configuration, and the Genesis-X application environment.</li>
+<li><b>Utils</b> Cross-platform helpers, platform abstractions, and additional C++ convenience APIs.</li>
+<li><b>Orm</b> A lightweight, high-level ORM layer with support for HTTP controllers, request handling, response objects, and future database connectors.</li>
+<li><b>Assets</b> (QML Design System) (In development) A QML-based UI toolkit with components, typography, spacing, color tokens, and layout helpers.</li>
+<li><b>Physics</b> (In development) A modern physics extension intended for Qt Quick 3D View3D applications.</li>
+<li><b>Snippets</b> (Developer Tools) Qt Creator snippets for faster QML and C++ development.</li>
+<li><b>Wizard</b> Templates Project templates integrated into Qt Creator’s “New Project” wizard.</li>
 </ul>
-<h2 id="what-s-next-0a20c90d">What’s next</h2>
-<ul>
-<li><b>Remote</b> API &mdash; A client API for talking to your backend server (authentication, messaging, data sync).</li>
-<li><b>Symfony</b> server template &mdash; A ready-to-use Symfony package that pairs with Genesis-X for an end-to-end setup (routes, DTOs, auth, push webhooks). This will be published as a separate package you can deploy or extend.</li>
-</ul>
-<h2 id="quick-start-notifications">Quick start (Notifications)</h2>
-<h3 id="c">C++</h3>
-<pre class="cpp" translate="no"><span class="preprocessor">#include &lt;GenesisX/NotificationHandler.h&gt;</span>
+<h2 id="getting-started">Getting Started</h2>
+<p>To begin using Genesis-X, include the desired modules in your qmake project:</p>
+<pre class="cpp" translate="no">QT <span class="operator">+</span><span class="operator">=</span> genesisx
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_app_notifications
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_assets
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_orm        <span class="preprocessor"># optional</span>
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_physics    <span class="preprocessor"># in development</span></pre>
+<p>In your main.cpp add:</p>
+<pre class="cpp" translate="no"><span class="preprocessor">#include &lt;GenesisX/CoreQml.h&gt;</span>
 
-NotificationHandler notifier;
-notifier<span class="operator">.</span>requestPermission();
-notifier<span class="operator">.</span>showLocal(<span class="type">QStringLiteral</span>(<span class="string">&quot;Hello from Genesis-X&quot;</span>));</pre>
-<h3 id="qml">QML</h3>
-<pre class="cpp" translate="no">import GenesisX<span class="operator">.</span>Notifications
+<span class="type">int</span> main(<span class="type">int</span> argc<span class="operator">,</span> <span class="type">char</span><span class="operator">*</span> argv<span class="operator">[</span><span class="operator">]</span>)
+{
+    <span class="type">QApplication</span> app(argc<span class="operator">,</span> argv);
 
-NotificationHandler {
-    onMessageReceived: (m) <span class="operator">=</span><span class="operator">&gt;</span> console<span class="operator">.</span>log(m<span class="operator">.</span>title<span class="operator">,</span> m<span class="operator">.</span>body)
+    GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);
 }</pre>
+<p>This will register the qmltypes of the chosen features.</p>
+<p>In QML, import modules using:</p>
+<pre class="cpp" translate="no">import GenesisX<span class="operator">.</span>Notifications <span class="number">1.0</span></pre>
+<div class="admonition note">
+<p><b>Note: </b>If you select a feature like genesisx_app_notifications the you don't have to add the feature genesisx, this is always included when selecting a feature.</p>
+</div>
+<p>Refer to the <a href="getting-started.html">Getting Started Guide</a> for installation steps, module usage, and editor integration.</p>
+<h2 id="module-overviews">Module Overviews</h2>
+<ul>
+<li><a href="io-genesisx-core-qmlmodule.html" translate="no">Core Module</a></li>
+<li><a href="io-genesisx-app-qmlmodule.html" translate="no">App Module</a></li>
+<li><a href="io-genesisx-orm-qmlmodule.html" translate="no">ORM Module</a></li>
+<li><a href="assets.html">Assets UI Module (In development)</a></li>
+<li><a href="physics.html">Physics Module (In development)</a></li>
+</ul>
+<h2 id="developer-tools">Developer Tools</h2>
+<p>Genesis-X ships with several productivity tools:</p>
+<ul>
+<li>Qt Creator Snippets Auto-completion helpers for common QML / C++ patterns.</li>
+<li>Qt Creator Wizard Templates Create new Genesis-X applications directly from <b translate="no">File &gt; New Project</b>.</li>
+<li>QDoc / Qt Assistant Integration This documentation is auto-registered in Qt Creator when the installer is run.</li>
+</ul>
 <h2 id="see-also">See also</h2>
 <ul>
-<li><a href="getting-started.html">Getting Started</a></li>
 <li><a href="classes.html">C++ Classes</a></li>
 <li><a href="namespaces.html">Namespaces</a></li>
 <li><a href="namespaces-orm.html">Namespaces Orm</a></li>
-<li><a href="coreqml-h.html" translate="no">CoreQml.h</a></li>
-<li><a href="systeminfo-h.html" translate="no">SystemInfo.h</a></li>
-<li><a href="gx-app-notifications-notificationhandler.html" translate="no">gx::app::notifications::NotificationHandler</a></li>
-<li><a href="genesisx-notifications-qmlmodule.html" translate="no">GenesisX.Notifications</a> (QML module)</li>
-<li><a href="gx-app-ab-abtesting.html" translate="no">gx::app::ab::ABTesting</a></li>
-<li><a href="gx-app-analytics-analytics.html" translate="no">gx::app::analytics::Analytics</a></li>
-<li><a href="genesisx-app-biometrics-qmlmodule.html" translate="no">GenesisX.App.Biometrics</a> (QML module)</li>
-<li><a href="gx-app-biometrics-biometrics.html" translate="no">gx::app::biometrics::Biometrics</a></li>
-<li><a href="genesisx-app-permissions-qmlmodule.html" translate="no">GenesisX.App.Permissions</a> (QML module)</li>
-<li><a href="gx-app-permissions-permissions.html" translate="no">gx::app::permissions::Permissions</a></li>
-<li><a href="gx-orm-commandcontroller.html" translate="no">gx::orm::CommandController</a></li>
-<li><a href="gx-orm-connectioncontroller.html" translate="no">gx::orm::ConnectionController</a></li>
+<li><a href="getting-started.html">Getting started with Genesis-X</a></li>
 </ul>
+<h2 id="license">License</h2>
+<p>Genesis-X is dual-licensed under:</p>
+<ul>
+<li><i>KooijmanInc Commercial License</i></li>
+<li>GPL-3.0-only</li>
+</ul>
+<p>See <a href="index.html#license">License Information</a> for details.</p>
+<h2 id="support-and-contact">Support and Contact</h2>
+<p>Official website: <i>https://www.genesis-x.io</i></p>
+<p>For commercial inquiries, licensing questions, or integration support, contact:</p>
+<p><i>support@genesis-x.io</i></p>
 </div>
 <!-- @@@index.html -->
-</div>
-</div>
-</div></div>
-</div>
 <div class="qt-footer">
-<p>© 2025 Kooijman Incorporate Holding B.V. — Genesis-X</p>
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
 </div>
 </body>
 </html>

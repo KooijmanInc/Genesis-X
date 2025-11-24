@@ -21,7 +21,7 @@
         LIBS += -lgenesisx
     }
 
-    win32 {message(this is activated)
+    win32 {
         GX_DLL = $$shell_path($$LIBDIRS/genesisx.dll)
         GX_DLL_DEST = $$shell_path($$DEST_LIBDIRS/genesisx.dll)
         GX_A = $$shell_path($$LIBDIRS/libgenesisx.a)
@@ -71,6 +71,12 @@
             GX_GSERV_SRC = $$clean_path($$GX_ANDROID_GRADLE_SRC/google-services.json)
         }
         GX_GSERV_DST = $$clean_path($$GX_ANDROID_GRADLE_DST/google-services.json)
+        exists($$GX_ANDROID_GRADLE_DST/AndroidManifest.xml) {
+            GX_GAFEST_SRC = $$clean_path($$GX_ANDROID_GRADLE_DST/AndroidManifest.xml)
+        } else: exists($$GX_ANDROID_GRADLE_SRC/AndroidManifest.xml) {
+            GX_GAFEST_SRC = $$clean_path($$GX_ANDROID_GRADLE_SRC/AndroidManifest.xml)
+        }
+        GX_GAFEST_DST = $$clean_path($$GX_ANDROID_GRADLE_DST/AndroidManifest.xml)
         GX_GBUILD_SRC = $$GX_ANDROID_GRADLE_SRC/build.gradle
         GX_GBUILD_DST = $$GX_ANDROID_GRADLE_DST/build.gradle
         GX_GPROPERTIES_SRC = $$GX_ANDROID_GRADLE_SRC/gradle.properties
@@ -100,6 +106,14 @@
             message([genesisx] will copy google-services.json from: $$GX_GSERV_SRC to: $$GX_GSERV_DST)
         } else {
             message([genesisx] WARNING: google-services.json not found in template or existing in app to: $$GX_GSERV_DST)
+        }
+        if (!exists($$GX_GAFEST_DST)) {
+            QMAKE_PRE_LINK += \
+                $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_GAFEST_SRC) $$shell_quote($$GX_GAFEST_DST)
+
+            message([genesisx] will copy AndroidManifest.xml from: $$GX_GAFEST_SRC to: $$GX_GAFEST_DST)
+        } else {
+            message([genesisx] WARNING: AndroidManifest.xml not found in template or existing in app to: $$GX_GAFEST_DST)
         }
     }
 }

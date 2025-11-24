@@ -1,7 +1,7 @@
 {
     "firebase": {
         "version": "13.1.0",
-        "url": "https://dl.google.com/firebase/sdk/cpp/firebase_cpp_sdk_13.1.0.zip",
-        "sha256": "a45f5bc377219e0e7945fd7aef9ff0223d76974daa3af05a613c5125bdf92eb1"
+        "url": "https://dl.google.com/firebase/sdk/cpp/firebase_cpp_sdk_13.2.0.zip",
+        "sha256": "13fe274d5409bb1c0d7de932bfedd0a525f976a77714e21d168a79f0405d7ca0"
     }
 }

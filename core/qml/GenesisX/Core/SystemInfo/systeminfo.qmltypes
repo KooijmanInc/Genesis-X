@@ -3,9 +3,9 @@ import QtQuick.tooling 1.2
 Module {
     dependencies: ["QtQml 6.0", "QtQuick 6.0"]
     Component {
-        name: "gx::utils::SystemInfo"
+        name: "SystemInfo"
         prototype: "QObject"
-        exports: ["GenesisX.Core.SystemInfo/SystemInfo 1.0"]
+        exports: ["GenesisX.SystemInfo/SystemInfo 1.0"]
         singleton: true
         Method {
             name: "ensureAppUuid"

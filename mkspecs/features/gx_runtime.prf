@@ -14,6 +14,10 @@ contains(QT, genesisx) {
     include(conf/gx_core.prf)
 }
 
+contains(QT, genesisx_assets) {
+    include(gx_assets.prf)
+}
+
 contains(QT, genesisx_app_ab) {
     include(gx_app_ab.prf)
 }
