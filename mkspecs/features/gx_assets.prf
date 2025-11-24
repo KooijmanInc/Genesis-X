@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+!defined(__GX_ASSETS_PRF_INCLUDED__, var) {
+    __GX_ASSETS_PRF_INCLUDED__ = 1
+
+    message([genesisx_assets] module loaded from $$PWD)
+
+    RESOURCES += $$PWD/../../assets/gx_assets.qrc
+    QML_IMPORT_PATH += $$PWD/../../assets/qml
+    message(import paths from library: $$QML_IMPORT_PATH and resources: $$RESOURCES)
+}
