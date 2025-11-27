@@ -3,6 +3,7 @@
 
 TEMPLATE = aux
 DISTFILES += \
+    $$files(../3rdparty/firebase/*, true) \
     $$files(../assets/*, true) \
     $$files(../docs/*, true) \
     $$files($$PWD/../common/*, true) \

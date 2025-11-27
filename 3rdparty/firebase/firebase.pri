@@ -11,6 +11,8 @@ INCLUDEPATH += $$FIREBASE_HOME/include $$FIREBASE_HOME/libs
 android {
     contains(QT_ARCH, arm64-v8a) {
         FIREBASE_ABI_DIR = $$FIREBASE_HOME/libs/android/arm64-v8a
+    } else: contains(QT_ARCH, x86_64) {
+        FIREBASE_ABI_DIR = $$FIREBASE_HOME/libs/android/x86_64
     } else {
         warning([Firebase] Unknown QT_ARCH: $$ANDROID_ABI $$QT_ARCH)
     }

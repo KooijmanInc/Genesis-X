@@ -12,6 +12,9 @@ ios {
     CONFIG += staticlib
 } else:macos {
     CONFIG += shared staticlib
+} else:wasm {
+    CONFIG -= shared dll plugin
+    CONFIG += staticlib
 } else {
     CONFIG += shared
 }
@@ -39,7 +42,11 @@ win32-g++: QMAKE_LFLAGS_SHLIB += -Wl,--out-implib,$$DESTDIR/lib$${TARGET}.a
 # Physics links to core; search same central dir
 QMAKE_LIBDIR += $$DESTDIR
 android {
-    LIBS += -lgenesisx_arm64-v8a
+    contains(QT_ARCH, arm64-v8a) {
+        LIBS += -lgenesisx_arm64-v8a
+    } else: contains(QT_ARCH, x86_64) {
+        LIBS += -lgenesisx_x86_64
+    }
 } else {
     LIBS += -lgenesisx
 }

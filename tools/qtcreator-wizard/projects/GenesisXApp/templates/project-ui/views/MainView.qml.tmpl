@@ -38,6 +38,16 @@ Window {
        }
     }
 
+    Permissions {
+        id: perms
+
+        Component.onCompleted: {
+            if (!perms.notificaitonsEnabled) {
+                perms.requestNotifications()
+            }
+        }
+    }
+
     SplashWobble {
         id: splash
         anchors.fill: parent

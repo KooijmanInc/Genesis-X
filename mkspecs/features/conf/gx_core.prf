@@ -13,7 +13,11 @@
 
     GX_ABI = $$QT_ARCH
     isEmpty(GX_ABI): GX_ABI = arm64-v8a
-    contains(GX_ABI, arm64): GX_ABI = arm64-v8a
+    contains(GX_ABI, arm64) {
+        GX_ABI = arm64-v8a
+    } else: contains(GX_ABI, x86_64) {
+        GX_ABI = x86_64
+    }
 
     android {
         LIBS += -lgenesisx_$${GX_ABI}
@@ -114,6 +118,21 @@
             message([genesisx] will copy AndroidManifest.xml from: $$GX_GAFEST_SRC to: $$GX_GAFEST_DST)
         } else {
             message([genesisx] WARNING: AndroidManifest.xml not found in template or existing in app to: $$GX_GAFEST_DST)
+        }
+    }
+
+    linux:!android {
+        # Embed a runpath that points to the exe directory at runtime
+        QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+        # (Optional) also add specific config dirs if you want:
+        QMAKE_RPATHDIR += $$DEST_LIBDIRS
+
+        SO_LIST = $$files($$LIBDIRS/libgenesisx.so*)
+        message([genesisx] Linux copy libs: $$SO_LIST to: $$DEST_LIBDIRS)
+
+        for (f, SO_LIST) {
+            # message(file is: f)
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DEST_LIBDIRS)/
         }
     }
 }

@@ -48,7 +48,7 @@ win32 {
 }
 
 android {
-    ANDROID_ABIS = arm64-v8a
+    ANDROID_ABIS = arm64-v8a x86_64
 }
 ios {
     QMAKE_INFO_PLIST = $$PWD/apple/ios/Info.plist
@@ -84,8 +84,11 @@ QML_IMPORT_PATH += $$PWD
 QML2_IMPORT_PATH += $$PWD
 
 contains(ANDROID_TARGET_ARCH,arm64-v8a) {
-    ANDROID_PACKAGE_SOURCE_DIR = \\
+    ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
+} else: contains(ANDROID_TARGET_ARCH,x86_64) {
+ANDROID_PACKAGE_SOURCE_DIR = \
+    $$PWD/android
 }
 
 RESOURCES += \\
