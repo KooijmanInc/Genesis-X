@@ -153,6 +153,7 @@ static void dumpConnectivity(const QUrl& url, int timeoutMs = 2000) {
     qInfo() << "DNS error:" << info.error() << info.errorString();
     for (const auto& addr : info.addresses()) qInfo() << "Resolved:" << addr.toString();
 
+#ifndef Q_OS_WASM
     // 3) Local interfaces
     for (const auto& ifc : QNetworkInterface::allInterfaces()) {
         if (!(ifc.flags() & QNetworkInterface::IsUp)) continue;
@@ -161,7 +162,7 @@ static void dumpConnectivity(const QUrl& url, int timeoutMs = 2000) {
             addrs << e.ip().toString();
         qInfo() << "IF:" << ifc.humanReadableName() << ifc.name() << addrs;
     }
-
+#endif
     // 4) Try each resolved address explicitly
     const int port = url.port(-1) == -1 ? (url.scheme()=="https"?443:80) : url.port();
     if (info.addresses().isEmpty()) {
@@ -212,11 +213,12 @@ static inline void debugConnections(auto reply)
     QHostInfo::lookupHost("api-hm2.kooijmaninc.nl", [](const QHostInfo &hi){
         qDebug() << "[DNS]" << hi.hostName() << "addrs =" << hi.addresses();
     });
-
+#ifndef Q_OS_WASM
     QObject::connect(reply, &QNetworkReply::sslErrors, reply,
                      [](const QList<QSslError>& errs){
                          qDebug() << "[HTTP] sslErrors" << errs;
                      });
+#endif
     QObject::connect(reply, &QNetworkReply::errorOccurred, reply,
                      [reply](QNetworkReply::NetworkError e){
                          qDebug() << "[HTTP] errorOccurred" << e << reply->errorString();
@@ -475,8 +477,9 @@ static QFuture<HttpResponse> runWithTimeout(QNetworkAccessManager* nam, const Ht
     QPointer<QNetworkAccessManager> namPtr(nam);
     QNetworkReply* reply = start(nam, req);
     QPointer<QNetworkReply> replyPtr(reply);
-
+#ifndef Q_OS_WASM
     QList<QSslError> sslErrs;
+
     QObject::connect(reply, &QNetworkReply::sslErrors, reply, [&](const QList<QSslError>& errs){
         sslErrs = errs;
 
@@ -487,6 +490,9 @@ static QFuture<HttpResponse> runWithTimeout(QNetworkAccessManager* nam, const Ht
             debugConnections(reply);
         }
     });
+#else
+    QList<int> sslErrs;
+#endif
 
     const int timeoutMs = (cfg.timeoutMs > 0) ? cfg.timeoutMs : 15000;
     QTimer* timer = new QTimer(reply);
@@ -512,9 +518,9 @@ static QFuture<HttpResponse> runWithTimeout(QNetworkAccessManager* nam, const Ht
 
         for (const auto& h : reply->rawHeaderPairs())
             r.headers.insert(h.first, h.second);
-
+#ifndef Q_OS_WASM
         r.sslErrors = sslErrs;
-
+#endif
         if (r.errorstring.isEmpty() && r.netError != QNetworkReply::NoError)
             r.errorstring = reply->errorString();
 

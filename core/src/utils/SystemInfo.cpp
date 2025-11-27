@@ -67,7 +67,6 @@ QString SystemInfo::ensureAppUuid()
     id = QSysInfo::machineUniqueId();
     s.setValue("app/uuid", id);
 #else
-    QSettings s;
     id = s.value("app/uuid").toString();
     if (id.isEmpty()) {
         id = QUuid::createUuid().toString(QUuid::WithoutBraces);

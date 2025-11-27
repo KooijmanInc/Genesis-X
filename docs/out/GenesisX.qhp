@@ -7,13 +7,78 @@
         <filterAttribute>GenesisX</filterAttribute>
         <toc>
             <section ref="index.html" title="Genesis-X Documentation">
-                <section ref="getting-started.html" title="Getting started"/>
+                <section ref="getting-started.html" title="Getting started">
+                    <section ref="qml-io-genesisx-app-biometrics.html" title="Biometrics Type Reference">
+                        <section ref="qml-io-genesisx-app-biometrics-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="classes.html" title="C++ Classes"/>
+                    <section ref="codegen-h.html" title="Codegen.h"/>
+                    <section ref="qml-io-genesisx-orm-commandcontroller.html" title="CommandController Type Reference">
+                        <section ref="qml-io-genesisx-orm-commandcontroller-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="qml-io-genesisx-orm-connectioncontroller.html" title="ConnectionController Type Reference">
+                        <section ref="qml-io-genesisx-orm-connectioncontroller-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="coreqml-h.html" title="CoreQml.h - Core qml register types"/>
+                    <section ref="app-classes.html" title="Genesis-X App C++ Classes"/>
+                    <section ref="assets.html" title="Genesis-X Assets"/>
+                    <section ref="genesisx-app-biometrics-qmlmodule.html" title="Genesis-X Biometrics (QML)"/>
+                    <section ref="genesisx-commandcontroller-qmlmodule.html" title="Genesis-X CommandController (QML)"/>
+                    <section ref="genesisx-connectioncontroller-qmlmodule.html" title="Genesis-X ConnectionController (QML)"/>
+                    <section ref="core-classes.html" title="Genesis-X Core C++ Classes"/>
+                    <section ref="index.html" title="Genesis-X Documentation"/>
+                    <section ref="genesisx-notifications-qmlmodule.html" title="Genesis-X Notifications (QML)"/>
+                    <section ref="orm-classes.html" title="Genesis-X Orm C++ Classes"/>
+                    <section ref="genesisx-permissions-qmlmodule.html" title="Genesis-X Permissions (QML)"/>
+                    <section ref="physics.html" title="Genesis-X Physics"/>
+                    <section ref="genesisx-systeminfo-qmlmodule.html" title="Genesis-X SystemInfo (QML)"/>
+                    <section ref="io-genesisx-app-qmlmodule.html" title="Genesis-X app system"/>
+                    <section ref="io-genesisx-core-qmlmodule.html" title="Genesis-X core system"/>
+                    <section ref="io-genesisx-orm-qmlmodule.html" title="Genesis-X orm system"/>
+                    <section ref="getting-started.html" title="Getting started with Genesis-X"/>
+                    <section ref="namespaces.html" title="Namespaces"/>
+                    <section ref="namespaces-orm.html" title="Namespaces Orm"/>
+                    <section ref="qml-io-genesisx-app-notificationhandler.html" title="NotificationHandler Type Reference">
+                        <section ref="qml-io-genesisx-app-notificationhandler-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="qml-genesisx-permissions-permissions.html" title="Permissions Type Reference">
+                        <section ref="qml-genesisx-permissions-permissions-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="qml-io-genesisx-core-systeminfo.html" title="SystemInfo Type Reference">
+                        <section ref="qml-io-genesisx-core-systeminfo-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="systeminfo-h.html" title="SystemInfo.h - System information"/>
+                    <section ref="gx.html" title="gx"/>
+                    <section ref="gx-app.html" title="app"/>
+                    <section ref="gx-app-ab.html" title="ab"/>
+                    <section ref="gx-app-ab-abtesting.html" title="ab::ABTesting Class Reference"/>
+                    <section ref="gx-app-analytics.html" title="analytics"/>
+                    <section ref="gx-app-analytics-analytics.html" title="analytics::Analytics Class Reference"/>
+                    <section ref="gx-app-audiorecorder.html" title="audiorecorder"/>
+                    <section ref="gx-app-audiorecorder-audiorecorder.html" title="audiorecorder::AudioRecorder Class Reference"/>
+                    <section ref="gx-app-auth.html" title="auth"/>
+                    <section ref="gx-app-auth-auth.html" title="auth::Auth Class Reference"/>
+                    <section ref="gx-app-biometrics.html" title="biometrics"/>
+                    <section ref="gx-app-biometrics-biometrics.html" title="biometrics::Biometrics Class Reference"/>
+                    <section ref="gx-app-notifications.html" title="notifications"/>
+                    <section ref="gx-app-notifications-notificationhandler.html" title="notifications::NotificationHandler Class Reference"/>
+                    <section ref="gx-app-permissions.html" title="permissions"/>
+                    <section ref="gx-app-permissions-permissions.html" title="permissions::Permissions Class Reference"/>
+                    <section ref="gx-core.html" title="core"/>
+                    <section ref="gx-orm.html" title="orm"/>
+                    <section ref="gx-orm-commandcontroller.html" title="orm::CommandController Class Reference"/>
+                    <section ref="gx-orm-connectioncontroller.html" title="orm::ConnectionController Class Reference"/>
+                    <section ref="gx-orm-codegen.html" title="codegen"/>
+                    <section ref="gx-utils.html" title="utils"/>
+                </section>
                 <section ref="io-genesisx-core-qmlmodule.html" title="Core">
                     <section ref="qml-io-genesisx-core-systeminfo.html" title="SystemInfo Type Reference">
                         <section ref="qml-io-genesisx-core-systeminfo-members.html" title="List of all members"/>
                     </section>
                 </section>
                 <section ref="io-genesisx-app-qmlmodule.html" title="App">
+                    <section ref="genesisx-app-biometrics-qmlmodule.html" title="Genesis-X Biometrics (QML)"/>
+                    <section ref="genesisx-notifications-qmlmodule.html" title="Genesis-X Notifications (QML)"/>
                     <section ref="qml-io-genesisx-app-biometrics.html" title="Biometrics Type Reference">
                         <section ref="qml-io-genesisx-app-biometrics-members.html" title="List of all members"/>
                     </section>
@@ -22,6 +87,8 @@
                     </section>
                 </section>
                 <section ref="io-genesisx-orm-qmlmodule.html" title="Orm">
+                    <section ref="genesisx-commandcontroller-qmlmodule.html" title="Genesis-X CommandController (QML)"/>
+                    <section ref="genesisx-connectioncontroller-qmlmodule.html" title="Genesis-X ConnectionController (QML)"/>
                     <section ref="qml-io-genesisx-orm-commandcontroller.html" title="CommandController Type Reference">
                         <section ref="qml-io-genesisx-orm-commandcontroller-members.html" title="List of all members"/>
                     </section>
@@ -57,16 +124,19 @@
             <keyword name="ConnectionController" id="QML.io.genesisx.orm.ConnectionController" ref="qml-io-genesisx-orm-connectioncontroller.html"/>
             <keyword name="Genesis-X App C++ Classes" id="Genesis-X App C++ Classes" ref="app-classes.html"/>
             <keyword name="Genesis-X Assets" id="Genesis-X Assets" ref="assets.html"/>
+            <keyword name="Genesis-X Biometrics (QML)" id="Genesis-X Biometrics (QML)" ref="genesisx-app-biometrics-qmlmodule.html"/>
+            <keyword name="Genesis-X CommandController (QML)" id="Genesis-X CommandController (QML)" ref="genesisx-commandcontroller-qmlmodule.html"/>
+            <keyword name="Genesis-X ConnectionController (QML)" id="Genesis-X ConnectionController (QML)" ref="genesisx-connectioncontroller-qmlmodule.html"/>
             <keyword name="Genesis-X Core C++ Classes" id="Genesis-X Core C++ Classes" ref="core-classes.html"/>
             <keyword name="Genesis-X Documentation" id="Genesis-X Documentation" ref="index.html"/>
+            <keyword name="Genesis-X Notifications (QML)" id="Genesis-X Notifications (QML)" ref="genesisx-notifications-qmlmodule.html"/>
             <keyword name="Genesis-X Orm C++ Classes" id="Genesis-X Orm C++ Classes" ref="orm-classes.html"/>
+            <keyword name="Genesis-X Permissions (QML)" id="Genesis-X Permissions (QML)" ref="genesisx-permissions-qmlmodule.html"/>
             <keyword name="Genesis-X Physics" id="Genesis-X Physics" ref="physics.html"/>
-            <keyword name="GenesisX.App.Biometrics" id="QML.Biometrics.App.GenesisX" ref="genesisx-app-biometrics-qmlmodule.html"/>
-            <keyword name="GenesisX.CommandController" id="QML.CommandController.GenesisX" ref="genesisx-commandcontroller-qmlmodule.html"/>
-            <keyword name="GenesisX.ConnectionController" id="QML.ConnectionController.GenesisX" ref="genesisx-connectioncontroller-qmlmodule.html"/>
-            <keyword name="GenesisX.Notifications" id="QML.Notifications.GenesisX" ref="genesisx-notifications-qmlmodule.html"/>
-            <keyword name="GenesisX.Permissions" id="QML.Permissions.GenesisX" ref="genesisx-permissions-qmlmodule.html"/>
-            <keyword name="GenesisX.SystemInfo" id="QML.SystemInfo.GenesisX" ref="genesisx-systeminfo-qmlmodule.html"/>
+            <keyword name="Genesis-X SystemInfo (QML)" id="Genesis-X SystemInfo (QML)" ref="genesisx-systeminfo-qmlmodule.html"/>
+            <keyword name="Genesis-X app system" id="Genesis-X app system" ref="io-genesisx-app-qmlmodule.html"/>
+            <keyword name="Genesis-X core system" id="Genesis-X core system" ref="io-genesisx-core-qmlmodule.html"/>
+            <keyword name="Genesis-X orm system" id="Genesis-X orm system" ref="io-genesisx-orm-qmlmodule.html"/>
             <keyword name="Getting started with Genesis-X" id="Getting started with Genesis-X" ref="getting-started.html"/>
             <keyword name="NEARBY_WIFI_DEVICES" id="Permissions::NEARBY_WIFI_DEVICES" ref="qml-genesisx-permissions-permissions.html#NEARBY_WIFI_DEVICES-prop"/>
             <keyword name="Namespaces" id="Namespaces" ref="namespaces.html"/>
@@ -107,9 +177,6 @@
             <keyword name="initialize" id="NotificationHandler::initialize" ref="qml-io-genesisx-app-notificationhandler.html#initialize-method"/>
             <keyword name="initialized" id="NotificationHandler::initialized" ref="qml-io-genesisx-app-notificationhandler.html#initialized-prop"/>
             <keyword name="initializedChanged" id="NotificationHandler::initializedChanged" ref="qml-io-genesisx-app-notificationhandler.html#initializedChanged-signal"/>
-            <keyword name="io.genesisx.app" id="QML.app.genesisx.io" ref="io-genesisx-app-qmlmodule.html"/>
-            <keyword name="io.genesisx.core" id="QML.core.genesisx.io" ref="io-genesisx-core-qmlmodule.html"/>
-            <keyword name="io.genesisx.orm" id="QML.orm.genesisx.io" ref="io-genesisx-orm-qmlmodule.html"/>
             <keyword name="isIgnoringBatteryOptimizations" id="Permissions::isIgnoringBatteryOptimizations" ref="qml-genesisx-permissions-permissions.html#isIgnoringBatteryOptimizations-method"/>
             <keyword name="notificationEnabledChanged" id="Permissions::notificationEnabledChanged" ref="qml-genesisx-permissions-permissions.html#notificationEnabledChanged-signal"/>
             <keyword name="notificationReceived" id="NotificationHandler::notificationReceived" ref="qml-io-genesisx-app-notificationhandler.html#notificationReceived-signal"/>

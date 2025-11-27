@@ -7,7 +7,7 @@ CONFIG += ordered
 
 SUBDIRS += core physics orm \
 
-!android:!ios {
+!android:!ios:!wasm {
     SUBDIRS += tools/gxgen
 }
 

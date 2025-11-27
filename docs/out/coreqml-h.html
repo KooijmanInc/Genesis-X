@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
 <!-- CoreQml.cpp -->
-  <meta name="description" content="Register all enabled GenesisX QML modules on engine.">
   <title>CoreQml.h - Core qml register types | Genesis-X Documentation 1.0</title>
 <link rel="stylesheet" type="text/css" href="style/style.css"/>
 </head>
@@ -25,27 +24,26 @@
 </ul>
 </div>
 <div class="sidebar-content" id="sidebar-content"></div></div>
-<h1 class="title" translate="no">CoreQml.h - Core qml register types</h1>
+<h1 class="title">CoreQml.h - Core qml register types</h1>
 <!-- $$$CoreQml.h-brief -->
-<p>Register all enabled GenesisX QML modules on <i translate="no">engine</i>. <a href="#details">More...</a></p>
+<p>Register all enabled GenesisX QML modules on <i>engine</i>. <a href="#details">More...</a></p>
 <!-- @@@CoreQml.h -->
-<div class="table"><table class="alignedsummary requisites" translate="no">
-<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign"> <code translate="no">#include &lt;CoreQml.h&gt;</code></td></tr>
-<tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr>
-</table></div>
+<div class="table"><table class="alignedsummary">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign"> <span class="preprocessor">#include &lt;CoreQml.h&gt;</span>
+</td></tr><tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr></table></div>
 <!-- $$$CoreQml.h-description -->
 <div class="descr">
 <h2 id="details">Detailed Description</h2>
-<p>Via <a href="coreqml-h.html" translate="no">CoreQml.h</a> you link the different modules. Which modules are registered depends on your qmake QT, e.g. genesisx_app_notifications, genesisx_app_ab, etc.</p>
+<p>Via <a href="coreqml-h.html">CoreQml.h</a> you link the different modules. Which modules are registered depends on your qmake QT, e.g&#x2e; genesisx_app_notifications, genesisx_app_ab, etc.</p>
 <h5 id="code-snippet-setting-modules-list-in-qmake">code snippet setting modules list in qmake:</h5>
-<pre class="cpp" translate="no">GX_LOADED_MODULES <span class="operator">=</span> $$QT
+<pre class="cpp">GX_LOADED_MODULES <span class="operator">=</span> $$QT
 GX_LOADED_MODULES_CSV <span class="operator">=</span> $$join(GX_LOADED_MODULES<span class="operator">,</span> <span class="string">&quot;,&quot;</span>)
 DEFINES <span class="operator">+</span><span class="operator">=</span> GX_LOADED_MODULES<span class="operator">=</span>\\\<span class="string">&quot;$$GX_LOADED_MODULES_CSV\\\&quot;
 </span></pre>
 <h5 id="and-set-in-main-cpp">And set in main.cpp.</h5>
-<pre class="cpp" translate="no">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine<span class="operator">,</span> GX_LOADED_MODULES);</pre>
+<pre class="cpp">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine<span class="operator">,</span> GX_LOADED_MODULES);</pre>
 <h5 id="optionally-you-can-load-everything-by-setting">Optionally you can load everything by setting.</h5>
-<pre class="cpp" translate="no">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);</pre>
+<pre class="cpp">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);</pre>
 </div>
 <!-- @@@CoreQml.h -->
 <div class="qt-footer">

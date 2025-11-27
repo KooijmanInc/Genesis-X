@@ -44,6 +44,9 @@ ios {
         $$PWD/src/app/Background/BackgroundAudio.mm
 #} else:win32 {
 #    CONFIG += dll
+} else:wasm {
+    CONFIG -= shared dll plugin
+    CONFIG += staticlib
 } else {
     CONFIG += shared
 }
@@ -148,6 +151,7 @@ FIREBASE_DEPENDENCIES_GRADLE = $$FIREBASE_CPP_SDK_DIR/Android/firebase_dependenc
 export(FIREBASE_CPP_SDK_DIR)
 export(FIREBASE_DEPENDENCIES_GRADLE)
 
+android {
 # Input template and expected generated output path in the SHADOW dir
 ANDROID_TPL_SRC_DIR = $$clean_path($$PWD/android-template)
 GRADLE_PROPS_IN     = $$ANDROID_TPL_SRC_DIR/gradle.properties.in
@@ -174,4 +178,7 @@ exists($$GRADLE_PROPS_IN) {
 }
 
 GRADLE_PROPS_DST = $$ANDROID_TPL_SRC_DIR/gradle.properties
-QMAKE_POST_LINK += $$QMAKE_COPY $$shell_path($$GRADLE_PROPS_GEN) $$shell_path($$GRADLE_PROPS_DST)
+QMAKE_POST_LINK += $$escape_expand(\\n\\t)$$QMAKE_COPY \
+                   $$shell_path($$GRADLE_PROPS_GEN) \
+                   $$shell_path($$GRADLE_PROPS_DST)
+}

@@ -36,6 +36,7 @@ isEqual(COMPILER_PATH, unknown-compiler) {
     }
     else: contains(QMAKE_CXX, g++) { COMPILER_PATH = gcc }
     else: contains(QMAKE_CXX, cl) { COMPILER_PATH = msvc }
+    else: contains(QMAKE_CXX, em++) { COMPILER_PATH = emcc }
     # else: COMPILER_PATH = android-clangcc
 }
 
@@ -46,7 +47,13 @@ isEqual(COMPILER_PATH, unknown-compiler) {
     } else:contains(SPEC, android) {
         message(on android)
     } else {
-        message($$COMPILER_PATH and $$QMAKE_CXX still to do)
+        android {
+            message(got an android)
+            COMPILER_PATH = android-clangcc
+        } else {
+            COMPILER_PATH = android-clangcc
+            message($$COMPILER_PATH and $$QMAKE_CXX still to do arch1 $$QMAKE_TARGET.arch arch2 $$QMAKE_HOST.arch arch3 $$QT_ARCH)
+        }
     }
 }
 
@@ -62,6 +69,10 @@ contains(ARCH, arm64)|contains(ARCH, aarch64)|equals(ARCH, arm64)|equals(ARCH, a
 }
 else: contains(ARCH, 64)|equals(ARCH, x86_64) { PROCESSOR_PATH = x64 }
 else: contains(ARCH, 86)|equals(ARCH, i386)|equals(ARCH, i686) { PROCESSOR_PATH = x86 }
+else {
+    # message(ARCH still to do arch1 $$QMAKE_TARGET.arch arch2 $$QMAKE_HOST.arch arch3 $$QT_ARCH)
+    PROCESSOR_PATH = $$QT_ARCH
+}
 
 # ---------- Build type ----------
 CONFIG(debug, debug|release|profile) {

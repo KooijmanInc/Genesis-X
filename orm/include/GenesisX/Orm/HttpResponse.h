@@ -19,7 +19,9 @@ struct GENESISX_ORM_EXPORT HttpResponse
     QByteArray body;
     QString errorstring;
     QNetworkReply::NetworkError netError = QNetworkReply::NoError;
+#ifndef Q_OS_WASM
     QList<QSslError> sslErrors;
+#endif
     QHash<QByteArray, QByteArray> headers;
 
     bool ok() const { return status >= 200 && status < 300 && netError == QNetworkReply::NoError; }

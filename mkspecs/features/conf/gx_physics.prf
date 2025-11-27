@@ -14,7 +14,11 @@
 
     GX_ABI = $$QT_ARCH
     isEmpty(GX_ABI): GX_ABI = arm64-v8a
-    contains(GX_ABI, arm64): GX_ABI = arm64-v8a
+    contains(GX_ABI, arm64) {
+        GX_ABI = arm64-v8a
+    } else: contains(GX_ABI, x86_64) {
+        GX_ABI = x86_64
+    }
 
     android {
         !contains(LIBS, -lgenesisx_$${GX_ABI}) {
