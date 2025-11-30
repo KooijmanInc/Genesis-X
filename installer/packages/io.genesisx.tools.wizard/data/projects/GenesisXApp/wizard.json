@@ -1,0 +1,190 @@
+{
+    "version": 1,
+    "id": "A.GenesisX.Lib",
+    "category": "D.ApplicationGenesisX",
+    "trDisplayName": "Genesis-X App",
+    "trDisplayCategory": "Genesis-X (Qt library for your application)",
+    "trDescription": "Creates a basic qml-based Qt application that is wired with the Genesis-X library, standard equipted with notifications for windows, android, linux, macos and ios. \n\nIt supports the former mentioned platforms and they are tested.",
+    "icon": "../genesis-x_icon.png",
+    "supportedProjectTypes": [ "Qt4ProjectManager.Qt4Project" ],
+    "featuresRequired": [ "QtSupport.Wizards.FeatureQt" ],
+    "enabled": "%{JS: isPluginRunning('qmakeprojectmanager')}",
+    "options": [
+      {
+        "key": "ProjectFile",
+        "value": "%{JS: Util.fileName(value('ProjectDirectory') + '/' + value('ProjectName'), 'pro')}"
+      }
+    ],
+
+    "pages": [
+        {
+            "typeId": "Project",
+            "trDisplayName": "Location",
+            "trShortTitle": "Location",
+            "data": {
+                "trDescription": "%{trDescription}"
+            }
+        },
+        {
+            "typeId": "Fields",
+            "trDisplayName": "Genesis-X Settings",
+            "trShortTitle": "Settings",
+            "data": [
+                { "name": "AppDescription", "trDisplayName": "Description of your app", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "Social media app" } },
+                { "name": "BundleId", "trDisplayName": "Bundle identifier", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "com.example.mygxapp" } },
+                { "name": "OrgName", "trDisplayName": "Organization", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "Kooijman Incorporate Holding B.V." } },
+                { "name": "CopyrightYear", "trDisplayName": "Copyright year", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "2025" } },
+                { "name": "Domain", "trDisplayName": "Company domain", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "example.com" } },
+                { "name": "UiDir", "trDisplayName": "UI subdir", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "gx-ui" } },
+                { "name": "LibPathWindows", "trDisplayName": "Genesis-X Library path windows", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "D:/<path-to>/Genesis-X" } },
+                { "name": "LibPathApple", "trDisplayName": "Genesis-X Library path apple", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/Users/<user>/<path-to>/Genesis-X" } },
+                { "name": "LibPathLinux", "trDisplayName": "Genesis-X Library path linux", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/home/<user>/<path-to>/Genesis-X" } }
+            ]
+        },
+        {
+            "trDisplayName": "Define Build System",
+            "trShortTitle": "Build System",
+            "typeId": "Fields",
+            "skipForSubprojects": true,
+            "data": [
+                {
+                    "name": "BuildSystem",
+                    "trDisplayName": "build system:",
+                    "type": "ComboBox",
+                    "persistanceKey": "BuildSystemType",
+                    "data": {
+                        "index": 1,
+                        "items": [
+                            {
+                                "trKey": "qmake",
+                                "value": "qmake",
+                                "condition": "%{JS: isPluginRunning('qmakeprojectmanager')}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "typeId": "Kits",
+            "trShortTitle": "Kits",
+            "trDisplayName": "Kit Selection",
+            "trDescription": "Although we don't exclude kits we any support Android, iOS, Desktop",
+            "data": {
+                "projectFilePath": "%{ProjectFile}"
+            }
+        },
+        {
+            "trDisplayName": "Project Management",
+            "trShortTitle": "Summary",
+            "typeId": "Summary"
+        }
+    ],
+
+    "generators": [
+        {
+            "typeId": "File",
+            "data": [
+                {
+                    "source": "templates/project.pro.tmpl",
+                    "target": "%{ProjectFile}",
+                    "openAsProject": true,
+                    "openInEditor": true
+                },
+                {
+                    "source": "templates/.qmake.conf.tmpl",
+                    "target": ".qmake.conf"
+                },
+                {
+                    "source": "templates/.gitignore.tmpl",
+                    "target": ".gitignore"
+                },
+                {
+                    "source": "templates/project-ui/ui.pro.tmpl",
+                    "target": "%{UiDir}/%{UiDir}.pro"
+                },
+                {
+                    "source": "templates/project-ui/views.qrc.tmpl",
+                    "target": "%{UiDir}/views.qrc"
+                },
+                {
+                    "source": "templates/project-ui/src/main.cpp.tmpl",
+                    "target": "%{UiDir}/src/main.cpp"
+                },
+                {
+                    "source": "templates/project-ui/views/MainView.qml.tmpl",
+                    "target": "%{UiDir}/views/MainView.qml"
+                },
+                {
+                    "source": "templates/project-ui/assets.qrc.tmpl",
+                    "target": "%{UiDir}/assets.qrc"
+                },
+                {
+                    "source": "templates/project-ui/assets/genesis-x.svg",
+                    "target": "%{UiDir}/assets/genesis-x.svg",
+                    "binary": true,
+                    "isBinary": true
+                },
+                {
+                    "source": "templates/project-ui/assets/logo.ico",
+                    "target": "%{UiDir}/assets/logo.ico",
+                    "binary": true,
+                    "isBinary": true
+                },
+                {
+                    "source": "templates/project-ui/assets/qmldir.tmpl",
+                    "target": "%{UiDir}/assets/qmldir"
+                },
+                {
+                    "source": "templates/project-ui/assets/Style.qml.tmpl",
+                    "target": "%{UiDir}/assets/Style.qml"
+                },
+                {
+                    "source": "templates/project-ui/components.qrc.tmpl",
+                    "target": "%{UiDir}/components.qrc"
+                },
+                {
+                    "source": "templates/project-ui/components/qmldir.tmpl",
+                    "target": "%{UiDir}/components/qmldir"
+                },
+                {
+                    "source": "templates/project-ui/components/SplashWobble.qml.tmpl",
+                    "target": "%{UiDir}/components/SplashWobble.qml"
+                },
+                {
+                    "source": "templates/project-ui/android/AndroidManifest.xml.tmpl",
+                    "target": "%{UiDir}/android/AndroidManifest.xml"
+                },
+                {
+                    "source": "templates/project-ui/android/google-services.json.tmpl",
+                    "target": "%{UiDir}/android/google-services.json"
+                },
+                {
+                    "source": "templates/project-ui/apple/ios/Info.plist.tmpl",
+                    "target": "%{UiDir}/apple/ios/Info.plist"
+                },
+                {
+                    "source": "templates/project-ui/apple/ios/GoogleService-Info.plist.tmpl",
+                    "target": "%{UiDir}/apple/ios/GoogleService-Info.plist"
+                },
+                {
+                    "source": "templates/project-ui/apple/ios/Entitlements.plist.tmpl",
+                    "target": "%{UiDir}/apple/ios/Entitlements.plist"
+                },
+                {
+                    "source": "templates/project-ui/apple/macos/Info.plist.tmpl",
+                    "target": "%{UiDir}/apple/macos/Info.plist"
+                },
+                {
+                    "source": "templates/project-ui/apple/macos/GoogleService-Info.plist.tmpl",
+                    "target": "%{UiDir}/apple/macos/GoogleService-Info.plist"
+                },
+                {
+                    "source": "templates/project-ui/apple/macos/Entitlements.plist.tmpl",
+                    "target": "%{UiDir}/apple/macos/Entitlements.plist"
+                }
+            ]
+        }
+    ]
+
+}

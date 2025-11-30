@@ -1,0 +1,58 @@
+LicenseRef-KooijmanInc-Commercial
+Version 1.0 — 2025-10-08
+Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+1. Grant
+Subject to your full compliance with this License, Kooijman Incorporate Holding B.V. (“Licensor”)
+grants you a non-exclusive, non-transferable, non-sublicensable license to:
+(a) use, modify, and compile the Genesis-X library and its source code solely for developing your
+    applications; and
+(b) distribute, license, and otherwise make available your applications in object/binary form that
+    are linked with and/or include the compiled Genesis-X library.
+
+2. Source Distribution
+You may provide access to the library’s source code only to your employees and contractors who have
+a need to know for the purpose of developing your application and who are bound by written
+confidentiality obligations at least as protective as this License. Redistribution of the library’s
+source code to third parties outside your organization is not permitted under this License.
+
+3. Restrictions
+Except to the extent a restriction is prohibited by applicable law, you shall not: (i) reverse
+engineer, decompile, or disassemble the library; (ii) remove, obscure, or alter any copyright,
+trademark, or license notices; or (iii) use the library to create a competing library published as a
+general-purpose reusable component.
+
+4. Third‑Party Software
+The library may include or depend on third‑party components that are licensed under their own terms.
+Those licenses govern your use of such components.
+
+5. Dual Licensing
+As an alternative to this commercial License, you may use the library under the terms of the GNU
+General Public License version 3.0 only (“GPL‑3.0‑only”). You may choose either the commercial
+license or GPL‑3.0‑only for any particular copy of the library.
+
+6. Term and Termination
+This License is effective upon your first use of the library under this License and continues until
+terminated. Licensor may terminate this License immediately if you breach any of its terms. Upon
+termination, you must stop all use and distribution of the library and destroy all copies in your
+possession or control. Sections 3, 7, and 8 survive termination.
+
+7. No Warranty
+THE LIBRARY IS PROVIDED “AS IS” WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+NON‑INFRINGEMENT. YOU USE THE LIBRARY AT YOUR OWN RISK.
+
+8. Limitation of Liability
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL LICENSOR OR ITS CONTRIBUTORS BE LIABLE
+FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, OR FOR ANY
+LOSS OF PROFITS, REVENUE, DATA, OR USE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. IN NO
+EVENT SHALL LICENSOR’S AGGREGATE LIABILITY EXCEED THE GREATER OF (A) EUR 100 OR (B) THE AMOUNT YOU
+PAID (IF ANY) FOR THE COMMERCIAL LICENSE IN THE TWELVE MONTHS PRECEDING THE CLAIM.
+
+9. Governing Law and Venue
+This License is governed by the laws of the Netherlands, excluding its conflict-of-law rules. The
+courts of the Netherlands shall have exclusive jurisdiction over any dispute arising out of or
+related to this License, and the parties consent to such jurisdiction and venue.
+
+10. Contact
+For commercial support, alternative terms, or questions, contact: sponsors@kooijman-inc.com

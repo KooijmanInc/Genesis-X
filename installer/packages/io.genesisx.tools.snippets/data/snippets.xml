@@ -1,0 +1,43 @@
+<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
+<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<snippets>
+    <snippet group="Text" trigger="genesisx" id="" complement="" removed="false" modified="false">genesisx</snippet>
+    <snippet group="Text" trigger="genesisx_physics" id="" complement="" removed="false" modified="false">genesisx_physics</snippet>
+    <snippet group="Text" trigger="genesisx_orm" id="" complement="" removed="false" modified="false">genesisx_orm</snippet>
+    <snippet group="Text" trigger="genesisx_app_core" id="" complement="" removed="false" modified="false">genesisx_app_core</snippet>
+    <snippet group="Text" trigger="genesisx_app_permissions" id="" complement="" removed="false" modified="false">genesisx_app_permissions</snippet>
+    <snippet group="Text" trigger="genesisx_app_config" id="" complement="" removed="false" modified="false">genesisx_app_config</snippet>
+    <snippet group="Text" trigger="genesisx_app_securestore" id="" complement="" removed="false" modified="false">genesisx_app_securestore</snippet>
+    <snippet group="Text" trigger="genesisx_app_logging" id="" complement="" removed="false" modified="false">genesisx_app_logging</snippet>
+    <snippet group="Text" trigger="genesisx_app_crash" id="" complement="" removed="false" modified="false">genesisx_app_crash</snippet>
+    <snippet group="Text" trigger="genesisx_app_deeplinks" id="" complement="" removed="false" modified="false">genesisx_app_deeplinks</snippet>
+    <snippet group="Text" trigger="genesisx_app_intents" id="" complement="" removed="false" modified="false">genesisx_app_intents</snippet>
+    <snippet group="Text" trigger="genesisx_app_notifications" id="" complement="" removed="false" modified="false">genesisx_app_notifications</snippet>
+    <snippet group="Text" trigger="genesisx_app_review" id="" complement="" removed="false" modified="false">genesisx_app_review</snippet>
+    <snippet group="Text" trigger="genesisx_app_haptics" id="" complement="" removed="false" modified="false">genesisx_app_haptics</snippet>
+    <snippet group="Text" trigger="genesisx_app_auth" id="" complement="" removed="false" modified="false">genesisx_app_auth</snippet>
+    <snippet group="Text" trigger="genesisx_app_biometrics" id="" complement="" removed="false" modified="false">genesisx_app_biometrics</snippet>
+    <snippet group="Text" trigger="genesisx_app_billing" id="" complement="" removed="false" modified="false">genesisx_app_billing</snippet>
+    <snippet group="Text" trigger="genesisx_app_analytics" id="" complement="" removed="false" modified="false">genesisx_app_analytics</snippet>
+    <snippet group="Text" trigger="genesisx_app_remoteconfig" id="" complement="" removed="false" modified="false">genesisx_app_remoteconfig</snippet>
+    <snippet group="Text" trigger="genesisx_app_ab" id="" complement="" removed="false" modified="false">genesisx_app_ab</snippet>
+    <snippet group="Text" trigger="genesisx_app_media" id="" complement="" removed="false" modified="false">genesisx_app_media</snippet>
+    <snippet group="Text" trigger="genesisx_app_camera" id="" complement="" removed="false" modified="false">genesisx_app_camera</snippet>
+    <snippet group="Text" trigger="genesisx_app_imagepicker" id="" complement="" removed="false" modified="false">genesisx_app_imagepicker</snippet>
+    <snippet group="Text" trigger="genesisx_app_audiorecorder" id="" complement="" removed="false" modified="false">genesisx_app_audiorecorder</snippet>
+    <snippet group="Text" trigger="genesisx_app_cast" id="" complement="" removed="false" modified="false">genesisx_app_cast</snippet>
+    <snippet group="Text" trigger="genesisx_app_connectivity" id="" complement="" removed="false" modified="false">genesisx_app_connectivity</snippet>
+    <snippet group="Text" trigger="genesisx_app_background" id="" complement="" removed="false" modified="false">genesisx_app_background</snippet>
+    <snippet group="Text" trigger="genesisx_app_updater" id="" complement="" removed="false" modified="false">genesisx_app_updater</snippet>
+    <snippet group="Text" trigger="genesisx_app_location" id="" complement="" removed="false" modified="false">genesisx_app_location</snippet>
+    <snippet group="Text" trigger="genesisx_app_sensors" id="" complement="" removed="false" modified="false">genesisx_app_sensors</snippet>
+    <snippet group="Text" trigger="genesisx_app_files" id="" complement="" removed="false" modified="false">genesisx_app_files</snippet>
+    <snippet group="Text" trigger="genesisx_app_share" id="" complement="" removed="false" modified="false">genesisx_app_share</snippet>
+    <snippet group="Text" trigger="genesisx_app_clipboard" id="" complement="" removed="false" modified="false">genesisx_app_clipboard</snippet>
+    <snippet group="Text" trigger="genesisx_app_preferences" id="" complement="" removed="false" modified="false">genesisx_app_preferences</snippet>
+    <snippet group="Text" trigger="genesisx_app_contacts" id="" complement="" removed="false" modified="false">genesisx_app_contacts</snippet>
+    <snippet group="Text" trigger="genesisx_app_calendar" id="" complement="" removed="false" modified="false">genesisx_app_calendar</snippet>
+    <snippet group="Text" trigger="genesisx_assets" id="" complement="" removed="false" modified="false">genesisx_assets</snippet>
+</snippets>

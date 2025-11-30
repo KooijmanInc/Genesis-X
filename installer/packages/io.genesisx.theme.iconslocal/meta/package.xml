@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Genesis-X File &amp; Folder icons (soon)</DisplayName>
+    <Description>Genesis-X theme icons for desktop Genesis-X folder only.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2025-11-27</ReleaseDate>
+
+    <Checkable>false</Checkable>
+    <Script>installscript.qs</Script>
+</Package>

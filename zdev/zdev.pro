@@ -11,6 +11,7 @@ DISTFILES += \
     $$files($$PWD/../mkspecs/*, true) \
     $$files($$PWD/../config/*, true) \
     $$files($$PWD/../scripts/*, true) \
+    $$files($$PWD/../installer/*, true) \
     ../.github/FUNDING.yml \
     ../.github/PULL_REQUEST_TEMPLATE.md \
     ../.github/ISSUE_TEMPLATE/bug_report.md \
