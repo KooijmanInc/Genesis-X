@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Genesis-X Tools</DisplayName>
+    <Description>Genesis-X helpful tools to be used in Qt Creator.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2025-11-27</ReleaseDate>
+
+    <Default>false</Default>
+
+    <Dependencies>
+        <Dependency>io.genesisx.core</Dependency>
+    </Dependencies>
+</Package>

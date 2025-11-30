@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>Genesis-X Library (required)</DisplayName>
+    <Description>Core libraries, tools and icons for Genesis-X.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2025-11-27</ReleaseDate>
+    <ForcedInstallation>true</ForcedInstallation>
+    <Default>true</Default>
+    <SortingPriority>123</SortingPriority>
+    <Script>installscript.qs</Script>
+
+    <Licenses>
+        <License name="Genesis-X License" file="license.txt"/>
+    </Licenses>
+</Package>

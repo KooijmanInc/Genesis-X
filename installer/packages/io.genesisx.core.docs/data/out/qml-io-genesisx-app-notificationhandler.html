@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- NotificationHandler.cpp -->
+  <meta name="description" content="Handles local and push notifications with a unified API.">
+  <title>NotificationHandler QML Type | Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
+<div class="navigationbar">
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li><a href="index.html">Genesis-X Documentation</a></li>
+<li><a href="io-genesisx-app-qmlmodule.html" translate="no">io.genesisx.app</a></li>
+<li>NotificationHandler</li>
+</ul>
+</div>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#properties">Properties</a></li>
+<li class="level1"><a href="#signals">Signals</a></li>
+<li class="level1"><a href="#methods">Methods</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+<li class="level2"><a href="#example">Example</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">NotificationHandler QML Type</h1>
+<!-- $$$NotificationHandler-brief -->
+<p>Handles local and push notifications with a unified API. <a href="#details">More...</a></p>
+<!-- @@@NotificationHandler -->
+<div class="table"><table class="alignedsummary requisites" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> <code translate="no">import io.genesisx.app</code></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> In C++:</td><td class="memItemRight bottomAlign"> <a href="gx-app-notifications-notificationhandler.html" translate="no">NotificationHandler</a></td></tr>
+</table></div>
+<ul>
+<li><a href="qml-io-genesisx-app-notificationhandler-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-app-notificationhandler.html#initialized-prop" translate="no">initialized</a></b> : bool</li>
+</ul>
+<h2 id="signals">Signals</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-app-notificationhandler.html#initializedChanged-signal" translate="no">initializedChanged</a></b>()</li>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-app-notificationhandler.html#notificationReceived-signal" translate="no">notificationReceived</a></b>(string <i>title</i>, string <i>body</i>, var <i>data</i>)</li>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-app-notificationhandler.html#tokenChanged-signal" translate="no">tokenChanged</a></b>(string <i>token</i>)</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<ul>
+<li class="fn" translate="no">void <b><a href="qml-io-genesisx-app-notificationhandler.html#initialize-method" translate="no">initialize</a></b>(var <i>options</i>)</li>
+<li class="fn" translate="no">void <b><a href="qml-io-genesisx-app-notificationhandler.html#show-method" translate="no">show</a></b>(string <i>title</i>, string <i>body</i>, int <i>msec</i>)</li>
+<li class="fn" translate="no">void <b><a href="qml-io-genesisx-app-notificationhandler.html#subscribe-method" translate="no">subscribe</a></b>(string <i>topic</i>)</li>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-app-notificationhandler.html#unsubscribe-method" translate="no">unsubscribe</a></b>(string <i>topic</i>)</li>
+</ul>
+<!-- $$$NotificationHandler-description -->
+<h2 id="details">Detailed Description</h2>
+<h3 id="example">Example</h3>
+<pre class="qml" translate="no">import GenesisX.Notifications 1.0
+
+<span class="type"><a href="qml-io-genesisx-app-notificationhandler.html" translate="no">NotificationHandler</a></span> {
+    <span class="name">onMessageReceived</span>: <span class="keyword"></span>(m) =&gt; <span class="keyword"></span><span class="name">console</span>.<span class="name">log</span>(<span class="name">m</span>.<span class="name">title</span>, <span class="name">m</span>.<span class="name">body</span>)
+    <span class="name">Component</span>.onCompleted: <span class="name">requestPermission</span>()
+}</pre>
+<!-- @@@NotificationHandler -->
+<h2>Property Documentation</h2>
+<!-- $$$initialized -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="initialized-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">initialized</span> : <span class="type">bool</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>True if the user has initialized notifications</p>
+</div></div><!-- @@@initialized -->
+<br/>
+<h2>Signal Documentation</h2>
+<!-- $$$initializedChanged[overload1]$$$initializedChanged -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="initializedChanged-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="name">initializedChanged</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Emitted whenever the <a href="qml-io-genesisx-app-notificationhandler.html#initialized-prop" translate="no">initialized</a> property changes.</p>
+<div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onInitializedChanged</code>.</p>
+</div></div></div><!-- @@@initializedChanged -->
+<br/>
+<!-- $$$notificationReceived[overload1]$$$notificationReceivedstringstringvar -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="notificationReceived-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="name">notificationReceived</span>(<span class="type">string</span> <i>title</i>, <span class="type">string</span> <i>body</i>, <span class="type">var</span> <i>data</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Emitted when a notification is received.</p>
+<p>The <i translate="no">title</i> and <i translate="no">body</i> contain the notification text. The <i translate="no">data</i> map may include extra key&ndash;value pairs from the payload.</p>
+<div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onNotificationReceived</code>.</p>
+</div></div></div><!-- @@@notificationReceived -->
+<br/>
+<!-- $$$tokenChanged[overload1]$$$tokenChangedstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="tokenChanged-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="name">tokenChanged</span>(<span class="type">string</span> <i>token</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Emitted when the push-notification token changes. The new token is provided in <i translate="no">token</i>.</p>
+<div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onTokenChanged</code>.</p>
+</div></div></div><!-- @@@tokenChanged -->
+<br/>
+<h2>Method Documentation</h2>
+<!-- $$$initialize[overload1]$$$initializevar -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="initialize-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">initialize</span>(<span class="type">var</span> <i>options</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Initializes the handler with the given <i translate="no">options</i> map The <i translate="no">options</i> argument can contain platform-specific settings such as initial topics or configuration flags.</p>
+</div></div><!-- @@@initialize -->
+<br/>
+<!-- $$$show[overload1]$$$showstringstringint -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="show-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">show</span>(<span class="type">string</span> <i>title</i>, <span class="type">string</span> <i>body</i>, <span class="type">int</span> <i>msec</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Shows notification messages in tray on desktop, show is fed by setting the <i translate="no">title</i> the <i translate="no">body</i> and the duration in millisecons <i translate="no">msec</i></p>
+</div></div><!-- @@@show -->
+<br/>
+<!-- $$$subscribe[overload1]$$$subscribestring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="subscribe-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">subscribe</span>(<span class="type">string</span> <i>topic</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Allowes to subscsribe for <i translate="no">topic</i></p>
+</div></div><!-- @@@subscribe -->
+<br/>
+<!-- $$$unsubscribe[overload1]$$$unsubscribestring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="unsubscribe-method">
+<td class="tblQmlFuncNode"><p>
+<span class="name">unsubscribe</span>(<span class="type">string</span> <i>topic</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Allowes to unsubscsribe for <i translate="no">topic</i></p>
+</div></div><!-- @@@unsubscribe -->
+<br/>
+<div class="qt-footer">
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
+</div>
+</body>
+</html>

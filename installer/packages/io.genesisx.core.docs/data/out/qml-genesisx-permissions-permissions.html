@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- Permissions.cpp -->
+  <meta name="description" content="QML APIs for permissions.">
+  <title>Permissions QML Type | Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
+<div class="navigationbar">
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li><a href="index.html">Genesis-X Documentation</a></li>
+<li><a href="genesisx-permissions-qmlmodule.html" translate="no">GenesisX.Permissions</a></li>
+<li>Permissions</li>
+</ul>
+</div>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#properties">Properties</a></li>
+<li class="level1"><a href="#signals">Signals</a></li>
+<li class="level1"><a href="#methods">Methods</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+<li class="level2"><a href="#example">Example</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">Permissions QML Type</h1>
+<!-- $$$Permissions-brief -->
+<p>QML APIs for permissions. <a href="#details">More...</a></p>
+<!-- @@@Permissions -->
+<div class="table"><table class="alignedsummary requisites" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> <code translate="no">import GenesisX.Permissions</code></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> In C++:</td><td class="memItemRight bottomAlign"> <a href="gx-app-permissions-permissions.html" translate="no">Permissions</a></td></tr>
+</table></div>
+<ul>
+<li><a href="qml-genesisx-permissions-permissions-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#ACCESS_BACKGROUND_LOCATION-prop" translate="no">ACCESS_BACKGROUND_LOCATION</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#ACCESS_COARSE_LOCATION-prop" translate="no">ACCESS_COARSE_LOCATION</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#ACCESS_FINE_LOCATION-prop" translate="no">ACCESS_FINE_LOCATION</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#ACTIVITY_RECOGNITION-prop" translate="no">ACTIVITY_RECOGNITION</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#BLUETOOTH_CONNECT-prop" translate="no">BLUETOOTH_CONNECT</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#BLUETOOTH_SCAN-prop" translate="no">BLUETOOTH_SCAN</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#BODY_SENSORS-prop" translate="no">BODY_SENSORS</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#BODY_SENSORS_BACKGROUND-prop" translate="no">BODY_SENSORS_BACKGROUND</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#CAMERA-prop" translate="no">CAMERA</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#NEARBY_WIFI_DEVICES-prop" translate="no">NEARBY_WIFI_DEVICES</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#READ_MEDIA_AUDIO-prop" translate="no">READ_MEDIA_AUDIO</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#READ_MEDIA_IMAGES-prop" translate="no">READ_MEDIA_IMAGES</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#READ_MEDIA_VIDEO-prop" translate="no">READ_MEDIA_VIDEO</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#READ_MEDIA_VISUAL_USER_SELECTED-prop" translate="no">READ_MEDIA_VISUAL_USER_SELECTED</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#RECORD_AUDIO-prop" translate="no">RECORD_AUDIO</a></b> : string</li>
+<li class="fn" translate="no"><b><a href="qml-genesisx-permissions-permissions.html#notificationsEnabled-prop" translate="no">notificationsEnabled</a></b> : string</li>
+</ul>
+<h2 id="signals">Signals</h2>
+<ul>
+<li class="fn" translate="no">void <b><a href="qml-genesisx-permissions-permissions.html#notificationEnabledChanged-signal" translate="no">notificationEnabledChanged</a></b>()</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<ul>
+<li class="fn" translate="no">bool <b><a href="qml-genesisx-permissions-permissions.html#canScheduleExactAlarms-method" translate="no">canScheduleExactAlarms</a></b>()</li>
+<li class="fn" translate="no">bool <b><a href="qml-genesisx-permissions-permissions.html#has-method" translate="no">has</a></b>(string <i>permission</i>)</li>
+<li class="fn" translate="no">bool <b><a href="qml-genesisx-permissions-permissions.html#isIgnoringBatteryOptimizations-method" translate="no">isIgnoringBatteryOptimizations</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="qml-genesisx-permissions-permissions.html#openAppSettings-method" translate="no">openAppSettings</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="qml-genesisx-permissions-permissions.html#openNotificationSettings-method" translate="no">openNotificationSettings</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="qml-genesisx-permissions-permissions.html#request-method" translate="no">request</a></b>(var <i>perms</i>)</li>
+<li class="fn" translate="no">void <b><a href="qml-genesisx-permissions-permissions.html#requestNotifications-method" translate="no">requestNotifications</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="qml-genesisx-permissions-permissions.html#requestScheduleExactAlarms-method" translate="no">requestScheduleExactAlarms</a></b>()</li>
+<li class="fn" translate="no">void <b><a href="qml-genesisx-permissions-permissions.html#requestignoreBatteryOptimizations-method" translate="no">requestignoreBatteryOptimizations</a></b>()</li>
+</ul>
+<!-- $$$Permissions-description -->
+<h2 id="details">Detailed Description</h2>
+<h3 id="example">Example</h3>
+<pre class="qml" translate="no">import GenesisX.Permissions
+
+<span class="type"><a href="qml-genesisx-permissions-permissions.html" translate="no">Permissions</a></span> {
+    <span class="name">Component</span>.onCompleted: {
+        <span class="keyword">if</span> (!<span class="name">perms</span>.<span class="name">notificationsEnabled</span>) {
+            <span class="name">perms</span>.<span class="name">requestNotifications</span>()
+        }
+
+        const need = []
+        <span class="keyword">if</span> (!<span class="name">perms</span>.<span class="name">has</span>(<span class="name">perms</span>.<span class="name">CAMERA</span>)) <span class="name">need</span>.<span class="name">push</span>(<span class="name">perms</span>.<span class="name">CAMERA</span>)
+        <span class="keyword">if</span> (!<span class="name">perms</span>.<span class="name">has</span>(<span class="name">perms</span>.<span class="name">READ_MEDIA_IMAGES</span>)) <span class="name">need</span>.<span class="name">push</span>(<span class="name">perms</span>.<span class="name">READ_MEDIA_IMAGES</span>)
+        <span class="keyword">if</span> (<span class="name">need</span>.<span class="name">length</span>) <span class="name">perms</span>.<span class="name">request</span>(<span class="name">need</span>)
+    }
+}</pre>
+<!-- @@@Permissions -->
+<h2>Property Documentation</h2>
+<!-- $$$ -->
+<div class="qmlitem"><div class="fngroup">
+<div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="ACCESS_BACKGROUND_LOCATION-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">ACCESS_BACKGROUND_LOCATION</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="ACCESS_COARSE_LOCATION-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">ACCESS_COARSE_LOCATION</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="ACCESS_FINE_LOCATION-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">ACCESS_FINE_LOCATION</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="ACTIVITY_RECOGNITION-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">ACTIVITY_RECOGNITION</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="BLUETOOTH_CONNECT-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">BLUETOOTH_CONNECT</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="BLUETOOTH_SCAN-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">BLUETOOTH_SCAN</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="BODY_SENSORS-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">BODY_SENSORS</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="BODY_SENSORS_BACKGROUND-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">BODY_SENSORS_BACKGROUND</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="CAMERA-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">CAMERA</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="NEARBY_WIFI_DEVICES-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">NEARBY_WIFI_DEVICES</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="READ_MEDIA_AUDIO-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">READ_MEDIA_AUDIO</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="READ_MEDIA_IMAGES-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">READ_MEDIA_IMAGES</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="READ_MEDIA_VIDEO-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">READ_MEDIA_VIDEO</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="READ_MEDIA_VISUAL_USER_SELECTED-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">READ_MEDIA_VISUAL_USER_SELECTED</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="RECORD_AUDIO-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">RECORD_AUDIO</span> : <span class="type">string</span></p></td></tr>
+<tr valign="top" class="odd" id="notificationsEnabled-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">notificationsEnabled</span> : <span class="type">string</span></p></td></tr>
+</table></div></div>
+</div><div class="qmldoc"></div></div><!-- @@@ -->
+<br/>
+<h2>Signal Documentation</h2>
+<!-- $$$notificationEnabledChanged[overload1]$$$notificationEnabledChanged -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="notificationEnabledChanged-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">notificationEnabledChanged</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onNotificationEnabledChanged</code>.</p>
+</div></div></div><!-- @@@notificationEnabledChanged -->
+<br/>
+<h2>Method Documentation</h2>
+<!-- $$$ -->
+<div class="qmlitem"><div class="fngroup">
+<div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="canScheduleExactAlarms-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">bool</span> <span class="name">canScheduleExactAlarms</span>()</p></td></tr>
+<tr valign="top" class="odd" id="has-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">bool</span> <span class="name">has</span>(<span class="type">string</span> <i>permission</i>)</p></td></tr>
+<tr valign="top" class="odd" id="isIgnoringBatteryOptimizations-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">bool</span> <span class="name">isIgnoringBatteryOptimizations</span>()</p></td></tr>
+<tr valign="top" class="odd" id="openAppSettings-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">openAppSettings</span>()</p></td></tr>
+<tr valign="top" class="odd" id="openNotificationSettings-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">openNotificationSettings</span>()</p></td></tr>
+<tr valign="top" class="odd" id="request-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">request</span>(<span class="type">var</span> <i>perms</i>)</p></td></tr>
+<tr valign="top" class="odd" id="requestNotifications-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">requestNotifications</span>()</p></td></tr>
+<tr valign="top" class="odd" id="requestScheduleExactAlarms-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">requestScheduleExactAlarms</span>()</p></td></tr>
+<tr valign="top" class="odd" id="requestignoreBatteryOptimizations-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">requestignoreBatteryOptimizations</span>()</p></td></tr>
+</table></div></div>
+</div><div class="qmldoc"></div></div><!-- @@@ -->
+<br/>
+<div class="qt-footer">
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
+</div>
+</body>
+</html>
