@@ -48,6 +48,7 @@ EXCLUDE_REGEX_PARTS=(
   '.*docs/Makefile\.Release$'
   '.*docs/Makefile\.Profile$'
   '.*tools/'
+  '.*installer/'
 )
 EXCLUDE_REGEX="$(IFS='|'; echo "${EXCLUDE_REGEX_PARTS[*]}")"
 
