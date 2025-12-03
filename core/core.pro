@@ -40,8 +40,8 @@ ios {
     QMAKE_MAC_XCODE_SETTINGS += OTHER_LDFLAGS="$(inherited) -ObjC"
     OBJECTIVE_SOURCES += \
         $$PWD/src/app/Notifications/NotificationHandler_apple.mm \
-        $$PWD/src/app/Notifications/GXPushBridge.mm \
-        $$PWD/src/app/Background/BackgroundAudio.mm
+        $$PWD/src/app/Notifications/GXPushBridge.mm
+        # $$PWD/src/app/Background/BackgroundAudio.mm
 #} else:win32 {
 #    CONFIG += dll
 } else:wasm {

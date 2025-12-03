@@ -2,15 +2,18 @@
 
 QT += qml quick widgets genesisx_app_permissions genesisx_app_notifications
 
+TARGET = "%{Target}"
+TARGET = "publicapp" # remove this line when done checking first standard build
 TEMPLATE = app
 CONFIG += c++23
 debug: CONFIG += console
 
-QMAKE_TARGET_COMPANY     = "%{OrgName}"
-QMAKE_TARGET_PRODUCT     = "%{ProjectName}"
-QMAKE_TARGET_DESCRIPTION = "%{AppDescription}"
-QMAKE_TARGET_COPYRIGHT   = "© %{CopyrightYear} %{OrgName}"
-QMAKE_TARGET_BUNDLE_PREFIX = "%{Domain}"
+QMAKE_TARGET_COMPANY       = "%{OrgName}"
+QMAKE_TARGET_PRODUCT       = "%{ProjectName}"
+QMAKE_TARGET_DESCRIPTION   = "%{AppDescription}"
+QMAKE_TARGET_COPYRIGHT     = "© %{CopyrightYear} %{OrgName}"
+QMAKE_TARGET_BUNDLE_PREFIX = "%{BundleIdentifierPrefix}"
+QMAKE_TARGET_BUNDLE_PREFIX = "io.genesisx" # remove this line when done checking first standard build
 
 GX_LOADED_MODULES = $$QT
 GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, ",")
@@ -51,7 +54,6 @@ wasm {
     QMAKE_LFLAGS += -sASSERTIONS -sASYNCIFY -Os
 }
 android {
-    # ANDROID_ABIS = arm64-v8a x86_64
     contains(ANDROID_TARGET_ARCH, arm64-v8a) {
         ANDROID_ABIS = arm64-v8a
     } else: contains(ANDROID_TARGET_ARCH, x86_64) {
@@ -59,10 +61,22 @@ android {
     }
 }
 ios {
+    GOOGLE_SERVICE_PLIST = $$PWD/apple/ios/GoogleService-Info.plist
+    QMAKE_BUNDLE_DATA += google_service_plist
+
+    google_service_plist.files = $$GOOGLE_SERVICE_PLIST
+    google_service_plist.path = .
+
     QMAKE_INFO_PLIST = $$PWD/apple/ios/Info.plist
     QMAKE_APPLE_ENTITLEMENTS = $$PWD/apple/ios/Entitlements.plist
 }
 macos {
+    GOOGLE_SERVICE_PLIST = $$PWD/apple/macos/GoogleService-Info.plist
+    QMAKE_BUNDLE_DATA += google_service_plist
+
+    google_service_plist.files = $$GOOGLE_SERVICE_PLIST
+    google_service_plist.path = Contents/Resources
+
     QMAKE_INFO_PLIST = $$PWD/apple/macos/Info.plist
     QMAKE_APPLE_ENTITLEMENTS = $$PWD/apple/macos/Entitlements.plist
 }
@@ -95,8 +109,8 @@ contains(ANDROID_TARGET_ARCH,arm64-v8a) {
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
 } else: contains(ANDROID_TARGET_ARCH,x86_64) {
-ANDROID_PACKAGE_SOURCE_DIR = \
-    $$PWD/android
+    ANDROID_PACKAGE_SOURCE_DIR = \
+        $$PWD/android
 }
 
 RESOURCES += \\

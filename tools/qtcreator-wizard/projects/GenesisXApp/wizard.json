@@ -31,10 +31,10 @@
             "trShortTitle": "Settings",
             "data": [
                 { "name": "AppDescription", "trDisplayName": "Description of your app", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "Social media app" } },
-                { "name": "BundleId", "trDisplayName": "Bundle identifier", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "com.example.mygxapp" } },
+                { "name": "Target", "trDisplayName": "App target", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "publicapp" } },
+                { "name": "BundleIdentifierPrefix", "trDisplayName": "Bundle identifier prefix", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "io.genesisx" } },
                 { "name": "OrgName", "trDisplayName": "Organization", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "Kooijman Incorporate Holding B.V." } },
                 { "name": "CopyrightYear", "trDisplayName": "Copyright year", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "2025" } },
-                { "name": "Domain", "trDisplayName": "Company domain", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "example.com" } },
                 { "name": "UiDir", "trDisplayName": "UI subdir", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "gx-ui" } },
                 { "name": "LibPathWindows", "trDisplayName": "Genesis-X Library path windows", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "D:/<path-to>/Genesis-X" } },
                 { "name": "LibPathApple", "trDisplayName": "Genesis-X Library path apple", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/Users/<user>/<path-to>/Genesis-X" } },

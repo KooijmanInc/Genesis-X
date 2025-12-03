@@ -7,8 +7,15 @@
 #import <UserNotifications/UserNotifications.h>
 #include <QtCore/qglobal.h>
 
+#if GX_HAVE_FIREBASE
+  #import <FirebaseMessaging.h>
+#else
+    #undef GX_HAVE_FIREBASE
+    #define GX_HAVE_FIREBASE 0
+#endif
+
 #import "NotificationHandler_apple_bridge.h"
-#include "src/notifications/NotificationHandler.h"
+#include <GenesisX/Notifications/NotificationHandler.h>
 
 extern "C" void gx_ios_push_anchor(void) {qDebug() << "ios anchor active";}
 
@@ -20,7 +27,7 @@ extern "C" void gx_ios_push_anchor(void) {qDebug() << "ios anchor active";}
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {qInfo() << "getting to ios getting token";
-#if __has_include(<FirebaseMessaging/FirebaseMessaging.h>)
+#if GX_HAVE_FIREBASE
   [FIRMessaging messaging].APNSToken = deviceToken;
 #endif
 

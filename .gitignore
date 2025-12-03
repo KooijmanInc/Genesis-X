@@ -1,11 +1,14 @@
 # 3rdparty
 3rdparty/firebase_cpp_sdk
+3rdparty/firebase_ios_sdk
 !3rdparty/.keep
 
 # Build artifacts
 build-*/
 build/
 bin/
+tools/gxgen/Debug
+tools/gxgen/Release
 *.o
 *.so
 *.dll

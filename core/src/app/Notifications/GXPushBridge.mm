@@ -7,24 +7,25 @@
 #include <QtCore/qglobal.h>
 
 #include "NotificationHandler_apple_bridge.h"
-#include "src/notifications/NotificationHandler.h"
+#include <GenesisX/Notifications/NotificationHandler.h>
 
 extern "C" void gx_macos_push_anchor(void) {qDebug() << "macos anchor active";}
 
 static void gx_install_hooks(void);
 
-// --- Simple handler that will be attached to the app delegate if it doesn't
-//     already implement the APNs callbacks.
 @interface GXPushHandler : NSObject
 @end
+
+#if GX_HAVE_FIREBASE
+#import <FirebaseMessaging.h>
+#endif
 
 @implementation GXPushHandler
 - (void)application:(NSApplication *)app
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    // TODO: forward token into your Qt code
     NSLog(@"APNs token: %@", deviceToken);
-#if __has_include(<FirebaseMessaging/FirebaseMessaging.h>)
+#if GX_HAVE_FIREBASE
   [FIRMessaging messaging].APNSToken = deviceToken;
 #endif
   if (gx_s_handler) {

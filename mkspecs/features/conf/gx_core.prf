@@ -135,4 +135,32 @@
             QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DEST_LIBDIRS)/
         }
     }
+
+    contains(QMAKE_HOST.os, Darwin) {
+        QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
+        QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
+        QMAKE_MAC_XCODE_SETTINGS += SEPARATE_HEADERMAP=YES
+
+        LIBS += -framework UserNotifications
+        macos: LIBS += -framework AppKit
+        ios: LIBS += -framework UIKit -framework AVFoundation
+        macos: LIBS += -framework Cocoa
+        LIBS += -framework Foundation
+        QMAKE_LFLAGS += -ObjC
+        QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+        QMAKE_OBJECTIVE_CXXFLAGS += -fobjc-arc
+        macos: QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
+
+#         # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+#         # QMAKE_LFLAGS += -rpath
+
+        SO_LIST = $$files($$LIBDIRS/libgenesisx*)
+        message([genesisx] Apple copy from $$LIBDIRS -> $$DEST_LIBDIRS)
+
+        QMAKE_POST_LINK += $$escape_expand(\\n\\t)mkdir -p $$shell_quote($$DEST_LIBDIRS)
+
+        for(f, SO_LIST) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DEST_LIBDIRS)/
+        }
+    }
 }

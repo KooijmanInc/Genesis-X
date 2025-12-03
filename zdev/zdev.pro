@@ -6,12 +6,12 @@ DISTFILES += \
     $$files(../3rdparty/firebase/*, true) \
     $$files(../assets/*, true) \
     $$files(../docs/*, true) \
-    $$files($$PWD/../common/*, true) \
-    $$files($$PWD/../tools/*, true) \
-    $$files($$PWD/../mkspecs/*, true) \
-    $$files($$PWD/../config/*, true) \
-    $$files($$PWD/../scripts/*, true) \
-    $$files($$PWD/../installer/*, true) \
+    $$files(../common/*, true) \
+    $$files(../tools/*, true) \
+    $$files(../mkspecs/*, true) \
+    $$files(../config/*, true) \
+    $$files(../scripts/*, true) \
+    $$files(../installer/*, true) \
     ../.github/FUNDING.yml \
     ../.github/PULL_REQUEST_TEMPLATE.md \
     ../.github/ISSUE_TEMPLATE/bug_report.md \
