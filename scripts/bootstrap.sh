@@ -20,8 +20,15 @@ usage() {
 
 list_packages() {
   # show *.sh scripts as package names
-  find "$PKG_DIR" -maxdepth 1 -type f -name "*.sh" -printf "%f\n" 2>/dev/null \
-    | sed 's/\.sh$//' | sort
+#  find "$PKG_DIR" -maxdepth 1 -type f -name "*.sh" -printf "%f\n" 2>/dev/null \
+#    | sed 's/\.sh$//' | sort
+  find "$PKG_DIR" -type f -name "*.sh" 2>/dev/null \
+    | while IFS= read -r path; do
+      if [ "$(dirname "$path")" = "$PKG_DIR" ]; then
+        fname=${path##*/}
+        echo "${fname%.sh}"
+      fi
+    done | sort
 }
 
 run_pkg() {
@@ -40,16 +47,16 @@ run_pkg() {
 if (( $# == 0 )); then set -- all; fi
 
 case "${1:-}" in
-  -h|--help) usage ;;
+  -h|--help)
+    usage ;;
   list)
-    echo "Available packages:"
     list_packages
     exit 0
     ;;
   all)
     shift
     pkgs=( $(list_packages) )
-    for p in "${pkgs[@]}"; do run_pkg "$p"; done
+    for p in "${pkgs[@]}"; do echo "$p"; run_pkg "$p"; done
     ;;
   *)
     # allow multiple explicit package names

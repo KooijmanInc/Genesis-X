@@ -248,16 +248,28 @@ install_snippets() {
         local CLEAN_FILE
         CLEAN_FILE="$(mktemp)"
 
-        grep -v 'trigger="genesisx' "$DEST_FILE" > "$CLEAN_FILE"
+        sed 's|<snippets\s*/>|<snippets>\n<snippets>|' "$DEST_FILE" \
+            | grep -v 'trigger="genesisx' \
+            > "$CLEAN_FILE"
 
         local TMP_FILE
         TMP_FILE="$(mktemp)"
 
-        sed '$d' "$CLEAN_FILE" > "$TMP_FILE"
+        {
+            if head -n1 "$CLEAN_FILE" | grep -q '^<\?xml'; then
+                head -n1 "$CLEAN_FILE"
+            else
+                echo '<?xml version="1.0" encoding="UTF-8"?>'
+            fi
 
-        sed '1,2d;$d' "$SRC_SNIPPETS_FILE" >> "$TMP_FILE"
+            echo '<snippets>'
 
-        tail -n 1 "$CLEAN_FILE" >> "$TMP_FILE"
+            sed '1,2d;$d' "$CLEAN_FILE"
+
+            sed '1,2d;$d' "$SRC_SNIPPETS_FILE"
+
+            echo '</snippets>'
+        } > "$TMP_FILE"
 
         mv "$TMP_FILE" "$DEST_FILE" || {
             echo "❌ Failed to write merged snippets file."
@@ -292,6 +304,7 @@ register_docs() {
         QT_CREATOR_INI="/mnt/c/Users/${WINUSER}/AppData/Roaming/QtProject/QtCreator.ini"
     else
         QT_CREATOR_INI="$HOME/.config/QtProject/QtCreator.ini"
+        echo "also macos"
     fi
 
     if [[ ! -f "$QT_CREATOR_INI" ]]; then
@@ -477,9 +490,11 @@ else
         QTC="/usr/bin/qtcreator"
     elif [[ ! -x "$QTC" ]]; then
         QTC="/usr/local/bin/qtcreator"
+    elif [[ ! -x "$QTC" ]]; then
+        QTC="$HOME/Qt/Qt Creator.app"
     fi
 fi
-
+echo "$QTC"
 if [[ ! -x "$QTC" ]]; then
     QT_CREATOR_BIN="${QT_CREATOR_BIN:-}"
 
@@ -490,6 +505,8 @@ if [[ ! -x "$QTC" ]]; then
         # 2) Fallback to the Qt Online Installer location you found
         elif [ -x "$HOME/Qt/Tools/QtCreator/bin/qtcreator" ]; then
             QT_CREATOR_BIN="$HOME/Qt/Tools/QtCreator/bin/qtcreator"
+        elif [ -x "$HOME/Qt/Qt Creator.app" ]; then
+            QT_CREATOR_BIN="$HOME/Qt/Qt Creator.app/Contents/MacOS/Qt Creator"
         fi
     fi
     if [ -n "$QT_CREATOR_BIN" ]; then

@@ -178,13 +178,9 @@ void NotificationHandler::show(const QString &title, const QString &body, int ms
     ensureTray();
     // You must have a visible tray icon for balloons to appear:
     m_tray->showMessage(title, body, qApp->windowIcon(), msec);
-#endif
-
-#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#elif defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     showLinuxNotification(title, body, msec);
-#endif
-
-#if defined(Q_OS_MACOS)
+#elif defined(Q_OS_MACOS)
     showAppleNotification(title, body, msec);
 #endif
 }

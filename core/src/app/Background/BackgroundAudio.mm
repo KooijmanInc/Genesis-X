@@ -10,7 +10,7 @@ extern "C" void gx_enableBackgroundAudio_ios()
     NSError *err = nil;
     BOOL ok = [session setCategory:AVAudioSessionCategoryPlayback
                        withOptions:0
-                       error:&error];
+                       error:&err];
     if (!ok) { NSLog(@"AVAudioSession setCategory error: %@", err); }
     ok = [session setActive:YES error:&err];
     if (!ok) { NSLog(@"AVAudioSession setActive error: %@", err); }

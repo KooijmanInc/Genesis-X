@@ -9,25 +9,25 @@
 #import <AppKit/AppKit.h>
 #endif
 
-#if __has_include(<FirebaseCore/FirebaseCore.h>)
-#define GX_HAVE_FIREBASE 1
-#else
+#import <objc/message.h>
+
+#if !defined(GX_HAVE_FIREBASE)
 #define GX_HAVE_FIREBASE 0
 #endif
 
 #if GX_HAVE_FIREBASE
-  #if __has_include(<FirebaseMessaging/FirebaseMessaging.h>)
-    #import <FirebaseMessaging/FirebaseMessaging.h>
-  #else
+  #import <FirebaseCore.h>
+  #import <FirebaseMessaging.h>
+#else
     #undef GX_HAVE_FIREBASE
     #define GX_HAVE_FIREBASE 0
-  #endif
 #endif
 
 #include "NotificationHandler_apple_bridge.h"
-#include "NotificationHandler.h"
+#include <GenesisX/Notifications/NotificationHandler.h>
 #include <QCoreApplication>
 #include <QVariantMap>
+#include <QDebug>
 
 #if TARGET_OS_IOS
 extern "C" void gx_ios_push_anchor(void);
@@ -35,7 +35,7 @@ extern "C" void gx_ios_push_anchor(void);
 extern "C" void gx_macos_push_anchor(void);
 #endif
 
-gx::NotificationHandler* gx_s_handler = nullptr;
+gx::app::notifications::NotificationHandler* gx_s_handler = nullptr;
 
 using namespace gx;
 
@@ -44,7 +44,7 @@ using namespace gx;
 , FIRMessagingDelegate
 #endif
 >
-@property (nonatomic, assign) gx::NotificationHandler* owner;
+@property (nonatomic, assign) gx::app::notifications::NotificationHandler* owner;
 @end
 
 @implementation GXUNDelegate
@@ -88,6 +88,23 @@ using namespace gx;
   completionHandler();
 }
 
+#if GX_HAVE_FIREBASE
+-(void)messaging:(FIRMessaging *) messaging
+  didReceiveRegistrationToken:(NSString *)fcmToken
+{
+  Q_UNUSED(messaging);
+
+  const QString qToken = QString::fromNSString(fcmToken);
+
+  if (self.owner) {
+    self.owner->appleDidReceiveToken(qToken);
+  }
+  if (gx_s_handler && gx_s_handler != self.owner) {
+    gx_s_handler->appleDidReceiveToken(qToken);
+  }
+}
+#endif
+
 @end
 
 namespace {
@@ -95,7 +112,7 @@ static GXUNDelegate* s_delegate = nil;
 static dispatch_once_t s_once;
 }
 
-void NotificationHandler::appleInitialize(const QVariantMap &options)
+void gx::app::notifications::NotificationHandler::appleInitialize(const QVariantMap &options)
 {
   Q_UNUSED(options);
 
@@ -106,6 +123,8 @@ void NotificationHandler::appleInitialize(const QVariantMap &options)
 #else
   gx_macos_push_anchor();
 #endif
+
+  qInfo() << "[GX Notify] appleInitialize() called. GX_HAVE_FIREBASE =" << GX_HAVE_FIREBASE;
 
   dispatch_once(&s_once, ^{
     UNUserNotificationCenter* center = UNUserNotificationCenter.currentNotificationCenter;
@@ -122,14 +141,15 @@ void NotificationHandler::appleInitialize(const QVariantMap &options)
       }
     }];
 
-#if __has_include(<FirebaseMessaging/FirebaseMessaging.h>)
-    static dispatch_once_t onceFirebase;
-    dispatch_once(&onceFirebase, ^{
-      if ([FIRApp defaultApp] == nil) {
-        [FIRApp configure];
-      }
-      [FIRMessaging messaging].delegate = s_delegate;
-    });
+#if GX_HAVE_FIREBASE
+  if ([FIRApp defaultApp] == nil) {
+    qInfo() << "[GX Notify] Calling [FIRApp configure]";
+    [FIRApp configure];
+  } else {
+    qInfo() << "[GX Notify] FIRApp already configured";
+  }
+
+  [FIRMessaging messaging].delegate = s_delegate;
 #endif
 
 #if TARGET_OS_IOS
@@ -137,6 +157,7 @@ void NotificationHandler::appleInitialize(const QVariantMap &options)
       [[UIApplication sharedApplication] registerForRemoteNotifications];
     });
 #else
+    qInfo() << "[GX Notify] also setting APNs for macOS";
     dispatch_async(dispatch_get_main_queue(), ^{
       [NSApp registerForRemoteNotifications];
     });
@@ -144,7 +165,7 @@ void NotificationHandler::appleInitialize(const QVariantMap &options)
   });
 }
 
-void NotificationHandler::showAppleNotification(const QString &title, const QString &body, int msec)
+void gx::app::notifications::NotificationHandler::showAppleNotification(const QString &title, const QString &body, int msec)
 {
 UNUserNotificationCenter* center = UNUserNotificationCenter.currentNotificationCenter;
 
