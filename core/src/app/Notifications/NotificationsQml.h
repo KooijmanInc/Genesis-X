@@ -15,4 +15,3 @@ GENESISX_CORE_EXPORT void registerGenesisXNotifications(QQmlEngine* engine);
 }
 
 #endif // NOTIFICATIONSQML_H
-

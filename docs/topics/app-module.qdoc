@@ -2,7 +2,9 @@
     \qmlmodule io.genesisx.app
     \title Genesis-X app system
 
-    \brief The app system
+    This module contains the app QML types of Genesis-X.
+
+    \brief The app system.
 
     \section1 Classes
     \list

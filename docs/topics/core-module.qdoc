@@ -7,6 +7,7 @@
     \section1 Classes
     \list
         \li \l {CoreQml.h}
+        \li \l {gx::navigation::GxRouter}
         \li \l {Genesis-X Core C++ Classes}
     \endlist
 

@@ -21,6 +21,7 @@ echo
 echo "Checking Qt environment..."
 echo
 
+QMAKE_CMD="null"
 if qmake.exe -v >/dev/null 2>&1; then
     QMAKE_CMD="qmake.exe"
 elif qmake6.exe -v >/dev/null 2>&1; then
@@ -102,19 +103,21 @@ else
     MAKE_CMD="make"
 fi
 
-QMAKE_BIN="$(detect_qmake || echo '')"
+if [[ $QMAKE_CMD == "null" ]]; then
+    QMAKE_BIN="$(detect_qmake || echo '')"
 
-if [ -z "$QMAKE_BIN" ]; then
-    echo "Error: Could not find a Qt 6 'qmake' on this system." >&2
-    echo "" >&2
-    echo "Please either:" >&2
-    echo "  - Install Qt 6 and ensure its qmake is in PATH," >&2
-    echo "  - Or run this script with an explicit QMAKE_BIN, for example:" >&2
-    echo "      QMAKE_BIN=\$HOME/Qt/6.10.0/gcc_64/bin/qmake ./scripts/install.sh" >&2
-    exit 1
-else
-#    echo "Using qmake: $QMAKE_BIN"
-    QMAKE_CMD=$QMAKE_BIN
+    if [ -z "$QMAKE_BIN" ]; then
+        echo "Error: Could not find a Qt 6 'qmake' on this system." >&2
+        echo "" >&2
+        echo "Please either:" >&2
+        echo "  - Install Qt 6 and ensure its qmake is in PATH," >&2
+        echo "  - Or run this script with an explicit QMAKE_BIN, for example:" >&2
+        echo "      QMAKE_BIN=\$HOME/Qt/6.10.0/gcc_64/bin/qmake ./scripts/install.sh" >&2
+        exit 1
+    else
+    #    echo "Using qmake: $QMAKE_BIN"
+        QMAKE_CMD=$QMAKE_BIN
+    fi
 fi
 
 echo "→ Qt detected:"

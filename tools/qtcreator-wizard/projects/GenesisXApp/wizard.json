@@ -36,9 +36,10 @@
                 { "name": "OrgName", "trDisplayName": "Organization", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "Kooijman Incorporate Holding B.V." } },
                 { "name": "CopyrightYear", "trDisplayName": "Copyright year", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "2025" } },
                 { "name": "UiDir", "trDisplayName": "UI subdir", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "gx-ui" } },
-                { "name": "LibPathWindows", "trDisplayName": "Genesis-X Library path windows", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "D:/<path-to>/Genesis-X" } },
-                { "name": "LibPathApple", "trDisplayName": "Genesis-X Library path apple", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/Users/<user>/<path-to>/Genesis-X" } },
-                { "name": "LibPathLinux", "trDisplayName": "Genesis-X Library path linux", "type": "LineEdit", "mandatory": true, "data": { "trPlaceholder": "/home/<user>/<path-to>/Genesis-X" } }
+                { "name": "LibPathWindows", "trDisplayName": "Genesis-X Library path windows", "type": "LineEdit", "mandatory": false, "data": { "trPlaceholder": "D:/<path-to>/Genesis-X" } },
+                { "name": "LibPathApple", "trDisplayName": "Genesis-X Library path apple", "type": "LineEdit", "mandatory": false, "data": { "trPlaceholder": "/Users/<user>/<path-to>/Genesis-X" } },
+                { "name": "LibPathLinux", "trDisplayName": "Genesis-X Library path linux", "type": "LineEdit", "mandatory": false, "data": { "trPlaceholder": "/home/<user>/<path-to>/Genesis-X" } },
+                { "name": "GenesisPathAnyValidator", "type": "Label", "visible": false, "span": true, "mandatory": true, "isComplete": "%{JS: !!value('LibPathWindows') || !!value('LibPathLinux') || !!value('LibPathApple') }", "trIncompleteMessage": "Please set at least one Genesis-X path (Windows, macOS or Linux).", "data": { "wordWrap": true, "trText": "Validator for Genesis-X paths (at least one platform path required)." } }
             ]
         },
         {

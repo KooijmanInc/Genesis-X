@@ -6,7 +6,7 @@
 /*!
     \class gx::app::permissions::Permissions
     \inmodule GenesisX
-    \ingroup genesisx-core
+    \ingroup app-classes
     \title Mobile Permissions
     \since Qt 6.10
     \brief Setting permissions for mobile devices.
@@ -14,6 +14,7 @@
 
 /*!
     \qmlmodule GenesisX.Permissions
+    \inqmlmodule io.genesisx.app
     \title Genesis-X Permissions (QML)
     \since Qt 6.10
     \nativetype gx::app::permissions::Permissions
@@ -27,8 +28,7 @@
 
 /*!
     \qmltype Permissions
-    \inqmlmodule GenesisX.Permissions
-    \ingroup genesisx-core
+    \inqmlmodule io.genesisx.app
     \nativetype gx::app::permissions::Permissions
     \since Qt 6.10
     \brief QML APIs for permissions.

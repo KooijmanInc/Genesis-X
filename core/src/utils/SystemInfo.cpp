@@ -11,6 +11,7 @@
 /*!
     \headerfile SystemInfo.h
     \inmodule io.genesisx.core
+    \ingroup core-classes
     \title System information
     \since Qt 6.10
     \brief Information about the current system.

@@ -4,7 +4,7 @@
 #include <GenesisX/Notifications/NotificationHandler.h>
 #include <QCoreApplication>
 
-#include <src/navigation/GxRouter.h>
+#include <GenesisX/Navigation/GxRouter.h>
 
 #ifdef Q_OS_ANDROID
 #include "fcm_android.h"
@@ -22,7 +22,8 @@
 
 /*!
     \class gx::app::notifications::NotificationHandler
-    \inmodule io.genesisx.core
+    \inmodule io.genesisx.app
+    \ingroup app-classes
     \title Notification handler
     \since Qt 6.10
     \brief Main class for local and push notifications.
