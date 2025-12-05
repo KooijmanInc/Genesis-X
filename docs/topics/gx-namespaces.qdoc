@@ -48,6 +48,20 @@
  */
 
 /*!
+    \namespace gx::app::background
+    \inmodule GenesisX
+    \title gx::app::background Namespace
+    \brief Background facilities.
+ */
+
+/*!
+    \namespace gx::app::cast
+    \inmodule GenesisX
+    \title gx::app::cast Namespace
+    \brief Cast facilities.
+ */
+
+/*!
     \namespace gx::app::notifications
     \inmodule GenesisX
     \title gx::app::notifications Namespace
@@ -66,6 +80,13 @@
     \inmodule GenesisX
     \title gx::core Namespace
     \brief Core facilities.
+ */
+
+/*!
+    \namespace gx::navigation
+    \inmodule GenesisX
+    \title gx::navigation Namespace
+    \brief Navigation facilities.
  */
 
 /*!

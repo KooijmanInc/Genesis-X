@@ -9,16 +9,28 @@
             <section ref="index.html" title="Genesis-X Documentation">
                 <section ref="getting-started.html" title="Getting started"/>
                 <section ref="io-genesisx-core-qmlmodule.html" title="Core">
+                    <section ref="qml-io-genesisx-core-router.html" title="Router Type Reference">
+                        <section ref="qml-io-genesisx-core-router-members.html" title="List of all members"/>
+                    </section>
                     <section ref="qml-io-genesisx-core-systeminfo.html" title="SystemInfo Type Reference">
                         <section ref="qml-io-genesisx-core-systeminfo-members.html" title="List of all members"/>
                     </section>
                 </section>
                 <section ref="io-genesisx-app-qmlmodule.html" title="App">
+                    <section ref="qml-io-genesisx-app-background.html" title="Background Type Reference">
+                        <section ref="qml-io-genesisx-app-background-members.html" title="List of all members"/>
+                    </section>
                     <section ref="qml-io-genesisx-app-biometrics.html" title="Biometrics Type Reference">
                         <section ref="qml-io-genesisx-app-biometrics-members.html" title="List of all members"/>
                     </section>
+                    <section ref="qml-io-genesisx-app-cast.html" title="Cast Type Reference">
+                        <section ref="qml-io-genesisx-app-cast-members.html" title="List of all members"/>
+                    </section>
                     <section ref="qml-io-genesisx-app-notificationhandler.html" title="NotificationHandler Type Reference">
                         <section ref="qml-io-genesisx-app-notificationhandler-members.html" title="List of all members"/>
+                    </section>
+                    <section ref="qml-io-genesisx-app-permissions.html" title="Permissions Type Reference">
+                        <section ref="qml-io-genesisx-app-permissions-members.html" title="List of all members"/>
                     </section>
                 </section>
                 <section ref="io-genesisx-orm-qmlmodule.html" title="Orm">
@@ -33,22 +45,28 @@
         </toc>
         <keywords>
             <keyword name="ABTesting" id="ab::ABTesting" ref="gx-app-ab-abtesting.html"/>
-            <keyword name="ACCESS_BACKGROUND_LOCATION" id="Permissions::ACCESS_BACKGROUND_LOCATION" ref="qml-genesisx-permissions-permissions.html#ACCESS_BACKGROUND_LOCATION-prop"/>
-            <keyword name="ACCESS_COARSE_LOCATION" id="Permissions::ACCESS_COARSE_LOCATION" ref="qml-genesisx-permissions-permissions.html#ACCESS_COARSE_LOCATION-prop"/>
-            <keyword name="ACCESS_FINE_LOCATION" id="Permissions::ACCESS_FINE_LOCATION" ref="qml-genesisx-permissions-permissions.html#ACCESS_FINE_LOCATION-prop"/>
-            <keyword name="ACTIVITY_RECOGNITION" id="Permissions::ACTIVITY_RECOGNITION" ref="qml-genesisx-permissions-permissions.html#ACTIVITY_RECOGNITION-prop"/>
+            <keyword name="ACCESS_BACKGROUND_LOCATION" id="Permissions::ACCESS_BACKGROUND_LOCATION" ref="qml-io-genesisx-app-permissions.html#ACCESS_BACKGROUND_LOCATION-prop"/>
+            <keyword name="ACCESS_COARSE_LOCATION" id="Permissions::ACCESS_COARSE_LOCATION" ref="qml-io-genesisx-app-permissions.html#ACCESS_COARSE_LOCATION-prop"/>
+            <keyword name="ACCESS_FINE_LOCATION" id="Permissions::ACCESS_FINE_LOCATION" ref="qml-io-genesisx-app-permissions.html#ACCESS_FINE_LOCATION-prop"/>
+            <keyword name="ACTIVITY_RECOGNITION" id="Permissions::ACTIVITY_RECOGNITION" ref="qml-io-genesisx-app-permissions.html#ACTIVITY_RECOGNITION-prop"/>
             <keyword name="Analytics" id="analytics::Analytics" ref="gx-app-analytics-analytics.html"/>
             <keyword name="AudioRecorder" id="audiorecorder::AudioRecorder" ref="gx-app-audiorecorder-audiorecorder.html"/>
             <keyword name="Auth" id="auth::Auth" ref="gx-app-auth-auth.html"/>
-            <keyword name="BLUETOOTH_CONNECT" id="Permissions::BLUETOOTH_CONNECT" ref="qml-genesisx-permissions-permissions.html#BLUETOOTH_CONNECT-prop"/>
-            <keyword name="BLUETOOTH_SCAN" id="Permissions::BLUETOOTH_SCAN" ref="qml-genesisx-permissions-permissions.html#BLUETOOTH_SCAN-prop"/>
-            <keyword name="BODY_SENSORS" id="Permissions::BODY_SENSORS" ref="qml-genesisx-permissions-permissions.html#BODY_SENSORS-prop"/>
-            <keyword name="BODY_SENSORS_BACKGROUND" id="Permissions::BODY_SENSORS_BACKGROUND" ref="qml-genesisx-permissions-permissions.html#BODY_SENSORS_BACKGROUND-prop"/>
+            <keyword name="BLUETOOTH_CONNECT" id="Permissions::BLUETOOTH_CONNECT" ref="qml-io-genesisx-app-permissions.html#BLUETOOTH_CONNECT-prop"/>
+            <keyword name="BLUETOOTH_SCAN" id="Permissions::BLUETOOTH_SCAN" ref="qml-io-genesisx-app-permissions.html#BLUETOOTH_SCAN-prop"/>
+            <keyword name="BODY_SENSORS" id="Permissions::BODY_SENSORS" ref="qml-io-genesisx-app-permissions.html#BODY_SENSORS-prop"/>
+            <keyword name="BODY_SENSORS_BACKGROUND" id="Permissions::BODY_SENSORS_BACKGROUND" ref="qml-io-genesisx-app-permissions.html#BODY_SENSORS_BACKGROUND-prop"/>
+            <keyword name="Background" id="QML.Background" ref="qml-io-genesisx-app-background.html"/>
+            <keyword name="Background" id="QML.io.genesisx.app.Background" ref="qml-io-genesisx-app-background.html"/>
+            <keyword name="BackgroundMediaRouter" id="background::BackgroundMediaRouter" ref="gx-app-background-backgroundmediarouter.html"/>
             <keyword name="Biometrics" id="biometrics::Biometrics" ref="gx-app-biometrics-biometrics.html"/>
             <keyword name="Biometrics" id="QML.Biometrics" ref="qml-io-genesisx-app-biometrics.html"/>
             <keyword name="Biometrics" id="QML.io.genesisx.app.Biometrics" ref="qml-io-genesisx-app-biometrics.html"/>
             <keyword name="C++ Classes" id="C++ Classes" ref="classes.html"/>
-            <keyword name="CAMERA" id="Permissions::CAMERA" ref="qml-genesisx-permissions-permissions.html#CAMERA-prop"/>
+            <keyword name="CAMERA" id="Permissions::CAMERA" ref="qml-io-genesisx-app-permissions.html#CAMERA-prop"/>
+            <keyword name="Cast" id="cast::Cast" ref="gx-app-cast-cast.html"/>
+            <keyword name="Cast" id="QML.Cast" ref="qml-io-genesisx-app-cast.html"/>
+            <keyword name="Cast" id="QML.io.genesisx.app.Cast" ref="qml-io-genesisx-app-cast.html"/>
             <keyword name="CommandController" id="orm::CommandController" ref="gx-orm-commandcontroller.html"/>
             <keyword name="CommandController" id="QML.CommandController" ref="qml-io-genesisx-orm-commandcontroller.html"/>
             <keyword name="CommandController" id="QML.io.genesisx.orm.CommandController" ref="qml-io-genesisx-orm-commandcontroller.html"/>
@@ -62,26 +80,32 @@
             <keyword name="Genesis-X Orm C++ Classes" id="Genesis-X Orm C++ Classes" ref="orm-classes.html"/>
             <keyword name="Genesis-X Physics" id="Genesis-X Physics" ref="physics.html"/>
             <keyword name="GenesisX.App.Biometrics" id="QML.Biometrics.App.GenesisX" ref="genesisx-app-biometrics-qmlmodule.html"/>
+            <keyword name="GenesisX.Background" id="QML.Background.GenesisX" ref="genesisx-background-qmlmodule.html"/>
+            <keyword name="GenesisX.Cast" id="QML.Cast.GenesisX" ref="genesisx-cast-qmlmodule.html"/>
             <keyword name="GenesisX.CommandController" id="QML.CommandController.GenesisX" ref="genesisx-commandcontroller-qmlmodule.html"/>
             <keyword name="GenesisX.ConnectionController" id="QML.ConnectionController.GenesisX" ref="genesisx-connectioncontroller-qmlmodule.html"/>
+            <keyword name="GenesisX.Navigation" id="QML.Navigation.GenesisX" ref="genesisx-navigation-qmlmodule.html"/>
             <keyword name="GenesisX.Notifications" id="QML.Notifications.GenesisX" ref="genesisx-notifications-qmlmodule.html"/>
             <keyword name="GenesisX.Permissions" id="QML.Permissions.GenesisX" ref="genesisx-permissions-qmlmodule.html"/>
             <keyword name="GenesisX.SystemInfo" id="QML.SystemInfo.GenesisX" ref="genesisx-systeminfo-qmlmodule.html"/>
             <keyword name="Getting started with Genesis-X" id="Getting started with Genesis-X" ref="getting-started.html"/>
-            <keyword name="NEARBY_WIFI_DEVICES" id="Permissions::NEARBY_WIFI_DEVICES" ref="qml-genesisx-permissions-permissions.html#NEARBY_WIFI_DEVICES-prop"/>
+            <keyword name="GxRouter" id="navigation::GxRouter" ref="gx-navigation-gxrouter.html"/>
+            <keyword name="NEARBY_WIFI_DEVICES" id="Permissions::NEARBY_WIFI_DEVICES" ref="qml-io-genesisx-app-permissions.html#NEARBY_WIFI_DEVICES-prop"/>
             <keyword name="Namespaces" id="Namespaces" ref="namespaces.html"/>
             <keyword name="Namespaces Orm" id="Namespaces Orm" ref="namespaces-orm.html"/>
             <keyword name="NotificationHandler" id="notifications::NotificationHandler" ref="gx-app-notifications-notificationhandler.html"/>
             <keyword name="NotificationHandler" id="QML.NotificationHandler" ref="qml-io-genesisx-app-notificationhandler.html"/>
             <keyword name="NotificationHandler" id="QML.io.genesisx.app.NotificationHandler" ref="qml-io-genesisx-app-notificationhandler.html"/>
             <keyword name="Permissions" id="permissions::Permissions" ref="gx-app-permissions-permissions.html"/>
-            <keyword name="Permissions" id="QML.Permissions" ref="qml-genesisx-permissions-permissions.html"/>
-            <keyword name="Permissions" id="QML.GenesisX.Permissions.Permissions" ref="qml-genesisx-permissions-permissions.html"/>
-            <keyword name="READ_MEDIA_AUDIO" id="Permissions::READ_MEDIA_AUDIO" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_AUDIO-prop"/>
-            <keyword name="READ_MEDIA_IMAGES" id="Permissions::READ_MEDIA_IMAGES" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_IMAGES-prop"/>
-            <keyword name="READ_MEDIA_VIDEO" id="Permissions::READ_MEDIA_VIDEO" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_VIDEO-prop"/>
-            <keyword name="READ_MEDIA_VISUAL_USER_SELECTED" id="Permissions::READ_MEDIA_VISUAL_USER_SELECTED" ref="qml-genesisx-permissions-permissions.html#READ_MEDIA_VISUAL_USER_SELECTED-prop"/>
-            <keyword name="RECORD_AUDIO" id="Permissions::RECORD_AUDIO" ref="qml-genesisx-permissions-permissions.html#RECORD_AUDIO-prop"/>
+            <keyword name="Permissions" id="QML.Permissions" ref="qml-io-genesisx-app-permissions.html"/>
+            <keyword name="Permissions" id="QML.io.genesisx.app.Permissions" ref="qml-io-genesisx-app-permissions.html"/>
+            <keyword name="READ_MEDIA_AUDIO" id="Permissions::READ_MEDIA_AUDIO" ref="qml-io-genesisx-app-permissions.html#READ_MEDIA_AUDIO-prop"/>
+            <keyword name="READ_MEDIA_IMAGES" id="Permissions::READ_MEDIA_IMAGES" ref="qml-io-genesisx-app-permissions.html#READ_MEDIA_IMAGES-prop"/>
+            <keyword name="READ_MEDIA_VIDEO" id="Permissions::READ_MEDIA_VIDEO" ref="qml-io-genesisx-app-permissions.html#READ_MEDIA_VIDEO-prop"/>
+            <keyword name="READ_MEDIA_VISUAL_USER_SELECTED" id="Permissions::READ_MEDIA_VISUAL_USER_SELECTED" ref="qml-io-genesisx-app-permissions.html#READ_MEDIA_VISUAL_USER_SELECTED-prop"/>
+            <keyword name="RECORD_AUDIO" id="Permissions::RECORD_AUDIO" ref="qml-io-genesisx-app-permissions.html#RECORD_AUDIO-prop"/>
+            <keyword name="Router" id="QML.Router" ref="qml-io-genesisx-core-router.html"/>
+            <keyword name="Router" id="QML.io.genesisx.core1.Router" ref="qml-io-genesisx-core-router.html"/>
             <keyword name="SystemInfo" id="QML.SystemInfo" ref="qml-io-genesisx-core-systeminfo.html"/>
             <keyword name="SystemInfo" id="QML.io.genesisx.core1.SystemInfo" ref="qml-io-genesisx-core-systeminfo.html"/>
             <keyword name="ab" id="app::ab" ref="gx-app-ab.html"/>
@@ -93,8 +117,12 @@
             <keyword name="authenticated" id="Biometrics::authenticated" ref="qml-io-genesisx-app-biometrics.html#authenticated-signal"/>
             <keyword name="availabilityChanged" id="Biometrics::availabilityChanged" ref="qml-io-genesisx-app-biometrics.html#availabilityChanged-signal"/>
             <keyword name="available" id="Biometrics::available" ref="qml-io-genesisx-app-biometrics.html#available-prop"/>
+            <keyword name="back" id="Router::back" ref="qml-io-genesisx-core-router.html#back-method"/>
+            <keyword name="background" id="app::background" ref="gx-app-background.html"/>
             <keyword name="biometrics" id="app::biometrics" ref="gx-app-biometrics.html"/>
-            <keyword name="canScheduleExactAlarms" id="Permissions::canScheduleExactAlarms" ref="qml-genesisx-permissions-permissions.html#canScheduleExactAlarms-method"/>
+            <keyword name="canScheduleExactAlarms" id="Permissions::canScheduleExactAlarms" ref="qml-io-genesisx-app-permissions.html#canScheduleExactAlarms-method"/>
+            <keyword name="cast" id="app::cast" ref="gx-app-cast.html"/>
+            <keyword name="clearRoutes" id="Router::clearRoutes" ref="qml-io-genesisx-core-router.html#clearRoutes-method"/>
             <keyword name="cmdLogin" id="CommandController::cmdLogin" ref="qml-io-genesisx-orm-commandcontroller.html#cmdLogin-method"/>
             <keyword name="cmdPing" id="CommandController::cmdPing" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPing-method"/>
             <keyword name="cmdPostJson" id="CommandController::cmdPostJson" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPostJson-method"/>
@@ -102,28 +130,45 @@
             <keyword name="cmdRegister" id="CommandController::cmdRegister" ref="qml-io-genesisx-orm-commandcontroller.html#cmdRegister-method"/>
             <keyword name="codegen" id="orm::codegen" ref="gx-orm-codegen.html"/>
             <keyword name="core" id="gx::core" ref="gx-core.html"/>
+            <keyword name="currentChanged" id="Router::currentChanged" ref="qml-io-genesisx-core-router.html#currentChanged-signal"/>
+            <keyword name="currentComponent" id="Router::currentComponent" ref="qml-io-genesisx-core-router.html#currentComponent-prop"/>
+            <keyword name="currentParams" id="Router::currentParams" ref="qml-io-genesisx-core-router.html#currentParams-prop"/>
+            <keyword name="currentPath" id="Router::currentPath" ref="qml-io-genesisx-core-router.html#currentPath-prop"/>
+            <keyword name="devicesAvailableChanged" id="Cast::devicesAvailableChanged" ref="qml-io-genesisx-app-cast.html#devicesAvailableChanged-signal"/>
+            <keyword name="devicesChanged" id="Cast::devicesChanged" ref="qml-io-genesisx-app-cast.html#devicesChanged-signal"/>
             <keyword name="gx" id="gx" ref="gx.html"/>
-            <keyword name="has" id="Permissions::has" ref="qml-genesisx-permissions-permissions.html#has-method"/>
+            <keyword name="gx_enableBackgroundAudio" id="Background::gx_enableBackgroundAudio" ref="qml-io-genesisx-app-background.html#gx_enableBackgroundAudio-method"/>
+            <keyword name="gx_stopForegroundServiceIfAndroid" id="Background::gx_stopForegroundServiceIfAndroid" ref="qml-io-genesisx-app-background.html#gx_stopForegroundServiceIfAndroid-method"/>
+            <keyword name="has" id="Permissions::has" ref="qml-io-genesisx-app-permissions.html#has-method"/>
+            <keyword name="history" id="Router::history" ref="qml-io-genesisx-core-router.html#history-method"/>
             <keyword name="initialize" id="NotificationHandler::initialize" ref="qml-io-genesisx-app-notificationhandler.html#initialize-method"/>
             <keyword name="initialized" id="NotificationHandler::initialized" ref="qml-io-genesisx-app-notificationhandler.html#initialized-prop"/>
             <keyword name="initializedChanged" id="NotificationHandler::initializedChanged" ref="qml-io-genesisx-app-notificationhandler.html#initializedChanged-signal"/>
             <keyword name="io.genesisx.app" id="QML.app.genesisx.io" ref="io-genesisx-app-qmlmodule.html"/>
             <keyword name="io.genesisx.core" id="QML.core.genesisx.io" ref="io-genesisx-core-qmlmodule.html"/>
             <keyword name="io.genesisx.orm" id="QML.orm.genesisx.io" ref="io-genesisx-orm-qmlmodule.html"/>
-            <keyword name="isIgnoringBatteryOptimizations" id="Permissions::isIgnoringBatteryOptimizations" ref="qml-genesisx-permissions-permissions.html#isIgnoringBatteryOptimizations-method"/>
-            <keyword name="notificationEnabledChanged" id="Permissions::notificationEnabledChanged" ref="qml-genesisx-permissions-permissions.html#notificationEnabledChanged-signal"/>
+            <keyword name="isIgnoringBatteryOptimizations" id="Permissions::isIgnoringBatteryOptimizations" ref="qml-io-genesisx-app-permissions.html#isIgnoringBatteryOptimizations-method"/>
+            <keyword name="navigate" id="Router::navigate" ref="qml-io-genesisx-core-router.html#navigate-method"/>
+            <keyword name="navigation" id="gx::navigation" ref="gx-navigation.html"/>
+            <keyword name="notificationEnabledChanged" id="Permissions::notificationEnabledChanged" ref="qml-io-genesisx-app-permissions.html#notificationEnabledChanged-signal"/>
             <keyword name="notificationReceived" id="NotificationHandler::notificationReceived" ref="qml-io-genesisx-app-notificationhandler.html#notificationReceived-signal"/>
             <keyword name="notifications" id="app::notifications" ref="gx-app-notifications.html"/>
-            <keyword name="notificationsEnabled" id="Permissions::notificationsEnabled" ref="qml-genesisx-permissions-permissions.html#notificationsEnabled-prop"/>
-            <keyword name="openAppSettings" id="Permissions::openAppSettings" ref="qml-genesisx-permissions-permissions.html#openAppSettings-method"/>
-            <keyword name="openNotificationSettings" id="Permissions::openNotificationSettings" ref="qml-genesisx-permissions-permissions.html#openNotificationSettings-method"/>
+            <keyword name="notificationsEnabled" id="Permissions::notificationsEnabled" ref="qml-io-genesisx-app-permissions.html#notificationsEnabled-prop"/>
+            <keyword name="openAppSettings" id="Permissions::openAppSettings" ref="qml-io-genesisx-app-permissions.html#openAppSettings-method"/>
+            <keyword name="openDeepLink" id="Router::openDeepLink" ref="qml-io-genesisx-core-router.html#openDeepLink-method"/>
+            <keyword name="openNotificationSettings" id="Permissions::openNotificationSettings" ref="qml-io-genesisx-app-permissions.html#openNotificationSettings-method"/>
             <keyword name="orm" id="gx::orm" ref="gx-orm.html"/>
             <keyword name="permissions" id="app::permissions" ref="gx-app-permissions.html"/>
-            <keyword name="request" id="Permissions::request" ref="qml-genesisx-permissions-permissions.html#request-method"/>
+            <keyword name="registerRoute" id="Router::registerRoute" ref="qml-io-genesisx-core-router.html#registerRoute-method"/>
+            <keyword name="replace" id="Router::replace" ref="qml-io-genesisx-core-router.html#replace-method"/>
+            <keyword name="request" id="Permissions::request" ref="qml-io-genesisx-app-permissions.html#request-method"/>
             <keyword name="requestFinished" id="CommandController::requestFinished" ref="qml-io-genesisx-orm-commandcontroller.html#requestFinished-signal"/>
-            <keyword name="requestNotifications" id="Permissions::requestNotifications" ref="qml-genesisx-permissions-permissions.html#requestNotifications-method"/>
-            <keyword name="requestScheduleExactAlarms" id="Permissions::requestScheduleExactAlarms" ref="qml-genesisx-permissions-permissions.html#requestScheduleExactAlarms-method"/>
-            <keyword name="requestignoreBatteryOptimizations" id="Permissions::requestignoreBatteryOptimizations" ref="qml-genesisx-permissions-permissions.html#requestignoreBatteryOptimizations-method"/>
+            <keyword name="requestNotifications" id="Permissions::requestNotifications" ref="qml-io-genesisx-app-permissions.html#requestNotifications-method"/>
+            <keyword name="requestScheduleExactAlarms" id="Permissions::requestScheduleExactAlarms" ref="qml-io-genesisx-app-permissions.html#requestScheduleExactAlarms-method"/>
+            <keyword name="requestignoreBatteryOptimizations" id="Permissions::requestignoreBatteryOptimizations" ref="qml-io-genesisx-app-permissions.html#requestignoreBatteryOptimizations-method"/>
+            <keyword name="reset" id="Router::reset" ref="qml-io-genesisx-core-router.html#reset-method"/>
+            <keyword name="scanningChanged" id="Cast::scanningChanged" ref="qml-io-genesisx-app-cast.html#scanningChanged-signal"/>
+            <keyword name="selectedDeviceChanged" id="Cast::selectedDeviceChanged" ref="qml-io-genesisx-app-cast.html#selectedDeviceChanged-signal"/>
             <keyword name="show" id="NotificationHandler::show" ref="qml-io-genesisx-app-notificationhandler.html#show-method"/>
             <keyword name="status" id="Biometrics::status" ref="qml-io-genesisx-app-biometrics.html#status-method"/>
             <keyword name="subscribe" id="NotificationHandler::subscribe" ref="qml-io-genesisx-app-notificationhandler.html#subscribe-method"/>
@@ -139,8 +184,11 @@
             <file>core-classes.html</file>
             <file>coreqml-h.html</file>
             <file>genesisx-app-biometrics-qmlmodule.html</file>
+            <file>genesisx-background-qmlmodule.html</file>
+            <file>genesisx-cast-qmlmodule.html</file>
             <file>genesisx-commandcontroller-qmlmodule.html</file>
             <file>genesisx-connectioncontroller-qmlmodule.html</file>
+            <file>genesisx-navigation-qmlmodule.html</file>
             <file>genesisx-notifications-qmlmodule.html</file>
             <file>genesisx-permissions-qmlmodule.html</file>
             <file>genesisx-systeminfo-qmlmodule.html</file>
@@ -153,14 +201,20 @@
             <file>gx-app-audiorecorder.html</file>
             <file>gx-app-auth-auth.html</file>
             <file>gx-app-auth.html</file>
+            <file>gx-app-background-backgroundmediarouter.html</file>
+            <file>gx-app-background.html</file>
             <file>gx-app-biometrics-biometrics.html</file>
             <file>gx-app-biometrics.html</file>
+            <file>gx-app-cast-cast.html</file>
+            <file>gx-app-cast.html</file>
             <file>gx-app-notifications-notificationhandler.html</file>
             <file>gx-app-notifications.html</file>
             <file>gx-app-permissions-permissions.html</file>
             <file>gx-app-permissions.html</file>
             <file>gx-app.html</file>
             <file>gx-core.html</file>
+            <file>gx-navigation-gxrouter.html</file>
+            <file>gx-navigation.html</file>
             <file>gx-orm-codegen.html</file>
             <file>gx-orm-commandcontroller.html</file>
             <file>gx-orm-connectioncontroller.html</file>
@@ -177,12 +231,18 @@
             <file>namespaces.html</file>
             <file>orm-classes.html</file>
             <file>physics.html</file>
-            <file>qml-genesisx-permissions-permissions-members.html</file>
-            <file>qml-genesisx-permissions-permissions.html</file>
+            <file>qml-io-genesisx-app-background-members.html</file>
+            <file>qml-io-genesisx-app-background.html</file>
             <file>qml-io-genesisx-app-biometrics-members.html</file>
             <file>qml-io-genesisx-app-biometrics.html</file>
+            <file>qml-io-genesisx-app-cast-members.html</file>
+            <file>qml-io-genesisx-app-cast.html</file>
             <file>qml-io-genesisx-app-notificationhandler-members.html</file>
             <file>qml-io-genesisx-app-notificationhandler.html</file>
+            <file>qml-io-genesisx-app-permissions-members.html</file>
+            <file>qml-io-genesisx-app-permissions.html</file>
+            <file>qml-io-genesisx-core-router-members.html</file>
+            <file>qml-io-genesisx-core-router.html</file>
             <file>qml-io-genesisx-core-systeminfo-members.html</file>
             <file>qml-io-genesisx-core-systeminfo.html</file>
             <file>qml-io-genesisx-orm-commandcontroller-members.html</file>

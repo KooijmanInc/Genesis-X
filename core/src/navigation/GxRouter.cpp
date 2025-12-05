@@ -1,10 +1,61 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-// #include "include/GenesisX/Navigation/GxRouter.h"
-#include "GxRouter.h"
+#include <GenesisX/Navigation/GxRouter.h>
 
 #include <QUrlQuery>
+
+/*!
+    \class gx::navigation::GxRouter
+    \inmodule io.genesisx.core
+    \ingroup core-classes
+    \title Navigation for QML routes
+    \since Qt 6.10
+    \brief Handles navigation for QML views.
+ */
+
+/*!
+    \qmlmodule GenesisX.Navigation
+    \inqmlmodule io.genesisx.core
+    \title Genesis-X Navigation (QML)
+    \since Qt 6.10
+    \nativetype gx::navigation::GxRouter
+    \brief Handles navigation for QML views.
+
+    Import this module to use the \l Router type:
+
+    \code
+    import GenesisX.Navigation 1.0
+    \endcode
+ */
+
+/*!
+    \qmltype Router
+    \inqmlmodule io.genesisx.core
+    \since Qt 6.10
+    \nativetype gx::navigation::GxRouter
+    \brief Handles routing for QML views.
+
+    \section2 Example
+    \qml
+    import GenesisX.Navigation 1.0
+
+    Window {
+        id: root
+
+        Component.onCompleted: {
+            Router.clearRoutes()
+            Router.registerRoute("welcomeIntro", "/welcome-intro", "qrc:/views/WelcomeIntroView.qml")
+        }
+    }
+    \endqml
+ */
+
+/*!
+    \qmlsignal Router::currentChanged()
+
+    Emitted whenever the current router is changed.
+*/
 
 using namespace gx::navigation;
 
@@ -43,27 +94,66 @@ GxRouter::GxRouter(QObject *parent)
 
 }
 
+/*!
+    \qmlmethod void Router::clearRoutes()
+
+    Clears all routes from memory
+ */
 void GxRouter::clearRoutes()
 {
     m_routes.clear();
 }
 
+/*!
+    \qmlmethod void Router::registerRoute(string name, string path, url comp)
+
+    Registeres all the different routes by setting a \a name in combination with
+    a \a path and a \a comp (componentUrl)
+
+    \code
+    Router.registerRoute("welcomeIntro", "/welcome-intro", "qrc:/views/WelcomeIntroView.qml")
+    \endcode
+ */
 void GxRouter::registerRoute(const QString &name, const QString &path, const QUrl &comp)
 {
     for (auto& r: m_routes) if (r.name == name) { r = makeSpec(name, path, comp); return; }
     m_routes.push_back(makeSpec(name, path, comp));
 }
 
+/*!
+    \qmlmethod bool Router::navigate(string pathOrName, var params)
+
+    Navigate to a specific component via \a pathOrName and optionally with \a params and returns a boolean
+
+    \code
+    Router.navigate("/auth")
+    \endcode
+ */
 bool GxRouter::navigate(const QString &pathOrName, const QVariantMap &params)
 {
     return doNavigate(pathOrName, params, /*replaceTop*/false);
 }
 
+/*!
+    \qmlmethod bool Router::replace(string pathOrName, var params)
+
+    Replace the specific component via \a pathOrName and optionally with \a params and returns a boolean
+
+    \code
+    Router.replace("/auth")
+    \endcode
+ */
 bool GxRouter::replace(const QString &pathOrName, const QVariantMap &params)
 {
     return doNavigate(pathOrName, params, /*replaceTop*/true);
 }
 
+/*!
+    \qmlmethod bool Router::back(int step)
+
+    Go back in history, \a step is standard 1 but can have any value you choose
+    and returns a boolean
+ */
 bool GxRouter::back(int steps)
 {
     if (steps < 1 || steps >= m_hist.size()) return false;
@@ -73,12 +163,23 @@ bool GxRouter::back(int steps)
     return true;
 }
 
+/*!
+    \qmlmethod void Router::reset()
+
+    This will reset the current history
+ */
 void GxRouter::reset()
 {
     m_hist.clear();
     emit currentChanged();
 }
 
+/*!
+    \qmlmethod bool Router::openDeepLink(url url)
+
+    Ability to cache \a url from e.g. notifications and go to component
+    on opening the app and returns a boolean
+ */
 bool GxRouter::openDeepLink(const QUrl &url)
 {
     QString p = url.path();
@@ -87,26 +188,53 @@ bool GxRouter::openDeepLink(const QUrl &url)
     return doNavigate(p, qp, false);
 }
 
+/*!
+    \qmlmethod bool Router::openDeepLink(string s)
+
+    Ability to cache \a s string from e.g. notifications and go to component
+    on opening the app, same as openDeepLink but in stead of QUrl a string
+    and returns a boolean
+ */
 bool GxRouter::openDeepLinkString(const QString &s)
 {
     return openDeepLink(QUrl(s));
 }
 
+/*!
+    \qmlproperty string Router::currentPath
+
+    Holds the value of the current path
+ */
 QString GxRouter::currentPath() const
 {
     return m_hist.isEmpty() ? QString() : m_hist.last().path;
 }
 
+/*!
+    \qmlproperty url Router::currentComponent
+
+    Holds the url of the current component
+ */
 QUrl GxRouter::currentComponent() const
 {
     return m_hist.isEmpty() ? QUrl() : m_hist.last().componentUrl;
 }
 
+/*!
+    \qmlproperty var Router::currentParams
+
+    Holds the variables of the current parameters
+ */
 QVariantMap GxRouter::currentParams() const
 {
     return m_hist.isEmpty() ? QVariantMap{} : m_hist.last().params;
 }
 
+/*!
+    \qmlmethod variantlist Router::history()
+
+    Returns the complete history as a VariantList
+ */
 QVariantList GxRouter::history() const
 {
     QVariantList v;
