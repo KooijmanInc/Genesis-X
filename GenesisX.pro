@@ -7,7 +7,7 @@ CONFIG += ordered
 
 SUBDIRS += core physics orm \
 
-!android:!ios {
+!android:!ios:!wasm:!macos {
     SUBDIRS += tools/gxgen
 }
 
@@ -33,6 +33,7 @@ DISTFILES += \
     SECURITY.md \
     LICENSES/LicenseRef-KooijmanInc-Commercial.txt \
     LICENSES/GPL-3.0-only.txt \
+    installer/packages/io.genesisx.theme.iconslocal/meta/installscript.qs \
     mkspecs/features/genesisx_app_core.prf \
     mkspecs/features/genesisx_assets.prf \
     mkspecs/features/gx_app_ab.prf \

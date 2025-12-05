@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- CommandController.cpp -->
+  <meta name="description" content="Handles API and database commands.">
+  <title>CommandController QML Type | Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
+<div class="navigationbar">
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li><a href="index.html">Genesis-X Documentation</a></li>
+<li><a href="io-genesisx-orm-qmlmodule.html" translate="no">io.genesisx.orm</a></li>
+<li>CommandController</li>
+</ul>
+</div>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#signals">Signals</a></li>
+<li class="level1"><a href="#methods">Methods</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">CommandController QML Type</h1>
+<!-- $$$CommandController-brief -->
+<p>Handles API and database commands. <a href="#details">More...</a></p>
+<!-- @@@CommandController -->
+<div class="table"><table class="alignedsummary requisites" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> <code translate="no">import io.genesisx.orm</code></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> In C++:</td><td class="memItemRight bottomAlign"> <a href="gx-orm-commandcontroller.html" translate="no">CommandController</a></td></tr>
+</table></div>
+<ul>
+<li><a href="qml-io-genesisx-orm-commandcontroller-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="signals">Signals</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-orm-commandcontroller.html#requestFinished-signal" translate="no">requestFinished</a></b>(string <i>path</i>, bool <i>ok</i>, int <i>status</i>, string <i>error</i>, object <i>obj</i>)</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<ul>
+<li class="fn" translate="no">void <b><a href="qml-io-genesisx-orm-commandcontroller.html#cmdLogin-method" translate="no">cmdLogin</a></b>(string <i>user</i>, string <i>pass</i>)</li>
+<li class="fn" translate="no">void <b><a href="qml-io-genesisx-orm-commandcontroller.html#cmdPing-method" translate="no">cmdPing</a></b>()</li>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-orm-commandcontroller.html#cmdPostJson-method" translate="no">cmdPostJson</a></b>(string <i>path</i>, var <i>vm</i>)</li>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-orm-commandcontroller.html#cmdPostJsonBoolAsync-method" translate="no">cmdPostJsonBoolAsync</a></b>(string <i>path</i>, object <i>body</i>)</li>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-orm-commandcontroller.html#cmdPostJsonBoolAsync-method-1" translate="no">cmdPostJsonBoolAsync</a></b>(string <i>path</i>, object <i>body</i>)</li>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-orm-commandcontroller.html#cmdRegister-method" translate="no">cmdRegister</a></b>(string <i>email</i>, string <i>password</i>)</li>
+</ul>
+<!-- $$$CommandController-description -->
+<h2 id="details">Detailed Description</h2>
+<!-- @@@CommandController -->
+<h2>Signal Documentation</h2>
+<!-- $$$requestFinished[overload1]$$$requestFinishedstringboolintstringobject -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="requestFinished-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="name">requestFinished</span>(<span class="type">string</span> <i>path</i>, <span class="type">bool</span> <i>ok</i>, <span class="type">int</span> <i>status</i>, <span class="type">string</span> <i>error</i>, <span class="type">object</span> <i>obj</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Emitted when the postrequest got response. The <i translate="no">path</i> where the request was send to. The <i translate="no">ok</i> boolean if it was successful. A http response <i translate="no">status</i> e.g. 200 or 400. The <i translate="no">error</i> shows what it wrong when getting other than status 200 The return body that must be in an JsonObject <i translate="no">obj</i>.</p>
+<div class="admonition note"><p><b>Note: </b>The corresponding handler is <code translate="no">onRequestFinished</code>.</p>
+</div></div></div><!-- @@@requestFinished -->
+<br/>
+<h2>Method Documentation</h2>
+<!-- $$$cmdLogin[overload1]$$$cmdLoginstringstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="cmdLogin-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">cmdLogin</span>(<span class="type">string</span> <i>user</i>, <span class="type">string</span> <i>pass</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Set login credentials for JWT authorization, add <i translate="no">user</i> as username and <i translate="no">pass</i> as password</p>
+</div></div><!-- @@@cmdLogin -->
+<br/>
+<!-- $$$cmdPing[overload1]$$$cmdPing -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="cmdPing-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">cmdPing</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Returns a signal if connection to remote server is successful</p>
+</div></div><!-- @@@cmdPing -->
+<br/>
+<!-- $$$cmdPostJson[overload1]$$$cmdPostJsonstringvar -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="cmdPostJson-method">
+<td class="tblQmlFuncNode"><p>
+<span class="name">cmdPostJson</span>(<span class="type">string</span> <i>path</i>, <span class="type">var</span> <i>vm</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Send <i translate="no">path</i> as the path in url for connecting to API function Send <i translate="no">vm</i> as the QVariantMap as parameters you need at that url request e.g. Customernumber 1, Address Krijtlaan etc.</p>
+</div></div><!-- @@@cmdPostJson -->
+<br/>
+<!-- $$$cmdPostJsonBoolAsync[overload1]$$$cmdPostJsonBoolAsyncstringobject -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="cmdPostJsonBoolAsync-method">
+<td class="tblQmlFuncNode"><p>
+<span class="name">cmdPostJsonBoolAsync</span>(<span class="type">string</span> <i>path</i>, <span class="type">object</span> <i>body</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Send <i translate="no">path</i> as the path in url for connecting to API function Send <i translate="no">body</i> as a QJsonObject, it returns only a boolean if post was successful</p>
+</div></div><!-- @@@cmdPostJsonBoolAsync -->
+<br/>
+<!-- $$$cmdPostJsonBoolAsync$$$cmdPostJsonBoolAsyncstringobject -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="cmdPostJsonBoolAsync-method-1">
+<td class="tblQmlFuncNode"><p>
+<span class="name">cmdPostJsonBoolAsync</span>(<span class="type">string</span> <i>path</i>, <span class="type">object</span> <i>body</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>Send <i translate="no">path</i> as the path in url for connecting to API function Send <i translate="no">body</i> as a QJsonObject. Its the same as cmdPostJsonBoolAsync but it returns HttpResponse with body</p>
+</div></div><!-- @@@cmdPostJsonBoolAsync -->
+<br/>
+<!-- $$$cmdRegister[overload1]$$$cmdRegisterstringstring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="cmdRegister-method">
+<td class="tblQmlFuncNode"><p>
+<span class="name">cmdRegister</span>(<span class="type">string</span> <i>email</i>, <span class="type">string</span> <i>password</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>A Stub to check if postJson is correct, testing the connection Send <i translate="no">email</i> and <i translate="no">password</i> for testing</p>
+</div></div><!-- @@@cmdRegister -->
+<br/>
+<div class="qt-footer">
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
+</div>
+</body>
+</html>

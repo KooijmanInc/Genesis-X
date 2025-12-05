@@ -13,6 +13,9 @@ ios {
     CONFIG += shared staticlib
 # } else:win32 {
 # CONFIG += dll
+} else:wasm {
+    CONFIG -= shared dll plugin
+    CONFIG += staticlib
 } else {
     CONFIG += shared
 }
@@ -40,14 +43,18 @@ win32-g++: QMAKE_LFLAGS_SHLIB += -Wl,--out-implib,$$DESTDIR/lib$${TARGET}.a
 # ORM links to core; search same central dir
 QMAKE_LIBDIR += $$DESTDIR
 android {
-    LIBS += -lgenesisx_arm64-v8a
+    contains(QT_ARCH, arm64-v8a) {
+        LIBS += -lgenesisx_arm64-v8a
+    } else: contains(QT_ARCH, x86_64) {
+        LIBS += -lgenesisx_x86_64
+    }
 } else {
     LIBS += -lgenesisx
 }
 
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/orm/include
 
-HEADERS += $$files($$PWD/include/GenesisX/Orm/*.h) \
+HEADERS += $$files($$PWD/include/GenesisX/*.h, true) \
     $$files($$PWD/src/*.h, true)
 
 SOURCES += $$files($$PWD/src/*.cpp, true)

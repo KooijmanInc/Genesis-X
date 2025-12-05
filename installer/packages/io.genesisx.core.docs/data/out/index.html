@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- index.qdoc -->
+  <title>Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
+<div class="navigationbar">
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li>Genesis-X Documentation</li>
+</ul>
+</div>
+<h1 class="title">Genesis-X Documentation</h1>
+<!-- $$$index.html-description -->
+<div class="descr" id="details">
+<h2 id="introduction">Introduction</h2>
+<p>Genesis-X is a modular, high-performance application framework designed for Qt 6. It provides production-ready tooling, fully integrated developer utilities, and advanced modules to accelerate development for desktop, mobile, and embedded platforms.</p>
+<p>Genesis-X is created and maintained by <i>Kooijman Incorporate Holding B.V&#x2e;</i>, with a focus on real-world developer experience, QML productivity, and clean modular extensibility.</p>
+<p>This documentation provides an overview of all Genesis-X modules and includes detailed C++, QML, tooling, and workflow references.</p>
+<h2 id="features">Features</h2>
+<p>Genesis-X contains several key modules:</p>
+<ul>
+<li><b>Core</b> Fundamental utilities, logging, configuration, and the Genesis-X application environment.</li>
+<li><b>Utils</b> Cross-platform helpers, platform abstractions, and additional C++ convenience APIs.</li>
+<li><b>Orm</b> A lightweight, high-level ORM layer with support for HTTP controllers, request handling, response objects, and future database connectors.</li>
+<li><b>Assets</b> (QML Design System) (In development) A QML-based UI toolkit with components, typography, spacing, color tokens, and layout helpers.</li>
+<li><b>Physics</b> (In development) A modern physics extension intended for Qt Quick 3D View3D applications.</li>
+<li><b>Snippets</b> (Developer Tools) Qt Creator snippets for faster QML and C++ development.</li>
+<li><b>Wizard</b> Templates Project templates integrated into Qt Creator’s “New Project” wizard.</li>
+</ul>
+<h2 id="getting-started">Getting Started</h2>
+<p>To begin using Genesis-X, include the desired modules in your qmake project:</p>
+<pre class="cpp">QT <span class="operator">+</span><span class="operator">=</span> genesisx
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_app_notifications
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_assets
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_orm        <span class="preprocessor"># optional</span>
+QT <span class="operator">+</span><span class="operator">=</span> genesisx_physics    <span class="preprocessor"># in development</span></pre>
+<p>In your main.cpp add:</p>
+<pre class="cpp"><span class="preprocessor">#include &lt;GenesisX/CoreQml.h&gt;</span>
+
+<span class="type">int</span> main(<span class="type">int</span> argc<span class="operator">,</span> <span class="type">char</span><span class="operator">*</span> argv<span class="operator">[</span><span class="operator">]</span>)
+{
+    <span class="type">QApplication</span> app(argc<span class="operator">,</span> argv);
+
+    GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);
+}</pre>
+<p>This will register the qmltypes of the chosen features.</p>
+<p>In QML, import modules using:</p>
+<pre class="cpp">import GenesisX<span class="operator">.</span>Notifications <span class="number">1.0</span></pre>
+<div class="admonition note">
+<p><b>Note: </b>If you select a feature like genesisx_app_notifications the you don't have to add the feature genesisx, this is always included when selecting a feature.</p>
+</div>
+<p>Refer to the <a href="getting-started.html">Getting Started Guide</a> for installation steps, module usage, and editor integration.</p>
+<h2 id="module-overviews">Module Overviews</h2>
+<ul>
+<li><a href="io-genesisx-core-qmlmodule.html">Core Module</a></li>
+<li><a href="io-genesisx-app-qmlmodule.html">App Module</a></li>
+<li><a href="io-genesisx-orm-qmlmodule.html">ORM Module</a></li>
+<li><a href="assets.html">Assets UI Module (In development)</a></li>
+<li><a href="physics.html">Physics Module (In development)</a></li>
+</ul>
+<h2 id="developer-tools">Developer Tools</h2>
+<p>Genesis-X ships with several productivity tools:</p>
+<ul>
+<li>Qt Creator Snippets Auto-completion helpers for common QML / C++ patterns.</li>
+<li>Qt Creator Wizard Templates Create new Genesis-X applications directly from <b>File &gt; New Project</b>.</li>
+<li>QDoc / Qt Assistant Integration This documentation is auto-registered in Qt Creator when the installer is run.</li>
+</ul>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="classes.html">C++ Classes</a></li>
+<li><a href="namespaces.html">Namespaces</a></li>
+<li><a href="namespaces-orm.html">Namespaces Orm</a></li>
+<li><a href="getting-started.html">Getting started with Genesis-X</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>Genesis-X is dual-licensed under:</p>
+<ul>
+<li><i>KooijmanInc Commercial License</i></li>
+<li>GPL-3.0-only</li>
+</ul>
+<p>See <a href="index.html#license">License Information</a> for details.</p>
+<h2 id="support-and-contact">Support and Contact</h2>
+<p>Official website: <i>https://www.genesis-x.io</i></p>
+<p>For commercial inquiries, licensing questions, or integration support, contact:</p>
+<p><i>support@genesis-x.io</i></p>
+</div>
+<!-- @@@index.html -->
+<div class="qt-footer">
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
+</div>
+</body>
+</html>

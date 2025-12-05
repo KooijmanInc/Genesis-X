@@ -13,7 +13,11 @@
 
     GX_ABI = $$QT_ARCH
     isEmpty(GX_ABI): GX_ABI = arm64-v8a
-    contains(GX_ABI, arm64): GX_ABI = arm64-v8a
+    contains(GX_ABI, arm64) {
+        GX_ABI = arm64-v8a
+    } else: contains(GX_ABI, x86_64) {
+        GX_ABI = x86_64
+    }
 
     android {
         LIBS += -lgenesisx_$${GX_ABI}
@@ -114,6 +118,49 @@
             message([genesisx] will copy AndroidManifest.xml from: $$GX_GAFEST_SRC to: $$GX_GAFEST_DST)
         } else {
             message([genesisx] WARNING: AndroidManifest.xml not found in template or existing in app to: $$GX_GAFEST_DST)
+        }
+    }
+
+    linux:!android {
+        # Embed a runpath that points to the exe directory at runtime
+        QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+        # (Optional) also add specific config dirs if you want:
+        QMAKE_RPATHDIR += $$DEST_LIBDIRS
+
+        SO_LIST = $$files($$LIBDIRS/libgenesisx.so*)
+        message([genesisx] Linux copy libs: $$SO_LIST to: $$DEST_LIBDIRS)
+
+        for (f, SO_LIST) {
+            # message(file is: f)
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DEST_LIBDIRS)/
+        }
+    }
+
+    contains(QMAKE_HOST.os, Darwin) {
+        QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
+        QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
+        QMAKE_MAC_XCODE_SETTINGS += SEPARATE_HEADERMAP=YES
+
+        LIBS += -framework UserNotifications
+        macos: LIBS += -framework AppKit
+        ios: LIBS += -framework UIKit -framework AVFoundation
+        macos: LIBS += -framework Cocoa
+        LIBS += -framework Foundation
+        QMAKE_LFLAGS += -ObjC
+        QMAKE_OBJECTIVE_CFLAGS += -fobjc-arc
+        QMAKE_OBJECTIVE_CXXFLAGS += -fobjc-arc
+        macos: QMAKE_LFLAGS += -Wl,-undefined,dynamic_lookup
+
+#         # QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+#         # QMAKE_LFLAGS += -rpath
+
+        SO_LIST = $$files($$LIBDIRS/libgenesisx*)
+        message([genesisx] Apple copy from $$LIBDIRS -> $$DEST_LIBDIRS)
+
+        QMAKE_POST_LINK += $$escape_expand(\\n\\t)mkdir -p $$shell_quote($$DEST_LIBDIRS)
+
+        for(f, SO_LIST) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DEST_LIBDIRS)/
         }
     }
 }

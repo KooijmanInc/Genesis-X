@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- NotificationHandler.cpp -->
+  <title>NotificationHandler Class | Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
+<div class="navigationbar">
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li><a href="index.html">Genesis-X Documentation</a></li>
+<li><a href="app-classes.html">C++ Classes</a></li>
+<li><a href="io-genesisx-core-qmlmodule.html">io.genesisx.core</a></li>
+<li>NotificationHandler</li>
+</ul>
+</div>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title">NotificationHandler Class</h1>
+<span class="small-subtitle">class <a href="gx.html">gx</a>::<a href="gx-app.html">app</a>::<a href="gx-app-notifications.html">notifications</a>::NotificationHandler</span>
+<!-- $$$NotificationHandler-brief -->
+<p>Main class for local and push notifications. <a href="#details">More...</a></p>
+<!-- @@@NotificationHandler -->
+<div class="table"><table class="alignedsummary">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign"> <span class="preprocessor">#include &lt;NotificationHandler&gt;</span>
+</td></tr><tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr></table></div>
+<!-- $$$NotificationHandler-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>code snippet shows the correct usage pattern:</p>
+<pre class="cpp"><span class="preprocessor">#include &lt;QGuiApplication&gt;</span>
+<span class="preprocessor">#include &lt;QQmlApplicationEngine&gt;</span>
+<span class="preprocessor">#include &lt;GenesisX/CoreQml.h&gt;</span>
+
+<span class="type">int</span> main(<span class="type">int</span> argc<span class="operator">,</span> <span class="type">char</span> <span class="operator">*</span>argv<span class="operator">[</span><span class="operator">]</span>)
+{
+    <span class="type">QGuiApplication</span> app(argc<span class="operator">,</span> argv);
+
+    GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);
+
+    <span class="type">QQmlApplicationEngine</span> engine;
+
+    engine<span class="operator">.</span>load(<span class="type">QStringLiteral</span>(<span class="string">&quot;qrc:/views/MasterView.qml&quot;</span>));
+
+    <span class="keyword">if</span> (engine<span class="operator">.</span>rootObjects()<span class="operator">.</span>isEmpty()) <span class="keyword">return</span> <span class="operator">-</span><span class="number">1</span>;
+
+    <span class="keyword">return</span> app<span class="operator">.</span>exec();
+}</pre>
+<p>code snippet setting modules list in qmake:</p>
+<pre class="cpp">GX_LOADED_MODULES <span class="operator">=</span> $$QT
+GX_LOADED_MODULES_CSV <span class="operator">=</span> $$join(GX_LOADED_MODULES<span class="operator">,</span> <span class="string">&quot;,&quot;</span>)
+DEFINES <span class="operator">+</span><span class="operator">=</span> GX_LOADED_MODULES<span class="operator">=</span>\\\<span class="string">&quot;$$GX_LOADED_MODULES_CSV\\\&quot;
+</span></pre>
+<pre class="cpp">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine<span class="operator">,</span> GX_LOADED_MODULES);</pre>
+<p>code snippet shows the correct usage pattern:</p>
+<pre class="cpp">import <span class="type">QtQuick</span>
+import GenesisX<span class="operator">.</span>Notifications <span class="number">1.0</span>
+
+Window {
+    id: root
+    visible: <span class="keyword">true</span>
+    width: <span class="number">1024</span>
+    height: <span class="number">768</span>
+
+    Component<span class="operator">.</span>onCompleted: {
+        notify<span class="operator">.</span>show(<span class="string">&quot;Hello from GenesisX&quot;</span><span class="operator">,</span> <span class="string">&quot;Windows tray balloon :-)&quot;</span>)
+    }
+
+    NotificationHandler {
+        id: notify
+        onNotificationReceived: (title<span class="operator">,</span> body<span class="operator">,</span> data) <span class="operator">=</span><span class="operator">&gt;</span> {
+            console<span class="operator">.</span>log(<span class="string">&quot;[QML] got notification:&quot;</span><span class="operator">,</span> title<span class="operator">,</span> body<span class="operator">,</span> JSON<span class="operator">.</span>stringify(data))
+        }
+        onTokenChanged: t <span class="operator">=</span><span class="operator">&gt;</span> console<span class="operator">.</span>log(<span class="string">&quot;New token found in qml:&quot;</span><span class="operator">,</span> t)
+        Component<span class="operator">.</span>onCompleted: initialize()
+    }
+}</pre>
+</div>
+<!-- @@@NotificationHandler -->
+<div class="qt-footer">
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
+</div>
+</body>
+</html>

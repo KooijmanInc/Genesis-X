@@ -4,5 +4,5 @@
     \inmodule io.genesisx.core
     \brief App C++ classes in Genesis-X
 
-    \generatelist{annotatedclasses}
+    \generatelist{core-classes}
  */

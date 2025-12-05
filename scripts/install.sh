@@ -21,6 +21,7 @@ echo
 echo "Checking Qt environment..."
 echo
 
+QMAKE_CMD="null"
 if qmake.exe -v >/dev/null 2>&1; then
     QMAKE_CMD="qmake.exe"
 elif qmake6.exe -v >/dev/null 2>&1; then
@@ -38,12 +39,85 @@ else
     exit 1
 fi
 
+detect_qmake() {
+    # 1) Explicit override
+    if [ -n "${QMAKE_BIN:-}" ]; then
+        if [ -x "$QMAKE_BIN" ]; then
+            echo "$QMAKE_BIN"
+            return 0
+        else
+            echo "Warning: QMAKE_BIN is set but not executable: $QMAKE_BIN" >&2
+        fi
+    fi
+
+    # Helper to check "is this qmake a Qt 6 qmake?"
+    is_qt6_qmake() {
+        QT_VER="$("$1" -v 2>/dev/null | grep -i 'Qt version' | awk '{print $4}')"
+        # Expect something like 6.10.0
+        case "$QT_VER" in
+            6.*) return 0 ;;
+            *)   return 1 ;;
+        esac
+    }
+
+    # 2) Try common Qt6 names first
+    for CAND in qmake6 qmake-qt6; do
+        if command -v "$CAND" >/dev/null 2>&1; then
+            if is_qt6_qmake "$(command -v "$CAND")"; then
+                command -v "$CAND"
+                return 0
+            fi
+        fi
+    done
+
+    # 3) Try plain qmake but only accept Qt 6
+    if command -v qmake >/dev/null 2>&1; then
+        Q="$(command -v qmake)"
+        if is_qt6_qmake "$Q"; then
+            echo "$Q"
+            return 0
+        fi
+    fi
+
+    # 4) Look in typical Qt installer directories (Qt Online Installer)
+    for base in "$HOME/Qt" "/opt/Qt"; do
+        if [ -d "$base" ]; then
+            CANDIDATE="$(find "$base" -maxdepth 4 -type f -name qmake 2>/dev/null | head -n1)"
+            if [ -n "$CANDIDATE" ]; then
+                if is_qt6_qmake "$CANDIDATE"; then
+                    echo "$CANDIDATE"
+                    return 0
+                fi
+            fi
+        fi
+    done
+
+    return 1
+}
+
 if mingw32-make.exe -v >/dev/null 2>&1; then
     MAKE_CMD="mingw32-make.exe"
 elif mingw32-make -v >/dev/null 2>&1; then
     MAKE_CMD="mingw32-make"
 else
     MAKE_CMD="make"
+fi
+
+if [[ $QMAKE_CMD == "null" ]]; then
+    QMAKE_BIN="$(detect_qmake || echo '')"
+
+    if [ -z "$QMAKE_BIN" ]; then
+        echo "Error: Could not find a Qt 6 'qmake' on this system." >&2
+        echo "" >&2
+        echo "Please either:" >&2
+        echo "  - Install Qt 6 and ensure its qmake is in PATH," >&2
+        echo "  - Or run this script with an explicit QMAKE_BIN, for example:" >&2
+        echo "      QMAKE_BIN=\$HOME/Qt/6.10.0/gcc_64/bin/qmake ./scripts/install.sh" >&2
+        exit 1
+    else
+    #    echo "Using qmake: $QMAKE_BIN"
+        QMAKE_CMD=$QMAKE_BIN
+    fi
 fi
 
 echo "→ Qt detected:"
@@ -177,16 +251,28 @@ install_snippets() {
         local CLEAN_FILE
         CLEAN_FILE="$(mktemp)"
 
-        grep -v 'trigger="genesisx' "$DEST_FILE" > "$CLEAN_FILE"
+        sed 's|<snippets\s*/>|<snippets>\n<snippets>|' "$DEST_FILE" \
+            | grep -v 'trigger="genesisx' \
+            > "$CLEAN_FILE"
 
         local TMP_FILE
         TMP_FILE="$(mktemp)"
 
-        sed '$d' "$CLEAN_FILE" > "$TMP_FILE"
+        {
+            if head -n1 "$CLEAN_FILE" | grep -q '^<\?xml'; then
+                head -n1 "$CLEAN_FILE"
+            else
+                echo '<?xml version="1.0" encoding="UTF-8"?>'
+            fi
 
-        sed '1,2d;$d' "$SRC_SNIPPETS_FILE" >> "$TMP_FILE"
+            echo '<snippets>'
 
-        tail -n 1 "$CLEAN_FILE" >> "$TMP_FILE"
+            sed '1,2d;$d' "$CLEAN_FILE"
+
+            sed '1,2d;$d' "$SRC_SNIPPETS_FILE"
+
+            echo '</snippets>'
+        } > "$TMP_FILE"
 
         mv "$TMP_FILE" "$DEST_FILE" || {
             echo "❌ Failed to write merged snippets file."
@@ -221,13 +307,17 @@ register_docs() {
         QT_CREATOR_INI="/mnt/c/Users/${WINUSER}/AppData/Roaming/QtProject/QtCreator.ini"
     else
         QT_CREATOR_INI="$HOME/.config/QtProject/QtCreator.ini"
+        echo "also macos"
     fi
 
     if [[ ! -f "$QT_CREATOR_INI" ]]; then
         echo "QtCreator.ini not found at: $QT_CREATOR_INI"
         echo "You need to register Genesis-X docs in Qt yourself"
     else
-        local SRC_DOCS_QCH="$(dirname "$0")/../docs/out/GenesisX.qch"
+        local SCRIPT_DIR
+        SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+        local SRC_DOCS_QCH="$SCRIPT_DIR/../docs/out/GenesisX.qch"
+#        local SRC_DOCS_QCH="$(dirname "$0")/../docs/out/GenesisX.qch"
         if ! grep -q "InstalledDocumentation=$SRC_DOCS_QCH" "$QT_CREATOR_INI"; then
             echo "Registering Genesis-X docs in Qt Creator:"
             echo "  INI: $QT_CREATOR_INI"
@@ -296,8 +386,10 @@ for F in "${FEATURES[@]}"; do
             ;;
         thirdparty)
             echo "→ Installing 3rd party for Genesis-X..."
-            bash "$(dirname "$0")/../scripts//bootstrap.sh" all
+            SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+            bash "$SCRIPT_DIR/../scripts/bootstrap.sh" all
             echo "✅ 3rd party dependencies for Genesis-X installed."
+            HAS_THIRDPARTY=1
             ;;
     esac
 done
@@ -397,18 +489,37 @@ elif [ -d "/mnt/c" ]; then
 else
     if [[ ! -x "$QTC" ]]; then
         QTC="/opt/Qt/Tools/QtCreator/bin/qtcreator"      # adjust to your real path
-    fi
-    if [[ ! -x "$QTC" ]]; then
+    elif [[ ! -x "$QTC" ]]; then
         QTC="/usr/bin/qtcreator"
-    fi
-    if [[ ! -x "$QTC" ]]; then
+    elif [[ ! -x "$QTC" ]]; then
         QTC="/usr/local/bin/qtcreator"
+    elif [[ ! -x "$QTC" ]]; then
+        QTC="$HOME/Qt/Qt Creator.app"
     fi
 fi
-
+echo "$QTC"
 if [[ ! -x "$QTC" ]]; then
-    echo -e "${YELLOW}⚠We could not detect a working Qt version, start Qt manually${RESET}"
-    return 0
+    QT_CREATOR_BIN="${QT_CREATOR_BIN:-}"
+
+    if [ -z "$QT_CREATOR_BIN" ]; then
+        # 1) If qtcreator is in PATH, prefer that
+        if command -v qtcreator >/dev/null 2>&1; then
+            QT_CREATOR_BIN="$(command -v qtcreator)"
+        # 2) Fallback to the Qt Online Installer location you found
+        elif [ -x "$HOME/Qt/Tools/QtCreator/bin/qtcreator" ]; then
+            QT_CREATOR_BIN="$HOME/Qt/Tools/QtCreator/bin/qtcreator"
+        elif [ -x "$HOME/Qt/Qt Creator.app" ]; then
+            QT_CREATOR_BIN="$HOME/Qt/Qt Creator.app/Contents/MacOS/Qt Creator"
+        fi
+    fi
+    if [ -n "$QT_CREATOR_BIN" ]; then
+        echo "Launching Qt Creator: $QT_CREATOR_BIN"
+        "$QT_CREATOR_BIN" &
+        exit 0
+    else
+        echo -e "${YELLOW}⚠We could not detect a working Qt version, start Qt manually${RESET}"
+        exit 0
+    fi
 else
     echo -e "${GREEN}✅ Working Qt version found, starting Qt now to let changed setting take effect${RESET}"
     "$QTC"

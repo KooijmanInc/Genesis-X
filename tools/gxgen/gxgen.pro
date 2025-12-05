@@ -24,8 +24,18 @@ DEPENDPATH += ../../orm/include
 
 LIBS += -L$$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/$$GX_CFG -lgenesisx_orm -lgenesisx
 
-PRE_TARGETDEPS += $$GENESISX_LIBDIR/libgenesisx_orm.a \
-                  $$GENESISX_LIBDIR/libgenesisx.a
+win32 {
+    PRE_TARGETDEPS += $$GENESISX_LIBDIR/libgenesisx_orm.a \
+                      $$GENESISX_LIBDIR/libgenesisx.a
+} else {
+    # Unix (Linux + macOS): depend on the *shared* libs (so/dylib) instead of .a
+    GENESISX_ORM_SHLIB = $$GENESISX_LIBDIR/$$QMAKE_PREFIX_SHLIBgenesisx_orm.$$QMAKE_EXTENSION_SHLIB
+    GENESISX_SHLIB     = $$GENESISX_LIBDIR/$$QMAKE_PREFIX_SHLIBgenesisx.$$QMAKE_EXTENSION_SHLIB
+
+    # message(get correct lib is $$GENESISX_LIB)
+    PRE_TARGETDEPS += $$GENESISX_LIBDIR/libgenesisx_orm.$$QMAKE_EXTENSION_SHLIB \
+                      $$GENESISX_LIBDIR/libgenesisx.$$QMAKE_EXTENSION_SHLIB
+}
 
 DESTDIR = $$PWD/$$GX_CFG
 

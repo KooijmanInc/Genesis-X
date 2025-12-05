@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- Biometrics.cpp -->
+  <meta name="description" content="QML APIs for biometrics.">
+  <title>Biometrics QML Type | Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
+<div class="navigationbar">
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li><a href="index.html">Genesis-X Documentation</a></li>
+<li><a href="io-genesisx-app-qmlmodule.html" translate="no">io.genesisx.app</a></li>
+<li>Biometrics</li>
+</ul>
+</div>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#properties">Properties</a></li>
+<li class="level1"><a href="#signals">Signals</a></li>
+<li class="level1"><a href="#methods">Methods</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+<li class="level2"><a href="#example">Example</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">Biometrics QML Type</h1>
+<!-- $$$Biometrics-brief -->
+<p>QML APIs for biometrics. <a href="#details">More...</a></p>
+<!-- @@@Biometrics -->
+<div class="table"><table class="alignedsummary requisites" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Import Statement:</td><td class="memItemRight bottomAlign"> <code translate="no">import io.genesisx.app</code></td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> In C++:</td><td class="memItemRight bottomAlign"> <a href="gx-app-biometrics-biometrics.html" translate="no">Biometrics</a></td></tr>
+</table></div>
+<ul>
+<li><a href="qml-io-genesisx-app-biometrics-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="properties">Properties</h2>
+<ul>
+<li class="fn" translate="no"><b><a href="qml-io-genesisx-app-biometrics.html#available-prop" translate="no">available</a></b> : bool</li>
+</ul>
+<h2 id="signals">Signals</h2>
+<ul>
+<li class="fn" translate="no">void <b><a href="qml-io-genesisx-app-biometrics.html#authenticated-signal" translate="no">authenticated</a></b>(int <i>code</i>, string <i>message</i>)</li>
+<li class="fn" translate="no">void <b><a href="qml-io-genesisx-app-biometrics.html#availabilityChanged-signal" translate="no">availabilityChanged</a></b>()</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<ul>
+<li class="fn" translate="no">var <b><a href="qml-io-genesisx-app-biometrics.html#authenticate-method" translate="no">authenticate</a></b>(string <i>reason</i>)</li>
+<li class="fn" translate="no">int <b><a href="qml-io-genesisx-app-biometrics.html#status-method" translate="no">status</a></b>()</li>
+</ul>
+<!-- $$$Biometrics-description -->
+<h2 id="details">Detailed Description</h2>
+<h3 id="example">Example</h3>
+<pre class="qml" translate="no">import GenesisX.App.Biometrics
+
+<span class="type"><a href="qml-io-genesisx-app-biometrics.html" translate="no">Biometrics</a></span> {
+    <span class="name">onAuthenticated</span>: <span class="keyword"></span>(code, message) =&gt; {
+        <span class="keyword">if</span> (<span class="name">code</span> <span class="operator">===</span> <span class="number">0</span>) <span class="name">console</span>.<span class="name">log</span>(<span class="string">&quot;OK biometrics there&quot;</span>, <span class="name">code</span>, <span class="name">message</span>)
+        <span class="keyword">else</span> <span class="name">console</span>.<span class="name">warn</span>(<span class="string">&quot;Biometric error:&quot;</span>, <span class="name">code</span>, <span class="name">message</span>)
+    }
+    <span class="name">Component</span>.onCompleted: {
+        <span class="keyword">if</span> (<span class="name">bio</span>.<span class="name">available</span>) {
+            <span class="name">bio</span>.<span class="name">authenticate</span>(<span class="string">&quot;Unlock app&quot;</span>)
+        }
+    }
+}</pre>
+<!-- @@@Biometrics -->
+<h2>Property Documentation</h2>
+<!-- $$$available -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="available-prop">
+<td class="tblQmlPropNode"><p>
+<span class="name">available</span> : <span class="type">bool</span></p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p>True if biometrics is available</p>
+</div></div><!-- @@@available -->
+<br/>
+<h2>Signal Documentation</h2>
+<!-- $$$ -->
+<div class="qmlitem"><div class="fngroup">
+<div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="authenticated-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">authenticated</span>(<span class="type">int</span> <i>code</i>, <span class="type">string</span> <i>message</i>)</p></td></tr>
+<tr valign="top" class="odd" id="availabilityChanged-signal">
+<td class="tblQmlFuncNode"><p>
+<span class="type">void</span> <span class="name">availabilityChanged</span>()</p></td></tr>
+</table></div></div>
+</div><div class="qmldoc"></div></div><!-- @@@ -->
+<br/>
+<h2>Method Documentation</h2>
+<!-- $$$authenticate[overload1]$$$authenticatestring -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="authenticate-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">var</span> <span class="name">authenticate</span>(<span class="type">string</span> <i>reason</i>)</p></td></tr>
+</table></div></div>
+<div class="qmldoc"><p><i translate="no">reason</i>, why it isn't available</p>
+</div></div><!-- @@@authenticate -->
+<br/>
+<!-- $$$status[overload1]$$$status -->
+<div class="qmlitem"><div class="qmlproto" translate="no">
+<div class="table"><table class="qmlname">
+<tr valign="top" class="odd" id="status-method">
+<td class="tblQmlFuncNode"><p>
+<span class="type">int</span> <span class="name">status</span>()</p></td></tr>
+</table></div></div>
+<div class="qmldoc"></div></div><!-- @@@status -->
+<br/>
+<div class="qt-footer">
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
+</div>
+</body>
+</html>

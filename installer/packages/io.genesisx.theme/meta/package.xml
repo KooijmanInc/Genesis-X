@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>Genesis-X Theme</DisplayName>
+    <Description>Genesis-X Theme package e.g. wallpaper, File &amp; Folder icons.</Description>
+    <Version>1.0.0</Version>
+    <ReleaseDate>2025-11-27</ReleaseDate>
+
+    <Default>false</Default>
+
+</Package>

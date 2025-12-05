@@ -5,7 +5,6 @@
 
 [![CI – Quality checks](https://github.com/KooijmanInc/Genesis-X/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/KooijmanInc/Genesis-X/actions/workflows/quality.yml)
 [![CI – Quality checks (staging)](https://github.com/KooijmanInc/Genesis-X/actions/workflows/quality.yml/badge.svg?branch=staging)](https://github.com/KooijmanInc/Genesis-X/actions/workflows/quality.yml)
-[![GitLab pipeline](https://gitlab.com/kooijmaninc2/genesisx/genesis-x/badges/main/pipeline.svg)](https://gitlab.com/kooijmaninc2/genesisx/genesis-x/-/pipelines)
 
 
 Qt library with a physics-engine foundation and cross-platform notifications.  

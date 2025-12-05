@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- CoreQml.cpp -->
+  <title>CoreQml.h - Core qml register types | Genesis-X Documentation 1.0</title>
+<link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+<body>
+<div class="navigationbar">
+  <ul class="navigationbar">
+<li><a href="index.html">Genesis-X</a></li>
+<li><a href="index.html">Genesis-X Documentation</a></li>
+<li>CoreQml.h - Core qml register types</li>
+</ul>
+</div>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level2"><a href="#code-snippet-setting-modules-list-in-qmake">code snippet setting modules list in qmake:</a></li>
+<li class="level2"><a href="#and-set-in-main-cpp">And set in main.cpp.</a></li>
+<li class="level2"><a href="#optionally-you-can-load-everything-by-setting">Optionally you can load everything by setting.</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title">CoreQml.h - Core qml register types</h1>
+<!-- $$$CoreQml.h-brief -->
+<p>Register all enabled GenesisX QML modules on <i>engine</i>. <a href="#details">More...</a></p>
+<!-- @@@CoreQml.h -->
+<div class="table"><table class="alignedsummary">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign"> <span class="preprocessor">#include &lt;CoreQml.h&gt;</span>
+</td></tr><tr><td class="memItemLeft rightAlign topAlign"> Since:</td><td class="memItemRight bottomAlign"> Qt 6.10</td></tr></table></div>
+<!-- $$$CoreQml.h-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>Via <a href="coreqml-h.html">CoreQml.h</a> you link the different modules. Which modules are registered depends on your qmake QT, e.g&#x2e; genesisx_app_notifications, genesisx_app_ab, etc.</p>
+<h5 id="code-snippet-setting-modules-list-in-qmake">code snippet setting modules list in qmake:</h5>
+<pre class="cpp">GX_LOADED_MODULES <span class="operator">=</span> $$QT
+GX_LOADED_MODULES_CSV <span class="operator">=</span> $$join(GX_LOADED_MODULES<span class="operator">,</span> <span class="string">&quot;,&quot;</span>)
+DEFINES <span class="operator">+</span><span class="operator">=</span> GX_LOADED_MODULES<span class="operator">=</span>\\\<span class="string">&quot;$$GX_LOADED_MODULES_CSV\\\&quot;
+</span></pre>
+<h5 id="and-set-in-main-cpp">And set in main.cpp.</h5>
+<pre class="cpp">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine<span class="operator">,</span> GX_LOADED_MODULES);</pre>
+<h5 id="optionally-you-can-load-everything-by-setting">Optionally you can load everything by setting.</h5>
+<pre class="cpp">GXCore<span class="operator">::</span>registerEnabledQmlModules(<span class="operator">&amp;</span>engine);</pre>
+</div>
+<!-- @@@CoreQml.h -->
+<div class="qt-footer">
+<center><p>© 2025 Kooijman Incorporate Holding B.V. — <a href="https://www.genesis-x.io">Genesis-X</a></p></center>
+</div>
+</body>
+</html>

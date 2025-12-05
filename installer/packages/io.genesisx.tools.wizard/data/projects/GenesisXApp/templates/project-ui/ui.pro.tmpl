@@ -1,0 +1,115 @@
+# Genesis-X skeleton
+
+QT += qml quick widgets genesisx_app_permissions genesisx_app_notifications
+
+TEMPLATE = app
+CONFIG += c++23
+debug: CONFIG += console
+
+QMAKE_TARGET_COMPANY     = "%{OrgName}"
+QMAKE_TARGET_PRODUCT     = "%{ProjectName}"
+QMAKE_TARGET_DESCRIPTION = "%{AppDescription}"
+QMAKE_TARGET_COPYRIGHT   = "© %{CopyrightYear} %{OrgName}"
+QMAKE_TARGET_BUNDLE_PREFIX = "%{Domain}"
+
+GX_LOADED_MODULES = $$QT
+GX_LOADED_MODULES_CSV = $$join(GX_LOADED_MODULES, ",")
+DEFINES += GX_LOADED_MODULES=\\\\\\\"$$GX_LOADED_MODULES_CSV\\\\\\\"
+
+# ---------- Genesis-X pass app root path ----------
+GENESISX_APP_ROOT = $$PWD
+
+# ---------- Build type sets library path ----------
+debug {
+    LOCAL_BUILD_PATH = debug
+} else: profile {
+    LOCAL_BUILD_PATH = profile
+} else {
+    LOCAL_BUILD_PATH = release
+    DEFINES += QT_NO_DEBUG_OUTPUT    # disables qDebug()
+    #DEFINES += QT_NO_INFO_OUTPUT    # uncomment to also disable qInfo()
+    #DEFINES += QT_NO_WARNING_OUTPUT # (usually keep warnings on)
+}
+
+# ---------- Set same build path optional ----------
+DESTDIR = $$PWD/../$$LOCAL_DESTINATION_PATH/$$LOCAL_BUILD_PATH
+DEST_LIBDIRS = $$DESTDIR
+
+# ---------- Add Genesis-X feature ----------
+CONFIG += gx_runtime
+
+win32 {
+    VERSION = 1.0.0
+    ICON += assets/logo.ico
+    RC_ICONS += assets/logo.ico
+
+    # Ensures the metadata gets embedded for MinGW/LLVM-MinGW too
+    CONFIG += embed_manifest_exe
+}
+
+android {
+    ANDROID_ABIS = arm64-v8a x86_64
+}
+ios {
+    QMAKE_INFO_PLIST = $$PWD/apple/ios/Info.plist
+    QMAKE_APPLE_ENTITLEMENTS = $$PWD/apple/ios/Entitlements.plist
+}
+macos {
+    QMAKE_INFO_PLIST = $$PWD/apple/macos/Info.plist
+    QMAKE_APPLE_ENTITLEMENTS = $$PWD/apple/macos/Entitlements.plist
+}
+ios|macos {
+    xcode_product_bundle_identifier_setting.value = "%{BundleId}"
+}
+
+HEADERS += \
+    $$files($$PWD/src/*.h, true)
+
+SOURCES += \
+    $$files($$PWD/src/*.cpp, true)
+
+INCLUDEPATH += \\
+    src
+
+# ---------- Build type ----------
+CONFIG(debug, debug|release|profile) {
+    BUILD_PATH = debug
+} else: CONFIG(profile, debug|release|profile) {
+    BUILD_PATH = profile
+} else {
+    BUILD_PATH = release
+}
+
+QML_IMPORT_PATH += $$PWD
+QML2_IMPORT_PATH += $$PWD
+
+contains(ANDROID_TARGET_ARCH,arm64-v8a) {
+    ANDROID_PACKAGE_SOURCE_DIR = \
+        $$PWD/android
+} else: contains(ANDROID_TARGET_ARCH,x86_64) {
+ANDROID_PACKAGE_SOURCE_DIR = \
+    $$PWD/android
+}
+
+RESOURCES += \\
+    views.qrc \\
+    assets.qrc \\
+    components.qrc
+
+DISTFILES += \\
+    android/AndroidManifest.xml \\
+    android/build.gradle \\
+    android/gradle.properties \\
+    android/google-services.json \\
+    android/gradle/wrapper/gradle-wrapper.jar \\
+    android/gradle/wrapper/gradle-wrapper.properties \\
+    android/gradlew \\
+    android/gradlew.bat \\
+    android/res/values/libs.xml \\
+    android/res/xml/qtprovider_paths.xml \\
+    apple/ios/Info.plist \\
+    apple/ios/Entitlements.plist \\
+    apple/ios/GoogleService-Info.plist \\
+    apple/macos/Info.plist \\
+    apple/macos/Entitlements.plist \\
+    apple/macos/GoogleService-Info.plist \\

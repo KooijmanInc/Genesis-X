@@ -11,6 +11,7 @@
 /*!
     \headerfile SystemInfo.h
     \inmodule io.genesisx.core
+    \ingroup core-classes
     \title System information
     \since Qt 6.10
     \brief Information about the current system.
@@ -67,7 +68,6 @@ QString SystemInfo::ensureAppUuid()
     id = QSysInfo::machineUniqueId();
     s.setValue("app/uuid", id);
 #else
-    QSettings s;
     id = s.value("app/uuid").toString();
     if (id.isEmpty()) {
         id = QUuid::createUuid().toString(QUuid::WithoutBraces);
