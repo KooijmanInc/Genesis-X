@@ -27,9 +27,9 @@ if qmake.exe -v >/dev/null 2>&1; then
 elif qmake6.exe -v >/dev/null 2>&1; then
     QMAKE_CMD="qmake6.exe"
 elif qmake -v >/dev/null 2>&1; then
-    QMAKE_CMD="qmake"
-elif qmake6 -v >/dev/null 2>&1; then
     QMAKE_CMD="qmake6"
+elif qmake6 -v >/dev/null 2>&1; then
+    QMAKE_CMD="qmake"
 else
     echo -e "${RED}❌ Could not run qmake or qmake6.${RESET}"
     echo
