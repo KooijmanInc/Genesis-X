@@ -3,7 +3,6 @@
 <head>
   <meta charset="utf-8">
 <!-- index.qdoc -->
-  <meta name="description" content="Overview of the Genesis-X Framework for Qt 6.">
   <title>Genesis-X Documentation 1.0</title>
 <link rel="stylesheet" type="text/css" href="style/style.css"/>
 </head>
@@ -19,7 +18,7 @@
 <div class="descr" id="details">
 <h2 id="introduction">Introduction</h2>
 <p>Genesis-X is a modular, high-performance application framework designed for Qt 6. It provides production-ready tooling, fully integrated developer utilities, and advanced modules to accelerate development for desktop, mobile, and embedded platforms.</p>
-<p>Genesis-X is created and maintained by <i>Kooijman Incorporate Holding B.V.</i>, with a focus on real-world developer experience, QML productivity, and clean modular extensibility.</p>
+<p>Genesis-X is created and maintained by <i>Kooijman Incorporate Holding B.V&#x2e;</i>, with a focus on real-world developer experience, QML productivity, and clean modular extensibility.</p>
 <p>This documentation provides an overview of all Genesis-X modules and includes detailed C++, QML, tooling, and workflow references.</p>
 <h2 id="features">Features</h2>
 <p>Genesis-X contains several key modules:</p>
@@ -34,13 +33,13 @@
 </ul>
 <h2 id="getting-started">Getting Started</h2>
 <p>To begin using Genesis-X, include the desired modules in your qmake project:</p>
-<pre class="cpp" translate="no">QT <span class="operator">+</span><span class="operator">=</span> genesisx
+<pre class="cpp">QT <span class="operator">+</span><span class="operator">=</span> genesisx
 QT <span class="operator">+</span><span class="operator">=</span> genesisx_app_notifications
 QT <span class="operator">+</span><span class="operator">=</span> genesisx_assets
 QT <span class="operator">+</span><span class="operator">=</span> genesisx_orm        <span class="preprocessor"># optional</span>
 QT <span class="operator">+</span><span class="operator">=</span> genesisx_physics    <span class="preprocessor"># in development</span></pre>
 <p>In your main.cpp add:</p>
-<pre class="cpp" translate="no"><span class="preprocessor">#include &lt;GenesisX/CoreQml.h&gt;</span>
+<pre class="cpp"><span class="preprocessor">#include &lt;GenesisX/CoreQml.h&gt;</span>
 
 <span class="type">int</span> main(<span class="type">int</span> argc<span class="operator">,</span> <span class="type">char</span><span class="operator">*</span> argv<span class="operator">[</span><span class="operator">]</span>)
 {
@@ -50,16 +49,16 @@ QT <span class="operator">+</span><span class="operator">=</span> genesisx_physi
 }</pre>
 <p>This will register the qmltypes of the chosen features.</p>
 <p>In QML, import modules using:</p>
-<pre class="cpp" translate="no">import GenesisX<span class="operator">.</span>Notifications <span class="number">1.0</span></pre>
+<pre class="cpp">import GenesisX<span class="operator">.</span>Notifications <span class="number">1.0</span></pre>
 <div class="admonition note">
 <p><b>Note: </b>If you select a feature like genesisx_app_notifications the you don't have to add the feature genesisx, this is always included when selecting a feature.</p>
 </div>
 <p>Refer to the <a href="getting-started.html">Getting Started Guide</a> for installation steps, module usage, and editor integration.</p>
 <h2 id="module-overviews">Module Overviews</h2>
 <ul>
-<li><a href="io-genesisx-core-qmlmodule.html" translate="no">Core Module</a></li>
-<li><a href="io-genesisx-app-qmlmodule.html" translate="no">App Module</a></li>
-<li><a href="io-genesisx-orm-qmlmodule.html" translate="no">ORM Module</a></li>
+<li><a href="io-genesisx-core-qmlmodule.html">Core Module</a></li>
+<li><a href="io-genesisx-app-qmlmodule.html">App Module</a></li>
+<li><a href="io-genesisx-orm-qmlmodule.html">ORM Module</a></li>
 <li><a href="assets.html">Assets UI Module (In development)</a></li>
 <li><a href="physics.html">Physics Module (In development)</a></li>
 </ul>
@@ -67,7 +66,7 @@ QT <span class="operator">+</span><span class="operator">=</span> genesisx_physi
 <p>Genesis-X ships with several productivity tools:</p>
 <ul>
 <li>Qt Creator Snippets Auto-completion helpers for common QML / C++ patterns.</li>
-<li>Qt Creator Wizard Templates Create new Genesis-X applications directly from <b translate="no">File &gt; New Project</b>.</li>
+<li>Qt Creator Wizard Templates Create new Genesis-X applications directly from <b>File &gt; New Project</b>.</li>
 <li>QDoc / Qt Assistant Integration This documentation is auto-registered in Qt Creator when the installer is run.</li>
 </ul>
 <h2 id="see-also">See also</h2>
