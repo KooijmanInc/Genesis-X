@@ -2,7 +2,7 @@
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
 #include "NavigationQml.h"
-#include "GxRouter.h"
+#include <GenesisX/Navigation/GxRouter.h>
 
 #include <QtQml/qqml.h>
 #include <QQmlEngine>
