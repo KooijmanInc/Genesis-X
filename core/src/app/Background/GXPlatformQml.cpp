@@ -3,7 +3,7 @@
 
 #include "GXPlatformQml.h"
 #include <GenesisX/Background/gx_background_audio.h>
-#include "GXBackgroundRouter.h"
+#include <GenesisX/Background/GXBackgroundRouter.h>
 #include <QtQml/qqml.h>
 #include <QQmlEngine>
 
