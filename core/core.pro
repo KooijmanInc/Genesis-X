@@ -79,11 +79,9 @@ INCLUDEPATH += $$GENESISX_BUILD_ROOT/core/include
 
 HEADERS += \
     $$files($$PWD/include/GenesisX/*.h, true) \
-    $$files($$PWD/src/*.h, true) \
-    include/GenesisX/Cast/Cast.h
+    $$files($$PWD/src/*.h, true)
 SOURCES += \
-    $$files($$PWD/src/*.cpp, true) \
-    src/app/Cast/Cast.cpp
+    $$files($$PWD/src/*.cpp, true)
 
 android {
     SOURCES += \
