@@ -30,13 +30,13 @@ elif qmake -v >/dev/null 2>&1; then
     QMAKE_CMD="qmake6"
 elif qmake6 -v >/dev/null 2>&1; then
     QMAKE_CMD="qmake"
-else
-    echo -e "${RED}❌ Could not run qmake or qmake6.${RESET}"
-    echo
-    echo "Please run this installer from a Qt terminal, for example:"
-    echo "  • Windows: 'Qt 6.x.x for MinGW 64-bit' Command Prompt"
-    echo "  • macOS/Linux: a terminal where Qt's bin directory is on PATH"
-    exit 1
+#else
+#    echo -e "${RED}❌ Could not run qmake or qmake6.${RESET}"
+#    echo
+#    echo "Please run this installer from a Qt terminal, for example:"
+#    echo "  • Windows: 'Qt 6.x.x for MinGW 64-bit' Command Prompt"
+#    echo "  • macOS/Linux: a terminal where Qt's bin directory is on PATH"
+#    exit 1
 fi
 
 detect_qmake() {
