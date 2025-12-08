@@ -17,6 +17,8 @@ Window {
     Component.onCompleted: {
         if (SystemInfo.platform() === "android") {
             visibility = "FullScreen"
+        } else if (SystemInfo.platform() === "ios") {
+            visibility = Window.FullScreen
         }
         if (!notify.initialized) {
             notify.initialize()
