@@ -9,7 +9,7 @@
 #include "NotificationHandler_apple_bridge.h"
 #include <GenesisX/Notifications/NotificationHandler.h>
 
-extern "C" void gx_macos_push_anchor(void) {qDebug() << "macos anchor active";}
+extern "C" void gx_macos_push_anchor(void) {}
 
 static void gx_install_hooks(void);
 

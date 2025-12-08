@@ -17,7 +17,7 @@
 #import "NotificationHandler_apple_bridge.h"
 #include <GenesisX/Notifications/NotificationHandler.h>
 
-extern "C" void gx_ios_push_anchor(void) {qDebug() << "ios anchor active";}
+extern "C" void gx_ios_push_anchor(void) {}
 
 @interface QIOSApplicationDelegate : UIResponder <UIApplicationDelegate> @end
 
@@ -26,7 +26,7 @@ extern "C" void gx_ios_push_anchor(void) {qDebug() << "ios anchor active";}
 @implementation QIOSApplicationDelegate (GXPush)
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{qInfo() << "getting to ios getting token";
+{
 #if GX_HAVE_FIREBASE
   [FIRMessaging messaging].APNSToken = deviceToken;
 #endif
