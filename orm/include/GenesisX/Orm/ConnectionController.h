@@ -45,9 +45,11 @@ public:
     QNetworkAccessManager* network() const;
     QNetworkRequest makeRequest(const QString& path) const;
 
+    QFuture<bool> refreshToken();
     QFuture<HttpResponse> login(const QString& username, const QString& password);
     QFuture<HttpResponse> getJson(const QString& path);
     QFuture<HttpResponse> postJson(const QString& path, const QJsonObject& body);
+    // QFuture<HttpResponse> actuallyPostJson(const QString& path, const QJsonObject& body);
     QFuture<HttpResponse> putJson(const QString& path, const QJsonObject& body);
     QFuture<HttpResponse> deleteJson(const QString& path);
     // QFuture<HttpResponse> postJsonResilient(const QString& path, const QJsonObject& body);

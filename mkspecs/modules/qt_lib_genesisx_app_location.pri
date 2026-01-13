@@ -3,5 +3,5 @@
 
 # ---- GenesisX (App location) qmake module ----
 QT.genesisx_app_location.name          = genesisx_app_location
-QT.genesisx_app_location.depends       = genesisx_app_core
+QT.genesisx_app_location.depends       = genesisx_app_core positioning
 QT.genesisx_app_location.friendly_name = GenesisX App - location

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-QT += core qml quick widgets network
+QT += core qml quick widgets network positioning
 linux:!android: QT += dbus
 TEMPLATE = lib
 TARGET = genesisx
@@ -89,18 +89,13 @@ android {
 } else {
     HEADERS -= \
         $$PWD/include/GenesisX/Auth/Auth.h \
-        $$PWD/include/GenesisX/Background/gx_background_audio.h \
-        $$PWD/include/GenesisX/Biometrics/Biometrics.h \
-        $$PWD/src/app/Biometrics/BiometricsQml.h
+        $$PWD/include/GenesisX/Background/gx_background_audio.h
 
     SOURCES -= \
         $$files($$PWD/src/*Android.cpp, true) \
         $$PWD/src/app/Auth/Auth.cpp \
         $$PWD/src/app/Background/gx_audio_service.cpp \
-        $$PWD/src/app/Background/BackgroundBridge_jni.cpp \
-        $$PWD/src/app/Biometrics/BiometricsAndroid.cpp \
-        $$PWD/src/app/Biometrics/Biometrics.cpp \
-        $$PWD/src/app/Biometrics/BiometricsQml.cpp
+        $$PWD/src/app/Background/BackgroundBridge_jni.cpp
 }
 
 
@@ -135,6 +130,9 @@ DISTFILES += \
     src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastKeepAliveService.java \
     src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastManager.java \
     src/app/Cast/android/src/main/java/com/genesisx/cast/GXCastOptionsProvider.java \
+    src/app/ImagePicker/android/src/main/java/com/genesisx/photopicker/GXPhotoPicker.java \
+    src/app/ImagePicker/android/src/main/java/com/genesisx/photopicker/GXPhotoPickerActivity.java \
+    src/app/ImagePicker/android/src/main/res/xml/genesisx_imagepicker_file_paths.xml \
     src/app/Permissions/android/src/main/java/permissions/GxPermissions.java
 
 RESOURCES += \

@@ -13,5 +13,7 @@
         <file>GenesisX/App/Biometrics/biometrics.qmltypes</file>
         <file>GenesisX/App/Permissions/qmldir</file>
         <file>GenesisX/App/Permissions/permissions.qmltypes</file>
+        <file>GenesisX/Core/SettingsManager/settingsmanager.qmltypes</file>
+        <file>GenesisX/Core/SettingsManager/qmldir</file>
     </qresource>
 </RCC>

@@ -7,7 +7,7 @@
 #include <QObject>
 #include <QtQml/qqml.h>
 
-#include "include/GenesisX/genesisx_global.h"
+#include <GenesisX/genesisx_global.h>
 
 class QQmlEngine;
 

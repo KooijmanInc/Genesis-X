@@ -9,20 +9,26 @@ Control {
     id: root
 
     property alias text: label.text
+    property alias textFont: label.font.family
+    property alias textSize: label.font.pixelSize
 
     property int radius : height / 2
 
     property color textColor: "#8AEFFF"
-    property color backgroundColor: "#0A2C45"
+    property color backgroundColor: "#1a4f76"
+    property color backgroundTopColor: "#1a4f76"
+    property color backgroundBottomColor: "#041326"
     property color borderColor: "#041326"
 
     property bool bold: false
     property bool pressed: false
+    property bool useGradient: true
+    property bool borderShadow: true
 
     property real borderOpacity: 0.25
 
     implicitWidth: label.implicitWidth + 40
-    implicitHeight: 44
+    implicitHeight: 50
 
     contentItem: Text {
         id: label
@@ -40,7 +46,18 @@ Control {
         radius: root.radius
         color: root.backgroundColor
 
-        layer.enabled: true
+        gradient: Gradient {
+            GradientStop {
+                position: -0.65
+                color: useGradient === true ? root.backgroundTopColor : root.backgroundColor
+            }
+            GradientStop {
+                position: 0.95
+                color: useGradient === true ? root.backgroundBottomColor : root.backgroundColor
+            }
+        }
+
+        layer.enabled: borderShadow
         layer.effect: DropShadow {
             transparentBorder: true
             horizontalOffset: 0

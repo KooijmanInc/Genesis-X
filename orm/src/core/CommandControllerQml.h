@@ -4,7 +4,7 @@
 #ifndef COMMANDCONTROLLERQML_H
 #define COMMANDCONTROLLERQML_H
 
-#include "include/GenesisX/Orm/genesisx_orm_global.h"
+#include <GenesisX/Orm/genesisx_orm_global.h>
 
 class QQmlEngine;
 

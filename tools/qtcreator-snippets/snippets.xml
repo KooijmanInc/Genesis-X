@@ -3,6 +3,7 @@
     <snippet group="Text" trigger="genesisx" id="" complement="" removed="false" modified="false">genesisx</snippet>
     <snippet group="Text" trigger="genesisx_physics" id="" complement="" removed="false" modified="false">genesisx_physics</snippet>
     <snippet group="Text" trigger="genesisx_orm" id="" complement="" removed="false" modified="false">genesisx_orm</snippet>
+    <snippet group="Text" trigger="genesisx_framework" id="" complement="" removed="false" modified="false">genesisx_framework</snippet>
     <snippet group="Text" trigger="genesisx_app_core" id="" complement="" removed="false" modified="false">genesisx_app_core</snippet>
     <snippet group="Text" trigger="genesisx_app_permissions" id="" complement="" removed="false" modified="false">genesisx_app_permissions</snippet>
     <snippet group="Text" trigger="genesisx_app_config" id="" complement="" removed="false" modified="false">genesisx_app_config</snippet>
@@ -37,4 +38,6 @@
     <snippet group="Text" trigger="genesisx_app_contacts" id="" complement="" removed="false" modified="false">genesisx_app_contacts</snippet>
     <snippet group="Text" trigger="genesisx_app_calendar" id="" complement="" removed="false" modified="false">genesisx_app_calendar</snippet>
     <snippet group="Text" trigger="genesisx_assets" id="" complement="" removed="false" modified="false">genesisx_assets</snippet>
+    <snippet group="Text" trigger="genesisx_settings" id="" complement="" removed="false" modified="false">genesisx_settings</snippet>
+    <snippet group="Text" trigger="genesisx_validation" id="" complement="" removed="false" modified="false">genesisx_validation</snippet>
 </snippets>

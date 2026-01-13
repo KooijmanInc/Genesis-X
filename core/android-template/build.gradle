@@ -84,8 +84,11 @@ android {
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs']
+
+            res.srcDirs += ["${gxBaseDir}/core/src/app/ImagePicker/android/src/main/res"]
             java.srcDirs += ["${gxBaseDir}/core/src/app/Biometrics/android/src/main/java"]
             java.srcDirs += ["${gxBaseDir}/core/src/app/Cast/android/src/main/java"]
+            java.srcDirs += ["${gxBaseDir}/core/src/app/ImagePicker/android/src/main/java"]
             java.srcDirs += ["${gxBaseDir}/core/src/app/Permissions/android/src/main/java"]
             kotlin.srcDirs += ["${gxBaseDir}/core/src/app/Background/android/src"]
        }

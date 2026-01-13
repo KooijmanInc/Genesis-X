@@ -11,22 +11,54 @@
 using namespace gx::app::cast;
 
 namespace {
-    static Cast s_castBridge;
-    static GXCastLifecycle s_lifecycle;
+//     static Cast s_castBridge;
+//     static GXCastLifecycle s_lifecycle;
     static GXCastControl s_control;
 }
 
 GXCastControl* gx_cast_control_singleton() { return &s_control; }
 
+namespace {
+Cast* castBridge()
+{
+    static Cast* inst = new Cast(qApp); // or nullptr parent if you prefer
+    return inst;
+}
+
+GXCastLifecycle* lifecycle()
+{
+    static GXCastLifecycle* inst = new GXCastLifecycle(qApp);
+    return inst;
+}
+
+// GXCastControl* control()
+// {
+//     static GXCastControl* inst = new GXCastControl(qApp);
+//     return inst;
+// }
+}
+
 void registerGenesisXCast(QQmlEngine *engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterSingletonInstance<gx::app::cast::Cast>("GenesisX.Cast", 1, 0, "Cast", &s_castBridge);
+    qmlRegisterSingletonInstance<gx::app::cast::Cast>(
+        "GenesisX.Cast", 1, 0, "Cast", castBridge());
 
-    qmlRegisterSingletonInstance<gx::app::cast::GXCastState>("GenesisX.Cast", 1, 0, "CastState", gx::app::cast::GXCastState::instance());
+    qmlRegisterSingletonInstance<gx::app::cast::GXCastState>(
+        "GenesisX.Cast", 1, 0, "CastState", gx::app::cast::GXCastState::instance());
 
-    qmlRegisterSingletonInstance<gx::app::cast::GXCastLifecycle>("GenesisX.Cast", 1, 0, "GXCastLifecycle", &s_lifecycle);
+    qmlRegisterSingletonInstance<gx::app::cast::GXCastLifecycle>(
+        "GenesisX.Cast", 1, 0, "GXCastLifecycle", lifecycle());
+
+    // qmlRegisterSingletonInstance<gx::app::cast::GXCastControl>(
+        // "GenesisX.Cast", 1, 0, "GXCastControl", control());
+
+    // qmlRegisterSingletonInstance<gx::app::cast::Cast>("GenesisX.Cast", 1, 0, "Cast", &s_castBridge);
+
+    // qmlRegisterSingletonInstance<gx::app::cast::GXCastState>("GenesisX.Cast", 1, 0, "CastState", gx::app::cast::GXCastState::instance());
+
+    // qmlRegisterSingletonInstance<gx::app::cast::GXCastLifecycle>("GenesisX.Cast", 1, 0, "GXCastLifecycle", &s_lifecycle);
 
     qmlRegisterSingletonInstance<gx::app::cast::GXCastControl>("GenesisX.Cast", 1, 0, "GXCastControl", &s_control);
 }

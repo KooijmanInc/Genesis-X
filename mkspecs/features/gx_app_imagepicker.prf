@@ -1,3 +1,6 @@
-DEFINES += GX_USE_APP_IMAGEPICKER
+!defined(__GX_APP_IMAGEPICKER_PRF_INCLUDED__, var) {
+    __GX_APP_IMAGEPICKER_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_APP_IMAGEPICKER
 
-message([genesisx app imagepicker] module loaded from $$PWD)
+    message([genesisx app imagepicker] module loaded from $$PWD)
+}

@@ -14,8 +14,6 @@ namespace {
 static gx::navigation::GxRouter s_router;
 }
 
-
-
 void registerGenesisXNavigation(QQmlEngine* engine)
 {
     Q_UNUSED(engine);

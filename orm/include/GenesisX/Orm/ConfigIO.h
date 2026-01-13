@@ -12,7 +12,7 @@ namespace gx::orm {
 
 struct TransportConfig;
 
-GENESISX_ORM_EXPORT bool loadTransportConfig(const QString& path, TransportConfig& out, const QStringView& env = {});
+GENESISX_ORM_EXPORT bool loadTransportConfig(const QString& path, TransportConfig& out, const QString& language = "", const QStringView& env = {});
 
 }
 

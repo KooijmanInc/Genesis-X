@@ -6,7 +6,7 @@
 
 #include <QObject>
 #include <QtQml/qqml.h>
-#include "include/GenesisX/genesisx_global.h"
+#include <GenesisX/genesisx_global.h>
 
 class QQmlEngine;
 
@@ -26,6 +26,7 @@ public:
 
 
 GENESISX_CORE_EXPORT void registerGenesisXBackground(QQmlEngine* engine);
+
 }
 
 #endif // GXPLATFORMQML_H
