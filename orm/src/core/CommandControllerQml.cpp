@@ -4,7 +4,7 @@
 #include "CommandControllerQml.h"
 #include <QQmlEngine>
 
-#include "include/GenesisX/Orm/CommandController.h"
+#include <GenesisX/Orm/CommandController.h>
 
 namespace gx::orm {
 
@@ -12,7 +12,7 @@ void registerGenesisXCommandController(QQmlEngine *engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterType<gx::orm::CommandController>("GenesisX.Orm.CommandController", 1, 0, "CommandController");
+    qmlRegisterType<gx::orm::CommandController>("GenesisX.Orm", 1, 0, "CommandController");
 }
 
 }

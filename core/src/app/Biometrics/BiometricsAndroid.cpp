@@ -12,6 +12,10 @@
 
 using namespace gx::app::biometrics;
 
+static inline jlong ptr(QObject* o) {
+    return reinterpret_cast<jlong>(o);
+}
+
 static BiometricsResult::Code mapStatusToCode(int status) {
     switch (status) {
     case 0: return BiometricsResult::Ok;
@@ -111,7 +115,107 @@ Java_biometrics_GxBiometrics_notifyQt(JNIEnv* env,
         obj,
         [obj, code, msg]() {
             emit obj->authenticated(static_cast<int>(code), msg);
+            if (code == 0 && msg == QStringLiteral("Token stored")) {
+                emit obj->loginTokenChanged();
+                obj->m_tokenOpInFlight = false;
+            }
         },
         Qt::QueuedConnection);
+}
+#endif
+
+QVariant gx_app_biometrics_store_token_android(const QString& token, const QString& reason, QObject* ctx)
+{
+#ifdef Q_OS_ANDROID
+    QJniObject jReason = QJniObject::fromString(reason);
+    QJniObject jToken = QJniObject::fromString(token);
+
+    QJniObject::callStaticMethod<void>(
+        "biometrics/GxBiometrics",
+        "storeLoginToken",
+        "(JLjava/lang/String;Ljava/lang/String;)V",
+        ptr(ctx),
+        jReason.object<jstring>(),
+        jToken.object<jstring>()
+    );
+
+    return QVariantMap{
+        { "code", 0 },
+        { "message", "started" }
+    };
+#endif
+
+    return {};
+}
+
+QVariant gx_app_biometrics_load_token_android(const QString& reason, QObject* ctx)
+{
+#ifdef Q_OS_ANDROID
+    QJniObject jReason = QJniObject::fromString(reason);
+
+    QJniObject::callStaticMethod<void>(
+        "biometrics/GxBiometrics",
+        "loadLoginToken",
+        "(JLjava/lang/String;)V",
+        ptr(ctx),
+        jReason.object<jstring>()
+    );
+
+    return QVariantMap{
+        { "code", 0 },
+        { "message", "started" },
+        { "token", "" }
+    };
+#endif
+
+    return {};
+}
+
+bool gx_app_biometrics_clear_token_android(QObject* /*ctx*/)
+{
+#ifdef Q_OS_ANDROID
+    return QJniObject::callStaticMethod<jboolean>(
+        "biometrics/GxBiometrics",
+        "clearLoginToken",
+        "()Z"
+    );
+#endif
+
+    return false;
+}
+
+bool gx_app_biometrics_has_token_android(QObject* /*ctx*/)
+{
+#ifdef Q_OS_ANDROID
+    return QJniObject::callStaticMethod<jboolean>(
+        "biometrics/GxBiometrics",
+        "hasLoginToken",
+        "()Z"
+    );
+#endif
+
+    return false;
+}
+
+#ifdef Q_OS_ANDROID
+extern "C" JNIEXPORT void JNICALL
+Java_biometrics_GxBiometrics_notifyQtToken(JNIEnv* env, jclass, jlong objPtr, jint code, jstring message, jstring token)
+{
+    auto* obj = reinterpret_cast<Biometrics*>(objPtr);
+    if (!obj) return;
+
+    const QString qMsg = message ? QString::fromUtf8(env->GetStringUTFChars(message, nullptr)) : QString();
+
+    QString qTok;
+    if (token) {
+        const char* chars = env->GetStringUTFChars(token, nullptr);
+        qTok = QString::fromUtf8(chars);
+        env->ReleaseStringUTFChars(token, chars);
+    }
+
+    QMetaObject::invokeMethod(obj, [obj, code, qMsg, qTok]() {
+        emit obj->authenticated(code, qMsg);
+        emit obj->loginTokenReady(code, qMsg, qTok);
+    }, Qt::QueuedConnection);
 }
 #endif

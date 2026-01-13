@@ -1,34 +1,45 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-// #include "include/GenesisX/CoreQml.h"
 #include <GenesisX/CoreQml.h>
 
 #include <QQmlEngine>
 
 #include "src/utils/SystemInfoQml.h"
+#include "src/utils/SettingsManagerQml.h"
 #include "src/navigation/NavigationQml.h"
 
 #include "src/app/Background/GXPlatformQml.h"
-// #include "src/app/Biometrics/BiometricsQml.h"
+#include "src/app/Biometrics/BiometricsQml.h"
 #ifndef Q_OS_WASM
 #include "src/app/Cast/CastQml.h"
 #endif
+#include "src/app/ImagePicker/GXImagePickerQml.h"
+#include "src/app/Location/LocationControllerQml.h"
 #include "src/app/Notifications/NotificationsQml.h"
 #include "src/app/Permissions/PermissionsQml.h"
+#include "src/Validation/ValidationQml.h"
 
 void registerGenesisXSystemInfo(QQmlEngine*);
+void registerGenesisXSettingsManager(QQmlEngine*);
 void registerGenesisXNavigation(QQmlEngine*);
 
 void registerGenesisXBackground(QQmlEngine*);
-// void registerGenesisXBiometrics(QQmlEngine*);
+void registerGenesisXBiometrics(QQmlEngine*);
 #ifndef Q_OS_WASM
 void registerGenesisXCast(QQmlEngine*);
 #endif
+void registerGenesisXImagePicker(QQmlEngine*);
+void registerGenesisXLocation(QQmlEngine*);
 void registerGenesisXNotifications(QQmlEngine*);
 void registerGenesisXPermissions(QQmlEngine*);
 
+// void registerGenesisXFramework(QQmlEngine*);
+
+void registerGenesisXValidation(QQmlEngine*);
+
 namespace gx::core {
+// using namespace gx::core;
 
 using Registrar = void(*)(QQmlEngine*);
 struct Feature {
@@ -38,12 +49,16 @@ struct Feature {
 
 inline const Feature kFeatures[] = {
     {"genesisx_app_background", &registerGenesisXBackground},
-    // {"genesisx_app_biometrics", &registerGenesisXBiometrics},
+    {"genesisx_app_biometrics", &registerGenesisXBiometrics},
 #ifndef Q_OS_WASM
     {"genesisx_app_cast", &registerGenesisXCast},
 #endif
+    {"genesisx_app_location", &registerGenesisXImagePicker},
+    {"genesisx_app_location", &registerGenesisXLocation},
     {"genesisx_app_notifications", &registerGenesisXNotifications},
-    {"genesisx_app_permissions", &registerGenesisXPermissions}
+    {"genesisx_app_permissions", &registerGenesisXPermissions},
+    {"genesisx_settings", &registerGenesisXSettingsManager},
+    {"genesisx_validation", &registerGenesisXValidation}
 };
 
 inline QStringList gxValidFeatureKeys()
@@ -128,6 +143,9 @@ void registerEnabledQmlModules(QQmlEngine* engine, QString features)
     requested.remove(QStringLiteral("all"));
     requested.remove(QStringLiteral("genesisx"));
     requested.remove(QStringLiteral("genesisx_assets"));
+    requested.remove(QStringLiteral("genesisx_orm"));
+    requested.remove(QStringLiteral("genesisx_app_imagepicker"));
+    requested.remove(QStringLiteral("genesisx_framework"));
 
     qInfo().noquote() << "[GX] QML modules requested:" << include.values().join(',');
     qInfo().noquote() << "[GX] QML modules registered:" << registered.join(',');

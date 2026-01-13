@@ -10,6 +10,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <memory>
 
 /*!
     \class gx::orm::CommandController
@@ -131,14 +132,74 @@ QFuture<bool> CommandController::cmdPostJsonBoolAsync(const QString &path, const
  */
 QFuture<HttpResponse> CommandController::cmdPostJsonAsync(const QString &path, const QJsonObject &body)
 {
-    return m_conn->postJson(path, body).then([this, path](const HttpResponse& r) {
-        const bool ok = r.ok();
-        QMetaObject::invokeMethod(this, [this, path, ok, r]() {
-            QString perr;
-            emit requestFinished(path, ok, r.status, r.errorstring, r.jsonObject(&perr));
-        }, Qt::QueuedConnection);
-        return r;
+    // We'll manually orchestrate the steps using a shared QPromise
+    auto promise = std::make_shared<QPromise<HttpResponse>>();
+    QFuture<HttpResponse> future = promise->future();
+    promise->start();
+
+    // 1) First attempt
+    m_conn->postJson(path, body).then([this, path, body, promise](const HttpResponse& r) mutable {
+        if (r.status != 401) {
+            // Normal case: no auth error, emit signal and finish
+            const bool ok = r.ok();
+            QMetaObject::invokeMethod(this, [this, path, ok, r]() {
+                QString perr;
+                emit requestFinished(path, ok, r.status, r.errorstring, r.jsonObject(&perr));
+            }, Qt::QueuedConnection);
+
+            promise->addResult(r);
+            promise->finish();
+            return;
+        }
+
+        // 2) Got 401 -> try to refresh token
+        m_conn->refreshToken().then([this, path, body, promise, r](bool okRefresh) mutable {
+            if (!okRefresh) {
+                // Refresh failed -> return original 401
+                promise->addResult(r);
+                promise->finish();
+                return;
+            }
+
+            // 3) Refresh succeeded -> retry once
+            m_conn->postJson(path, body).then([this, path, promise](const HttpResponse& r2) mutable {
+                const bool ok2 = r2.ok();
+                QMetaObject::invokeMethod(this, [this, path, ok2, r2]() {
+                    QString perr;
+                    emit requestFinished(path, ok2, r2.status, r2.errorstring, r2.jsonObject(&perr));
+                }, Qt::QueuedConnection);
+
+                promise->addResult(r2);
+                promise->finish();
+            });
+        });
     });
+
+    return future;
 }
+
+// QFuture<HttpResponse> CommandController::cmdPostJsonAsync(const QString &path, const QJsonObject &body)
+// {
+//     return m_conn->postJson(path, body).then([this, path](const HttpResponse& r) {
+//         if (r.status == 401) {
+//             return m_conn->refreshToken().then([this, path, body, r](bool ok) {
+//                 if (!ok) {
+//                     // return original 401
+//                     return r;
+//                 }
+//                 // retry once
+//                 return m_conn->postJson(path, body).result(); // sync part of then
+//             });
+//         }
+
+//         const bool ok = r.ok();
+//         QMetaObject::invokeMethod(this, [this, path, ok, r]() {
+//             QString perr;
+//             emit requestFinished(path, ok, r.status, r.errorstring, r.jsonObject(&perr));
+//         }, Qt::QueuedConnection);
+//         return r;
+
+//     });
+// }
 
 }

@@ -1,3 +1,8 @@
-DEFINES += GX_USE_APP_LOCATION
+!defined(__GX_APP_LOCATION_PRF_INCLUDED__, var) {
+    __GX_APP_LOCATION_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_APP_LOCATION
 
-message([genesisx app location] module loaded from $$PWD)
+    QT += positioning
+
+    message([genesisx app location] module loaded from $$PWD)
+}

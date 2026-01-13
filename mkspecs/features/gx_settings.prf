@@ -1,0 +1,6 @@
+!defined(__GX_SETTINGS_PRF_INCLUDED__, var) {
+    __GX_SETTINGS_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_SETTINGS
+
+    message([genesisx settings] module loaded from $$PWD)
+}

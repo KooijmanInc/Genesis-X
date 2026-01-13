@@ -15,5 +15,5 @@ void registerGenesisXBiometrics(QQmlEngine* engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterType<gx::app::biometrics::Biometrics>("GenesisX.App.Biometrics", 1, 0, "Biometrics");
+    qmlRegisterType<gx::app::biometrics::Biometrics>("GenesisX.Biometrics", 1, 0, "Biometrics");
 }

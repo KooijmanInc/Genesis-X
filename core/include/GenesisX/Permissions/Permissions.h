@@ -41,6 +41,7 @@ class GENESISX_CORE_EXPORT Permissions : public QObject
 
     Q_PROPERTY(bool notificationsEnabled READ notificationsEnabled NOTIFY notificationsEnabledChanged)
 
+    Q_PROPERTY(QString POST_NOTIFICATIONS READ postNotifications CONSTANT)
     Q_PROPERTY(QString CAMERA READ camera CONSTANT)
     Q_PROPERTY(QString RECORD_AUDIO READ recordAudio CONSTANT)
     Q_PROPERTY(QString ACCESS_FINE_LOCATION READ fineLocation CONSTANT)
@@ -83,6 +84,24 @@ public:
         }
         if (!list.isEmpty()) gx_app_request_android(list);
 #endif
+    }
+
+    Q_INVOKABLE QVariantMap snapshot(const QVariant& perms) const {
+        Q_UNUSED(perms);
+        QVariantMap out;
+        QStringList list;
+
+#ifdef Q_OS_ANDROID
+        if (perms.canConvert<QString>()) list << perms.toString();
+        else if (perms.canConvert<QStringList>()) list = perms.toStringList();
+        else if (perms.typeId() == QMetaType::QVariantList) {
+            for (const auto& v : perms.toList()) list << v.toString();
+        }
+
+        for (const auto& p : list) out.insert(p, has(p));
+#endif
+        qDebug() << "perms" << out;
+        return out;
     }
 
     bool notificationsEnabled() const {
@@ -139,6 +158,7 @@ public:
 #endif
     }
 
+    QString postNotifications() const { return u"android.permissions.POST_NOTIFICATIONS"_s; }
     QString camera() const { return u"android.permission.CAMERA"_s; }
     QString recordAudio() const { return u"android.permission.RECORD_AUDIO"_s; }
     QString fineLocation() const { return u"android.permission.ACCESS_FINE_LOCATION"_s; }

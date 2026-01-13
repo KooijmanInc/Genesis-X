@@ -18,7 +18,7 @@ Module {
             name: "initialize"
             type: "void"
             parameter: {
-                name: "options";
+                name: "options"
                 type: "QVariantMap"
             }
         }
@@ -30,7 +30,7 @@ Module {
                 type: "QString"
             }
             parameter: {
-                name: "body";
+                name: "body"
                 type: "QString"
             }
             parameter: {

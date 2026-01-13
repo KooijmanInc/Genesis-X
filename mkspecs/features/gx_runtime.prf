@@ -153,3 +153,11 @@ contains(QT, genesisx_physics) {
 contains(QT, genesisx_orm) {
     include(conf/gx_orm.prf)
 }
+
+contains(QT, genesisx_framework) {
+    include(conf/gx_framework.prf)
+}
+
+contains(QT, genesisx_settings) {
+    include(gx_settings.prf)
+}

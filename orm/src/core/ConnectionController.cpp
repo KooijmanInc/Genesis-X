@@ -210,7 +210,7 @@ static inline void debugConnections(auto reply)
         "qt.network.ssl.warning=true\n"
         );
 
-    QHostInfo::lookupHost("api-hm2.kooijmaninc.nl", [](const QHostInfo &hi){
+    QHostInfo::lookupHost("host", [](const QHostInfo &hi){
         qDebug() << "[DNS]" << hi.hostName() << "addrs =" << hi.addresses();
     });
 #ifndef Q_OS_WASM
@@ -265,6 +265,9 @@ static inline void applyHeaders(QNetworkRequest& req, const HttpConfig& cfg, con
     if (!cfg.userLanguage.isEmpty()) {
         req.setRawHeader("Accept-Language", cfg.userLanguage.toUtf8());
     }
+    if (!cfg.userLanguage.isEmpty()) {
+        req.setRawHeader("X-App-Language", cfg.userLanguage.toUtf8());
+    }
     if (!auth.appKey.isEmpty()) {
         req.setRawHeader("X-App-Key", auth.appKey.toUtf8());
     }
@@ -285,53 +288,32 @@ static inline void applyHeaders(QNetworkRequest& req, const HttpConfig& cfg, con
                      QNetworkRequest::NoLessSafeRedirectPolicy);
 }
 
-// static inline QUrl makeAbs(const QUrl& base, const QString& path) {
-//     return resolvePath(base, path);
-// }
-
-// // Build a request for an IP fallback, but keep TLS/Host correct
-// static inline QNetworkRequest makeIpRequest(const QUrl& url, const QString& ip, const HttpConfig& cfg) {
-//     // Build https://<ip>/<path>?<query>
-//     const QString path = url.path() + (url.hasQuery() ? "?" + url.query() : "");
-//     QUrl ipUrl(url);
-//     ipUrl.setHost(ip);   // swap host with IP
-//     QNetworkRequest req(ipUrl);
-
-//     // Preserve headers + add Host and SNI so TLS validates
-//     applyHeaders(req, cfg, AuthCredentials{}); // base defaults, will be overridden later anyway
-//     req.setRawHeader("Host", url.host().toUtf8());
-
-//     QSslConfiguration ssl = QSslConfiguration::defaultConfiguration();
-//     ssl.setPeerVerifyName(url.host());   // SNI + hostname verify
-//     req.setSslConfiguration(ssl);
-//     return req;
-// }
-
-// template<typename SendFn, typename RetryFn>
-// static void resolveWithRetry(const QString& host, int retryDelayMs, SendFn&& send, RetryFn&& retry)
-// {
-//     QHostInfo::lookupHost(host, [=](const QHostInfo& hi){
-//         if (!hi.addresses().isEmpty()) {
-//             send(/*resolved*/ true);
-//             return;
-//         }
-//         // retry once after a brief delay
-//         QTimer::singleShot(qMax(1, retryDelayMs), qApp, [=](){
-//             QHostInfo::lookupHost(host, [=](const QHostInfo& hi2){
-//                 send(!hi2.addresses().isEmpty());
-//                 // if still empty, 'send(false)' lets caller choose fallback/IP
-//             });
-//         });
-//         // allow caller to prepare retry state if needed
-//         retry();
-//     });
-// }
-
 struct ConnectionController::Impl {
     HttpConfig cfg;
     AuthCredentials auth;
     QNetworkAccessManager nam;
+
+    QString storedUser;
+    QString storedPass;
+
+    enum class AuthState { Idle, LoggingIn, Ready, Error };
+    AuthState authState = AuthState::Idle;
+
+    QList<std::function<void()>> pendingRequests;
 };
+
+template<typename T>
+static QFuture<T> makeReadyFuture(const T &value)
+{
+    QPromise<T> p;
+    auto f = p.future();
+    p.start();
+    p.addResult(value);
+    p.finish();
+
+    return f;
+}
+
 QNetworkAccessManager* ConnectionController::network() const { return &d->nam; }
 
 ConnectionController::ConnectionController(QObject *parent)
@@ -444,11 +426,10 @@ void ConnectionController::setDefaultHeader(const QByteArray &name, const QByteA
     d->cfg.defaultHeaders.insert(name, value);
 }
 
-
 QNetworkRequest ConnectionController::makeRequest(const QString& path) const
 {
     const QUrl url = resolvePath(d->cfg.baseUrl, path);
-    qInfo() << "[HTTP] Request" << url.toString();
+    // qInfo() << "[HTTP] Request" << url.toString();
     QNetworkRequest req(url);
     applyHeaders(req, d->cfg, d->auth);
 #if QT_VERSION <= QT_VERSION_CHECK(6, 5, 0)
@@ -456,6 +437,18 @@ QNetworkRequest ConnectionController::makeRequest(const QString& path) const
 #endif
 
     return req;
+}
+
+QFuture<bool> ConnectionController::refreshToken()
+{
+    if (d->storedUser.isEmpty()) {
+        return makeReadyFuture(false);
+    }
+
+    return login(d->storedUser, d->storedPass)
+        .then([](const HttpResponse& r) {
+            return r.status >= 200 && r.status < 300;
+        });
 }
 
 template <typename StartFn>
@@ -545,6 +538,10 @@ QFuture<HttpResponse> ConnectionController::getJson(const QString &path)
 
 QFuture<HttpResponse> ConnectionController::login(const QString &username, const QString &password)
 {
+    d->storedUser = username;
+    d->storedPass = password;
+    d->authState = Impl::AuthState::LoggingIn;
+
     const QString path = QStringLiteral("login_check");
 
     QNetworkRequest req = makeRequest(path);
@@ -564,38 +561,74 @@ QFuture<HttpResponse> ConnectionController::login(const QString &username, const
             if (r.status >= 200 && r.status < 300) {
                 QJsonParseError jerr{};
                 const QJsonDocument doc = QJsonDocument::fromJson(r.body, &jerr);
-                qDebug() << "request token document received" << doc.object().value(QStringLiteral("token")).toString();
+                // qDebug() << "request token document received" << doc.object().value(QStringLiteral("token")).toString();
                 if (jerr.error == QJsonParseError::NoError && doc.isObject()) {
                     const auto tok = doc.object().value(QStringLiteral("token")).toString();
                     if (!tok.isEmpty()) {
-                        qDebug() << "Bearer token:" << tok;
+                        // qDebug() << "Bearer token:" << tok;
                         setBearerToken(tok);
                         emit loginSucceeded(tok);
+
+                        d->authState = Impl::AuthState::Ready;
+                        auto queue = std::move(d->pendingRequests);
+                        d->pendingRequests.clear();
+                        for (auto &resume : queue) {
+                            resume();
+                        }
+
                         return r;
                     }
                 }
                 // Token missing even though 2xx
                 emit loginFailed(QStringLiteral("No token in login response"));
+                d->authState = Impl::AuthState::Error;
             } else {
                 // Pass through server error body if available
                 const QString errText = r.body.isEmpty()
                                             ? QStringLiteral("Login failed (status %1)").arg(r.status)
                                             : QString::fromUtf8(r.body);
                 emit loginFailed(errText);
+                d->authState = Impl::AuthState::Error;
             }
             return r;
         });
 }
+
+// QFuture<HttpResponse> ConnectionController::postJson(const QString &path, const QJsonObject &body)
+// {
+//     auto send = [this, path, body]() {
+//         return actuallyPostJson(path, body);   // new internal function
+//     };
+
+//     if (d->authState == Impl::AuthState::LoggingIn) {
+//         // Queue the request
+//         QPromise<HttpResponse> promise;
+//         auto fut = promise.future();
+//         d->pendingRequests << [send, p = std::move(promise)]() mutable {
+//             send().then([p = std::move(p)](auto r) mutable {
+//                 p.addResult(r);
+//                 p.finish();
+//             });
+//         };
+//         return fut;
+//     }
+
+//     if (d->authState == Impl::AuthState::Error) {
+//         // optionally retry login here
+//     }
+
+//     return send();
+// }
 
 QFuture<HttpResponse> ConnectionController::postJson(const QString &path, const QJsonObject &body)
 {
     QNetworkRequest req = makeRequest(path);
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     const QByteArray payload = QJsonDocument(body).toJson(QJsonDocument::Compact);
-    qInfo() << "[HTTP] POST" << req.url().toString()
-            << "len" << payload.size()
-            << "headers:"
-            << req.rawHeaderList();
+    // qInfo() << "[HTTP] POST" << req.url().toString()
+    //         << "len" << payload.size()
+    //         << "headers:"
+    //         << req.rawHeaderList();
 
     return runWithTimeout(&d->nam, d->cfg, req, [payload](QNetworkAccessManager* nam, const QNetworkRequest& r) {
         auto reply = nam->post(r, payload);

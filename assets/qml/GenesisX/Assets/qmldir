@@ -1,2 +1,10 @@
 module GenesisX.Assets
 GXButton 1.0 GXButton.qml
+GXCard 1.0 GXCard.qml
+GXInput 1.0 GXInput.qml
+GXTextArea 1.0 GXTextArea.qml
+GXMultiTumblerPicker 1.0 GXMultiTumblerPicker.qml
+GXRadialSpinner 1.0 GXRadialSpinner.qml
+GXAlbumCameraChooser 1.0 GXAlbumCameraChooser.qml
+GXImageCropper 1.0 GXImageCropper.qml
+GXConfirm 1.0 GXConfirm.qml

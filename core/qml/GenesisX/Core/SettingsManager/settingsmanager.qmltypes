@@ -1,0 +1,262 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "Settings"
+        prototype: "QObject"
+        exports: ["GenesisX.System/Settings 1.0"]
+        Enum {
+            name: "TriState"
+            values: [
+                "False",
+                "True",
+                "Undefined"
+            ]
+        }
+
+        Method {
+            name: "schemaVersion"
+            type: "int"
+        }
+        Method {
+            name: "sync"
+            type: "void"
+        }
+        Method {
+            name: "contains"
+            type: "bool"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "remove"
+            type: "bool"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "containsUser"
+            type: "bool"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "removeUser"
+            type: "bool"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "deviceKey"
+            type: "QString"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "userKey"
+            type: "QString"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+        }
+        Method {
+            name: "getInt"
+            type: "int"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "defaultValue"
+                type: "int"
+            }
+        }
+        Method {
+            name: "setInt"
+            type: "void"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "value"
+                type: "int"
+            }
+        }
+        Method {
+            name: "getUserInt"
+            type: "int"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "defaultValue"
+                type: "int"
+            }
+        }
+        Method {
+            name: "setInt"
+            type: "void"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "value"
+                type: "int"
+            }
+        }
+        Method {
+            name: "getBool"
+            type: "bool"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "defaultValue"
+                type: "bool"
+            }
+        }
+        Method {
+            name: "setBool"
+            type: "void"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "value"
+                type: "bool"
+            }
+        }
+        Method {
+            name: "getUserBool"
+            type: "bool"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "defaultValue"
+                type: "bool"
+            }
+        }
+        Method {
+            name: "setUserBool"
+            type: "void"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "value"
+                type: "bool"
+            }
+        }
+        Method {
+            name: "getTriState"
+            type: "TriState"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "defaultValue"
+                type: "TriState"
+            }
+        }
+        Method {
+            name: "setTriState"
+            type: "void"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "value"
+                type: "TriState"
+            }
+        }
+        Method {
+            name: "getUserTriState"
+            type: "TriState"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "defaultValue"
+                type: "TriState"
+            }
+        }
+        Method {
+            name: "setUserTriState"
+            type: "void"
+            parameter: {
+                name: "userId"
+                type: "QString"
+            }
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+            parameter: {
+                name: "value"
+                type: "TriState"
+            }
+        }
+        Signal {
+            name: "valueChanged"
+            parameter: {
+                name: "key"
+                type: "QString"
+            }
+        }
+    }
+}

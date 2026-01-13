@@ -5,5 +5,13 @@
     <qresource prefix="/qt/qml/GenesisX/Assets">
         <file alias="qmldir">qml/GenesisX/Assets/qmldir</file>
         <file alias="GXButton.qml">qml/GenesisX/Assets/GXButton.qml</file>
+        <file alias="GXCard.qml">qml/GenesisX/Assets/GXCard.qml</file>
+        <file alias="GXInput.qml">qml/GenesisX/Assets/GXInput.qml</file>
+        <file alias="GXTextArea.qml">qml/GenesisX/Assets/GXTextArea.qml</file>
+        <file alias="GXMultiTumblerPicker.qml">qml/GenesisX/Assets/GXMultiTumblerPicker.qml</file>
+        <file alias="GXRadialSpinner.qml">qml/GenesisX/Assets/GXRadialSpinner.qml</file>
+        <file alias="GXAlbumCameraChooser.qml">qml/GenesisX/Assets/GXAlbumCameraChooser.qml</file>
+        <file alias="GXImageCropper.qml">qml/GenesisX/Assets/GXImageCropper.qml</file>
+        <file alias="GXConfirm.qml">qml/GenesisX/Assets/GXConfirm.qml</file>
     </qresource>
 </RCC>

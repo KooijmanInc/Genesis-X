@@ -1,0 +1,6 @@
+!defined(__GX_VALIDATION_PRF_INCLUDED__, var) {
+    __GX_VALIDATION_PRF_INCLUDED__ = 1
+    DEFINES += GX_USE_VALIDATION
+
+    message([genesisx validation] module loaded from $$PWD)
+}

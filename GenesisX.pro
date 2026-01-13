@@ -5,7 +5,7 @@ TEMPLATE = subdirs
 CONFIG += qt c++23
 CONFIG += ordered
 
-SUBDIRS += core physics orm \
+SUBDIRS += core physics orm framework
 
 !android:!ios:!wasm:!macos {
     SUBDIRS += tools/gxgen
@@ -18,6 +18,9 @@ physics.depends = core
 
 orm.subdir = $$PWD/orm
 orm.depends = core
+
+framework.subdir = $$PWD/framework
+framework.depends = core
 
 !android:!ios { tools/gxgen.depends = orm }
 
@@ -33,7 +36,7 @@ DISTFILES += \
     SECURITY.md \
     LICENSES/LicenseRef-KooijmanInc-Commercial.txt \
     LICENSES/GPL-3.0-only.txt \
-    installer/packages/io.genesisx.theme.iconslocal/meta/installscript.qs \
+    mkspecs/features/conf/gx_framework.prf \
     mkspecs/features/genesisx_app_core.prf \
     mkspecs/features/genesisx_assets.prf \
     mkspecs/features/gx_app_ab.prf \
@@ -66,6 +69,8 @@ DISTFILES += \
     mkspecs/features/gx_app_sensors.prf \
     mkspecs/features/gx_app_share.prf \
     mkspecs/features/gx_app_updater.prf \
+    mkspecs/features/gx_settings.prf \
+    mkspecs/features/gx_validation.prf \
     mkspecs/gx_app_calendar.prf \
     mkspecs/modules/qt_lib_genesisx_app_ab.pri \
     mkspecs/modules/qt_lib_genesisx_app_analytics.pri \
@@ -101,6 +106,9 @@ DISTFILES += \
     mkspecs/modules/qt_lib_genesisx_app_share.pri \
     mkspecs/modules/qt_lib_genesisx_app_updater.pri \
     mkspecs/modules/qt_lib_genesisx_assets.pri \
+    mkspecs/modules/qt_lib_genesisx_framework \
+    mkspecs/modules/qt_lib_genesisx_settings.pri \
+    mkspecs/modules/qt_lib_genesisx_validation.pri \
     scripts/install.bat \
     scripts/install.sh \
     tools/qtcreator-wizard/install-wizard.sh

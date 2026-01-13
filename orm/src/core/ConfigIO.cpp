@@ -17,10 +17,16 @@ static QJsonObject loadObj(const QString& path) {
     return d.isObject() ? d.object() : QJsonObject{};
 }
 
-static void mergeHttp(HttpConfig& http, const QJsonObject& api) {
+static void mergeHttp(HttpConfig& http, const QJsonObject& api, const QString& overrideLanguage = "") {
     if (api.contains("baseUrl"))         http.baseUrl = QUrl(api.value("baseUrl").toString());
     if (api.contains("appVersion"))      http.appVersion = api.value("appVersion").toString();
-    if (api.contains("userLanguage"))    http.userLanguage = api.value("userLanguage").toString(http.userLanguage);
+    if (api.contains("userLanguage"))    {
+        if (!overrideLanguage.isEmpty()) {
+            http.userLanguage = overrideLanguage;
+        } else {
+            http.userLanguage = api.value("userLanguage").toString(http.userLanguage);
+        }
+    }
     if (api.contains("timeoutMs"))       http.timeoutMs = api.value("timeoutMs").toInt(http.timeoutMs);
     if (api.contains("retryCount"))      http.retryCount = api.value("retryCount").toInt(http.retryCount);
     if (api.contains("allowInsecureDev"))http.allowInsecureDev = api.value("allowInsecureDev").toBool(http.allowInsecureDev);
@@ -53,7 +59,7 @@ static void mergeSql(SqlConfig& sql, const QJsonObject& s) {
     }
 }
 
-bool loadTransportConfig(const QString &path, TransportConfig& out, const QStringView &env)
+bool loadTransportConfig(const QString &path, TransportConfig& out, const QString& language, const QStringView &env)
 {
     const auto root = loadObj(path);
     if (root.isEmpty()) return false;
@@ -63,7 +69,7 @@ bool loadTransportConfig(const QString &path, TransportConfig& out, const QStrin
 
     const auto api = root.value("api").toObject();
     const auto sql = root.value("sql").toObject();
-    if (!api.isEmpty()) mergeHttp(out.http, api);
+    if (!api.isEmpty()) mergeHttp(out.http, api, language);
     if (!sql.isEmpty()) mergeSql(out.sql, sql);
 
     if (!env.isEmpty()) {

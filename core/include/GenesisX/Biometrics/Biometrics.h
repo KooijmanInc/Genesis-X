@@ -32,6 +32,7 @@ class GENESISX_CORE_EXPORT Biometrics : public QObject
     Q_OBJECT
 
     Q_PROPERTY(bool available READ available NOTIFY availabilityChanged)
+    Q_PROPERTY(bool hasLoginToken READ hasLoginToken NOTIFY loginTokenChanged)
 
 public:
     explicit Biometrics(QObject* parent = nullptr);
@@ -40,9 +41,19 @@ public:
     Q_INVOKABLE int status() const;
     Q_INVOKABLE QVariant authenticate(const QString& reason = QString());
 
+    Q_INVOKABLE bool hasLoginToken() const;
+    Q_INVOKABLE QVariant storeLoginToken(const QString& token, const QString& reason = QStringLiteral("Enable biometric login"));
+    Q_INVOKABLE QVariant loadLoginToken(const QString& reason = QStringLiteral("Unlock to sign in"));
+    Q_INVOKABLE bool clearLoginToken();
+
+    bool m_tokenOpInFlight = false;
+
 signals:
     void availabilityChanged();
     void authenticated(int code, const QString& message);
+
+    void loginTokenChanged();
+    void loginTokenReady(int code, const QString& message, const QString& token);
 
 private:
     bool m_available = false;

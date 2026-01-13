@@ -13,8 +13,16 @@ using namespace gx::android;
 void FcmListener::OnTokenReceived(const char *token)
 {
     if (!m_owner) return;
-    m_owner->m_token = QString::fromUtf8(token ? token : "[GX Notify] token failed");
-    emit m_owner->tokenChanged(m_owner->m_token);
+
+    const QString t = QString::fromUtf8(token ? token : "[GX Notify] token failed");
+
+    QMetaObject::invokeMethod(&FcmBridge::instance(), [t]{
+        auto& b = FcmBridge::instance();
+        b.m_token = t;
+        emit b.tokenChanged(b.m_token);
+    }, Qt::QueuedConnection);
+    // m_owner->m_token = QString::fromUtf8(token ? token : "[GX Notify] token failed");
+    // emit m_owner->tokenChanged(m_owner->m_token);
 }
 
 static QVariantMap mapFromPairs(const ::firebase::messaging::Message& msg)
@@ -57,9 +65,23 @@ void FcmBridge::initialize()
     ::firebase::App* inst = ::firebase::App::GetInstance();
     if (!inst) {
         QJniEnvironment env;
-        auto ctx = QNativeInterface::QAndroidApplication::context();
-        jobject jctx = ctx.object();
-        inst = ::firebase::App::Create(env.jniEnv(), jctx);
+
+        QJniObject ctx = QNativeInterface::QAndroidApplication::context();
+        if (!ctx.isValid()) {
+            qWarning() << "[GX Notify] Android context invalid";
+            return;
+        }
+
+        // IMPORTANT: make a JNI *local* ref for Firebase
+        jobject jctxLocal = env->NewLocalRef(ctx.object<jobject>());
+
+        inst = ::firebase::App::Create(env.jniEnv(), jctxLocal);
+
+        // Clean up our local ref (Firebase should not delete our global ref now)
+        env->DeleteLocalRef(jctxLocal);
+        // auto ctx = QNativeInterface::QAndroidApplication::context();
+        // jobject jctx = ctx.object();
+        // inst = ::firebase::App::Create(env.jniEnv(), jctx);
     }
     m_app = inst;
 
