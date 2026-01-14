@@ -73,7 +73,7 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     chooser.close()
-                    if (SystemInfo.platform() === "android") {
+                    if (SystemInfo.platform() === "android" || SystemInfo.platform() === "ios") {console.log("photo picker galery")
                         PhotoPicker.pickFromGallery()
                     } else {
                         fileDialog.open()
@@ -93,7 +93,7 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     chooser.close()
-                    if (SystemInfo.platform() === "android") {
+                    if (SystemInfo.platform() === "android" || SystemInfo.platform() === "ios") {console.log("photo picker take photo")
                         PhotoPicker.takePhoto()
                     } else {
                         openCamera()

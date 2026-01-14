@@ -16,6 +16,19 @@ bool gx_app_biometrics_clear_token_android(QObject* ctx);
 bool gx_app_biometrics_has_token_android(QObject* ctx);
 #endif
 
+#ifdef Q_OS_IOS
+extern "C++" {
+    QVariant gx_app_biometrics_authenticate_ios(const QString& reason, QObject* ctx);
+    bool gx_app_biometrics_available_ios();
+    int gx_app_biometrics_status_ios();
+
+    QVariant gx_app_biometrics_store_token_ios(const QString& token, const QString& reason, QObject* ctx);
+    QVariant gx_app_biometrics_load_token_ios(const QString& reason, QObject* ctx);
+    bool gx_app_biometrics_clear_token_ios(QObject* ctx);
+    bool gx_app_biometrics_has_token_ios(QObject* ctx);
+}
+#endif
+
 /*!
     \class gx::app::biometrics::Biometrics
     \inmodule GenesisX
@@ -89,6 +102,8 @@ Biometrics::Biometrics(QObject *parent)
 {
 #ifdef Q_OS_ANDROID
     m_available = gx_app_biometrics_available_android();
+#elif defined(Q_OS_IOS)
+    m_available = gx_app_biometrics_available_ios();
 #else
     m_available = false;
 #endif
@@ -113,6 +128,8 @@ int Biometrics::status() const
 {
 #ifdef Q_OS_ANDROID
     return gx_app_biometrics_status_android();
+#elif defined(Q_OS_IOS)
+    return gx_app_biometrics_status_ios();
 #else
     return BiometricsResult::NotAvailable;
 #endif
@@ -127,6 +144,8 @@ QVariant Biometrics::authenticate(const QString &reason)
 #ifdef Q_OS_ANDROID
     // emit authenticated(/*code*/1, /*message*/QStringLiteral("Biometrics not available"));
     return gx_app_biometrics_authenticate_android(reason, this);
+#elif defined(Q_OS_IOS)
+    return gx_app_biometrics_authenticate_ios(reason, this);
 #else
     Q_UNUSED(reason);
     BiometricsResult r{BiometricsResult::NotAvailable, QStringLiteral("Biometrics not available on this platform.")};
@@ -139,13 +158,15 @@ bool Biometrics::hasLoginToken() const
 {
 #ifdef Q_OS_ANDROID
     return gx_app_biometrics_has_token_android(const_cast<Biometrics*>(this));
+#elif defined(Q_OS_IOS)
+    return gx_app_biometrics_has_token_ios(const_cast<Biometrics*>(this));
 #else
     return false;
 #endif
 }
 
 QVariant Biometrics::storeLoginToken(const QString &token, const QString &reason)
-{
+{qDebug() << " store token";
 #ifdef Q_OS_ANDROID
     if (m_tokenOpInFlight) {
         return QVariantMap{
@@ -160,6 +181,15 @@ QVariant Biometrics::storeLoginToken(const QString &token, const QString &reason
     // emit authenticated(mapCodeOrDefault(m, BiometricsResult::Internal), mapMsgOrDefault(m, QStringLiteral("storeLoginToken finished")));
 
     return res;
+#elif defined(Q_OS_IOS)
+    if (m_tokenOpInFlight) {
+        return QVariantMap{
+            { "code", BiometricsResult::TemporarilyUnavailable },
+            { "message", "Token operation already running" }
+        };
+    }
+    m_tokenOpInFlight = true;
+    return gx_app_biometrics_store_token_ios(token, reason, this);
 #else
     Q_UNUSED(token);
     Q_UNUSED(reason);
@@ -186,6 +216,17 @@ QVariant Biometrics::loadLoginToken(const QString &reason)
     emit loginTokenReady(code, msg, token);
 
     return res;
+#elif defined(Q_OS_IOS)
+    const QVariant res = gx_app_biometrics_load_token_ios(reason, this);
+    const QVariantMap m = res.toMap();
+    const int code = mapCodeOrDefault(m, BiometricsResult::Internal);
+    const QString msg = mapMsgOrDefault(m, QStringLiteral("loadLoginToken finished"));
+    const QString token = m.value(QStringLiteral("token")).toString();
+    qDebug() << "loading token" << code << msg << token;
+    emit authenticated(code, msg);
+    emit loginTokenReady(code, msg, token);
+
+    return res;
 #else
     Q_UNUSED(reason);
     const QVariantMap m{
@@ -204,6 +245,11 @@ bool Biometrics::clearLoginToken()
 {
 #ifdef Q_OS_ANDROID
     const bool ok = gx_app_biometrics_clear_token_android(this);
+    emit loginTokenChanged();
+
+    return ok;
+#elif defined(Q_OS_IOS)
+    const bool ok = gx_app_biometrics_clear_token_ios(this);
     emit loginTokenChanged();
 
     return ok;

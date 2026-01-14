@@ -3,4 +3,8 @@
     DEFINES += GX_USE_APP_IMAGEPICKER
 
     message([genesisx app imagepicker] module loaded from $$PWD)
+
+    ios {
+        LIBS += -framework UIKit -framework PhotosUI
+    }
 }

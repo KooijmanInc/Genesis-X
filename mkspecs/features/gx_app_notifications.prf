@@ -58,131 +58,188 @@
         -framework GoogleDataTransport \
         -framework GoogleUtilities
     }
-
-    ios:!simulator {
+    ios {
         FIREBASE_ROOT = $$clean_path($$PWD/../../../Genesis-X/3rdparty/firebase_ios_sdk)
+        ANALYTICS_PT  = $$FIREBASE_ROOT/FirebaseAnalytics
 
-        ANALYTICS_PT = $$FIREBASE_ROOT/FirebaseAnalytics
+        # Determine which SDK we are building for
+        FIREBASE_SLICE =
+        contains(QMAKE_PLATFORM, iphonesimulator) {
+            FIREBASE_SLICE = ios-arm64_x86_64-simulator
+            SWIFT_LIB_DIR  = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator
+        } else {
+            FIREBASE_SLICE = ios-arm64
+            SWIFT_LIB_DIR  = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos
+        }
 
-        FIREBASEHBL_XC = $$FIREBASE_ROOT/FirebasePerformance/FirebaseCoreExtension.xcframework
-
-        FIREBASECORE_XC = $$ANALYTICS_PT/FirebaseCore.xcframework
+        FIREBASECORE_XC    = $$ANALYTICS_PT/FirebaseCore.xcframework
         FIREBASECOREINT_XC = $$ANALYTICS_PT/FirebaseCoreInternal.xcframework
-        FIREBASEINST_XC = $$ANALYTICS_PT/FirebaseInstallations.xcframework
-        FIREBASEBL_XC = $$ANALYTICS_PT/FBLPromises.xcframework
-        FIREBASEGU_XC = $$ANALYTICS_PT/GoogleUtilities.xcframework
-        FIREBASENPB_XC = $$ANALYTICS_PT/nanopb.xcframework
+        FIREBASEINST_XC    = $$ANALYTICS_PT/FirebaseInstallations.xcframework
+        FIREBASEBL_XC      = $$ANALYTICS_PT/FBLPromises.xcframework
+        FIREBASEGU_XC      = $$ANALYTICS_PT/GoogleUtilities.xcframework
+        FIREBASENPB_XC     = $$ANALYTICS_PT/nanopb.xcframework
 
         FIREBASEMSG_XC = $$FIREBASE_ROOT/FirebaseMessaging/FirebaseMessaging.xcframework
         FIREBASEGDT_XC = $$FIREBASE_ROOT/FirebaseMessaging/GoogleDataTransport.xcframework
 
-        FIREBASEHBL_FW = $$FIREBASEHBL_XC/ios-arm64/FirebaseCoreExtension.framework
+        # Slice-specific framework roots (these are what -F needs)
+        F_CORE    = $$FIREBASECORE_XC/$$FIREBASE_SLICE
+        F_COREINT = $$FIREBASECOREINT_XC/$$FIREBASE_SLICE
+        F_INST    = $$FIREBASEINST_XC/$$FIREBASE_SLICE
+        F_MSG     = $$FIREBASEMSG_XC/$$FIREBASE_SLICE
+        F_GU      = $$FIREBASEGU_XC/$$FIREBASE_SLICE
+        F_NPB     = $$FIREBASENPB_XC/$$FIREBASE_SLICE
+        F_BL      = $$FIREBASEBL_XC/$$FIREBASE_SLICE
+        F_GDT     = $$FIREBASEGDT_XC/$$FIREBASE_SLICE
 
-        FIREBASECORE_FW = $$FIREBASECORE_XC/ios-arm64/FirebaseCore.framework
-        FIREBASECOREINT_FW = $$FIREBASECOREINT_XC/ios-arm64/FirebaseCoreInternal.framework
-        FIREBASEINST_FW = $$FIREBASEINST_XC/ios-arm64/FirebaseInstallations.framework
-        FIREBASEBL_FW = $$FIREBASEBL_XC/ios-arm64/FBLPromises.framework
-        FIREBASEGU_FW = $$FIREBASEGU_XC/ios-arm64/GoogleUtilities.framework
-        FIREBASENPB_FW = $$FIREBASENPB_XC/ios-arm64/nanopb.framework
-
-        FIREBASEMSG_FW = $$FIREBASEMSG_XC/ios-arm64/FirebaseMessaging.framework
-        FIREBASEGDT_FW = $$FIREBASEGDT_XC/ios-arm64/GoogleDataTransport.framework
-
-        FIREBASEHBL_FW_ROOT = $$dirname(FIREBASEHBL_FW)
-
-        FIREBASECORE_FW_ROOT = $$dirname(FIREBASECORE_FW)
-        FIREBASECOREINT_FW_ROOT = $$dirname(FIREBASECOREINT_FW)
-        FIREBASEINST_FW_ROOT = $$dirname(FIREBASEINST_FW)
-        FIREBASEBL_FW_ROOT = $$dirname(FIREBASEBL_FW)
-        FIREBASEGU_FW_ROOT = $$dirname(FIREBASEGU_FW)
-        FIREBASENPB_FW_ROOT = $$dirname(FIREBASENPB_FW)
-
-        FIREBASEMSG_FW_ROOT = $$dirname(FIREBASEMSG_FW)
-        FIREBASEGDT_FW_ROOT = $$dirname(FIREBASEGDT_FW)
-
-        QMAKE_LFLAGS += -F$$FIREBASECORE_FW_ROOT \
-            -F$$FIREBASECOREINT_FW_ROOT \
-            -F$$FIREBASEINST_FW_ROOT \
-            -F$$FIREBASEMSG_FW_ROOT \
-            -F$$FIREBASEGU_FW_ROOT \
-            -F$$FIREBASENPB_FW_ROOT \
-            -F$$FIREBASEBL_FW_ROOT \
-            -F$$FIREBASEGDT_FW_ROOT \
-            -F/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos \
+        QMAKE_LFLAGS += \
+            -F$$F_CORE \
+            -F$$F_COREINT \
+            -F$$F_INST \
+            -F$$F_MSG \
+            -F$$F_GU \
+            -F$$F_NPB \
+            -F$$F_BL \
+            -F$$F_GDT \
+            -F$$SWIFT_LIB_DIR \
             -ObjC
 
-        LIBS += -framework FirebaseCore \
-        -framework FirebaseCoreInternal \
-        -framework FirebaseInstallations \
-        -framework FirebaseMessaging \
-        -framework FBLPromises \
-        -framework GoogleDataTransport \
-        -framework GoogleUtilities \
-        -framework nanopb \
-        -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -lswiftCompatibility56
+        LIBS += \
+            -framework FirebaseCore \
+            -framework FirebaseCoreInternal \
+            -framework FirebaseInstallations \
+            -framework FirebaseMessaging \
+            -framework FBLPromises \
+            -framework GoogleDataTransport \
+            -framework GoogleUtilities \
+            -framework nanopb \
+            -L$$SWIFT_LIB_DIR -lswiftCompatibility56
     }
-    ios:simulator {
-        FIREBASE_ROOT = $$clean_path($$PWD/../../../Genesis-X/3rdparty/firebase_ios_sdk)
 
-        ANALYTICS_PT = $$FIREBASE_ROOT/FirebaseAnalytics
+    # ios:!simulator {
+    #     FIREBASE_ROOT = $$clean_path($$PWD/../../../Genesis-X/3rdparty/firebase_ios_sdk)
 
-        FIREBASEHBL_XC = $$FIREBASE_ROOT/FirebasePerformance/FirebaseCoreExtension.xcframework
+    #     ANALYTICS_PT = $$FIREBASE_ROOT/FirebaseAnalytics
 
-        FIREBASECORE_XC = $$ANALYTICS_PT/FirebaseCore.xcframework
-        FIREBASECOREINT_XC = $$ANALYTICS_PT/FirebaseCoreInternal.xcframework
-        FIREBASEINST_XC = $$ANALYTICS_PT/FirebaseInstallations.xcframework
-        FIREBASEBL_XC = $$ANALYTICS_PT/FBLPromises.xcframework
-        FIREBASEGU_XC = $$ANALYTICS_PT/GoogleUtilities.xcframework
-        FIREBASENPB_XC = $$ANALYTICS_PT/nanopb.xcframework
+    #     FIREBASEHBL_XC = $$FIREBASE_ROOT/FirebasePerformance/FirebaseCoreExtension.xcframework
 
-        FIREBASEMSG_XC = $$FIREBASE_ROOT/FirebaseMessaging/FirebaseMessaging.xcframework
-        FIREBASEGDT_XC = $$FIREBASE_ROOT/FirebaseMessaging/GoogleDataTransport.xcframework
+    #     FIREBASECORE_XC = $$ANALYTICS_PT/FirebaseCore.xcframework
+    #     FIREBASECOREINT_XC = $$ANALYTICS_PT/FirebaseCoreInternal.xcframework
+    #     FIREBASEINST_XC = $$ANALYTICS_PT/FirebaseInstallations.xcframework
+    #     FIREBASEBL_XC = $$ANALYTICS_PT/FBLPromises.xcframework
+    #     FIREBASEGU_XC = $$ANALYTICS_PT/GoogleUtilities.xcframework
+    #     FIREBASENPB_XC = $$ANALYTICS_PT/nanopb.xcframework
 
-        FIREBASEHBL_FW = $$FIREBASEHBL_XC/ios-arm64_x86_64-simulator/FirebaseCoreExtension.framework
+    #     FIREBASEMSG_XC = $$FIREBASE_ROOT/FirebaseMessaging/FirebaseMessaging.xcframework
+    #     FIREBASEGDT_XC = $$FIREBASE_ROOT/FirebaseMessaging/GoogleDataTransport.xcframework
 
-        FIREBASECORE_FW = $$FIREBASECORE_XC/ios-arm64_x86_64-simulator/FirebaseCore.framework
-        FIREBASECOREINT_FW = $$FIREBASECOREINT_XC/ios-arm64_x86_64-simulator/FirebaseCoreInternal.framework
-        FIREBASEINST_FW = $$FIREBASEINST_XC/ios-arm64_x86_64-simulator/FirebaseInstallations.framework
-        FIREBASEBL_FW = $$FIREBASEBL_XC/ios-arm64_x86_64-simulator/FBLPromises.framework
-        FIREBASEGU_FW = $$FIREBASEGU_XC/ios-arm64_x86_64-simulator/GoogleUtilities.framework
-        FIREBASENPB_FW = $$FIREBASENPB_XC/ios-arm64_x86_64-simulator/nanopb.framework
+    #     FIREBASEHBL_FW = $$FIREBASEHBL_XC/ios-arm64/FirebaseCoreExtension.framework
 
-        FIREBASEMSG_FW = $$FIREBASEMSG_XC/ios-arm64_x86_64-simulator/FirebaseMessaging.framework
-        FIREBASEGDT_FW = $$FIREBASEGDT_XC/ios-arm64_x86_64-simulator/GoogleDataTransport.framework
+    #     FIREBASECORE_FW = $$FIREBASECORE_XC/ios-arm64/FirebaseCore.framework
+    #     FIREBASECOREINT_FW = $$FIREBASECOREINT_XC/ios-arm64/FirebaseCoreInternal.framework
+    #     FIREBASEINST_FW = $$FIREBASEINST_XC/ios-arm64/FirebaseInstallations.framework
+    #     FIREBASEBL_FW = $$FIREBASEBL_XC/ios-arm64/FBLPromises.framework
+    #     FIREBASEGU_FW = $$FIREBASEGU_XC/ios-arm64/GoogleUtilities.framework
+    #     FIREBASENPB_FW = $$FIREBASENPB_XC/ios-arm64/nanopb.framework
 
-        FIREBASEHBL_FW_ROOT = $$dirname(FIREBASEHBL_FW)
+    #     FIREBASEMSG_FW = $$FIREBASEMSG_XC/ios-arm64/FirebaseMessaging.framework
+    #     FIREBASEGDT_FW = $$FIREBASEGDT_XC/ios-arm64/GoogleDataTransport.framework
 
-        FIREBASECORE_FW_ROOT = $$dirname(FIREBASECORE_FW)
-        FIREBASECOREINT_FW_ROOT = $$dirname(FIREBASECOREINT_FW)
-        FIREBASEINST_FW_ROOT = $$dirname(FIREBASEINST_FW)
-        FIREBASEBL_FW_ROOT = $$dirname(FIREBASEBL_FW)
-        FIREBASEGU_FW_ROOT = $$dirname(FIREBASEGU_FW)
-        FIREBASENPB_FW_ROOT = $$dirname(FIREBASENPB_FW)
+    #     FIREBASEHBL_FW_ROOT = $$dirname(FIREBASEHBL_FW)
 
-        FIREBASEMSG_FW_ROOT = $$dirname(FIREBASEMSG_FW)
-        FIREBASEGDT_FW_ROOT = $$dirname(FIREBASEGDT_FW)
+    #     FIREBASECORE_FW_ROOT = $$dirname(FIREBASECORE_FW)
+    #     FIREBASECOREINT_FW_ROOT = $$dirname(FIREBASECOREINT_FW)
+    #     FIREBASEINST_FW_ROOT = $$dirname(FIREBASEINST_FW)
+    #     FIREBASEBL_FW_ROOT = $$dirname(FIREBASEBL_FW)
+    #     FIREBASEGU_FW_ROOT = $$dirname(FIREBASEGU_FW)
+    #     FIREBASENPB_FW_ROOT = $$dirname(FIREBASENPB_FW)
 
-        QMAKE_LFLAGS += -F$$FIREBASECORE_FW_ROOT \
-            -F$$FIREBASECOREINT_FW_ROOT \
-            -F$$FIREBASEINST_FW_ROOT \
-            -F$$FIREBASEMSG_FW_ROOT \
-            -F$$FIREBASEGU_FW_ROOT \
-            -F$$FIREBASENPB_FW_ROOT \
-            -F$$FIREBASEBL_FW_ROOT \
-            -F$$FIREBASEGDT_FW_ROOT \
-            -F/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos \
-            -ObjC
+    #     FIREBASEMSG_FW_ROOT = $$dirname(FIREBASEMSG_FW)
+    #     FIREBASEGDT_FW_ROOT = $$dirname(FIREBASEGDT_FW)
 
-        LIBS += -framework FirebaseCore \
-        -framework FirebaseCoreInternal \
-        -framework FirebaseInstallations \
-        -framework FirebaseMessaging \
-        -framework FBLPromises \
-        -framework GoogleDataTransport \
-        -framework GoogleUtilities \
-        -framework nanopb \
-        -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -lswiftCompatibility56
-    }
+    #     QMAKE_LFLAGS += -F$$FIREBASECORE_FW_ROOT \
+    #         -F$$FIREBASECOREINT_FW_ROOT \
+    #         -F$$FIREBASEINST_FW_ROOT \
+    #         -F$$FIREBASEMSG_FW_ROOT \
+    #         -F$$FIREBASEGU_FW_ROOT \
+    #         -F$$FIREBASENPB_FW_ROOT \
+    #         -F$$FIREBASEBL_FW_ROOT \
+    #         -F$$FIREBASEGDT_FW_ROOT \
+    #         -F/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos \
+    #         -ObjC
+
+    #     LIBS += -framework FirebaseCore \
+    #     -framework FirebaseCoreInternal \
+    #     -framework FirebaseInstallations \
+    #     -framework FirebaseMessaging \
+    #     -framework FBLPromises \
+    #     -framework GoogleDataTransport \
+    #     -framework GoogleUtilities \
+    #     -framework nanopb \
+    #     -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos -lswiftCompatibility56
+    # }
+    # ios:simulator {
+    #     FIREBASE_ROOT = $$clean_path($$PWD/../../../Genesis-X/3rdparty/firebase_ios_sdk)
+
+    #     ANALYTICS_PT = $$FIREBASE_ROOT/FirebaseAnalytics
+
+    #     FIREBASEHBL_XC = $$FIREBASE_ROOT/FirebasePerformance/FirebaseCoreExtension.xcframework
+
+    #     FIREBASECORE_XC = $$ANALYTICS_PT/FirebaseCore.xcframework
+    #     FIREBASECOREINT_XC = $$ANALYTICS_PT/FirebaseCoreInternal.xcframework
+    #     FIREBASEINST_XC = $$ANALYTICS_PT/FirebaseInstallations.xcframework
+    #     FIREBASEBL_XC = $$ANALYTICS_PT/FBLPromises.xcframework
+    #     FIREBASEGU_XC = $$ANALYTICS_PT/GoogleUtilities.xcframework
+    #     FIREBASENPB_XC = $$ANALYTICS_PT/nanopb.xcframework
+
+    #     FIREBASEMSG_XC = $$FIREBASE_ROOT/FirebaseMessaging/FirebaseMessaging.xcframework
+    #     FIREBASEGDT_XC = $$FIREBASE_ROOT/FirebaseMessaging/GoogleDataTransport.xcframework
+
+    #     FIREBASEHBL_FW = $$FIREBASEHBL_XC/ios-arm64_x86_64-simulator/FirebaseCoreExtension.framework
+
+    #     FIREBASECORE_FW = $$FIREBASECORE_XC/ios-arm64_x86_64-simulator/FirebaseCore.framework
+    #     FIREBASECOREINT_FW = $$FIREBASECOREINT_XC/ios-arm64_x86_64-simulator/FirebaseCoreInternal.framework
+    #     FIREBASEINST_FW = $$FIREBASEINST_XC/ios-arm64_x86_64-simulator/FirebaseInstallations.framework
+    #     FIREBASEBL_FW = $$FIREBASEBL_XC/ios-arm64_x86_64-simulator/FBLPromises.framework
+    #     FIREBASEGU_FW = $$FIREBASEGU_XC/ios-arm64_x86_64-simulator/GoogleUtilities.framework
+    #     FIREBASENPB_FW = $$FIREBASENPB_XC/ios-arm64_x86_64-simulator/nanopb.framework
+
+    #     FIREBASEMSG_FW = $$FIREBASEMSG_XC/ios-arm64_x86_64-simulator/FirebaseMessaging.framework
+    #     FIREBASEGDT_FW = $$FIREBASEGDT_XC/ios-arm64_x86_64-simulator/GoogleDataTransport.framework
+
+    #     FIREBASEHBL_FW_ROOT = $$dirname(FIREBASEHBL_FW)
+
+    #     FIREBASECORE_FW_ROOT = $$dirname(FIREBASECORE_FW)
+    #     FIREBASECOREINT_FW_ROOT = $$dirname(FIREBASECOREINT_FW)
+    #     FIREBASEINST_FW_ROOT = $$dirname(FIREBASEINST_FW)
+    #     FIREBASEBL_FW_ROOT = $$dirname(FIREBASEBL_FW)
+    #     FIREBASEGU_FW_ROOT = $$dirname(FIREBASEGU_FW)
+    #     FIREBASENPB_FW_ROOT = $$dirname(FIREBASENPB_FW)
+
+    #     FIREBASEMSG_FW_ROOT = $$dirname(FIREBASEMSG_FW)
+    #     FIREBASEGDT_FW_ROOT = $$dirname(FIREBASEGDT_FW)
+
+    #     QMAKE_LFLAGS += -F$$FIREBASECORE_FW_ROOT \
+    #         -F$$FIREBASECOREINT_FW_ROOT \
+    #         -F$$FIREBASEINST_FW_ROOT \
+    #         -F$$FIREBASEMSG_FW_ROOT \
+    #         -F$$FIREBASEGU_FW_ROOT \
+    #         -F$$FIREBASENPB_FW_ROOT \
+    #         -F$$FIREBASEBL_FW_ROOT \
+    #         -F$$FIREBASEGDT_FW_ROOT \
+    #         -F/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator \
+    #         -ObjC
+
+    #     LIBS += -framework FirebaseCore \
+    #     -framework FirebaseCoreInternal \
+    #     -framework FirebaseInstallations \
+    #     -framework FirebaseMessaging \
+    #     -framework FBLPromises \
+    #     -framework GoogleDataTransport \
+    #     -framework GoogleUtilities \
+    #     -framework nanopb \
+    #     -L/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator -lswiftCompatibility56
+    # }
     } else {
         message([genesisx app notifications] firebase_ios_sdk not found reverting to APNs)
     }

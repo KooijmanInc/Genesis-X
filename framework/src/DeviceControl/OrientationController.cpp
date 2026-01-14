@@ -9,6 +9,11 @@
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
 #endif
+#ifdef Q_OS_IOS
+extern "C" void gx_ios_set_orientation_portrait(void);
+extern "C" void gx_ios_set_orientation_landscape(void);
+extern "C" void gx_ios_clear_orientation_override(void);
+#endif
 
 using namespace gx::framework::devicecontrol;
 
@@ -42,8 +47,9 @@ void OrientationController::toPortrait()
 
     const int SCREEN_ORIENTATION_PORTRAIT = 1;
     activity.callMethod<void>("setRequestedOrientation", "(I)V", SCREEN_ORIENTATION_PORTRAIT);
-#elif Q_OS_IOS
-
+#endif
+#ifdef Q_OS_IOS
+    gx_ios_set_orientation_portrait();
 #endif
 }
 
@@ -59,8 +65,9 @@ void OrientationController::toLandscape()
 
     const int SCREEN_ORIENTATION_LANDSCAPE = 6;
     activity.callMethod<void>("setRequestedOrientation", "(I)V", SCREEN_ORIENTATION_LANDSCAPE);
-#elif Q_OS_IOS
-
+#endif
+#ifdef Q_OS_IOS
+    gx_ios_set_orientation_landscape();
 #endif
 }
 
