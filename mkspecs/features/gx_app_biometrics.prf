@@ -4,4 +4,7 @@
 
     message([genesisx app biometrics] module loaded from $$PWD)
 
+    ios {
+        LIBS += -framework LocalAuthentication -framework Security
+    }
 }

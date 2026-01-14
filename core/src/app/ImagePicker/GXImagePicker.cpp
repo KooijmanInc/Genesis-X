@@ -8,6 +8,11 @@
 #include <QJniObject>
 #endif
 
+#ifdef Q_OS_IOS
+void gx_ios_photo_picker_open_camera(QObject* ctx);
+void gx_ios_photo_picker_open_gallery(QObject* ctx);
+#endif
+
 using namespace gx::app::imagepicker;
 
 static NativePhotoPicker* s_instance = nullptr;
@@ -40,6 +45,8 @@ void NativePhotoPicker::takePhoto()
         "(Landroid/content/Context;)V",
         ctx.object()
     );
+#elif defined(Q_OS_IOS)
+    gx_ios_photo_picker_open_camera(this);
 #endif
 }
 
@@ -58,6 +65,8 @@ void NativePhotoPicker::pickFromGallery()
         "(Landroid/content/Context;)V",
         ctx.object()
     );
+#elif defined(Q_OS_IOS)
+    gx_ios_photo_picker_open_gallery(this);
 #endif
 }
 

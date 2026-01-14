@@ -10,7 +10,8 @@ ios {
     CONFIG -= dll shared
     CONFIG += staticlib
     OBJECTIVE_SOURCES += \
-        src/DeviceControl/KeepAwake_ios.mm
+        src/DeviceControl/KeepAwake_ios.mm \
+        src/DeviceControl/gx_ios_orientation.mm
 } else:macos {
     CONFIG += shared staticlib
 # } else:win32 {
@@ -59,5 +60,4 @@ INCLUDEPATH += $$GENESISX_BUILD_ROOT/framework/include
 HEADERS += $$files($$PWD/include/GenesisX/*.h, true) \
     $$files($$PWD/src/*.h, true)
 
-SOURCES += $$files($$PWD/src/*.cpp, true) \
-    src/DeviceControl/KeepAwake_ios.mm
+SOURCES += $$files($$PWD/src/*.cpp, true)

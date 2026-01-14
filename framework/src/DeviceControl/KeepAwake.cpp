@@ -28,6 +28,7 @@ void KeepAwake::setEnabled(bool on)
 
 void KeepAwake::applyPlatform(bool on)
 {
+    Q_UNUSED(on);
 #ifdef Q_OS_ANDROID
     QNativeInterface::QAndroidApplication::runOnAndroidMainThread([on]() -> QVariant {
         QJniObject activity = QNativeInterface::QAndroidApplication::context();

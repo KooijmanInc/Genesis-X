@@ -6,9 +6,9 @@
 #ifdef Q_OS_IOS
 #import <UIKit/UIKit.h>
 
-void KeepAwake::applyPlatform(bool on)
+void gx::framework::KeepAwake::applyPlatform(bool on)
 {
-  dispach_async(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_main_queue(), ^{
     [UIApplication sharedApplication].idleTimerDisabled = on ? YES : NO;
   });
 }

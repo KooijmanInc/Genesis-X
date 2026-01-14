@@ -23,7 +23,9 @@ ios {
     OBJECTIVE_SOURCES += \
         $$PWD/src/app/Notifications/NotificationHandler_apple.mm \
         $$PWD/src/app/Notifications/GXAppDelegate+Push_ios.mm \
-        $$PWD/src/app/Background/BackgroundAudio.mm
+        $$PWD/src/app/Background/BackgroundAudio.mm \
+        $$PWD/src/app/biometrics/gx_ios_biometrics.mm \
+        $$PWD/src/app/ImagePicker/gx_ios_imagepicker.mm
 } else:macos {
     QMAKE_MAC_XCODE_SETTINGS += ALWAYS_SEARCH_USER_PATHS=NO
     QMAKE_MAC_XCODE_SETTINGS += USE_HEADERMAP=YES
