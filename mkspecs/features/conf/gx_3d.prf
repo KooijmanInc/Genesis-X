@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+!defined(__GX_GX3D_PRF_INCLUDED__, var) {
+    __GX_GX3D_PRF_INCLUDED__ = 1
+
+    message([genesisx_3d] module loaded from $$PWD)
+
+    GX_GX3D_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/gx3d/include)
+
+    INCLUDEPATH += $$GX_GX3D_INC_ROOT $$clean_path($$GENESISX_BUILD_ROOT/core/include)
+    QMAKE_LIBDIR += $$LIBDIRS
+
+    GX_ABI = $$QT_ARCH
+    isEmpty(GX_ABI): GX_ABI = arm64-v8a
+    contains(GX_ABI, arm64) {
+        GX_ABI = arm64-v8a
+    } else: contains(GX_ABI, x86_64) {
+        GX_ABI = x86_64
+    }
+
+    android {
+        LIBS += -lgenesisx_3d_$${GX_ABI}
+
+        message([genesisx_3d] setting gx3d lib -lgenesisx_3d_$${GX_ABI})
+    } else {
+        LIBS += -lgenesisx_3d
+
+        message([genesisx_3d] setting gx3d lib -lgenesisx_3d)
+    }
+
+    win32 {
+        GX_DLL_GX3D = $$shell_path($$LIBDIRS/genesisx_3d.dll)
+        GX_DLL_GX3D_DEST = $$shell_path($$DEST_LIBDIRS/genesisx_3d.dll)
+        GX_A_GX3D = $$shell_path($$LIBDIRS/libgenesisx_3d.a)
+        GX_A_GX3D_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_3d.a)
+
+        exists($$GX_DLL_GX3D) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_GX3D) $$shell_quote($$GX_DLL_GX3D_DEST)
+            message([genesisx_3d] gx3d library .dll file copied to $$DEST_LIBDIRS)
+        }
+        exists($$GX_A_GX3D) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_A_GX3D) $$shell_quote($$GX_A_GX3D_DEST)
+            message([genesisx_3d] gx3d library $$GX_A_GX3D $$GX_GX3D_A file copied to $$DEST_LIBDIRS)
+        }
+    }
+}

@@ -40,4 +40,5 @@
     <snippet group="Text" trigger="genesisx_assets" id="" complement="" removed="false" modified="false">genesisx_assets</snippet>
     <snippet group="Text" trigger="genesisx_settings" id="" complement="" removed="false" modified="false">genesisx_settings</snippet>
     <snippet group="Text" trigger="genesisx_validation" id="" complement="" removed="false" modified="false">genesisx_validation</snippet>
+    <snippet group="Text" trigger="genesisx_3d" id="" complement="" removed="false" modified="false">genesisx_3d</snippet>
 </snippets>

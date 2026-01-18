@@ -5,7 +5,8 @@ TEMPLATE = subdirs
 CONFIG += qt c++23
 CONFIG += ordered
 
-SUBDIRS += core physics orm framework
+SUBDIRS += core physics orm framework \
+    gx3d
 
 !android:!ios:!wasm:!macos {
     SUBDIRS += tools/gxgen
@@ -37,6 +38,7 @@ DISTFILES += \
     LICENSES/LicenseRef-KooijmanInc-Commercial.txt \
     LICENSES/GPL-3.0-only.txt \
     mkspecs/features/conf/gx_framework.prf \
+    mkspecs/features/conf/gx_gx3d.prf \
     mkspecs/features/genesisx_app_core.prf \
     mkspecs/features/genesisx_assets.prf \
     mkspecs/features/gx_app_ab.prf \
@@ -107,6 +109,7 @@ DISTFILES += \
     mkspecs/modules/qt_lib_genesisx_app_updater.pri \
     mkspecs/modules/qt_lib_genesisx_assets.pri \
     mkspecs/modules/qt_lib_genesisx_framework \
+    mkspecs/modules/qt_lib_genesisx_gx3d.pri \
     mkspecs/modules/qt_lib_genesisx_settings.pri \
     mkspecs/modules/qt_lib_genesisx_validation.pri \
     scripts/install.bat \
