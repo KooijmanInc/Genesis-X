@@ -1,0 +1,19 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXScene"
+        className: "gx::gx3d::GXScene"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXScene 1.0"]
+        Property {
+            name: "objectName"
+            type: "string"
+        }
+        Property {
+            name: "roots"
+            type: "QQmlListProperty"
+        }
+    }
+}

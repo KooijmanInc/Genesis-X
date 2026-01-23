@@ -6,7 +6,11 @@
 
 #include <QColor>
 #include <QTimer>
+#include <QPointer>
 #include <QQuickItem>
+
+#include <GenesisX/GX3D/Core/GXCamera.h>
+#include <GenesisX/GX3D/Scene/GXScene.h>
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
@@ -17,6 +21,8 @@ class GENESISX_GX3D_EXPORT GXView3D : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY(QColor clearColor READ clearColor WRITE setClearColor NOTIFY clearColorChanged)
+    Q_PROPERTY(GXCamera* camera READ camera WRITE setCamera NOTIFY cameraChanged)
+    Q_PROPERTY(scene::GXScene* scene READ scene WRITE setScene NOTIFY sceneChanged)
 
 public:
     /**
@@ -47,10 +53,18 @@ public:
     int targetFps() const { return m_targetFps; }
     void setTargetFps(int fps);
 
+    GXCamera* camera() const { return m_camera; }
+    void setCamera(GXCamera* cam);
+
+    scene::GXScene* scene() const { return m_scene; }
+    void setScene(scene::GXScene* s);
+
 signals:
     void clearColorChanged();
     void renderModeChanged();
     void targetFpsChanged();
+    void cameraChanged();
+    void sceneChanged();
 
 protected:
     QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*) override;
@@ -67,6 +81,9 @@ private:
     int m_targetFps = 30;
 
     QTimer m_tickTimer;
+
+    QPointer<GXCamera> m_camera;
+    scene::GXScene* m_scene = nullptr;
 };
 
 }

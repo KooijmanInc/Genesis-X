@@ -1,0 +1,47 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXNode"
+        className: "gx::gx3d::scene::GXNode"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXNode 1.0"]
+        Property {
+            name: "position"
+            type: "QVector3D"
+            read: "position"
+            notify: "positionChanged"
+        }
+        Property {
+            name: "rotation"
+            type: "QQuaternion"
+            read: "rotation"
+            notify: "rotationChanged"
+        }
+        Property {
+            name: "scale"
+            type: "QVector3D"
+            read: "scale"
+            notify: "scaleChanged"
+        }
+        Property {
+            name: "x"
+            type: "float"
+            read: "x"
+            notify: "xChanged"
+        }
+        Property {
+            name: "y"
+            type: "float"
+            read: "y"
+            notify: "yChanged"
+        }
+        Property {
+            name: "z"
+            type: "float"
+            read: "z"
+            notify: "zChanged"
+        }
+    }
+}

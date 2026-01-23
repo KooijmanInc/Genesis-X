@@ -1,0 +1,53 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXPerspectiveCamera"
+        className: "gx::gx3d::GXPerspectiveCamera"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXPerspectiveCamera 1.0"]
+        Property {
+            name: "objectName"
+            type: "string"
+        }
+        Property {
+            name: "position"
+            type: "QVector3D"
+        }
+        Property {
+            name: "target"
+            type: "QVector3D"
+        }
+        Property {
+            name: "fov"
+            type: "float"
+        }
+        Property {
+            name: "nearPlane"
+            type: "float"
+        }
+        Property {
+            name: "farPlane"
+            type: "float"
+        }
+        Property {
+            name: "x"
+            type: "float"
+            read: "x"
+            notify: "xChanged"
+        }
+        Property {
+            name: "y"
+            type: "float"
+            read: "y"
+            notify: "yChanged"
+        }
+        Property {
+            name: "z"
+            type: "float"
+            read: "z"
+            notify: "zChanged"
+        }
+    }
+}

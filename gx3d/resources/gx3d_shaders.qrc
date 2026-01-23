@@ -2,5 +2,14 @@
     <qresource prefix="/gx3d/shaders">
         <file alias="solidcolor.frag.qsb">../shaders/solidcolor.frag.qsb</file>
         <file alias="solidcolor.vert.qsb">../shaders/solidcolor.vert.qsb</file>
+        <file alias="testtri.vert.qsb">../shaders/testtri.vert.qsb</file>
+        <file alias="testtri.frag.qsb">../shaders/testtri.frag.qsb</file>
+        <file alias="cube.frag.qsb">../shaders/cube.frag.qsb</file>
+        <file alias="cube.vert.qsb">../shaders/cube.vert.qsb</file>
+        <file alias="default_lit.frag.qsb">../shaders/default_lit.frag.qsb</file>
+        <file alias="default_lit.vert.qsb">../shaders/default_lit.vert.qsb</file>
+
+        <file alias="light_gizmo.frag.qsb">../shaders/light_gizmo.frag.qsb</file>
+        <file alias="light_gizmo.vert.qsb">../shaders/light_gizmo.vert.qsb</file>
     </qresource>
 </RCC>

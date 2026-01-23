@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-#include "GXClearNode.h"
+#include <GenesisX/GX3D/Render/Nodes/GXClearNode.h>
 
 #include <QFile>
 
-using namespace gx::render;
+using namespace gx::gx3d::render;
 
 static QShader loadShader(const QString &path)
 {

@@ -4,7 +4,7 @@
 #ifndef GX3DQML_H
 #define GX3DQML_H
 
-#include "genesisx_gx3d_global.h"
+#include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
 class QQmlEngine;
 

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-QT += quick qml gui-private
+QT += core gui quick qml gui-private
 
 TEMPLATE = lib
 TARGET = genesisx_3d
@@ -59,9 +59,19 @@ HEADERS += $$files($$PWD/include/GenesisX/*.h, true) \
 
 SOURCES += $$files($$PWD/src/*.cpp, true)
 
+QML_IMPORT_PATH += $$PWD/qml
+
 DISTFILES += \
+    shaders/default_lit.frag \
+    shaders/default_lit.vert \
+    shaders/light_gizmo.frag \
+    shaders/light_gizmo.vert \
     shaders/solidcolor.frag \
-    shaders/solidcolor.vert
+    shaders/solidcolor.vert \
+    shaders/test.vert \
+    shaders/testtri.frag \
+    shaders/testtri.vert
 
 RESOURCES += \
+    qml/GenesisX3D/gx3d_modules.qrc \
     resources/gx3d_shaders.qrc

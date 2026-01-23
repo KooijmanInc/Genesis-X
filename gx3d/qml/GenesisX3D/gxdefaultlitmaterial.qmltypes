@@ -1,0 +1,15 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXDefaultLitMaterial"
+        className: "gx::gx3d::render::GXDefaultLitMaterial"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXDefaultLitMaterial 1.0"]
+        Property {
+            name: "baseColor"
+            type: "string"
+        }
+    }
+}

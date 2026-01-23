@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/qt/qml/GenesisX3D">
+        <file>gxmodel.qmltypes</file>
+        <file>qmldir</file>
+        <file>plugins.qmltypes</file>
+        <file>gxnode.qmltypes</file>
+        <file>gxrenderablenode.qmltypes</file>
+        <file>gxview3d.qmltypes</file>
+        <file>gxscene.qmltypes</file>
+        <file>gxpointlight.qmltypes</file>
+        <file>gxperspectivecamera.qmltypes</file>
+        <file>gxdefaultlitmaterial.qmltypes</file>
+    </qresource>
+</RCC>
