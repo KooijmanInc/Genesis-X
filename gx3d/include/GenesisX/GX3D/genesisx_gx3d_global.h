@@ -18,5 +18,9 @@
 
 namespace gx { namespace gx3d { } }
 namespace GX3d = gx::gx3d;
+namespace gx { namespace gx3d { namespace render { } } }
+namespace GX3DRender = gx::gx3d::render;
+namespace gx { namespace gx3d { namespace scene { } } }
+namespace GX3DScene = gx::gx3d::scene;
 
 #endif // GENESISX_GX3D_GLOBAL_H

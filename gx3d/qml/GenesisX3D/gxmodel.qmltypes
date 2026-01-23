@@ -1,0 +1,63 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXModel"
+        className: "gx::gx3d::render::GXModel"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXModel 1.0"]
+        Property {
+            name: "objectName"
+            type: "string"
+        }
+        Property {
+            name: "mesh"
+            type: "gx::gx3d::render::GXMesh*"
+            read: "mesh"
+            notify: "meshChanged"
+        }
+        Property {
+            name: "source"
+            type: "string"
+            read: "source"
+            notify: "sourceChanged"
+        }
+        Property {
+            name: "position"
+            type: "QVector3D"
+            read: "position"
+            notify: "positionChanged"
+        }
+        Property {
+            name: "scale"
+            type: "QVector3D"
+            read: "scale"
+            notify: "scaleChanged"
+        }
+        Property {
+            name: "material"
+            type: "gx::gx3d::render::GXMaterial"
+            read: "material"
+            notify: "materialChanged"
+        }
+        Property {
+            name: "x"
+            type: "float"
+            read: "x"
+            notify: "xChanged"
+        }
+        Property {
+            name: "y"
+            type: "float"
+            read: "y"
+            notify: "yChanged"
+        }
+        Property {
+            name: "z"
+            type: "float"
+            read: "z"
+            notify: "zChanged"
+        }
+    }
+}

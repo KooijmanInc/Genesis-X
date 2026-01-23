@@ -1,0 +1,32 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXView3D"
+        className: "gx::gx3d::GXView3D"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXView3D 1.0"]
+        Property {
+            name: "objectName"
+            type: "string"
+        }
+        Property {
+            name: "anchors"
+            type: "QQuickItem"
+        }
+
+        Property {
+            name: "renderMode"
+            type: "gx::gx3d::GXView3D"
+        }
+        Property {
+            name: "scene"
+            type: "gx::gx3d::scene::GXScene"
+        }
+        Property {
+            name: "camera"
+            type: "gx::gx3d::GXCamera"
+        }
+    }
+}

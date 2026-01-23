@@ -1,0 +1,35 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXNode"
+        className: "gx::gx3d::scene::GXNode"
+        prototype: "QObject"
+        exports: ["GenesisX3D.GXModel 1.0"]
+        Property {
+            name: "position"
+            type: "QVector3D"
+            read: "position"
+            notify: "positionChanged"
+        }
+    }
+    Component {
+        name: "GXRenderableNode"
+        className: "gx::gx3d::render::GXRenderableNode"
+        prototype: "gx::gx3d::scene::GXNode"
+        exports: ["GenesisX3D.GXRenderableNode 1.0"]
+    }
+    Component {
+        name: "GXModel"
+        className: "gx::gx3d::render::GXModel"
+        prototype: "gx::gx3d::render::GXRenderableNode"
+        exports: ["GenesisX3D.GXModel 1.0"]
+        Property {
+            name: "mesh"
+            type: "gx::gx3d::render::GXMesh*"
+            read: "mesh"
+            notify: "meshChanged"
+        }
+    }
+}

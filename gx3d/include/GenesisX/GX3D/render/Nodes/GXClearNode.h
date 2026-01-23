@@ -12,7 +12,7 @@
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
-namespace gx::render {
+namespace gx::gx3d::render {
 
 class GXClearNode final : public QSGRenderNode
 {
