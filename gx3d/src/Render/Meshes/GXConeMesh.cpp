@@ -10,7 +10,8 @@ using namespace gx::gx3d::render;
 
 static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz)
 {
-    return GXMesh::Vertex{ px, py, pz, nx, ny, nz };
+    float u = 0.0f, v = 0.0f;
+    return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
 }
 
 GXMesh *GXConeMesh::create()

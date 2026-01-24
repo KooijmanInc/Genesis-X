@@ -55,7 +55,8 @@ android {
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/gx3d/include
 
 HEADERS += $$files($$PWD/include/GenesisX/*.h, true) \
-    $$files($$PWD/src/*.h, true)
+    $$files($$PWD/src/*.h, true) \
+    include/GenesisX/GX3D/Render/Materials/GXPrincipledUniforms.h
 
 SOURCES += $$files($$PWD/src/*.cpp, true)
 
@@ -66,6 +67,8 @@ DISTFILES += \
     shaders/default_lit.vert \
     shaders/light_gizmo.frag \
     shaders/light_gizmo.vert \
+    shaders/principled.frag \
+    shaders/principled.vert \
     shaders/solidcolor.frag \
     shaders/solidcolor.vert \
     shaders/test.vert \

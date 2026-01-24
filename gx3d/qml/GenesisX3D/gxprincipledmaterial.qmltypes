@@ -1,0 +1,17 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXPrincipledMaterial"
+        className: "gx::gx3d::render::GXPrincipledMaterial"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXPrincipledMaterial 1.0"]
+        Property {
+            name: "baseColor"
+            type: "string"
+            read: "baseColor"
+            notify: "baseColorChanged"
+        }
+    }
+}

@@ -32,7 +32,6 @@ public:
 
     void setRect(const QRectF& r) { m_rect = r; markDirty(DirtyGeometry); }
     void setScene(scene::GXScene* scene);
-    // { m_scene = scene; markDirty(DirtyGeometry); }
     void setViewProj(const QMatrix4x4& vp) { m_viewProj = vp; markDirty(DirtyGeometry); }
 
     void setQuickWindow(QQuickWindow* w);
@@ -61,12 +60,18 @@ private:
     QRhiRenderPassDescriptor *m_rpDesc = nullptr;
     QRhiSwapChain* m_lastSwapChain = nullptr;
 
+    // light debug
     QRhi* m_gizmoRhi = nullptr;
     QRhiBuffer* m_gizmoVbuf = nullptr;
     QRhiBuffer* m_gizmoUbuf = nullptr;
     QRhiShaderResourceBindings* m_gizmoSrb = nullptr;
     QRhiGraphicsPipeline* m_gizmoPs = nullptr;
     bool m_gizmoDirty = true;
+
+    // lighting
+    QRhi* m_lastRhi = nullptr;
+    QRhiBuffer* m_frameLightUbo = nullptr;
+    bool m_frameLightDirty = true;
 
     QSize m_lastSize;
     int m_lastSampleCount = 1;
@@ -76,6 +81,8 @@ private:
 
     void ensureLightGizmo(QRhi* rhi, QRhiCommandBuffer* cb, QRhiRenderTarget* rt);
     void destroyLightGizmo();
+
+    void destroyFrameLightUbo();
 
     std::atomic_bool m_depthDirty { true };
 

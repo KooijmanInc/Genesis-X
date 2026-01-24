@@ -79,8 +79,6 @@ static QShader loadShader(const QString &path)
 
     if (!s.isValid()) qWarning() << "Invalid .qsb shader:" << path;
 
-    qWarning() << "Loading shader" << path << "size" << f.size();
-
     return s;
 }
 
@@ -94,8 +92,9 @@ GXCubeNode::GXCubeNode(QObject *parent)
 
     QVector<GXMesh::Vertex> verts;
     verts.reserve(24);
+    float u = 0.0f, uv = 0.0f;
     for (const auto &v : kCubeVerts)
-        verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz };
+        verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz, u, uv };
 
     QVector<quint16> idx;
     idx.reserve(36);

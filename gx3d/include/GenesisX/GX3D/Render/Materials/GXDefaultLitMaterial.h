@@ -29,16 +29,16 @@ public:
     void applyTo(QRhiGraphicsPipeline* ps) const override;
 
     // Layout contract (size + binding numbers)
-    int vsBinding() const { return DefaultLit_VS_Binding; }
-    int fsBinding() const { return DefaultLit_FS_Binding; }
-    int vsUboSize() const {return int(sizeof(DefaultLitVSUBO)); }
-    int fsUboSize() const {return int(sizeof(DefaultLitFSUBO)); }
+    int vsBinding() const override { return DefaultLit_VS_Binding; }
+    int fsBinding() const override { return DefaultLit_FS_Binding; }
+    int vsUboSize() const override {return int(sizeof(DefaultLitVSUBO)); }
+    int fsUboSize() const override {return int(sizeof(DefaultLitFSUBO)); }
 
     QColor baseColor() const { return m_baseColor; }
     void setBaseColor(const QColor& c);
 
-    void fillVS(DefaultLitVSUBO& out, const QMatrix4x4& mvp, const QMatrix4x4& model) const;
-    void fillFS(DefaultLitFSUBO& out, const GXPointLightData& light) const;
+    void fillVS(void* dst, const QMatrix4x4& mvp, const QMatrix4x4& model) const override;
+    void fillFS(void* dst) const override;
 
 signals:
     void baseColorChanged();

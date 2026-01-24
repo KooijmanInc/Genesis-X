@@ -28,8 +28,10 @@ GXMesh *GXPlaneMesh::create()
     QVector<GXMesh::Vertex> verts;
     QVector<quint16> indices;
 
+    float u = 0.0f, uv = 0.0f;
+
     verts.reserve(4);
-    for (const auto &v : kPlaneVerts)  verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz };
+    for (const auto &v : kPlaneVerts)  verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz, u, uv };
     indices.reserve(6);
     for (quint16 i : kPlaneIndices) indices << i;
 

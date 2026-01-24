@@ -40,6 +40,14 @@ public:
     virtual QShader fragmentShader() const = 0;
     virtual void applyTo(QRhiGraphicsPipeline* ps) const = 0;
 
+    virtual int vsBinding() const = 0;
+    virtual int fsBinding() const = 0;
+    virtual int vsUboSize() const = 0;
+    virtual int fsUboSize() const = 0;
+
+    virtual void fillVS(void* dst, const QMatrix4x4& mvp, const QMatrix4x4& model) const = 0;
+    virtual void fillFS(void* dst) const = 0;
+
     const GXRenderState& renderState() const { return m_state; }
     void setRenderState(const GXRenderState& s);
 

@@ -10,5 +10,6 @@
         <file>gxpointlight.qmltypes</file>
         <file>gxperspectivecamera.qmltypes</file>
         <file>gxdefaultlitmaterial.qmltypes</file>
+        <file>gxprincipledmaterial.qmltypes</file>
     </qresource>
 </RCC>

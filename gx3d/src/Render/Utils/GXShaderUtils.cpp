@@ -20,7 +20,5 @@ QShader GXShaderUtils::gxLoadShader(const QString &path) const
 
     if (!s.isValid()) qWarning() << "Invalid .qsb shader:" << path;
 
-    qWarning() << "Loading shader" << path << "size" << f.size();
-
     return s;
 }

@@ -48,4 +48,15 @@
             message([genesisx_3d] gx3d library $$GX_A_GX3D $$GX_GX3D_A file copied to $$DEST_LIBDIRS)
         }
     }
+
+    android {
+        GX_3D_SO = $$shell_path($$LIBDIRS/libgenesisx_3d_$${GX_ABI}.so)
+        GX_3D_SO_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_3d_$${GX_ABI}.so)
+        exists($$GX_3D_SO) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_3D_SO) $$shell_quote($$GX_3D_SO_DEST)
+            message([genesisx_3d] library .so file copied to $$DEST_LIBDIRS)
+        }
+
+        ANDROID_EXTRA_LIBS += $$GX_3D_SO
+    }
 }

@@ -26,7 +26,6 @@ QQmlListProperty<GXNode> GXScene::roots()
 void GXScene::addRoot(GXNode *node)
 {
     if (!node) return;
-    qWarning() << "GXScene addRoot" << node << node->metaObject()->className() << "name=" << node->objectName();
 
     if (m_roots.contains(node)) return;
 

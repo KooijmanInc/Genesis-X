@@ -5,7 +5,11 @@ TEMPLATE = subdirs
 CONFIG += qt c++23
 CONFIG += ordered
 
-SUBDIRS += core physics orm framework \
+SUBDIRS += \
+    core \
+    physics \
+    orm \
+    framework \
     gx3d
 
 !android:!ios:!wasm:!macos {
@@ -22,6 +26,9 @@ orm.depends = core
 
 framework.subdir = $$PWD/framework
 framework.depends = core
+
+gx3d.subdir = $$PWD/gx3d
+gx3d.depends = core
 
 !android:!ios { tools/gxgen.depends = orm }
 

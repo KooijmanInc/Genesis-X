@@ -6,6 +6,8 @@ layout(location = 2) in vec2 vUv;
 
 layout(binding = 1) uniform FSUBO {
     vec4 baseColor;
+    vec4 emissive;
+    vec4 emissiveLight;
 } fsu;
 
 layout(binding = 2) uniform FrameLightingUBO {
@@ -16,30 +18,29 @@ layout(binding = 2) uniform FrameLightingUBO {
 
 layout(location = 0) out vec4 fragColor;
 
-void main()
+void main(void)
 {
     vec3 N = normalize(vWorldN);
+    vec4 base = fsu.baseColor;
+    vec4 emissive = fsu.emissive;
+
+    vec3 emissiveColor = emissive.rgb * emissive.a;
 
     vec3 Lvec = fl.lightPos.xyz - vWorldPos;
     float dist = length(Lvec);
-    vec3 L = (dist > 1e-5) ? (Lvec / dist) : vec3(0.0, 0.0, 1.0);
-
-    float ndotl = max(dot(N, L), 0.0);
+    vec3 L = (dist >1e-5) ? (Lvec / dist) : vec3(0.0, 0.0, 1.0);
+    float ndot1 = max(dot(N, L), 0.0);
 
     float range = max(fl.lightParams.x, 1e-4);
-    // float att = 1.0 / (1.0 + (dist * dist) / (range * range));
     float x = clamp(1.0 - dist / range, 0.0, 1.0);
     float att = x * x;
 
     float intensity = fl.lightColor.a;
 
-    vec3 ambient = fsu.baseColor.rgb * 0.15;
-    vec3 diffuse = fsu.baseColor.rgb * fl.lightColor.rgb * (ndotl * att * intensity);
+    vec3 diffuse = base.rgb * fl.lightColor.rgb * (ndot1 * att * intensity);
+    vec3 ambient = base.rgb * 0.15;
 
-    vec3 color = ambient + diffuse;
-    color = clamp(color, 0.0, 1.0);
-    // fragColor = vec4(fract(vUv), 0.0, 1.0);
-    fragColor = vec4(color, fsu.baseColor.a);
-    // fragColor = fsu.baseColor;
-    // return;
+    vec3 color = ambient + diffuse + emissiveColor;
+
+    fragColor = vec4(clamp(color, 0.0, 1.0), base.a);
 }

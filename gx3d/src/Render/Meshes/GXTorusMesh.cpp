@@ -8,9 +8,9 @@
 
 using namespace gx::gx3d::render;
 
-static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz)
+static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz, float u, float v)
 {
-    return GXMesh::Vertex{ px, py, pz, nx, ny, nz };
+    return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
 }
 
 GXMesh *GXTorusMesh::create()
@@ -67,7 +67,10 @@ GXMesh *GXTorusMesh::create()
             QVector3D n = (pos - ringCenter);
             n.normalize();
 
-            verts << makeV(pos.x(), pos.y(), pos.z(), n.x(), n.y(), n.z());
+            const float uu = float(i) / float(majorSeg);
+            const float vv = float(j) / float(minorSeg);
+
+            verts << makeV(pos.x(), pos.y(), pos.z(), n.x(), n.y(), n.z(), uu, vv);
         }
     }
 

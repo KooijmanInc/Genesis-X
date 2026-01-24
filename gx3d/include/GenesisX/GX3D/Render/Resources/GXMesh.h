@@ -20,6 +20,7 @@ public:
     struct Vertex {
         float px, py, pz;
         float nx, ny, nz;
+        float u, v;
     };
 
     GXMesh() = default;
@@ -43,9 +44,9 @@ public:
     QRhiBuffer* vertexBuffer() const { return m_vbuf; }
     QRhiBuffer* indexBuffer() const { return m_ibuf; }
 
-protected:
     void destroyRhiResources();
 
+protected:
     QVector<Vertex> m_vertices;
     QVector<quint16> m_indices;
 

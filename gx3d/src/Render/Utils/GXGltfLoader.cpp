@@ -266,16 +266,31 @@ GXMesh *GXGltfLoader::loadMeshFromFilePath(const QString &path)
     const int posAcc = attrs.value("POSITION").toInt(-1);
     const int nrmAcc = attrs.value("NORMAL").toInt(-1);
     const int idxAcc = prim0.value("indices").toInt(-1);
+    const int uvAcc = attrs.value("TEXCOORD_0").toInt(-1);
+    bool hasUv = false;
 
     if (posAcc < 0 || nrmAcc < 0 || idxAcc < 0) {
         qWarning() << "GXGltfLoader: missing POSITION/NORMAL/indices";
         return nullptr;
     }
 
-    AccessView posV, nrmV, idxV;
+
+    AccessView posV, nrmV, idxV, uvV;
     if (!makeAccessView(root, glb.bin, posAcc, posV, &err)) { qWarning() << "pos:" << err; return nullptr; }
     if (!makeAccessView(root, glb.bin, nrmAcc, nrmV, &err)) { qWarning() << "nrm:" << err; return nullptr; }
     if (!makeAccessView(root, glb.bin, idxAcc, idxV, &err)) { qWarning() << "idx:" << err; return nullptr; }
+    if (uvAcc >= 0) {
+        if (!makeAccessView(root, glb.bin, uvAcc, uvV, &err)) {
+            qWarning() << "uv:" << err << "(continuing without UVs)";
+        } else {
+            if (uvV.compType != 5126 || uvV.ncomp != 2) {
+                qWarning() << "GXGltfLoader: TEXCOORD_0 not float2 (ignore)";
+            } else {
+                hasUv = true;
+            }
+        }
+    }
+
 
     if (posV.compType != 5126 || posV.ncomp != 3) { qWarning() << "GXGltfLoader: POSITION not float3"; return nullptr; }
     if (nrmV.compType != 5126 || nrmV.ncomp != 3) { qWarning() << "GXGltfLoader: NORMAL not float3"; return nullptr; }
@@ -316,7 +331,14 @@ GXMesh *GXGltfLoader::loadMeshFromFilePath(const QString &path)
         QVector3D P = M.map(QVector3D(px, py, pz));
         QVector3D N = n4.mapVector(QVector3D(nx, ny, nz)).normalized();
 
-        verts[i] = GXMesh::Vertex{ P.x(), P.y(), P.z(), N.x(), N.y(), N.z() };
+        float u = 0.0f, v = 0.0f;
+        if (hasUv) {
+            const uchar* tp = uvV.base + i * uvV.stride;
+            u = readLE<float>(tp + 0);
+            v = readLE<float>(tp + 4);
+        }
+
+        verts[i] = GXMesh::Vertex{ P.x(), P.y(), P.z(), N.x(), N.y(), N.z(), u, v };
     }
 
     QVector<quint16> indices16;

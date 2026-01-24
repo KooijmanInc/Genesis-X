@@ -1,27 +1,29 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-#ifndef GXDEFAULTLITUNIFORMS_H
-#define GXDEFAULTLITUNIFORMS_H
+#ifndef GXPRINCIPLEDUNIFORMS_H
+#define GXPRINCIPLEDUNIFORMS_H
 
 #include <QtGlobal>
 
 namespace gx::gx3d::render {
 
 enum : int {
-    DefaultLit_VS_Binding = 0,
-    DefaultLit_FS_Binding = 1
+    Principled_VS_Binding = 0,
+    Principled_FS_Binding = 1
 };
 
-struct alignas(16) DefaultLitVSUBO {
+struct alignas(16) PrincipledVSUBO {
     float mvp[16];
     float model[16];
 };
 
-struct alignas(16) DefaultLitFSUBO {
+struct alignas(16) PrincipledFSUBO {
     float baseColor[4];
+    float emissive[4];
+    float emissiveLight[4];
 };
 
 }
 
-#endif // GXDEFAULTLITUNIFORMS_H
+#endif // GXPRINCIPLEDUNIFORMS_H
