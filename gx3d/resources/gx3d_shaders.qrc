@@ -8,8 +8,10 @@
         <file alias="cube.vert.qsb">../shaders/cube.vert.qsb</file>
         <file alias="default_lit.frag.qsb">../shaders/default_lit.frag.qsb</file>
         <file alias="default_lit.vert.qsb">../shaders/default_lit.vert.qsb</file>
-
         <file alias="light_gizmo.frag.qsb">../shaders/light_gizmo.frag.qsb</file>
         <file alias="light_gizmo.vert.qsb">../shaders/light_gizmo.vert.qsb</file>
+
+        <file alias="principled.frag.qsb">../shaders/principled.frag.qsb</file>
+        <file alias="principled.vert.qsb">../shaders/principled.vert.qsb</file>
     </qresource>
 </RCC>

@@ -70,8 +70,10 @@ GXMesh *GXCubeMesh::create()
     QVector<GXMesh::Vertex> verts;
     QVector<quint16> indices;
 
+    float u = 0.0f, uv = 0.0f;
+
     verts.reserve(24);
-    for (const auto &v : kCubeVerts)  verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz };
+    for (const auto &v : kCubeVerts)  verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz, u,uv };
     indices.reserve(36);
     for (quint16 i : kCubeIndices) indices << i;
 

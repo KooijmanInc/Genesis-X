@@ -193,10 +193,13 @@ QVariant Biometrics::storeLoginToken(const QString &token, const QString &reason
 #else
     Q_UNUSED(token);
     Q_UNUSED(reason);
+
     const QVariantMap m{
         {QStringLiteral("code"), BiometricsResult::NotAvailable},
         {QStringLiteral("message"), QStringLiteral("Secure token store not available on this platform")}
     };
+    Q_UNUSED(mapCodeOrDefault(m, BiometricsResult::NotAvailable));
+    Q_UNUSED(mapMsgOrDefault(m, ""));
     emit authenticated(BiometricsResult::NotAvailable, m.value(QStringLiteral("message")).toString());
 
     return m;

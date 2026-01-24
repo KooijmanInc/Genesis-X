@@ -62,7 +62,8 @@ GXMesh *GXSphereMesh::create()
             const float z = sinPhi * qSin(theta);
 
             const Vertex vv = makeSphereVertex(x * radius, y * radius, z * radius);
-            verts << GXMesh::Vertex{ vv.px, vv.py, vv.pz, vv.nx, vv.ny, vv.nz };
+            float uv = 0.0f, v = 0.0f;
+            verts << GXMesh::Vertex{ vv.px, vv.py, vv.pz, vv.nx, vv.ny, vv.nz, uv, v };
         }
     }
 

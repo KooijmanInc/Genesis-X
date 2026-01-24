@@ -41,6 +41,20 @@ struct alignas(16) GizmoUBO {
     float color[4];
 };
 
+struct FrameLightingUBO {
+    float lightPos[4];
+    float lightColor[4];
+    float lightParams[4];
+};
+
+static QSize surfacePixelSize(QRhiRenderTarget* rt)
+{
+    if (auto *swrt = dynamic_cast<QRhiSwapChainRenderTarget *>(rt)) {
+        if (auto* sc = swrt->swapChain()) return sc->currentPixelSize();
+    }
+    return rt? rt->pixelSize() : QSize();
+}
+
 GXSceneRenderNode::GXSceneRenderNode() = default;
 
 GXSceneRenderNode::~GXSceneRenderNode()
@@ -92,8 +106,8 @@ void GXSceneRenderNode::setQuickWindow(QQuickWindow *w)
         m_depthDirty.store(true, std::memory_order_relaxed);
     };
 
-    QObject::connect(m_window, &QQuickWindow::widthChanged, m_window, markDirty, Qt::DirectConnection);
-    QObject::connect(m_window, &QQuickWindow::heightChanged, m_window, markDirty, Qt::DirectConnection);
+    // QObject::connect(m_window, &QQuickWindow::widthChanged, m_window, markDirty, Qt::DirectConnection);
+    // QObject::connect(m_window, &QQuickWindow::heightChanged, m_window, markDirty, Qt::DirectConnection);
 
     QObject::connect(m_window, &QQuickWindow::sceneGraphInvalidated, m_window, markDirty, Qt::DirectConnection);
     // QObject::connect(m_window, &QQuickWindow::sceneGraphInitialized, m_window, markDirty, Qt::DirectConnection);
@@ -116,6 +130,18 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
     QRhi* rhi = m_window->rhi();
     if (!rhi) return;
 
+    if (m_lastRhi != rhi) {
+        destroyFrameLightUbo();
+        m_lastRhi = rhi;
+        m_frameLightDirty = true;
+    }
+
+    if (!m_frameLightUbo) {
+        m_frameLightUbo = rhi->newBuffer(QRhiBuffer::Dynamic, QRhiBuffer::UniformBuffer, sizeof(FrameLightingUBO));
+        if (!m_frameLightUbo->create()) qWarning() << "GXSceneRenderNode: frame light UBO create failed";
+        m_frameLightDirty = true;
+    }
+
     // For QRhiRenderTarget + command buffer:
     // QSGRenderNode exposes these through internal render state; the easiest practical approach
     // is to follow the same pattern you used in GXTestTriangleNode (since it already works).
@@ -132,48 +158,109 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
         destroyDepthTarget();
 
         forEachRenderable([&](GXRenderableNode *r) {
-            r->releaseResources();
+            r->markForRelease();
         });
+        if (m_window) m_window->update();
+        return;
     }
     // if (m_depthDirty.load(std::memory_order_relaxed))
     //     qWarning() << "depthDirty is true";
 
-    if (auto *swrt = dynamic_cast<QRhiSwapChainRenderTarget *>(rt)) {
-        auto *sc = swrt->swapChain();
-        if (sc && m_depthBuffer && m_depthBuffer->pixelSize() != sc->currentPixelSize()) {
-            // qWarning() << "Depth mismatch detected (forcing rebuild):"
-            //            << "depth" << m_depthBuffer->pixelSize()
-            //            << "swap" << sc->currentPixelSize();
+    // if (auto *swrt = dynamic_cast<QRhiSwapChainRenderTarget *>(rt)) {
+    const bool isSwapchain = dynamic_cast<QRhiSwapChainRenderTarget *>(rt) != nullptr;
+    const bool ownsDepth = !isSwapchain; // we only own depth for texture RT path
+
+    if (ownsDepth) {
+        const QSize surfaceSz = surfacePixelSize(rt);
+        if (m_depthBuffer && m_depthBuffer->pixelSize() != surfaceSz) {
             destroyDepthTarget();
-            forEachRenderable([](GXRenderableNode* r) { r->releaseResources(); });
+            forEachRenderable([](GXRenderableNode* r) { r->markForRelease(); });
+            if (m_window) m_window->update();
+            return;
         }
     }
 
+        // auto *sc = swrt->swapChain();
+        // if (sc && m_depthBuffer && m_depthBuffer->pixelSize() != sc->currentPixelSize()) {
+        //     // qWarning() << "Depth mismatch detected (forcing rebuild):"
+        //     //            << "depth" << m_depthBuffer->pixelSize()
+        //     //            << "swap" << sc->currentPixelSize();
+        //     destroyDepthTarget();
+        //     forEachRenderable([](GXRenderableNode* r) { r->markForRelease(); });
+        //     m_window->update();
+        //     return;
+        // }
+    // }
+
     ensureDepthTarget(rhi, rt);
+
     QRhiRenderTarget *useRt = m_rtWithDepth ? static_cast<QRhiRenderTarget*>(m_rtWithDepth) : rt;
 
-    GXPointLightData light;
+    if (ownsDepth) {
+        const QSize surfaceSz2 = surfacePixelSize(useRt); // <-- validate against the RT we actually render to
+        if (m_depthBuffer && m_depthBuffer->pixelSize() != surfaceSz2) {
+            qWarning() << "Depth still mismatched after rebuild:"
+                       << "depth=" << m_depthBuffer->pixelSize()
+                       << "surface=" << surfaceSz2
+                       << "-> skipping frame";
+            destroyDepthTarget();
+            forEachRenderable([](GXRenderableNode* r) { r->markForRelease(); });
+            if (m_window) m_window->update();
+            return;
+        }
+    }
+
+    GXPointLightData light{};
+
     scene::GXPointLight* firstLight = nullptr;
     m_scene->traverse([&](scene::GXNode* n) {
         if (firstLight) return;
         if (auto* l = qobject_cast<scene::GXPointLight*>(n)) {
-            // qDebug() << "SceneRenderNode: point light found at" << l->position();
             firstLight = l;
         }
     });
+
     if (firstLight) {
         light.positionWS = firstLight->worldMatrix().map(QVector3D(0, 0, 0));
         light.intensity = firstLight->intensity();
         light.color = QVector3D(firstLight->color().redF(), firstLight->color().greenF(), firstLight->color().blueF());
         light.range = firstLight->range();
+    } else {
+        light.positionWS = QVector3D(0, 1, 0);
+        light.color = QVector3D(1, 1, 1);
+        light.intensity = 5.0f;
+        light.range = 10.0f;
     }
+
+    FrameLightingUBO fl{};
+    fl.lightPos[0] = light.positionWS.x();
+    fl.lightPos[1] = light.positionWS.y();
+    fl.lightPos[2] = light.positionWS.z();
+    fl.lightPos[3] = 1.0f;
+
+    fl.lightColor[0] = light.color.x();
+    fl.lightColor[1] = light.color.y();
+    fl.lightColor[2] = light.color.z();
+    fl.lightColor[3] = light.intensity;
+
+    fl.lightParams[0] = light.range;
+    fl.lightParams[1] = 0.0f;
+    fl.lightParams[2] = 0.0f;
+    fl.lightParams[3] = 0.0f;
+
+    QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
+    u->updateDynamicBuffer(m_frameLightUbo, 0, sizeof(FrameLightingUBO), &fl);
+    cb->resourceUpdate(u);
+
     forEachRenderable([&](GXRenderableNode *r) {
         r->setViewProj(m_viewProj);
-        r->setPointLight(light);
+        r->setFrameLightingUbo(m_frameLightUbo);
         r->syncFromScene();
         r->ensureResources(rhi, useRt);
         r->recordRender(cb, useRt);
     });
+
+    m_frameLightDirty = false;
 
     // if (firstLight) {
     //     if (firstLight) {
@@ -335,9 +422,72 @@ void GXSceneRenderNode::destroyLightGizmo()
     m_gizmoDirty = true;
 }
 
+void GXSceneRenderNode::destroyFrameLightUbo()
+{
+    if (m_frameLightUbo) {
+        m_frameLightUbo->destroy();
+        delete m_frameLightUbo;
+        m_frameLightUbo = nullptr;
+        m_frameLightDirty = true;
+    }
+}
+
 void GXSceneRenderNode::ensureDepthTarget(QRhi *rhi, QRhiRenderTarget *windowRt)
 {
     if (!rhi || !windowRt) return;
+
+    if (auto *swrt = dynamic_cast<QRhiSwapChainRenderTarget *>(windowRt)) {
+        // Swapchain target: let QQuickWindow / QRhiSwapChain manage depth+rpDesc.
+        // We must not override sc->setDepthStencil() or sc->setRenderPassDescriptor().
+        m_rtWithDepth = nullptr;      // ensure we render to swapchain RT
+        m_rpDesc = nullptr;
+        m_depthBuffer = nullptr;      // we no longer own one for swapchain
+        m_lastSwapChain = swrt->swapChain();
+        m_lastSize = surfacePixelSize(windowRt);
+        m_lastSampleCount = m_lastSwapChain ? m_lastSwapChain->sampleCount() : 1;
+        return;
+    }
+
+
+    // if (auto *swrt = dynamic_cast<QRhiSwapChainRenderTarget *>(windowRt)) {
+    //     QRhiSwapChain *sc = swrt->swapChain();
+    //     if (!sc) return;
+
+    //     // const QSize sz = sc->currentPixelSize();
+    //     const QSize sz = surfacePixelSize(windowRt);
+    //     const int sampleCount = sc->sampleCount();
+    //     if (sz.isEmpty()) return;
+
+    //     const bool swapChanged   = (m_lastSwapChain != sc);
+    //     const bool sizeChanged   = (m_lastSize != sz);
+    //     const bool samplesChanged = (m_lastSampleCount != sampleCount);
+    //     const bool needRebuild = !m_depthBuffer || !m_rpDesc || swapChanged || sizeChanged || samplesChanged;
+
+    //     if (!needRebuild)
+    //         return;
+
+    //     destroyDepthTarget();
+
+    //     m_lastSwapChain = sc;
+    //     m_lastSize = sz;
+    //     m_lastSampleCount = sampleCount;
+
+    //     m_depthBuffer = rhi->newRenderBuffer(QRhiRenderBuffer::DepthStencil, sz, sampleCount);
+    //     if (!m_depthBuffer->create()) {
+    //         qWarning() << "GXSceneRenderNode: swapchain depth buffer create failed";
+    //         destroyDepthTarget();
+    //         return;
+    //     }
+
+    //     sc->setDepthStencil(m_depthBuffer);
+
+    //     m_rpDesc = sc->newCompatibleRenderPassDescriptor();
+    //     sc->setRenderPassDescriptor(m_rpDesc);
+
+    //     // Important: renderables need to rebuild pipelines once
+    //     forEachRenderable([](GXRenderableNode* r) { r->markForRelease(); });
+    //     return;
+    // }
 
     if (auto *wtrt = dynamic_cast<QRhiTextureRenderTarget *>(windowRt)) {
         const QSize sz = windowRt->pixelSize();
@@ -391,7 +541,7 @@ void GXSceneRenderNode::ensureDepthTarget(QRhi *rhi, QRhiRenderTarget *windowRt)
             return;
         }
 
-        forEachRenderable([](GXRenderableNode* r) { r->releaseResources(); });
+        forEachRenderable([](GXRenderableNode* r) { r->markForRelease(); });
         return;
     }
 

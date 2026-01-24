@@ -13,7 +13,13 @@ Module {
         }
         Property {
             name: "anchors"
-            type: "QQuickItem"
+            type: "QQuickAnchors"
+            isReadonly: true
+            isPointer: true
+        }
+        Property {
+            name: "clearColor"
+            type: "string"
         }
 
         Property {

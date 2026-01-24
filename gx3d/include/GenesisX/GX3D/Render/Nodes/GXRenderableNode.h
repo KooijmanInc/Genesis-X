@@ -38,12 +38,16 @@ public:
 
     virtual void releaseResources();
 
+    virtual void setFrameLightingUbo(QRhiBuffer* ubo);
+
     GXMaterial* material() const { return m_material; }
     void setMaterial(GXMaterial* m);
 
     void setViewProj(const QMatrix4x4 vp);
 
     void setPointLight(const GXPointLightData& l);
+
+    void markForRelease();
 
 signals:
     void materialChanged(gx::gx3d::render::GXMaterial* material);
@@ -59,6 +63,12 @@ protected:
     GXMaterial* m_material = nullptr;
     bool m_pipelineDirty = true;
     QMatrix4x4 m_viewProj;
+
+    QRhiBuffer* m_frameLightingUbo = nullptr;
+
+    QSize m_lastRtPixelSize;
+
+    bool m_pendingRelease = false;
 
     GXPointLightData m_pointLight;
 };
