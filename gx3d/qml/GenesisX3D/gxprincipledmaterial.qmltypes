@@ -13,5 +13,11 @@ Module {
             read: "baseColor"
             notify: "baseColorChanged"
         }
+        Property {
+            name: "baseColorTexture"
+            type: "string"
+            read: "baseColorTexture"
+            notify: "baseColorTextureChanged"
+        }
     }
 }

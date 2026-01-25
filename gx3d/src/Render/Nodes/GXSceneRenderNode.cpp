@@ -256,7 +256,7 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
         r->setViewProj(m_viewProj);
         r->setFrameLightingUbo(m_frameLightUbo);
         r->syncFromScene();
-        r->ensureResources(rhi, useRt);
+        r->ensureResources(rhi, useRt, cb);
         r->recordRender(cb, useRt);
     });
 

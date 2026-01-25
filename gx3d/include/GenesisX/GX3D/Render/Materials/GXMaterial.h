@@ -66,24 +66,34 @@ public:
     FrontFace frontFace() const;
     void setFrontFace(FrontFace f);
 
-    QColor baseColor() const { return m_baseColor; }
+    bool isDirty() const { return m_dirty; }
+    bool consumeDirty();
 
-    // void applyTo(QRhiGraphicsPipeline* ps) const;
+    QRhiTexture* baseColorTex() const { return m_baseColorTex; }
+    QRhiSampler* baseColorSampler() const { return m_baseColorSampler; }
 
-    // const QShader& vertexShader() const { return m_vs; }
-    // const QShader& fragmentShader() const { return m_fs; }
+    void ensureRhi(QRhi* rhi, QRhiCommandBuffer* cb);
 
 signals:
     void renderStateChanged();
+    void materialChanged();
 
 protected:
     GXShaderUtils m_shaderUtils;
+    void markDirty();
+
+    virtual void ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer* cb) = 0;
+    virtual void destroyRhiResources();
+
+    QRhi* m_rhi = nullptr;
+    QRhiTexture* m_baseColorTex = nullptr;
+    QRhiSampler* m_baseColorSampler = nullptr;
 
 private:
     GXRenderState m_state;
 
-    QShader m_vs, m_fs;
-    QColor m_baseColor = Qt::blue;
+    bool m_dirty = true;
+
 };
 
 }

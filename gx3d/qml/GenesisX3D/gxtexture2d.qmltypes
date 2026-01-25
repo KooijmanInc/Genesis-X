@@ -1,0 +1,17 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXTexture2D"
+        className: "gx::gx3d::render::GXTexture2D"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXTexture2D 1.0"]
+        Property {
+            name: "source"
+            type: "string"
+            read: "source"
+            notify: "sourceChanged"
+        }
+    }
+}

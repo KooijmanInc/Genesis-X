@@ -1,3 +1,6 @@
+<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
+<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
+
 <RCC>
     <qresource prefix="/gx3d/shaders">
         <file alias="solidcolor.frag.qsb">../shaders/solidcolor.frag.qsb</file>
@@ -10,8 +13,12 @@
         <file alias="default_lit.vert.qsb">../shaders/default_lit.vert.qsb</file>
         <file alias="light_gizmo.frag.qsb">../shaders/light_gizmo.frag.qsb</file>
         <file alias="light_gizmo.vert.qsb">../shaders/light_gizmo.vert.qsb</file>
-
         <file alias="principled.frag.qsb">../shaders/principled.frag.qsb</file>
         <file alias="principled.vert.qsb">../shaders/principled.vert.qsb</file>
+    </qresource>
+    <qresource prefix="/gx3d/assets">
+        <file alias="checker.jpg">images/checker.jpg</file>
+
+        <file alias="WoodFloor.jpg">images/WoodFloor.jpg</file>
     </qresource>
 </RCC>

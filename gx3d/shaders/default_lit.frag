@@ -14,6 +14,8 @@ layout(binding = 2) uniform FrameLightingUBO {
     vec4 lightParams;
 } fl;
 
+layout(binding = 3) uniform sampler2D baseColorTex;
+
 layout(location = 0) out vec4 fragColor;
 
 void main()
@@ -24,7 +26,7 @@ void main()
     float dist = length(Lvec);
     vec3 L = (dist > 1e-5) ? (Lvec / dist) : vec3(0.0, 0.0, 1.0);
 
-    float ndotl = max(dot(N, L), 0.0);
+    float ndot1 = max(dot(N, L), 0.0);
 
     float range = max(fl.lightParams.x, 1e-4);
     // float att = 1.0 / (1.0 + (dist * dist) / (range * range));
@@ -33,13 +35,22 @@ void main()
 
     float intensity = fl.lightColor.a;
 
-    vec3 ambient = fsu.baseColor.rgb * 0.15;
-    vec3 diffuse = fsu.baseColor.rgb * fl.lightColor.rgb * (ndotl * att * intensity);
+    vec4 tex = texture(baseColorTex, vUv);
+    vec3 albedo = fsu.baseColor.rgb * tex.rgb;
 
-    vec3 color = ambient + diffuse;
-    color = clamp(color, 0.0, 1.0);
+    vec3 ambient = albedo * 0.15;
+    vec3 diffuse = albedo * fl.lightColor.rgb * (ndot1 * att * intensity);
+
+    vec3 color = clamp(ambient + diffuse, 0.0, 1.0);
+    fragColor = vec4(color, fsu.baseColor.a * tex.a);
+    // vec3 ambient = fsu.baseColor.rgb * 0.15;
+    // vec3 diffuse = fsu.baseColor.rgb * fl.lightColor.rgb * (ndotl * att * intensity);
+
+    // vec3 color = ambient + diffuse;
+    // color = clamp(color, 0.0, 1.0);
     // fragColor = vec4(fract(vUv), 0.0, 1.0);
-    fragColor = vec4(color, fsu.baseColor.a);
-    // fragColor = fsu.baseColor;
+    // fragColor = vec4(vUv, 0.0, 1.0);
+    // fragColor = vec4(color, fsu.baseColor.a);
+    // fragColor = tex;
     // return;
 }

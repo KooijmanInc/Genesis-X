@@ -19,8 +19,9 @@ void GXRenderableNode::syncFromScene()
 {
 }
 
-void GXRenderableNode::ensureResources(QRhi *rhi, QRhiRenderTarget *rt)
+void GXRenderableNode::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer* cb)
 {
+    Q_UNUSED(cb);
     if (m_rhi && m_rhi != rhi) releaseResources();
 
     m_rhi = rhi;

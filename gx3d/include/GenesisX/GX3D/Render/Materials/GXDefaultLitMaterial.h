@@ -8,6 +8,8 @@
 #include <GenesisX/GX3D/Render/Materials/GXMaterial.h>
 #include <GenesisX/GX3D/Render/Materials/GXDefaultLitUniforms.h>
 
+#include <GenesisX/GX3D/Render/Texture/GXTexture.h>
+
 #include <QColor>
 #include <QMatrix4x4>
 
@@ -20,6 +22,17 @@ class GENESISX_GX3D_EXPORT GXDefaultLitMaterial : public GXMaterial
     Q_OBJECT
 
     Q_PROPERTY(QColor baseColor READ baseColor WRITE setBaseColor NOTIFY baseColorChanged)
+    Q_PROPERTY(GXTexture* baseColorTexture READ baseColorTexture WRITE setBaseColorTexture NOTIFY baseColorTextureChanged)
+    Q_PROPERTY(TestMaterial baseColorTestTexture READ baseColorTestTexture WRITE setBaseColorTestTexture NOTIFY baseColorTestTextureChanged)
+
+public:
+    enum TestMaterial {
+        UvGrid,
+        Checker,
+        BrushedMetal,
+        WoodFloor
+    };
+    Q_ENUM(TestMaterial)
 
 public:
     explicit GXDefaultLitMaterial(QObject* parent = nullptr);
@@ -37,14 +50,33 @@ public:
     QColor baseColor() const { return m_baseColor; }
     void setBaseColor(const QColor& c);
 
+    GXTexture* baseColorTexture() const { return m_baseColorTexture; }
+    void setBaseColorTexture(GXTexture* tex);
+
+    TestMaterial baseColorTestTexture() const { return m_baseColorTestTexture; }
+    void setBaseColorTestTexture(TestMaterial id);
+
     void fillVS(void* dst, const QMatrix4x4& mvp, const QMatrix4x4& model) const override;
     void fillFS(void* dst) const override;
 
+    void ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer* cb) override;
+
 signals:
     void baseColorChanged();
+    void baseColorTextureChanged();
+    void baseColorTestTextureChanged();
 
 private:
+    QShader m_vs, m_fs;
     QColor m_baseColor = Qt::white;
+    GXTexture* m_baseColorTexture = nullptr;
+    QString m_testMaterial;
+    TestMaterial m_baseColorTestTexture;
+
+    QByteArray m_baseColorTexName = "";
+
+    QSize m_baseColorSz;
+    QImage m_baseColorImg;
 };
 
 }

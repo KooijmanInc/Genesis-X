@@ -8,13 +8,14 @@ using namespace gx::gx3d::render;
 struct Vertex {
     float px, py, pz;
     float nx, ny, nz;
+    float u, v;
 };
 
 static const Vertex kPlaneVerts[4] = {
-    { -1.0f,0.0f,-1.0f,   0,1,0 },
-    {  1.0f,0.0f,-1.0f,   0,1,0 },
-    {  1.0f,0.0f, 1.0f,   0,1,0 },
-    { -1.0f,0.0f, 1.0f,   0,1,0 }
+    { -1.0f,0.0f,-1.0f,   0,1,0,    0.0f, 0.0f },
+    {  1.0f,0.0f,-1.0f,   0,1,0,    1.0f, 0.0f },
+    {  1.0f,0.0f, 1.0f,   0,1,0,    1.0f, 1.0f },
+    { -1.0f,0.0f, 1.0f,   0,1,0,    0.0f, 1.0f }
 };
 
 static const quint16 kPlaneIndices[6] = {
@@ -28,10 +29,10 @@ GXMesh *GXPlaneMesh::create()
     QVector<GXMesh::Vertex> verts;
     QVector<quint16> indices;
 
-    float u = 0.0f, uv = 0.0f;
+    // float u = 0.0f, uv = 0.0f;
 
     verts.reserve(4);
-    for (const auto &v : kPlaneVerts)  verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz, u, uv };
+    for (const auto &v : kPlaneVerts)  verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz, v.u, v.v };
     indices.reserve(6);
     for (quint16 i : kPlaneIndices) indices << i;
 

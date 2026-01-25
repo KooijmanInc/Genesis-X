@@ -11,8 +11,6 @@
 #include <GenesisX/GX3D/Render/Meshes/GXTorusMesh.h>
 #include <GenesisX/GX3D/Render/Utils/GXGltfLoader.h>
 
-#include <QFile>
-
 using namespace gx::gx3d::render;
 
 static void ensureUbo(QRhi* rhi, QRhiBuffer*& buf, int size)
@@ -119,7 +117,7 @@ void GXModel::setPrimitive(Primitive p)
     emit meshChanged();
 }
 
-void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt)
+void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer* cb)
 {
     if (m_pendingRelease) {
         releaseResources();
@@ -130,7 +128,7 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt)
         m_pipelineDirty = true;
     }
 
-    GXRenderableNode::ensureResources(rhi, rt);
+    GXRenderableNode::ensureResources(rhi, rt, cb);
 
     if (m_rhi == rhi && m_ps && m_srb && m_vsUbuf && m_fsUbuf && !m_pipelineDirty && m_boundLightingUbo == m_frameLightingUbo) return;
 
@@ -151,9 +149,11 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt)
     ensureUbo(rhi, m_vsUbuf, vsSize);
     ensureUbo(rhi, m_fsUbuf, fsSize);
 
+    mat->ensureRhi(rhi, cb);
+
     m_srb = m_rhi->newShaderResourceBindings();
     QVector<QRhiShaderResourceBinding> bindings;
-    bindings.reserve(3);
+    bindings.reserve(4);
 
     bindings.append(QRhiShaderResourceBinding::uniformBuffer(mat->vsBinding(), QRhiShaderResourceBinding::VertexStage, m_vsUbuf));
     bindings.append(QRhiShaderResourceBinding::uniformBuffer(mat->fsBinding(), QRhiShaderResourceBinding::FragmentStage, m_fsUbuf));
@@ -165,6 +165,9 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt)
     if (m_frameLightingUbo) {
         bindings.append(QRhiShaderResourceBinding::uniformBuffer(2, QRhiShaderResourceBinding::FragmentStage, m_frameLightingUbo));
     }
+
+    bindings.append(QRhiShaderResourceBinding::sampledTexture(3, QRhiShaderResourceBinding::FragmentStage, mat->baseColorTex(), mat->baseColorSampler()));
+
     m_srb->setBindings(bindings.cbegin(), bindings.cend());
 
     if (!m_srb->create()) qWarning() << "GXModel: srb Shader Resource Bindings failed";
@@ -179,9 +182,9 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt)
     QRhiVertexInputLayout inputLayout;
     inputLayout.setBindings({ QRhiVertexInputBinding(sizeof(GXMesh::Vertex)) });
     inputLayout.setAttributes({
-        QRhiVertexInputAttribute(0, 0, QRhiVertexInputAttribute::Float3, 0),
-        QRhiVertexInputAttribute(0, 1, QRhiVertexInputAttribute::Float3, 3 * sizeof(float)),
-        QRhiVertexInputAttribute(0, 2, QRhiVertexInputAttribute::Float2, 6 * sizeof(float))
+                               QRhiVertexInputAttribute(0, 0, QRhiVertexInputAttribute::Float3, offsetof(GXMesh::Vertex, px)),
+        QRhiVertexInputAttribute(0, 1, QRhiVertexInputAttribute::Float3, offsetof(GXMesh::Vertex, nx)),
+        QRhiVertexInputAttribute(0, 2, QRhiVertexInputAttribute::Float2,  offsetof(GXMesh::Vertex, u))
     });
 
     m_ps->setVertexInputLayout(inputLayout);
@@ -224,7 +227,7 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
     if (!cb || !rt) return;
 
     QRhi* rhi = cb->rhi();
-    ensureResources(rhi, rt);
+    ensureResources(rhi, rt, cb);
 
     if (m_mesh) m_mesh->uploadIfNeeded(rhi, cb);
 
@@ -262,18 +265,24 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
 
     QMatrix4x4 mvp = rhi->clipSpaceCorrMatrix() * (m_viewProj * model);
 
-    QByteArray vsData(mat->vsUboSize(), Qt::Uninitialized);
-    QByteArray fsData(mat->fsUboSize(), Qt::Uninitialized);
+    QByteArray vsData;
+    vsData.resize(mat->vsUboSize());
+    if (vsData.size() > 0) mat->fillVS(vsData.data(), mvp, model);
 
-    mat->fillVS(vsData.data(), mvp, model);
-    mat->fillFS(fsData.data());
-
+    const bool fsDirty = mat->consumeDirty();
+    QByteArray fsData;
+    if (fsDirty && mat->fsUboSize() > 0) {
+        fsData.resize(mat->fsUboSize());
+        mat->fillFS(fsData.data());
+    }
     // GX_DUMP_UBO_STATE("[UBO UPDATE]", rhi, cb, m_vsUbuf, m_fsUbuf, vsBytes, fsBytes);
 
     {
         QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
-        u->updateDynamicBuffer(m_vsUbuf, 0, vsData.size(), vsData.constData());
-        u->updateDynamicBuffer(m_fsUbuf, 0, fsData.size(), fsData.constData());
+        if (vsData.size() > 0) u->updateDynamicBuffer(m_vsUbuf, 0, vsData.size(), vsData.constData());
+
+        if (fsDirty && mat->fsUboSize() > 0) u->updateDynamicBuffer(m_fsUbuf, 0, fsData.size(), fsData.constData());
+
         cb->resourceUpdate(u);
     }
 
@@ -309,6 +318,49 @@ void GXModel::releaseResources()
     destroyRhiResources();
     GXRenderableNode::releaseResources();
 }
+
+// void GXModel::ensureBaseColorTestTexture(QRhi *rhi, QRhiCommandBuffer* cb, GXMaterial* mat)
+// {
+    // if (!rhi || !cb)
+    //     return;
+
+    // const QSize sz(256, 256);
+
+    // // Create texture once (or if size changed)
+    // if (!mat->baseColorTex() || mat->baseColorTex()->pixelSize() != sz) {
+    //     if (mat->baseColorTex()) {
+    //         mat->baseColorTex()->destroy();
+    //         delete mat->baseColorTex();
+    //         // mat->baseColorTex() = nullptr;
+    //     }
+
+    //     m_baseColorTex = rhi->newTexture(QRhiTexture::RGBA8, sz, 1);
+    //     m_baseColorTex->setName("GX3D_BuiltIn_UVGrid");
+    //     if (!m_baseColorTex->create()) {
+    //         qWarning() << "GXModelNode: baseColor texture create failed";
+    //         return;
+    //     }
+
+    //     // Generate image
+    //     QImage img = gxMakeUvGridImage(sz.width(), sz.height());
+
+    //     // We decided: "flip image data on upload" so UV (0,0) is bottom-left.
+    //     // QImage is top-left origin -> flip vertically before upload.
+    //     img = img.flipped(Qt::Vertical);
+
+    //     // Upload to GPU
+    //     QRhiTextureSubresourceUploadDescription sub;
+    //     sub.setImage(img);
+
+    //     QRhiTextureUploadEntry entry(0, 0, sub);
+
+    //     QRhiTextureUploadDescription desc({ entry });
+
+    //     QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
+    //     u->uploadTexture(m_baseColorTex, desc);
+    //     cb->resourceUpdate(u);
+    // }
+// }
 
 void GXModel::destroyRhiResources()
 {

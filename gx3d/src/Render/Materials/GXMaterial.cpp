@@ -8,8 +8,8 @@ using namespace gx::gx3d::render;
 GXMaterial::GXMaterial(QObject *parent)
     : QObject{parent}
 {
-    m_vs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/default_lit.vert.qsb");
-    m_fs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/default_lit.frag.qsb");
+    // m_vs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/default_lit.vert.qsb");
+    // m_fs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/default_lit.frag.qsb");
 }
 
 void GXMaterial::setRenderState(const GXRenderState &s)
@@ -18,6 +18,8 @@ void GXMaterial::setRenderState(const GXRenderState &s)
     m_state = s;
 
     emit renderStateChanged();
+
+    markDirty();
 }
 
 void GXMaterial::setDoubleSided(bool on)
@@ -27,6 +29,8 @@ void GXMaterial::setDoubleSided(bool on)
     m_state.cullMode = newMode;
 
     emit renderStateChanged();
+
+    markDirty();
 }
 
 void GXMaterial::setDepthTest(bool on)
@@ -35,6 +39,8 @@ void GXMaterial::setDepthTest(bool on)
     m_state.depthTest = on;
 
     emit renderStateChanged();
+
+    markDirty();
 }
 
 void GXMaterial::setDepthWrite(bool on)
@@ -43,6 +49,8 @@ void GXMaterial::setDepthWrite(bool on)
     m_state.depthWrite = on;
 
     emit renderStateChanged();
+
+    markDirty();
 }
 
 GXMaterial::CullMode GXMaterial::cullMode() const
@@ -67,6 +75,8 @@ void GXMaterial::setCullMode(CullMode m)
     m_state.cullMode = cm;
 
     emit renderStateChanged();
+
+    markDirty();
 }
 
 void GXMaterial::setFrontFace(FrontFace f)
@@ -76,6 +86,49 @@ void GXMaterial::setFrontFace(FrontFace f)
     m_state.frontFace = ff;
 
     emit renderStateChanged();
+
+    markDirty();
+}
+
+bool GXMaterial::consumeDirty()
+{
+    const bool was = m_dirty;
+    m_dirty = false;
+    return was;
+}
+
+void GXMaterial::ensureRhi(QRhi *rhi, QRhiCommandBuffer *cb)
+{
+    if (!rhi) return;
+
+    if (m_rhi != rhi) {
+        destroyRhiResources();
+        m_rhi = rhi;
+        markDirty();
+    }
+
+    ensureBaseColorResources(rhi, cb);
+}
+
+void GXMaterial::markDirty()
+{
+    if (m_dirty) return;
+    m_dirty = true;
+    emit materialChanged();
+}
+
+void GXMaterial::destroyRhiResources()
+{
+    if (m_baseColorTex) {
+        m_baseColorTex->destroy();
+        delete m_baseColorTex;
+        m_baseColorTex = nullptr;
+    }
+    if (m_baseColorSampler) {
+        m_baseColorSampler->destroy();
+        delete m_baseColorSampler;
+        m_baseColorSampler = nullptr;
+    }
 }
 
 GXMaterial::FrontFace GXMaterial::frontFace() const

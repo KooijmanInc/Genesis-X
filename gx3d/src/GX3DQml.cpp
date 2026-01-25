@@ -12,9 +12,13 @@
 #include <GenesisX/GX3D/Render/Nodes/GXModelNode.h>
 #include <GenesisX/GX3D/Render/Nodes/GXRenderableNode.h>
 #include <GenesisX/GX3D/Scene/GXScene.h>
+
 #include <GenesisX/GX3D/Render/Materials/GXMaterial.h>
 #include <GenesisX/GX3D/Render/Materials/GXDefaultLitMaterial.h>
 #include <GenesisX/GX3D/Render/Materials/GXPrincipledMaterial.h>
+
+#include <GenesisX/GX3D/Render/Texture/GXTexture.h>
+#include <GenesisX/GX3D/Render/Texture/GXTexture2D.h>
 
 #include <QQmlEngine>
 
@@ -35,6 +39,7 @@ void registerEnabledQmlModules(QQmlEngine *engine)
     qmlRegisterUncreatableType<gx::gx3d::GXCamera>("GenesisX3D", 1, 0, "GXCamera", "GXCamera is an abstract base class. Use GXPerspectiveCamera or GXOrthographicCamera.");
     qmlRegisterUncreatableType<gx::gx3d::render::GXRenderableNode>("GenesisX3D", 1, 0, "GXRenderableNode", "GXRenderableNode is an abstract base class. Use GXNode.");
     qmlRegisterUncreatableType<gx::gx3d::render::GXMaterial>("GenesisX3D", 1, 0, "GXMaterial", "GXMaterial is an abstract base class. Use GXDefaultLitMaterial or GXPrincipledMaterial");
+    qmlRegisterUncreatableType<gx::gx3d::render::GXTexture>("GenesisX3D", 1, 0, "GXTexture", "GXTexture is an abstract base class. Use GXTexture2D");
 
     qmlRegisterType<gx::gx3d::GXPerspectiveCamera>("GenesisX3D", 1, 0, "GXPerspectiveCamera");
     qmlRegisterType<gx::gx3d::GXOrthographicCamera>("GenesisX3D", 1, 0, "GXOrthographicCamera");
@@ -48,6 +53,8 @@ void registerEnabledQmlModules(QQmlEngine *engine)
     qRegisterMetaType<gx::gx3d::render::GXMaterial>("gx::gx3d::render::GXMaterial*");
     qmlRegisterType<gx::gx3d::render::GXDefaultLitMaterial>("GenesisX3D", 1, 0, "GXDefaultLitMaterial");
     qmlRegisterType<gx::gx3d::render::GXPrincipledMaterial>("GenesisX3D", 1, 0, "GXPrincipledMaterial");
+
+    qmlRegisterType<gx::gx3d::render::GXTexture2D>("GenesisX3D", 1, 0, "GXTexture2D");
 }
 
 }
