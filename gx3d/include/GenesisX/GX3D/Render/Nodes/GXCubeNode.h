@@ -45,7 +45,7 @@ public:
     QVector3D scale() const { return m_scale; }
     void setScale(const QVector3D& s);
 
-    void ensureResources(QRhi* rhi, QRhiRenderTarget* rt) override;
+    void ensureResources(QRhi* rhi, QRhiRenderTarget* rt, QRhiCommandBuffer* cb) override;
     void recordRender(QRhiCommandBuffer* cb, QRhiRenderTarget* rt) override;
     void releaseResources() override;
 

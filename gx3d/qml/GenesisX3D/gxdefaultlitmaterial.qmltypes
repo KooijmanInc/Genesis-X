@@ -7,9 +7,32 @@ Module {
         className: "gx::gx3d::render::GXDefaultLitMaterial"
         prototype: "QObject"
         exports: ["GenesisX3D/GXDefaultLitMaterial 1.0"]
+        Enum {
+            name: "TestMaterial"
+            values: [
+                "UvGrid",
+                "Checker",
+                "BrushedMetal",
+                "WoodFloor"
+            ]
+        }
         Property {
             name: "baseColor"
             type: "string"
+            read: "baseColor"
+            notify: "baseColorChanged"
+        }
+        Property {
+            name: "baseColorTexture"
+            type: "string"
+            read: "baseColorTexture"
+            notify: "baseColorTextureChanged"
+        }
+        Property {
+            name: "baseColorTestTexture"
+            type: "TestMaterial"
+            read: "baseColorTestTexture"
+            notify: "baseColorTestTextureChanged"
         }
     }
 }

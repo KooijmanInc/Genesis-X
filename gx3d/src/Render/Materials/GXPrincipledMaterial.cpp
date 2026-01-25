@@ -2,12 +2,16 @@
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
 #include <GenesisX/GX3D/Render/Materials/GXPrincipledMaterial.h>
+#include <GenesisX/GX3D/Render/Texture/GXTexture2D.h>
 
 using namespace gx::gx3d::render;
 
 GXPrincipledMaterial::GXPrincipledMaterial(QObject *parent)
     : GXMaterial{parent}
 {
+    GXTexture2D* defaultImg = new GXTexture2D(this);
+    defaultImg->setSource(QUrl(""));
+    m_baseColorTexture = defaultImg;
 }
 
 QShader GXPrincipledMaterial::vertexShader() const
@@ -57,12 +61,32 @@ void GXPrincipledMaterial::fillFS(void* dst) const
     out.emissiveLight[3] = 0.0f;
 }
 
+void GXPrincipledMaterial::ensureBaseColorResources(QRhi *rhi, QRhiCommandBuffer *cb)
+{
+    if (!rhi) return;
+
+    if (m_baseColorTexture) {
+        m_baseColorTexture->ensureRhi(rhi, cb);
+        m_baseColorTex = m_baseColorTexture->rhiTexture();
+        m_baseColorSampler = m_baseColorTexture->rhiSampler();
+    }
+}
+
 void GXPrincipledMaterial::setBaseColor(const QColor &c)
 {
     if (m_baseColor == c) return;
     m_baseColor = c;
 
     emit baseColorChanged();
+}
+
+void GXPrincipledMaterial::setBaseColorTexture(GXTexture* tex)
+{
+    if (m_baseColorTexture == tex) return;
+    m_baseColorTexture = tex;
+
+    emit baseColorTextureChanged();
+    markDirty();
 }
 
 void GXPrincipledMaterial::setEmissiveColor(const QColor &c)

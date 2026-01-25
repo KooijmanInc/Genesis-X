@@ -47,7 +47,7 @@ public:
     // GXMaterial* material() const { return m_material; }
     // void setMaterial(GXMaterial* m);
 
-    void ensureResources(QRhi* rhi, QRhiRenderTarget* rt) override;
+    void ensureResources(QRhi* rhi, QRhiRenderTarget* rt, QRhiCommandBuffer* cb) override;
     void recordRender(QRhiCommandBuffer* cb, QRhiRenderTarget* rt) override;
     void releaseResources() override;
     void setFrameLightingUbo(QRhiBuffer* ubo) override {
@@ -98,6 +98,8 @@ private:
     // QRhiBuffer* m_frameLightingUbo = nullptr;
     QRhiBuffer* m_boundLightingUbo = nullptr;
     bool m_boundHadLighting = false;
+
+    // void ensureBaseColorTestTexture(QRhi* rhi, QRhiCommandBuffer* cb, GXMaterial* mat);
 
     void destroyRhiResources();
     void destroyPipelineResources();

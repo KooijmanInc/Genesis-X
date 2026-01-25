@@ -32,7 +32,7 @@ public:
 
     virtual void syncFromScene();
 
-    virtual void ensureResources(QRhi* rhi, QRhiRenderTarget* rt);
+    virtual void ensureResources(QRhi* rhi, QRhiRenderTarget* rt, QRhiCommandBuffer* cb);
 
     virtual void recordRender(QRhiCommandBuffer* cb, QRhiRenderTarget* rt);
 

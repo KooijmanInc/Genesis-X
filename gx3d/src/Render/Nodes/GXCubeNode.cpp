@@ -148,9 +148,9 @@ void GXCubeNode::setScale(const QVector3D &s)
     emit scaleChanged();
 }
 
-void GXCubeNode::ensureResources(QRhi *rhi, QRhiRenderTarget *rt)
+void GXCubeNode::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer* cb)
 {
-    GXRenderableNode::ensureResources(rhi, rt);
+    GXRenderableNode::ensureResources(rhi, rt, cb);
 
     if (m_rhi == rhi && m_ps && !m_pipelineDirty) return;
 
@@ -227,7 +227,7 @@ void GXCubeNode::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
     if (!cb || !rt) return;
 
     QRhi* rhi = cb->rhi();
-    ensureResources(rhi, rt);
+    ensureResources(rhi, rt, cb);
 
     if (m_mesh) m_mesh->uploadIfNeeded(rhi, cb);
 
