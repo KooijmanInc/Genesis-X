@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qt/qml/GenesisX3D/Helpers">
+        <file alias="GXWasdController.qml">GXWasdController.qml</file>
+        <file alias="qmldir">qmldir</file>
+    </qresource>
+</RCC>

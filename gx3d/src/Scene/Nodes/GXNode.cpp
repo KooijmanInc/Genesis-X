@@ -5,6 +5,11 @@
 
 using namespace gx::gx3d::scene;
 
+static inline bool fuzzyVec3(const QVector3D& a, const QVector3D& b, float eps = 1e-4)
+{
+    return (a - b).lengthSquared() <= eps * eps;
+}
+
 GXNode::GXNode(QObject *parent)
     : QObject{parent}
 {
@@ -16,6 +21,7 @@ void GXNode::setX(float v)
     m_pos.setX(v);
 
     emit xChanged();
+    markTransformDirty();
 }
 
 void GXNode::setY(float v)
@@ -24,6 +30,7 @@ void GXNode::setY(float v)
     m_pos.setY(v);
 
     emit yChanged();
+    markTransformDirty();
 }
 
 void GXNode::setZ(float v)
@@ -32,6 +39,7 @@ void GXNode::setZ(float v)
     m_pos.setZ(v);
 
     emit zChanged();
+    markTransformDirty();
 }
 
 void GXNode::setPosition(const QVector3D &pos)
@@ -40,6 +48,7 @@ void GXNode::setPosition(const QVector3D &pos)
     m_pos = pos;
 
     emit positionChanged();
+    markTransformDirty();
 }
 
 void GXNode::setRotation(const QQuaternion &rot)
@@ -47,7 +56,11 @@ void GXNode::setRotation(const QQuaternion &rot)
     if (m_rotation == rot) return;
     m_rotation = rot;
 
+    m_eulerRotation = m_rotation.toEulerAngles();
+
     emit rotationChanged();
+    emit eulerRotationChanged();
+    markTransformDirty();
 }
 
 void GXNode::setScale(const QVector3D &s)
@@ -56,6 +69,59 @@ void GXNode::setScale(const QVector3D &s)
     m_scale = s;
 
     emit scaleChanged();
+    markTransformDirty();
+}
+
+void GXNode::setEulerRotation(const QVector3D &eRot)
+{
+    if (fuzzyVec3(eRot, m_eulerRotation)) return;
+
+    m_eulerRotation = eRot;
+    m_rotation = QQuaternion::fromEulerAngles(m_eulerRotation);
+
+    emit eulerRotationChanged();
+    emit rotationChanged();
+    markTransformDirty();
+}
+
+QVector3D GXNode::forward() const
+{
+    return m_rotation.rotatedVector(QVector3D(0, 0, -1));
+}
+
+QVector3D GXNode::back() const
+{
+    return m_rotation.rotatedVector(QVector3D(0, 0, 1));
+}
+
+QVector3D GXNode::left() const
+{
+    return m_rotation.rotatedVector(QVector3D(-1, 0, 0));
+}
+
+QVector3D GXNode::right() const
+{
+    return m_rotation.rotatedVector(QVector3D(1, 0, 0));
+}
+
+void GXNode::addYaw(float degrees)
+{
+    m_eulerRotation.setY(m_eulerRotation.y() + degrees);
+    m_rotation = QQuaternion::fromEulerAngles(m_eulerRotation);
+
+    emit eulerRotationChanged();
+    emit rotationChanged();
+    markTransformDirty();
+}
+
+void GXNode::addPitch(float degrees)
+{
+    m_eulerRotation.setX(m_eulerRotation.x() + degrees);
+    m_rotation = QQuaternion::fromEulerAngles(m_eulerRotation);
+
+    emit eulerRotationChanged();
+    emit rotationChanged();
+    markTransformDirty();
 }
 
 QMatrix4x4 GXNode::localMatrix() const
@@ -90,6 +156,11 @@ QQmlListProperty<GXNode> GXNode::children()
         &GXNode::childAt,
         &GXNode::clearChildren
     );
+}
+
+void GXNode::markTransformDirty()
+{
+    m_dirty = true;
 }
 
 void GXNode::appendChild(QQmlListProperty<GXNode> *prop, GXNode *child)

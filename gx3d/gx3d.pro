@@ -76,4 +76,5 @@ DISTFILES += \
 
 RESOURCES += \
     qml/GenesisX3D/gx3d_modules.qrc \
+    qml/GenesisX3D/helpers/gx3d_helpers.qrc \
     resources/gx3d_shaders.qrc

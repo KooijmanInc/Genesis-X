@@ -8,9 +8,8 @@
 
 using namespace gx::gx3d::render;
 
-static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz)
+static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz, float u, float v)
 {
-    float u = 0.0f, v = 0.0f;
     return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
 }
 
@@ -40,8 +39,8 @@ GXMesh *GXCylinderMesh::create()
     // Caps: bottom fan => sectors * 3, top fan => sectors * 3
     indices.reserve(sectors * 6 + sectors * 3 + sectors * 3);
 
-    const float y0 = 0.0f;
-    const float y1 = height;
+    const float y0 = -height * 0.5f;
+    const float y1 = height * 0.5f;
 
     const int sideBottomStart = 0;
     const int sideTopStart    = sideBottomStart + sectors;
@@ -63,7 +62,7 @@ GXMesh *GXCylinderMesh::create()
         QVector3D n(x, 0.0f, z);
         n.normalize();
 
-        verts << makeV(x, y0, z, n.x(), n.y(), n.z());
+        verts << makeV(x, y0, z, n.x(), n.y(), n.z(), u, 0.0f);
     }
 
     // --- Side top ring ---
@@ -77,11 +76,11 @@ GXMesh *GXCylinderMesh::create()
         QVector3D n(x, 0.0f, z);
         n.normalize();
 
-        verts << makeV(x, y1, z, n.x(), n.y(), n.z());
+        verts << makeV(x, y1, z, n.x(), n.y(), n.z(), u, 1.0f);
     }
 
     // --- Bottom cap center ---
-    verts << makeV(0.0f, y0, 0.0f, 0.0f, -1.0f, 0.0f);
+    verts << makeV(0.0f, y0, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 0.5f);
 
     // --- Bottom cap ring (separate normals) ---
     for (int s = 0; s < sectors; ++s) {
@@ -91,11 +90,14 @@ GXMesh *GXCylinderMesh::create()
         const float x = radius * qCos(a);
         const float z = radius * qSin(a);
 
-        verts << makeV(x, y0, z, 0.0f, -1.0f, 0.0f);
+        const float capU = (x / (2.0f * radius)) + 0.5f;
+        const float capV = (z / (2.0f * radius)) + 0.5f;
+
+        verts << makeV(x, y0, z, 0.0f, -1.0f, 0.0f, capU, capV);
     }
 
     // --- Top cap center ---
-    verts << makeV(0.0f, y1, 0.0f, 0.0f, 1.0f, 0.0f);
+    verts << makeV(0.0f, y1, 0.0f, 0.0f, 1.0f, 0.0f, 0.5f, 0.5f);
 
     // --- Top cap ring (separate normals) ---
     for (int s = 0; s < sectors; ++s) {
@@ -105,7 +107,10 @@ GXMesh *GXCylinderMesh::create()
         const float x = radius * qCos(a);
         const float z = radius * qSin(a);
 
-        verts << makeV(x, y1, z, 0.0f, 1.0f, 0.0f);
+        const float capU = (x / (2.0f * radius)) + 0.5f;
+        const float capV = (z / (2.0f * radius)) + 0.5f;
+
+        verts << makeV(x, y1, z, 0.0f, 1.0f, 0.0f, capU, capV);
     }
 
     // --- Side indices (quads) ---
