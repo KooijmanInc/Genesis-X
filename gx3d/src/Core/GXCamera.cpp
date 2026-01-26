@@ -6,7 +6,7 @@
 using namespace gx::gx3d;
 
 GXCamera::GXCamera(QObject *parent)
-    : QObject{parent}
+    : scene::GXNode{parent}
 {
 }
 
@@ -28,14 +28,13 @@ void GXCamera::clearTarget()
 
 QMatrix4x4 GXCamera::viewMatrix() const
 {
-    QMatrix4x4 v;
-
     if (m_useTarget) {
-        v.lookAt(m_position, m_target, m_up);
-    } else {
-        // QVector3D forward(0, 0, -1);
-        v.translate(-m_position);
+        QMatrix4x4 v;
+        v.setToIdentity();
+        v.lookAt(worldPosition(), m_target, m_up);
+        return v;
     }
 
-    return v;
+    // Free camera: inverse of node transform
+    return worldMatrix().inverted();
 }

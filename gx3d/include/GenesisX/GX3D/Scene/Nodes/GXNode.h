@@ -26,6 +26,11 @@ class GENESISX_GX3D_EXPORT GXNode : public QObject
     Q_PROPERTY(QVector3D position READ position WRITE setPosition NOTIFY positionChanged)
     Q_PROPERTY(QQuaternion rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
     Q_PROPERTY(QVector3D scale READ scale WRITE setScale NOTIFY scaleChanged)
+    Q_PROPERTY(QVector3D eulerRotation READ eulerRotation WRITE setEulerRotation NOTIFY eulerRotationChanged)
+    Q_PROPERTY(QVector3D forward READ forward NOTIFY forwardChanged)
+    Q_PROPERTY(QVector3D back READ back NOTIFY backChanged)
+    Q_PROPERTY(QVector3D left READ left NOTIFY leftChanged)
+    Q_PROPERTY(QVector3D right READ right NOTIFY rightChanged)
 
     Q_PROPERTY(QQmlListProperty<GXNode> children READ children)
 
@@ -50,6 +55,16 @@ public:
     QVector3D scale() const { return m_scale; }
     void setScale(const QVector3D& s);
 
+    QVector3D eulerRotation() const { return m_eulerRotation; }
+    void setEulerRotation(const QVector3D& eRot);
+
+    QVector3D forward() const;
+    QVector3D back() const;
+    QVector3D left() const;
+    QVector3D right() const;
+    Q_INVOKABLE void addYaw(float degrees);
+    Q_INVOKABLE void addPitch(float degrees);
+
     QMatrix4x4 localMatrix() const;
     QMatrix4x4 worldMatrix() const;
 
@@ -66,6 +81,14 @@ signals:
     void positionChanged();
     void rotationChanged();
     void scaleChanged();
+    void eulerRotationChanged();
+    void forwardChanged();
+    void backChanged();
+    void leftChanged();
+    void rightChanged();
+
+protected:
+    void markTransformDirty();
 
 private:
     static void appendChild(QQmlListProperty<GXNode>* prop, GXNode* child);
@@ -79,6 +102,9 @@ private:
     QVector3D m_pos {0,0,0};
     QQuaternion m_rotation;
     QVector3D m_scale {1,1,1};
+    QVector3D m_eulerRotation {0,0,0};
+
+    bool m_dirty = true;
 };
 
 }

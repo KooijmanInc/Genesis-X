@@ -8,9 +8,8 @@
 
 using namespace gx::gx3d::render;
 
-static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz)
+static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz, float u, float v)
 {
-    float u = 0.0f, v = 0.0f;
     return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
 }
 
@@ -21,6 +20,9 @@ GXMesh *GXConeMesh::create()
     // Blender-ish defaults
     const float radius = 1.0f;
     const float height = 2.0f;
+
+    const float yBase = -height * 0.5f;
+    const float yTip  =  height * 0.5f;
 
     // Segments around the cone
     const int sectors = 32; // keep modest for quint16
@@ -58,15 +60,15 @@ GXMesh *GXConeMesh::create()
         QVector3D n(x, nyUn, z);
         n.normalize();
 
-        verts << makeV(x, 0.0f, z, n.x(), n.y(), n.z());
+        verts << makeV(x, yBase, z, n.x(), n.y(), n.z(), u, 0.0f);
     }
 
     // --- Tip vertex (y = height) ---
     // Normal at the tip is undefined; give it a reasonable up-ish normal.
-    verts << makeV(0.0f, height, 0.0f, 0.0f, 1.0f, 0.0f);
+    verts << makeV(0.0f, yTip, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
     // --- Base center vertex (cap) ---
-    verts << makeV(0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f);
+    verts << makeV(0.0f, yBase, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 0.5f);
 
     // --- Base ring vertices (cap) ---
     for (int s = 0; s < sectors; ++s) {
@@ -76,7 +78,10 @@ GXMesh *GXConeMesh::create()
         const float x = radius * qCos(a);
         const float z = radius * qSin(a);
 
-        verts << makeV(x, 0.0f, z, 0.0f, -1.0f, 0.0f);
+        const float capU = (x / (2.0f * radius)) + 0.5f;
+        const float capV = (z / (2.0f * radius)) + 0.5f;
+
+        verts << makeV(x, yBase, z, 0.0f, -1.0f, 0.0f, capU, capV);
     }
 
     // --- Side triangles ---

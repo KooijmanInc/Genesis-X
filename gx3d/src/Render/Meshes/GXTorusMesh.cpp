@@ -67,8 +67,8 @@ GXMesh *GXTorusMesh::create()
             QVector3D n = (pos - ringCenter);
             n.normalize();
 
-            const float uu = float(i) / float(majorSeg);
-            const float vv = float(j) / float(minorSeg);
+            const float uu = u;
+            const float vv = 1.0f - v;
 
             verts << makeV(pos.x(), pos.y(), pos.z(), n.x(), n.y(), n.z(), uu, vv);
         }

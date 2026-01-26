@@ -9,6 +9,7 @@
     GX_GX3D_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/gx3d/include)
 
     RESOURCES += $$PWD/../../../gx3d/qml/GenesisX3D/gx3d_modules.qrc
+    RESOURCES += $$PWD/../../../gx3d/qml/GenesisX3D/Helpers/gx3d_helpers.qrc
     QML_IMPORT_PATH += $$PWD/../../../gx3d/qml
     INCLUDEPATH += $$GX_GX3D_INC_ROOT $$clean_path($$GENESISX_BUILD_ROOT/core/include)
     QMAKE_LIBDIR += $$LIBDIRS

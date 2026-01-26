@@ -9,22 +9,19 @@
 #include <QMatrix4x4>
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
+#include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
 
 namespace gx::gx3d {
 
-class GENESISX_GX3D_EXPORT GXCamera : public QObject
+class GENESISX_GX3D_EXPORT GXCamera : public scene::GXNode
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVector3D position READ position WRITE setPosition NOTIFY positionChanged)
     Q_PROPERTY(QVector3D target READ target WRITE setTarget NOTIFY targetChanged)
     Q_PROPERTY(QVector3D up READ up WRITE setUp NOTIFY upChanged)
 
 public:
     explicit GXCamera(QObject* parent = nullptr);
-
-    QVector3D position() const { return m_position; }
-    void setPosition(const QVector3D& v) { if (m_position == v) return; m_position = v; emit positionChanged(); }
 
     QVector3D target() const { return m_target; }
     void setTarget(const QVector3D& v);
@@ -39,13 +36,11 @@ public:
     virtual QMatrix4x4 projectionMatrix(float aspect) const = 0;
 
 signals:
-    void positionChanged();
     void targetChanged();
     void upChanged();
     void changed();
 
 protected:
-    QVector3D m_position { 0.0f, 0.0f, 5.0f };
     QVector3D m_target { 0.0f, 0.0f, 0.0f };
     QVector3D m_up { 0.0f, 1.0f, 0.0f };
 

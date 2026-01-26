@@ -11,6 +11,7 @@ using namespace gx::gx3d::render;
 struct Vertex {
     float px, py, pz;
     float nx, ny, nz;
+    float u, v;
 };
 
 static inline Vertex makeSphereVertex(float x, float y, float z)
@@ -48,22 +49,23 @@ GXMesh *GXSphereMesh::create()
 
     // Generate vertices (latitude from 0..pi, longitude 0..2pi)
     for (int r = 0; r <= rings; ++r) {
-        const float v = float(r) / float(rings);          // 0..1
-        const float phi = float(M_PI) * v;                // 0..pi
+        const float vCoord = float(r) / float(rings);          // 0..1
+        const float phi = float(M_PI) * vCoord;                // 0..pi
 
         const float y = qCos(phi);                        // -1..1? actually cos(0)=1, cos(pi)=-1
         const float sinPhi = qSin(phi);
 
         for (int s = 0; s <= sectors; ++s) {
-            const float u = float(s) / float(sectors);    // 0..1
-            const float theta = float(2.0 * M_PI) * u;    // 0..2pi
+            const float uCoord = float(s) / float(sectors);    // 0..1
+            const float theta = float(2.0 * M_PI) * uCoord;    // 0..2pi
 
             const float x = sinPhi * qCos(theta);
             const float z = sinPhi * qSin(theta);
 
             const Vertex vv = makeSphereVertex(x * radius, y * radius, z * radius);
-            float uv = 0.0f, v = 0.0f;
-            verts << GXMesh::Vertex{ vv.px, vv.py, vv.pz, vv.nx, vv.ny, vv.nz, uv, v };
+            const float uv_u = uCoord;
+            const float uv_v = 1.0f - vCoord;
+            verts << GXMesh::Vertex{ vv.px, vv.py, vv.pz, vv.nx, vv.ny, vv.nz, uv_u, uv_v };
         }
     }
 
