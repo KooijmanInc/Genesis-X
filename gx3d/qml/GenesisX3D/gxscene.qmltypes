@@ -12,8 +12,16 @@ Module {
             type: "string"
         }
         Property {
+            name: "debugLighting"
+            type: "bool"
+            read: "debugLighting"
+            notify: "debugLightingChanged"
+        }
+
+        Property {
             name: "roots"
             type: "QQmlListProperty"
+            read: "roots"
         }
     }
 }

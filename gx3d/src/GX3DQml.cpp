@@ -9,6 +9,8 @@
 #include <GenesisX/GX3D/Core/GXOrthographicCamera.h>
 #include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
 #include <GenesisX/GX3D/Scene/Lights/GXPointLight.h>
+#include <GenesisX/GX3D/Scene/Lights/GXSpotLight.h>
+
 #include <GenesisX/GX3D/Render/Nodes/GXModelNode.h>
 #include <GenesisX/GX3D/Render/Nodes/GXRenderableNode.h>
 #include <GenesisX/GX3D/Scene/GXScene.h>
@@ -46,7 +48,9 @@ void registerEnabledQmlModules(QQmlEngine *engine)
 
     qmlRegisterType<gx::gx3d::scene::GXNode>("GenesisX3D", 1, 0, "GXNode");
     qmlRegisterType<gx::gx3d::scene::GXScene>("GenesisX3D", 1, 0, "GXScene");
+
     qmlRegisterType<gx::gx3d::scene::GXPointLight>("GenesisX3D", 1, 0, "GXPointLight");
+    qmlRegisterType<gx::gx3d::scene::GXSpotLight>("GenesisX3D", 1, 0, "GXSpotLight");
 
     qmlRegisterType<gx::gx3d::render::GXModel>("GenesisX3D", 1, 0, "GXModel");
 

@@ -19,6 +19,9 @@ class GENESISX_GX3D_EXPORT GXLight : public GXNode
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(float intensity READ intensity WRITE setIntensity NOTIFY intensityChanged)
 
+    // Q_PROPERTY(QQuaternion rotation READ rotation WRITE setRotation NOTIFY rotationChanged)
+    // Q_PROPERTY(QVector3D eulerRotation READ eulerRotation WRITE setEulerRotation NOTIFY eulerRotationChanged)
+
 public:
     explicit GXLight(QObject* parent = nullptr);
 
@@ -28,13 +31,25 @@ public:
     float intensity() const { return m_intensity; }
     void setIntensity(float i);
 
+    // QQuaternion rotation() const { return m_rotation; }
+    // void setRotation(const QQuaternion& rot);
+
+    // QVector3D eulerRotation() const { return m_eulerRotation; }
+    // void setEulerRotation(const QVector3D& eRot);
+
 signals:
+    void changed();
     void colorChanged();
     void intensityChanged();
+    // void rotationChanged();
+    // void eulerRotationChanged();
 
 protected:
     QColor m_color = Qt::white;
     float m_intensity = 1.0f;
+
+    // QQuaternion m_rotation;
+    // QVector3D m_eulerRotation {0,0,0};
 };
 
 }

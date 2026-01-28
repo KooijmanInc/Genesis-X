@@ -6,6 +6,7 @@
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
+#include <GenesisX/GX3D/Scene/Lights/GXSpotLight.h>
 #include <GenesisX/GX3D/Scene/Lights/GXPointLight.h>
 #include <GenesisX/GX3D/Render/Lights/GXFrameLighting.h>
 

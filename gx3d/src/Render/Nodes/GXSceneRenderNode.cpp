@@ -41,11 +41,37 @@ struct alignas(16) GizmoUBO {
     float color[4];
 };
 
-struct FrameLightingUBO {
-    float lightPos[4];
-    float lightColor[4];
-    float lightParams[4];
+// struct alignas(16) FrameLightingUBO {
+//     float lightPos[4];
+//     float lightDir[4];
+//     float lightColor[4];
+//     float lightParams[4];
+
+//     float cosInner;
+//     float cosOuter;
+//     float _pad0;
+//     float _pad1;
+// };
+// static_assert(sizeof(FrameLightingUBO) % 16 == 0);
+
+static constexpr int GX_MAX_LIGHTS = 15;
+
+struct alignas(16) GXLightGPU
+{
+    QVector4D pos;
+    QVector4D dir;
+    QVector4D color;
+    QVector4D params;
 };
+
+struct alignas(16) FrameLightingUBO
+{
+    QVector4D frameParams;
+    GXLightGPU lights[GX_MAX_LIGHTS];
+};
+static_assert(sizeof(GXLightGPU) == 64);
+static_assert(sizeof(FrameLightingUBO) == 16 + 64 * GX_MAX_LIGHTS);
+static_assert(sizeof(FrameLightingUBO) % 16 == 0);
 
 static QSize surfacePixelSize(QRhiRenderTarget* rt)
 {
@@ -210,46 +236,60 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
         }
     }
 
-    GXPointLightData light{};
+    FrameLightingUBO fl{};
+    const int requested = m_scene ? m_scene->maxLights() : 8;
+    const int used = qMin(requested, GX_MAX_LIGHTS);
 
-    scene::GXPointLight* firstLight = nullptr;
+    if (requested > GX_MAX_LIGHTS) {
+        qWarning() << "GXScene maxLights=" << requested
+                   << "exceeds shader cap" << GX_MAX_LIGHTS
+                   << "clamping.";
+    }
+
+    int count = 0;
+
     m_scene->traverse([&](scene::GXNode* n) {
-        if (firstLight) return;
-        if (auto* l = qobject_cast<scene::GXPointLight*>(n)) {
-            firstLight = l;
+        if (count >= used) return;
+
+        if (auto* p = qobject_cast<scene::GXPointLight*>(n)) {
+            const QVector3D posWS = p->worldMatrix().map(QVector3D(0, 0, 0));
+            const QVector3D col = QVector3D(p->color().redF(), p->color().greenF(), p->color().blueF());
+
+            auto &L = fl.lights[count++];
+            L.pos = QVector4D(posWS, 0.0f);
+            L.dir = QVector4D(0.0f, 0.0f, 0.0f, 0.0f);
+            L.color = QVector4D(col, p->intensity());
+            L.params = QVector4D(p->range(), -1.0f, 1.0f, 0.0f);
+
+            return;
+        }
+
+        if (auto* s = qobject_cast<scene::GXSpotLight*>(n)) {
+            const QVector3D posWS = s->worldMatrix().map(QVector3D(0,0,0));
+            const QVector3D dirWS = s->directionWS().normalized();
+            const QVector3D col = QVector3D(s->color().redF(), s->color().greenF(), s->color().blueF());
+
+            // angles are degrees in API
+            const float inner = std::cos(qDegreesToRadians(s->innerConeAngle()));
+            const float outer = std::cos(qDegreesToRadians(s->outerConeAngle()));
+            const float cIn = qMax(inner, outer);
+            const float cOut = qMin(inner, outer);
+
+            auto &L = fl.lights[count++];
+            L.pos = QVector4D(posWS, 1.0f);
+            L.dir = QVector4D(dirWS, 0.0f);
+            L.color = QVector4D(col, s->intensity());
+            L.params = QVector4D(s->range(), cIn, cOut, 0.0f);
+
+            return;
         }
     });
 
-    if (firstLight) {
-        light.positionWS = firstLight->worldMatrix().map(QVector3D(0, 0, 0));
-        light.intensity = firstLight->intensity();
-        light.color = QVector3D(firstLight->color().redF(), firstLight->color().greenF(), firstLight->color().blueF());
-        light.range = firstLight->range();
-    } else {
-        light.positionWS = QVector3D(0, 1, 0);
-        light.color = QVector3D(1, 1, 1);
-        light.intensity = 5.0f;
-        light.range = 10.0f;
-    }
-
-    FrameLightingUBO fl{};
-    fl.lightPos[0] = light.positionWS.x();
-    fl.lightPos[1] = light.positionWS.y();
-    fl.lightPos[2] = light.positionWS.z();
-    fl.lightPos[3] = 1.0f;
-
-    fl.lightColor[0] = light.color.x();
-    fl.lightColor[1] = light.color.y();
-    fl.lightColor[2] = light.color.z();
-    fl.lightColor[3] = light.intensity;
-
-    fl.lightParams[0] = light.range;
-    fl.lightParams[1] = 0.0f;
-    fl.lightParams[2] = 0.0f;
-    fl.lightParams[3] = 0.0f;
+    fl.frameParams = QVector4D(float(count), (m_scene && m_scene->debugLighting()) ? 0.15f : 0.0f, 0.0f, 0.0f);
 
     QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
-    u->updateDynamicBuffer(m_frameLightUbo, 0, sizeof(FrameLightingUBO), &fl);
+    const quint32 bytes = sizeof(FrameLightingUBO);
+    u->updateDynamicBuffer(m_frameLightUbo, 0, bytes, &fl);
     cb->resourceUpdate(u);
 
     forEachRenderable([&](GXRenderableNode *r) {
