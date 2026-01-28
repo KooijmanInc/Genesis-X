@@ -16,4 +16,5 @@ void GXPointLight::setRange(float r)
     m_range = r;
 
     emit rangeChanged();
+    emit changed();
 }
