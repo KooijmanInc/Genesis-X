@@ -33,6 +33,7 @@ public:
     void ensureRhi(QRhi* rhi, QRhiCommandBuffer* cb);
     void releaseRhi();
 
+    static QImage makeFallback(const QColor& color);
     static QImage makeWhiteFallback();
 
 signals:

@@ -42,6 +42,14 @@ void GXTexture::releaseRhi()
     m_dirty = true;
 }
 
+QImage GXTexture::makeFallback(const QColor& color)
+{
+    QImage img(256, 256, QImage::Format_RGBA8888);
+    img.fill(color);
+
+    return img;
+}
+
 QImage GXTexture::makeWhiteFallback()
 {
     QImage img(256, 256, QImage::Format_RGBA8888);

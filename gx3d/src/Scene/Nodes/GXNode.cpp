@@ -2,6 +2,7 @@
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
 #include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
+#include <GenesisX/GX3D/Render/Utils/GXGltfLoader.h>
 
 using namespace gx::gx3d::scene;
 
@@ -104,6 +105,28 @@ QVector3D GXNode::right() const
     return m_rotation.rotatedVector(QVector3D(1, 0, 0));
 }
 
+void GXNode::setSceneSource(const QUrl &url)
+{
+    if (m_sceneSource == url) return;
+
+    m_sceneSource = url;
+    emit sceneSourceChanged();
+
+    if (m_sceneRoot) {
+        m_children.removeOne(m_sceneRoot);
+        delete m_sceneRoot;
+        m_sceneRoot = nullptr;
+    }
+
+    if (!m_sceneSource.isValid()) return;
+
+    GXNode* loadedRoot = render::GXGltfLoader::loadSceneRoot(m_sceneSource);
+    if (!loadedRoot) return;
+
+    addChild(loadedRoot);
+    m_sceneRoot = loadedRoot;
+}
+
 void GXNode::addYaw(float degrees)
 {
     m_eulerRotation.setY(m_eulerRotation.y() + degrees);
@@ -156,6 +179,14 @@ QQmlListProperty<GXNode> GXNode::children()
         &GXNode::childAt,
         &GXNode::clearChildren
     );
+}
+
+void GXNode::addChild(GXNode *child)
+{
+    if (!child || m_children.contains(child)) return;
+
+    child->setParent(this);
+    m_children.append(child);
 }
 
 void GXNode::markTransformDirty()

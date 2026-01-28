@@ -66,8 +66,12 @@ static QImage gxMakeUvGridImage(int w = 256, int h = 256)
 GXDefaultLitMaterial::GXDefaultLitMaterial(QObject *parent)
     : GXMaterial{parent}
 {
-    m_baseColorSz.setWidth(256);
-    m_baseColorSz.setHeight(256);
+    // m_baseColorSz.setWidth(256);
+    // m_baseColorSz.setHeight(256);
+
+    m_solidColorTex = new GXTexture2D(this);
+    m_solidColorTex->setDefaultImage(Qt::white);
+    // m_baseColorTexture = m_solidColorTex;
 }
 
 QShader GXDefaultLitMaterial::vertexShader() const
@@ -93,6 +97,8 @@ void GXDefaultLitMaterial::setBaseColor(const QColor &c)
 {
     if (m_baseColor == c) return;
     m_baseColor = c;
+
+    m_solidColorTex->setDefaultImage(c);
 
     emit baseColorChanged();
 }
@@ -156,6 +162,7 @@ void GXDefaultLitMaterial::fillFS(void* dst) const
 void GXDefaultLitMaterial::ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer* cb)
 {
     if (!rhi) return;
+
     if (m_baseColorTexture) {
         m_baseColorTexture->ensureRhi(rhi, cb);
         m_baseColorTex = m_baseColorTexture->rhiTexture();
@@ -200,7 +207,9 @@ void GXDefaultLitMaterial::ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer
             cb->resourceUpdate(u);
         }
     } else {
-        m_baseColorTex = nullptr;
-        m_baseColorSampler = nullptr;
+        m_baseColorTexture = m_solidColorTex;
+        m_baseColorTexture->ensureRhi(rhi, cb);
+        m_baseColorTex = m_baseColorTexture->rhiTexture();
+        m_baseColorSampler = m_baseColorTexture->rhiSampler();
     }
 }

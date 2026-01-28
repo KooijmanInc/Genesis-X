@@ -13,9 +13,9 @@ using namespace gx::gx3d::render;
 GXTexture2D::GXTexture2D(QObject *parent)
     : GXTexture{parent}
 {
-    m_image = GXTexture::makeWhiteFallback();
-    m_size = m_image.size();
-    m_dirty = true;
+    // m_image = GXTexture::makeFallback();
+    // m_size = m_image.size();
+    // m_dirty = true;
 }
 
 void GXTexture2D::setSource(const QUrl &url)
@@ -48,6 +48,13 @@ void GXTexture2D::setImage(const QImage &img)
 
     if (m_hasCpuImage) m_size = m_image.size();
 
+    markDirty();
+}
+
+void GXTexture2D::setDefaultImage(const QColor &color)
+{
+    m_image = GXTexture::makeFallback(color);
+    setImage(m_image);
     markDirty();
 }
 

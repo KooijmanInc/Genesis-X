@@ -42,6 +42,7 @@ void main()
     vec3 diffuse = albedo * fl.lightColor.rgb * (ndot1 * att * intensity);
 
     vec3 color = clamp(ambient + diffuse, 0.0, 1.0);
+    color = pow(color, vec3(1.0/2.2));
     fragColor = vec4(color, fsu.baseColor.a * tex.a);
     // vec3 ambient = fsu.baseColor.rgb * 0.15;
     // vec3 diffuse = fsu.baseColor.rgb * fl.lightColor.rgb * (ndotl * att * intensity);

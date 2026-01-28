@@ -9,6 +9,8 @@
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
+#include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
+
 namespace gx::gx3d::render {
 
 class GXMesh;
@@ -20,8 +22,9 @@ class GENESISX_GX3D_EXPORT GXGltfLoader final : public QObject
 public:
     using QObject::QObject;
 
-    static GXMesh* loadMesh(const QUrl& source);
-    static GXMesh* loadMeshFromFilePath(const QString& path);
+    static QVector<GXMesh*> loadMesh(const QUrl& source);
+    static QVector<GXMesh*> loadMeshesFromFilePath(const QString& path);
+    static gx::gx3d::scene::GXNode* loadSceneRoot(const QUrl& source);
 };
 
 }
