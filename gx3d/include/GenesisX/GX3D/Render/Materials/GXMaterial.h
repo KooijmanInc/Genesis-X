@@ -74,6 +74,8 @@ public:
 
     void ensureRhi(QRhi* rhi, QRhiCommandBuffer* cb);
 
+    static QColor gxParseColor(const QString& s);
+
 signals:
     void renderStateChanged();
     void materialChanged();

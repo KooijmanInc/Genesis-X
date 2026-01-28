@@ -9,6 +9,7 @@
 #include <GenesisX/GX3D/Render/Materials/GXDefaultLitUniforms.h>
 
 #include <GenesisX/GX3D/Render/Texture/GXTexture.h>
+#include <GenesisX/GX3D/Render/Texture/GXTexture2D.h>
 
 #include <QColor>
 #include <QMatrix4x4>
@@ -77,6 +78,8 @@ private:
 
     QSize m_baseColorSz;
     QImage m_baseColorImg;
+
+    GXTexture2D* m_solidColorTex = nullptr;
 };
 
 }

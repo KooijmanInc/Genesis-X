@@ -11,7 +11,28 @@
 #include <GenesisX/GX3D/Render/Meshes/GXTorusMesh.h>
 #include <GenesisX/GX3D/Render/Utils/GXGltfLoader.h>
 
+#include <QVector4D>
+
 using namespace gx::gx3d::render;
+
+static void ensureUboForMat(QRhi* rhi, QHash<GXMaterial*, QRhiBuffer*>& map, GXMaterial* mat, int size)
+{
+    if (!rhi || !mat || size <= 0) return;
+
+    QRhiBuffer*& buf = map[mat];
+    const quint32 usize = quint32(size);
+
+    if (buf && buf->size() == usize) return;
+
+    if (buf) { buf->destroy(); delete buf; buf = nullptr; }
+
+    buf = rhi->newBuffer(QRhiBuffer::Dynamic, QRhiBuffer::UniformBuffer, usize);
+    if (!buf || !buf->create()) {
+        qWarning() << "GXModel: per-mat ubuf create failed";
+        delete buf;
+        buf = nullptr;
+    }
+}
 
 static void ensureUbo(QRhi* rhi, QRhiBuffer*& buf, int size)
 {
@@ -38,15 +59,6 @@ static void ensureUbo(QRhi* rhi, QRhiBuffer*& buf, int size)
     }
 }
 
-// static void uploadUbo(QRhi* rhi, QRhiBuffer* buf, const QByteArray& data)
-// {
-//     if (!buf || data.isEmpty()) return;
-
-//     QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
-//     u->updateDynamicBuffer(buf, 0, data.size(), data.constData());
-//     rhi->submitResourceUpdates(u);
-// }
-
 GXModel::GXModel(QObject *parent)
     : GXRenderableNode{parent}
 {
@@ -65,10 +77,8 @@ void GXModel::setMesh(GXMesh *mesh)
     if (m_mesh == mesh) return;
     delete m_mesh;
     m_mesh = mesh;
-    m_primitive = None;
 
     emit meshChanged();
-    emit primitiveChanged();
 }
 
 void GXModel::setSource(QString src)
@@ -90,31 +100,56 @@ void GXModel::setSource(QString src)
     } else if (src == "#Torus") {
         m_mesh = GXTorusMesh::create();
     } else if (src.endsWith(".glb")) {
-        m_mesh = GXGltfLoader::loadMesh(QUrl(src));
+        const auto meshes = GXGltfLoader::loadMesh(QUrl(src));
+        m_mesh = meshes.isEmpty() ? nullptr : meshes.first();
     }
 
     emit sourceChanged();
 }
 
-void GXModel::setPrimitive(Primitive p)
+QQmlListProperty<GXMaterial> GXModel::materials()
 {
-    if (m_primitive == p) return;
-    m_primitive = p;
+    return QQmlListProperty<GXMaterial>(
+        this,
+        this,
+        [](QQmlListProperty<GXMaterial>* p, GXMaterial* v) {
+            auto* self = static_cast<GXModel*>(p->data);
+            if (!v) return;
+            self->m_materials.append(v);
+            emit self->materialsChanged();
+        },
+        [](QQmlListProperty<GXMaterial>* p) -> qsizetype {
+            auto* self = static_cast<GXModel*>(p->data);
+            return self->m_materials.size();
+        },
+        [](QQmlListProperty<GXMaterial>* p, qsizetype i) -> GXMaterial* {
+            auto* self = static_cast<GXModel*>(p->data);
+            return (i >= 0 && i < self->m_materials.size()) ? self->m_materials[int(i)] : nullptr;
+        },
+        [](QQmlListProperty<GXMaterial>* p) {
+            auto* self = static_cast<GXModel*>(p->data);
+            self->m_materials.clear();
+            emit self->materialsChanged();
+        }
+    );
+}
 
-    // Replace mesh with a built-in one
-    // (for now: own it; later: cache/share)
-    delete m_mesh;
-    m_mesh = nullptr;
+void GXModel::addMaterial(GXMaterial *m)
+{
+    if (!m) return;
+    m_materials.append(m);
 
-    switch (p) {
-    case Cube:  m_mesh = GXCubeMesh::create(); break;
-    // case Plane: m_mesh = GXPlaneMesh::create(); break;
-    // Sphere/Torus later...
-    default: break;
-    }
+    emit materialsChanged();
+    invalidPipeline();
+}
 
-    emit primitiveChanged();
-    emit meshChanged();
+void GXModel::clearMaterials()
+{
+    if (m_materials.isEmpty()) return;
+    m_materials.clear();
+
+    emit materialsChanged();
+    invalidPipeline();
 }
 
 void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer* cb)
@@ -126,54 +161,50 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer
     const bool haveLightingNow = (m_frameLightingUbo != nullptr);
     if (m_boundHadLighting != haveLightingNow || m_boundLightingUbo != m_frameLightingUbo) {
         m_pipelineDirty = true;
+
+        qDeleteAll(m_materialSrbs);
+        m_materialSrbs.clear();
     }
 
     GXRenderableNode::ensureResources(rhi, rt, cb);
 
-    if (m_rhi == rhi && m_ps && m_srb && m_vsUbuf && m_fsUbuf && !m_pipelineDirty && m_boundLightingUbo == m_frameLightingUbo) return;
+    if (m_rhi == rhi && m_ps && m_vsUbuf && m_fsUbuf && !m_pipelineDirty && m_boundLightingUbo == m_frameLightingUbo) return;
 
     destroyPipelineResources();
     m_rhi = rhi;
 
     if (m_mesh) m_mesh->ensureResources(rhi);
 
-    GXMaterial* mat = material();
-    if (!mat) {
-        qWarning() << "GXModel: Unable to set vsUbuf and fsUbuf";
+    GXMaterial* defaultMat = nullptr;
+    if (!m_materials.isEmpty()) defaultMat = m_materials.first();
+    else defaultMat = material();
+
+    if (!defaultMat) {
+        qWarning() << "GXModel: no default material";
         return;
     }
 
-    const int vsSize = mat->vsUboSize();
-    const int fsSize = mat->fsUboSize();
+    int maxVsSize = 0;
+    int maxFsSize = 0;
 
-    ensureUbo(rhi, m_vsUbuf, vsSize);
-    ensureUbo(rhi, m_fsUbuf, fsSize);
+    auto considerMat = [&](GXMaterial* m) {
+        if (!m) return;
+        maxVsSize = qMax(maxVsSize, m->vsUboSize());
+        maxFsSize = qMax(maxFsSize, m->fsUboSize());
+    };
 
-    mat->ensureRhi(rhi, cb);
+    for (GXMaterial* m : std::as_const(m_materials)) considerMat(m);
 
-    m_srb = m_rhi->newShaderResourceBindings();
-    QVector<QRhiShaderResourceBinding> bindings;
-    bindings.reserve(4);
+    considerMat(material());
 
-    bindings.append(QRhiShaderResourceBinding::uniformBuffer(mat->vsBinding(), QRhiShaderResourceBinding::VertexStage, m_vsUbuf));
-    bindings.append(QRhiShaderResourceBinding::uniformBuffer(mat->fsBinding(), QRhiShaderResourceBinding::FragmentStage, m_fsUbuf));
+    ensureUbo(rhi, m_vsUbuf, maxVsSize);
+    ensureUbo(rhi, m_fsUbuf, maxFsSize);
 
-    QRhiBuffer* lightingUbo = m_frameLightingUbo;
-    m_boundLightingUbo = lightingUbo;
-    m_boundHadLighting = (lightingUbo != nullptr);
-
-    if (m_frameLightingUbo) {
-        bindings.append(QRhiShaderResourceBinding::uniformBuffer(2, QRhiShaderResourceBinding::FragmentStage, m_frameLightingUbo));
-    }
-
-    bindings.append(QRhiShaderResourceBinding::sampledTexture(3, QRhiShaderResourceBinding::FragmentStage, mat->baseColorTex(), mat->baseColorSampler()));
-
-    m_srb->setBindings(bindings.cbegin(), bindings.cend());
-
-    if (!m_srb->create()) qWarning() << "GXModel: srb Shader Resource Bindings failed";
+    defaultMat->ensureRhi(rhi, cb);
 
     m_ps = m_rhi->newGraphicsPipeline();
-    GXMaterial* matPtr = mat;
+
+    GXMaterial* matPtr = defaultMat;
     m_ps->setShaderStages({
         { QRhiShaderStage::Vertex, matPtr->vertexShader() },
         { QRhiShaderStage::Fragment, matPtr->fragmentShader() }
@@ -187,13 +218,20 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer
         QRhiVertexInputAttribute(0, 2, QRhiVertexInputAttribute::Float2,  offsetof(GXMesh::Vertex, u))
     });
 
+    QRhiShaderResourceBindings* layoutSrb = srbForMaterial(defaultMat, cb);
+    if (!layoutSrb) {
+        qWarning() << "GXModel: failed to build SRB for default material";
+        return;
+    }
+
     m_ps->setVertexInputLayout(inputLayout);
-    m_ps->setShaderResourceBindings(m_srb);
+    m_ps->setShaderResourceBindings(layoutSrb);
     m_ps->setTopology(QRhiGraphicsPipeline::Triangles);
     m_ps->setRenderPassDescriptor(rt->renderPassDescriptor());
     m_ps->setSampleCount(rt->sampleCount());
-    if (mat) {
-        mat->applyTo(m_ps);
+
+    if (defaultMat) {
+        defaultMat->applyTo(m_ps);
     } else {
         m_ps->setCullMode(QRhiGraphicsPipeline::Back);
         m_ps->setFrontFace(QRhiGraphicsPipeline::CCW);
@@ -210,18 +248,6 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer
     m_pipelineDirty = false;
 }
 
-// #define GX_DUMP_UBO_STATE(tag, rhi, cb, vsBuf, fsBuf, vsBytes, fsBytes) \
-// do { \
-//         qWarning().noquote() \
-//         << tag \
-//         << "rhi=" << (void*)(rhi) \
-//         << "cb=" << (void*)(cb) \
-//         << "vsBuf=" << (void*)(vsBuf) << "created=" << ((vsBuf) ? true : false) \
-//         << "vsSize=" << ((vsBuf) ? (vsBuf)->size() : -1) << "vsBytes=" << (vsBytes) \
-//         << "fsBuf=" << (void*)(fsBuf) << "created=" << ((fsBuf) ? true : false) \
-//         << "fsSize=" << ((fsBuf) ? (fsBuf)->size() : -1) << "fsBytes=" << (fsBytes); \
-// } while (0)
-
 void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
 {
     if (!cb || !rt) return;
@@ -231,33 +257,12 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
 
     if (m_mesh) m_mesh->uploadIfNeeded(rhi, cb);
 
-    if (!m_ps || !m_srb || !m_vsUbuf || !m_fsUbuf) return;
-
-    GXMaterial* mat = material();
-    if (!mat) {
-        qWarning() << "GXModel::recordRender: no material";
-        return;
-    }
-
-    const int vsBytes = mat->vsUboSize();
-    const int fsBytes = mat->fsUboSize();
+    if (!m_ps) return;
 
     if (!m_vsUbuf || !m_fsUbuf) {
         qWarning() << "GXModel::recordRender: missing UBO buffers"
                    << "vsUbuf=" << (void*)m_vsUbuf
-                   << "fsUbuf=" << (void*)m_fsUbuf
-                   << "mat=" << mat->metaObject()->className();
-        return;
-    }
-
-    const int vsBufSize = int(m_vsUbuf->size());
-    const int fsBufSize = int(m_fsUbuf->size());
-
-    if (vsBufSize < vsBytes || fsBufSize < fsBytes) {
-        qWarning() << "GXModel::recordRender: UBO size mismatch"
-                   << "vsBuf=" << vsBufSize << "need" << vsBytes
-                   << "fsBuf=" << fsBufSize << "need" << fsBytes
-                   << "mat=" << mat->metaObject()->className();
+                   << "fsUbuf=" << (void*)m_fsUbuf;
         return;
     }
 
@@ -265,29 +270,45 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
 
     QMatrix4x4 mvp = rhi->clipSpaceCorrMatrix() * (m_viewProj * model);
 
-    QByteArray vsData;
-    vsData.resize(mat->vsUboSize());
-    if (vsData.size() > 0) mat->fillVS(vsData.data(), mvp, model);
+    auto updateUbosFor = [&](GXMaterial* m, const QMatrix4x4& mvpIn, const QMatrix4x4& modelIn) -> QVector4D {
 
-    const bool fsDirty = mat->consumeDirty();
-    QByteArray fsData;
-    if (fsDirty && mat->fsUboSize() > 0) {
-        fsData.resize(mat->fsUboSize());
-        mat->fillFS(fsData.data());
-    }
-    // GX_DUMP_UBO_STATE("[UBO UPDATE]", rhi, cb, m_vsUbuf, m_fsUbuf, vsBytes, fsBytes);
+        QByteArray vsData;
+        vsData.resize(m->vsUboSize());
+        if (!vsData.isEmpty())
+            m->fillVS(vsData.data(), mvpIn, modelIn);
 
-    {
-        QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
-        if (vsData.size() > 0) u->updateDynamicBuffer(m_vsUbuf, 0, vsData.size(), vsData.constData());
+        QByteArray fsData;
+        fsData.resize(m->fsUboSize());
+        if (!fsData.isEmpty())
+            m->fillFS(fsData.data());
 
-        if (fsDirty && mat->fsUboSize() > 0) u->updateDynamicBuffer(m_fsUbuf, 0, fsData.size(), fsData.constData());
+        QVector4D preview(0, 0, 0, 0);
+        if (fsData.size() >= 16) {
+            const float *f = reinterpret_cast<const float*>(fsData.constData());
+            preview = QVector4D(f[0], f[1], f[2], f[3]);
+        }
 
-        cb->resourceUpdate(u);
-    }
+        QRhiBuffer* vsBuf = m_vsUbufPerMat.value(m, nullptr);
+        QRhiBuffer* fsBuf = m_fsUbufPerMat.value(m, nullptr);
+
+        if (!vsBuf || !fsBuf) {
+            qWarning() << "GXModel: missing per-mat UBO for" << m;
+            return preview;
+        }
+
+        {
+            QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
+            if (!vsData.isEmpty())
+                u->updateDynamicBuffer(vsBuf, 0, vsData.size(), vsData.constData());
+            if (!fsData.isEmpty())
+                u->updateDynamicBuffer(fsBuf, 0, fsData.size(), fsData.constData());
+            cb->resourceUpdate(u);
+        }
+
+        return preview;
+    };
 
     cb->setGraphicsPipeline(m_ps);
-    cb->setShaderResources(m_srb);
 
     if (!m_mesh || !m_mesh->isReady()) {
         qWarning() << "GXModel: mesh or buffers not ready"
@@ -304,13 +325,80 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
     }
 
     const QRhiCommandBuffer::VertexInput vbufBinding(m_mesh->vertexBuffer(), 0);
-    cb->setVertexInput(0, 1, &vbufBinding, m_mesh->indexBuffer(), 0, QRhiCommandBuffer::IndexUInt16);
+
+    const auto idxFmt = (m_mesh->indexType() == GXMesh::IndexUInt32)
+        ? QRhiCommandBuffer::IndexUInt32
+        : QRhiCommandBuffer::IndexUInt16;
+
+    cb->setVertexInput(0, 1, &vbufBinding, m_mesh->indexBuffer(), 0, idxFmt);
 
     const QSize ps = rt->pixelSize();
     cb->setViewport(QRhiViewport(0, 0, float(ps.width()), float(ps.height())));
     cb->setScissor(QRhiScissor(0, 0, ps.width(), ps.height()));
 
-    cb->drawIndexed(m_mesh->indexCount());
+    const auto &subs = m_mesh->subMeshes();
+    const auto& mats = materialsVector();
+    for (int i = 0; i < subs.size(); ++i) {
+        const GXSubMesh &sm = subs[i];
+
+        int slot = sm.materialSlot;
+        if (slot < 0) {
+            slot = i;
+        } else if (slot >= 0 && slot < mats.size()) {
+            // qDebug() << "[GXModel] slot" << slot << "mat" << mats[slot];
+        } else {
+            qDebug() << "[GXModel] slot out of range" << slot << "mats.size" << mats.size();
+        }
+
+        GXMaterial* useMat = nullptr;
+
+        if (slot >= 0 && slot < mats.size()) useMat = mats[slot];
+
+        if (!useMat) useMat = material();
+
+        if (slot < 0 || slot >= mats.size()) {
+            qWarning() << "[GXModel] slot out of range"
+                       << "slot=" << slot
+                       << "mats.size=" << mats.size()
+                       << "submesh=" << i;
+        }
+
+        if (!useMat) {
+            qWarning() << "[GXModel] no material for submesh" << i;
+            continue;
+        }
+        if (useMat->vsUboSize() > int(m_vsUbuf->size()))
+            qWarning() << "VS UBO too large for buffer";
+        if (useMat->fsUboSize() > int(m_fsUbuf->size()))
+            qWarning() << "FS UBO too large for buffer";
+
+        QRhiShaderResourceBindings* useSrb = srbForMaterial(useMat, cb);
+        if (!useSrb) continue;
+
+        updateUbosFor(useMat, mvp, model);
+
+        cb->setShaderResources(useSrb);
+        cb->drawIndexed(int(sm.indexCount), 1, int(sm.indexOffset), int(sm.baseVertex), 0);
+    }
+
+    if (subs.isEmpty()) {
+        GXMaterial *useMat0 = nullptr;
+        if (!mats.isEmpty()) useMat0 = mats[0];
+        if (!useMat0) useMat0 = material();
+
+        if (!useMat0) {
+            qWarning() << "[GXModel] no material (fallback draw)";
+            return;
+        }
+        if (useMat0->fsUboSize() > int(m_fsUbuf->size()))
+            qWarning() << "FS UBO too large for buffer";
+
+        updateUbosFor(useMat0, mvp, model);
+        QRhiShaderResourceBindings* useSrb0 = srbForMaterial(useMat0, cb);
+        if (!useSrb0) return;
+        cb->setShaderResources(useSrb0);
+        cb->drawIndexed(m_mesh->indexCount());
+    }
 }
 
 void GXModel::releaseResources()
@@ -319,62 +407,63 @@ void GXModel::releaseResources()
     GXRenderableNode::releaseResources();
 }
 
-// void GXModel::ensureBaseColorTestTexture(QRhi *rhi, QRhiCommandBuffer* cb, GXMaterial* mat)
-// {
-    // if (!rhi || !cb)
-    //     return;
+QRhiShaderResourceBindings *GXModel::srbForMaterial(GXMaterial *mat, QRhiCommandBuffer *cb)
+{
+    if (!m_rhi || ! mat) return nullptr;
 
-    // const QSize sz(256, 256);
+    if (auto* existing = m_materialSrbs.value(mat, nullptr)) return existing;
 
-    // // Create texture once (or if size changed)
-    // if (!mat->baseColorTex() || mat->baseColorTex()->pixelSize() != sz) {
-    //     if (mat->baseColorTex()) {
-    //         mat->baseColorTex()->destroy();
-    //         delete mat->baseColorTex();
-    //         // mat->baseColorTex() = nullptr;
-    //     }
+    mat->ensureRhi(m_rhi, cb);
 
-    //     m_baseColorTex = rhi->newTexture(QRhiTexture::RGBA8, sz, 1);
-    //     m_baseColorTex->setName("GX3D_BuiltIn_UVGrid");
-    //     if (!m_baseColorTex->create()) {
-    //         qWarning() << "GXModelNode: baseColor texture create failed";
-    //         return;
-    //     }
+    ensureUboForMat(m_rhi, m_vsUbufPerMat, mat, mat->vsUboSize());
+    ensureUboForMat(m_rhi, m_fsUbufPerMat, mat, mat->fsUboSize());
 
-    //     // Generate image
-    //     QImage img = gxMakeUvGridImage(sz.width(), sz.height());
+    QRhiBuffer* vsBuf = m_vsUbufPerMat.value(mat, nullptr);
+    QRhiBuffer* fsBuf = m_fsUbufPerMat.value(mat, nullptr);
 
-    //     // We decided: "flip image data on upload" so UV (0,0) is bottom-left.
-    //     // QImage is top-left origin -> flip vertically before upload.
-    //     img = img.flipped(Qt::Vertical);
+    auto* srb = m_rhi->newShaderResourceBindings();
+    QVector<QRhiShaderResourceBinding> bindings;
+    bindings.reserve(4);
 
-    //     // Upload to GPU
-    //     QRhiTextureSubresourceUploadDescription sub;
-    //     sub.setImage(img);
+    bindings.append(QRhiShaderResourceBinding::uniformBuffer(mat->vsBinding(), QRhiShaderResourceBinding::VertexStage, vsBuf));
+    bindings.append(QRhiShaderResourceBinding::uniformBuffer(mat->fsBinding(), QRhiShaderResourceBinding::FragmentStage, fsBuf));
 
-    //     QRhiTextureUploadEntry entry(0, 0, sub);
+    if (m_frameLightingUbo) {
+        bindings.append(QRhiShaderResourceBinding::uniformBuffer(2, QRhiShaderResourceBinding::FragmentStage, m_frameLightingUbo));
+    }
 
-    //     QRhiTextureUploadDescription desc({ entry });
+    bindings.append(QRhiShaderResourceBinding::sampledTexture(3, QRhiShaderResourceBinding::FragmentStage, mat->baseColorTex(), mat->baseColorSampler()));
 
-    //     QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
-    //     u->uploadTexture(m_baseColorTex, desc);
-    //     cb->resourceUpdate(u);
-    // }
-// }
+    srb->setBindings(bindings.cbegin(), bindings.cend());
+    if (!srb->create()) {
+        qWarning() << "GXModel: per-material SRB create failed";
+        delete srb;
+        return nullptr;
+    }
+
+    m_materialSrbs.insert(mat, srb);
+    return srb;
+}
 
 void GXModel::destroyRhiResources()
 {
     if (m_ps) { m_ps->destroy(); delete m_ps; m_ps = nullptr; }
-    if (m_srb) { m_srb->destroy(); delete m_srb; m_srb = nullptr; }
     if (m_vsUbuf) { m_vsUbuf->destroy(); delete m_vsUbuf; m_vsUbuf = nullptr; }
     if (m_fsUbuf) { m_fsUbuf->destroy(); delete m_fsUbuf; m_fsUbuf = nullptr; }
+    for (auto* srb : std::as_const(m_materialSrbs)) {
+        if (srb) { srb->destroy(); delete srb; }
+    }
+    m_materialSrbs.clear();
     m_pipelineDirty = true;
 }
 
 void GXModel::destroyPipelineResources()
 {
     if (m_ps) { m_ps->destroy(); delete m_ps; m_ps = nullptr; }
-    if (m_srb) { m_srb->destroy(); delete m_srb; m_srb = nullptr; }
     if (m_vsUbuf) { m_vsUbuf->destroy(); delete m_vsUbuf; m_vsUbuf = nullptr; }
     if (m_fsUbuf) { m_fsUbuf->destroy(); delete m_fsUbuf; m_fsUbuf = nullptr; }
+    for (auto* srb : std::as_const(m_materialSrbs)) {
+        if (srb) { srb->destroy(); delete srb; }
+    }
+    m_materialSrbs.clear();
 }

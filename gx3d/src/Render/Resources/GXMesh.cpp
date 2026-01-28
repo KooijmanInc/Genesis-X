@@ -16,8 +16,18 @@ GXMesh::~GXMesh()
 void GXMesh::setGeometry(const QVector<Vertex> &v, const QVector<quint16> &i)
 {
     m_vertices = v;
-    m_indices = i;
+    m_indices16 = i;
+    m_indices32.clear();
+    m_indexType = IndexUInt16;
+    m_dirty = true;
+}
 
+void GXMesh::setGeometry(const QVector<Vertex> &v, const QVector<quint32> &i)
+{
+    m_vertices = v;
+    m_indices32 = i;
+    m_indices16.clear();
+    m_indexType = IndexUInt32;
     m_dirty = true;
 }
 
@@ -26,7 +36,9 @@ void GXMesh::ensureResources(QRhi *rhi)
     if (!rhi) return;
 
     const int vsize = m_vertices.size() * int(sizeof(Vertex));
-    const int isize = m_indices.size() * int(sizeof(quint16));
+    const int isize = (m_indexType == IndexUInt32)
+        ?  (m_indices32.size() * int(sizeof(quint32)))
+        :  (m_indices16.size() * int(sizeof(quint16)));
 
     if (vsize <= 0 || isize <= 0) {
         qWarning() << "GXMesh::ensureResources called with empty geometry";
@@ -36,7 +48,7 @@ void GXMesh::ensureResources(QRhi *rhi)
     const bool needRecreate =
         (m_rhi != rhi) ||
         (!m_vbuf || !m_ibuf) ||
-        (m_ibufSize != vsize) ||
+        (m_vbufSize != vsize) ||
         (m_ibufSize != isize);
 
     // Recreate when QRhi backend/device changes
@@ -78,7 +90,12 @@ void GXMesh::uploadIfNeeded(QRhi *rhi, QRhiCommandBuffer *cb)
 
     // Upload raw bytes from QVector storage
     u->uploadStaticBuffer(m_vbuf, m_vertices.constData());
-    u->uploadStaticBuffer(m_ibuf, m_indices.constData());
+
+    if (m_indexType == IndexUInt32) {
+        u->uploadStaticBuffer(m_ibuf, m_indices32.constData());
+    } else {
+        u->uploadStaticBuffer(m_ibuf, m_indices16.constData());
+    }
 
     cb->resourceUpdate(u);
     m_dirty = false;

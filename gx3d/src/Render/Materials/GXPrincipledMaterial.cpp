@@ -9,9 +9,8 @@ using namespace gx::gx3d::render;
 GXPrincipledMaterial::GXPrincipledMaterial(QObject *parent)
     : GXMaterial{parent}
 {
-    GXTexture2D* defaultImg = new GXTexture2D(this);
-    defaultImg->setSource(QUrl(""));
-    m_baseColorTexture = defaultImg;
+    m_solidColorTex = new GXTexture2D(this);
+    m_solidColorTex->setDefaultImage(Qt::white);
 }
 
 QShader GXPrincipledMaterial::vertexShader() const
@@ -50,15 +49,15 @@ void GXPrincipledMaterial::fillFS(void* dst) const
     out.baseColor[2] = float(m_baseColor.blueF());
     out.baseColor[3] = float(m_baseColor.alphaF());
 
-    out.emissive[0] = float(m_emissiveColor.redF());
-    out.emissive[1] = float(m_emissiveColor.greenF());
-    out.emissive[2] = float(m_emissiveColor.blueF());
-    out.emissive[3] = float(m_emissiveStrength);
+    out.emission[0] = float(m_emissionColor.redF());
+    out.emission[1] = float(m_emissionColor.greenF());
+    out.emission[2] = float(m_emissionColor.blueF());
+    out.emission[3] = float(m_emissionStrength);
 
-    out.emissiveLight[0] = float(m_emissiveLightIntensity);
-    out.emissiveLight[1] = float(m_emissiveLightRadius);
-    out.emissiveLight[2] = float(m_emissiveLight ? 1.0f : 0.0f);
-    out.emissiveLight[3] = 0.0f;
+    out.emissionLight[0] = float(m_emissionLightIntensity);
+    out.emissionLight[1] = float(m_emissionLightRadius);
+    out.emissionLight[2] = float(m_emissionLight ? 1.0f : 0.0f);
+    out.emissionLight[3] = 0.0f;
 }
 
 void GXPrincipledMaterial::ensureBaseColorResources(QRhi *rhi, QRhiCommandBuffer *cb)
@@ -69,6 +68,11 @@ void GXPrincipledMaterial::ensureBaseColorResources(QRhi *rhi, QRhiCommandBuffer
         m_baseColorTexture->ensureRhi(rhi, cb);
         m_baseColorTex = m_baseColorTexture->rhiTexture();
         m_baseColorSampler = m_baseColorTexture->rhiSampler();
+    } else {
+        m_baseColorTexture = m_solidColorTex;
+        m_baseColorTexture->ensureRhi(rhi, cb);
+        m_baseColorTex = m_baseColorTexture->rhiTexture();
+        m_baseColorSampler = m_baseColorTexture->rhiSampler();
     }
 }
 
@@ -76,8 +80,11 @@ void GXPrincipledMaterial::setBaseColor(const QColor &c)
 {
     if (m_baseColor == c) return;
     m_baseColor = c;
+    m_emissionStrength = 0.0;
+    m_solidColorTex->setDefaultImage(c);
 
     emit baseColorChanged();
+    markDirty();
 }
 
 void GXPrincipledMaterial::setBaseColorTexture(GXTexture* tex)
@@ -89,42 +96,49 @@ void GXPrincipledMaterial::setBaseColorTexture(GXTexture* tex)
     markDirty();
 }
 
-void GXPrincipledMaterial::setEmissiveColor(const QColor &c)
+void GXPrincipledMaterial::setEmissionColor(const QColor &c)
 {
-    if (m_emissiveColor == c) return;
-    m_emissiveColor = c;
-
-    emit emissiveColorChanged();
+    if (m_emissionColor == c) return;
+    m_emissionColor = c;
+    qDebug() << "emCol" << m_emissionColor;
+    m_emissionStrength = 1.0;
+    emit emissionColorChanged();
+    markDirty();
 }
 
-void GXPrincipledMaterial::setEmissiveStrength(float s)
+void GXPrincipledMaterial::setEmissionStrength(float s)
 {
-    if (m_emissiveStrength == s) return;
-    m_emissiveStrength = s;
-
-    emit emissiveStrengthChanged();
+    s = qMax(0.0f, s);
+    if (qFuzzyCompare(m_emissionStrength, s)) return;
+    m_emissionStrength = s;
+    qDebug() << "emStr" << m_emissionStrength;
+    emit emissionStrengthChanged();
+    markDirty();
 }
 
-void GXPrincipledMaterial::setEmissiveLight(bool l)
+void GXPrincipledMaterial::setEmissionLight(bool l)
 {
-    if (m_emissiveLight == l) return;
-    m_emissiveLight = l;
+    if (m_emissionLight == l) return;
+    m_emissionLight = l;
 
-    emit emissiveLightChanged();
+    emit emissionLightChanged();
+    markDirty();
 }
 
-void GXPrincipledMaterial::setEmissiveLightIntensity(float l)
+void GXPrincipledMaterial::setEmissionLightIntensity(float l)
 {
-    if (m_emissiveLightIntensity == l) return;
-    m_emissiveLightIntensity = l;
+    if (m_emissionLightIntensity == l) return;
+    m_emissionLightIntensity = l;
 
-    emit emissiveLightIntensityChanged();
+    emit emissionLightIntensityChanged();
+    markDirty();
 }
 
-void GXPrincipledMaterial::setEmissiveLightRadius(float l)
+void GXPrincipledMaterial::setEmissionLightRadius(float l)
 {
-    if (m_emissiveLightRadius == l) return;
-    m_emissiveLightIntensity = l;
+    if (m_emissionLightRadius == l) return;
+    m_emissionLightIntensity = l;
 
-    emit emissiveLightIntensityChanged();
+    emit emissionLightIntensityChanged();
+    markDirty();
 }

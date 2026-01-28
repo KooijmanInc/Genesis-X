@@ -508,7 +508,8 @@ void GXSceneRenderNode::ensureDepthTarget(QRhi *rhi, QRhiRenderTarget *windowRt)
         m_lastSize = sz;
         m_lastSampleCount = sampleCount;
 
-        m_depthBuffer = rhi->newRenderBuffer(QRhiRenderBuffer::DepthStencil, sz, sampleCount);
+        m_depthBuffer = rhi->newRenderBuffer(QRhiRenderBuffer::DepthStencil, sz, sampleCount, QRhiRenderBuffer::UsedWithSwapChainOnly, QRhiTexture::D32F);
+
         if (!m_depthBuffer->create()) {
             qWarning() << "GXSceneRenderNode: depth buffer create failed";
             destroyDepthTarget();

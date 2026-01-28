@@ -4,6 +4,7 @@
 #ifndef GXNODE_H
 #define GXNODE_H
 
+#include <QUrl>
 #include <QObject>
 #include <QVector3D>
 #include <QMatrix4x4>
@@ -31,6 +32,8 @@ class GENESISX_GX3D_EXPORT GXNode : public QObject
     Q_PROPERTY(QVector3D back READ back NOTIFY backChanged)
     Q_PROPERTY(QVector3D left READ left NOTIFY leftChanged)
     Q_PROPERTY(QVector3D right READ right NOTIFY rightChanged)
+
+    Q_PROPERTY(QUrl sceneSource READ sceneSource WRITE setSceneSource NOTIFY sceneSourceChanged)
 
     Q_PROPERTY(QQmlListProperty<GXNode> children READ children)
 
@@ -62,6 +65,10 @@ public:
     QVector3D back() const;
     QVector3D left() const;
     QVector3D right() const;
+
+    QUrl sceneSource() const { return m_sceneSource; }
+    void setSceneSource(const QUrl& url);
+
     Q_INVOKABLE void addYaw(float degrees);
     Q_INVOKABLE void addPitch(float degrees);
 
@@ -73,6 +80,8 @@ public:
     QQmlListProperty<GXNode> children();
 
     const QVector<GXNode*> childrenNodes() const { return m_children; }
+
+    void addChild(GXNode* child);
 
 signals:
     void xChanged();
@@ -86,6 +95,7 @@ signals:
     void backChanged();
     void leftChanged();
     void rightChanged();
+    void sceneSourceChanged();
 
 protected:
     void markTransformDirty();
@@ -103,6 +113,9 @@ private:
     QQuaternion m_rotation;
     QVector3D m_scale {1,1,1};
     QVector3D m_eulerRotation {0,0,0};
+
+    QUrl m_sceneSource;
+    GXNode* m_sceneRoot = nullptr;
 
     bool m_dirty = true;
 };

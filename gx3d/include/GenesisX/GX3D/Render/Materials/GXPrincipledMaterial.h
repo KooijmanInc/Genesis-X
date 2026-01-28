@@ -10,6 +10,7 @@
 #include <GenesisX/GX3D/Render/Materials/GXPrincipledUniforms.h>
 
 #include <GenesisX/GX3D/Render/Texture/GXTexture.h>
+#include <GenesisX/GX3D/Render/Texture/GXTexture2D.h>
 
 namespace gx::gx3d::render {
 
@@ -19,11 +20,11 @@ class GENESISX_GX3D_EXPORT GXPrincipledMaterial : public GXMaterial
 
     Q_PROPERTY(QColor baseColor READ baseColor WRITE setBaseColor NOTIFY baseColorChanged)
     Q_PROPERTY(GXTexture* baseColorTexture READ baseColorTexture WRITE setBaseColorTexture NOTIFY baseColorTextureChanged)
-    Q_PROPERTY(QColor emissiveColor READ emissiveColor WRITE setEmissiveColor NOTIFY emissiveColorChanged)
-    Q_PROPERTY(float emissiveStrength READ emissiveStrength WRITE setEmissiveStrength NOTIFY emissiveStrengthChanged)
-    Q_PROPERTY(bool emissiveLight READ emissiveLight WRITE setEmissiveLight NOTIFY emissiveLightChanged)
-    Q_PROPERTY(float emissiveLightIntensity READ emissiveLightIntensity WRITE setEmissiveLightIntensity NOTIFY emissiveLightIntensityChanged)
-    Q_PROPERTY(float emissiveLightRadius READ emissiveLightRadius WRITE setEmissiveLightRadius NOTIFY emissiveLightRadiusChanged)
+    Q_PROPERTY(QColor emissionColor READ emissionColor WRITE setEmissionColor NOTIFY emissionColorChanged)
+    Q_PROPERTY(float emissionStrength READ emissionStrength WRITE setEmissionStrength NOTIFY emissionStrengthChanged)
+    Q_PROPERTY(bool emissionLight READ emissionLight WRITE setEmissionLight NOTIFY emissionLightChanged)
+    Q_PROPERTY(float emissionLightIntensity READ emissionLightIntensity WRITE setEmissionLightIntensity NOTIFY emissionLightIntensityChanged)
+    Q_PROPERTY(float emissionLightRadius READ emissionLightRadius WRITE setEmissionLightRadius NOTIFY emissionLightRadiusChanged)
 
 public:
     explicit GXPrincipledMaterial(QObject* parent = nullptr);
@@ -48,41 +49,43 @@ public:
     GXTexture* baseColorTexture() const { return m_baseColorTexture; }
     void setBaseColorTexture(GXTexture* tex);
 
-    QColor emissiveColor() const { return m_emissiveColor; }
-    void setEmissiveColor(const QColor& c);
+    QColor emissionColor() const { return m_emissionColor; }
+    void setEmissionColor(const QColor& c);
 
-    float emissiveStrength() const { return m_emissiveStrength; }
-    void setEmissiveStrength(float s);
+    float emissionStrength() const { return m_emissionStrength; }
+    void setEmissionStrength(float s);
 
-    bool emissiveLight() const { return m_emissiveLight; }
-    void setEmissiveLight(bool l);
+    bool emissionLight() const { return m_emissionLight; }
+    void setEmissionLight(bool l);
 
-    float emissiveLightIntensity() const { return m_emissiveLightIntensity; }
-    void setEmissiveLightIntensity(float l);
+    float emissionLightIntensity() const { return m_emissionLightIntensity; }
+    void setEmissionLightIntensity(float l);
 
-    float emissiveLightRadius() const { return m_emissiveLightRadius; }
-    void setEmissiveLightRadius(float l);
+    float emissionLightRadius() const { return m_emissionLightRadius; }
+    void setEmissionLightRadius(float l);
 
 signals:
     void baseColorChanged();
     void baseColorTextureChanged();
-    void emissiveColorChanged();
-    void emissiveStrengthChanged();
-    void emissiveLightChanged();
-    void emissiveLightIntensityChanged();
-    void emissiveLightRadiusChanged();
+    void emissionColorChanged();
+    void emissionStrengthChanged();
+    void emissionLightChanged();
+    void emissionLightIntensityChanged();
+    void emissionLightRadiusChanged();
 
 private:
     QShader m_vs, m_fs;
     QColor m_baseColor = Qt::white;
     GXTexture* m_baseColorTexture = nullptr;
-    QColor m_emissiveColor = Qt::black;
+    QColor m_emissionColor = Qt::black;
 
-    float m_emissiveStrength = 0.0f;
-    float m_emissiveLightIntensity = 0.0f;
-    float m_emissiveLightRadius = 0.0f;
+    float m_emissionStrength = 0.0f;
+    float m_emissionLightIntensity = 0.0f;
+    float m_emissionLightRadius = 0.0f;
 
-    bool m_emissiveLight = false;
+    bool m_emissionLight = false;
+
+    GXTexture2D* m_solidColorTex = nullptr;
 };
 
 }

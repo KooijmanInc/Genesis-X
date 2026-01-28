@@ -110,6 +110,24 @@ void GXMaterial::ensureRhi(QRhi *rhi, QRhiCommandBuffer *cb)
     ensureBaseColorResources(rhi, cb);
 }
 
+QColor GXMaterial::gxParseColor(const QString &s)
+{
+    const QString t = s.trimmed();
+
+    // If it looks like #RRGGBBAA (Blender)
+    if (t.size() == 9 && t.startsWith('#')) {
+        const QString rrggbbaa = t.mid(1);
+        const QString rr = rrggbbaa.mid(0,2);
+        const QString gg = rrggbbaa.mid(2,2);
+        const QString bb = rrggbbaa.mid(4,2);
+        const QString aa = rrggbbaa.mid(6,2);
+        return QColor("#" + aa + rr + gg + bb); // Qt wants AARRGGBB
+    }
+
+    // #RRGGBB or named colors etc
+    return QColor(t);
+}
+
 void GXMaterial::markDirty()
 {
     if (m_dirty) return;

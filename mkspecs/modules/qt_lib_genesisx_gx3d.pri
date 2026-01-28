@@ -3,5 +3,5 @@
 
 # ---- GenesisX (3D) qmake module ----
 QT.genesisx_3d.name          = genesisx_3d
-QT.genesisx_3d.depends       = genesisx
+QT.genesisx_3d.depends       = genesisx_app_core
 QT.genesisx_3d.friendly_name = GenesisX 3D

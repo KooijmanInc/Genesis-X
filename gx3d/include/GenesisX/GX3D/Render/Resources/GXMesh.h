@@ -6,7 +6,10 @@
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
+#include <GenesisX/GX3D/Render/Resources/GXSubMesh.h>
+
 #include <QVector>
+#include <QDebug>
 
 class QRhi;
 class QRhiBuffer;
@@ -23,19 +26,37 @@ public:
         float u, v;
     };
 
+    enum IndexType {
+        IndexUInt16,
+        IndexUInt32
+    };
+
     GXMesh() = default;
     virtual ~GXMesh();
 
-    bool isReady() const { return m_vbuf && m_ibuf && !m_vertices.isEmpty() && !m_indices.isEmpty(); }
+    bool isReady() const {
+        if (!m_vbuf || !m_ibuf) return false;
+        if (m_vertices.isEmpty()) return false;
+
+        if (m_indexType == IndexUInt32) return !m_indices32.isEmpty();
+        return !m_indices16.isEmpty();
+    }
 
     // CPU data
     const QVector<Vertex>& vertices() const { return m_vertices; }
-    const QVector<quint16>& indices() const { return m_indices; }
+
+    const QVector<quint16>& indices() const { return m_indices16; }
 
     int vertexCount() const { return m_vertices.size(); }
-    int indexCount() const { return m_indices.size(); }
+    int indexCount() const {
+        return (m_indexType == IndexUInt32) ? m_indices32.size()
+                                            : m_indices16.size();
+    }
+
+    IndexType indexType() const { return m_indexType; }
 
     void setGeometry(const QVector<Vertex>& v, const QVector<quint16>& i);
+    void setGeometry(const QVector<Vertex>& v, const QVector<quint32>& i);
 
     // GPU resources
     void ensureResources(QRhi* rhi);
@@ -44,11 +65,15 @@ public:
     QRhiBuffer* vertexBuffer() const { return m_vbuf; }
     QRhiBuffer* indexBuffer() const { return m_ibuf; }
 
+    const QVector<GXSubMesh>& subMeshes() const { return m_subMeshes; }
+    void addSubMesh(const GXSubMesh& sm) { return m_subMeshes.append(sm); }
+
     void destroyRhiResources();
 
 protected:
     QVector<Vertex> m_vertices;
-    QVector<quint16> m_indices;
+    QVector<quint16> m_indices16;
+    QVector<quint32> m_indices32;
 
     QRhi* m_rhi = nullptr;
     QRhiBuffer* m_vbuf = nullptr;
@@ -56,6 +81,11 @@ protected:
     int m_vbufSize = 0;
     int m_ibufSize = 0;
     bool m_dirty = true;
+
+    IndexType m_indexType = IndexUInt16;
+
+private:
+    QVector<GXSubMesh> m_subMeshes;
 };
 
 }

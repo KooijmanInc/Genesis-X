@@ -16,6 +16,12 @@ Module {
             type: "QVector3D"
         }
         Property {
+            name: "eulerRotation"
+            type: "vector3d"
+            read: "eulerRotation"
+            notify: "eulerRotationChanged"
+        }
+        Property {
             name: "target"
             type: "QVector3D"
         }

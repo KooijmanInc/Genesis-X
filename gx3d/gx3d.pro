@@ -55,7 +55,8 @@ android {
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/gx3d/include
 
 HEADERS += $$files($$PWD/include/GenesisX/*.h, true) \
-    $$files($$PWD/src/*.h, true)
+    $$files($$PWD/src/*.h, true) \
+    include/GenesisX/GX3D/Render/Resources/GXSubMesh.h
 
 SOURCES += $$files($$PWD/src/*.cpp, true)
 

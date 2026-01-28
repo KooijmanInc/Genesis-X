@@ -43,5 +43,11 @@ Module {
             read: "z"
             notify: "zChanged"
         }
+        Property {
+            name: "sceneSource"
+            type: "string"
+            read: "sceneSource"
+            notify: "sceneSourceChanged"
+        }
     }
 }

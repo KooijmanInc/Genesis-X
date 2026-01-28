@@ -48,6 +48,12 @@ Module {
             notify: "materialChanged"
         }
         Property {
+            name: "materials"
+            type: "QQmlListProperty"
+            read: "materials"
+            notify: "materialsChanged"
+        }
+        Property {
             name: "x"
             type: "float"
             read: "x"

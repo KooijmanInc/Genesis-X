@@ -20,8 +20,8 @@ struct alignas(16) PrincipledVSUBO {
 
 struct alignas(16) PrincipledFSUBO {
     float baseColor[4];
-    float emissive[4];
-    float emissiveLight[4];
+    float emission[4];
+    float emissionLight[4];
 };
 
 }

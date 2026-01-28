@@ -32,6 +32,8 @@ public:
     void setImage(const QImage& img);
     const QImage& image() const { return m_image; }
 
+    void setDefaultImage(const QColor& color);
+
 signals:
     void sourceChanged();
     void flipVerticalChanged();
