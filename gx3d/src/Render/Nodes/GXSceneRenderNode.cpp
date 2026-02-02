@@ -3,6 +3,8 @@
 
 #include <GenesisX/GX3D/Render/Nodes/GXSceneRenderNode.h>
 #include <GenesisX/GX3D/Render/Nodes/GXRenderableNode.h>
+#include <GenesisX/GX3D/Render/Nodes/GXModelNode.h>
+#include <GenesisX/GX3D/Render/Materials/GXPrincipledMaterial.h>
 #include <GenesisX/GX3D/Scene/GXScene.h>
 
 #include <QObject>
@@ -79,6 +81,35 @@ static QSize surfacePixelSize(QRhiRenderTarget* rt)
         if (auto* sc = swrt->swapChain()) return sc->currentPixelSize();
     }
     return rt? rt->pixelSize() : QSize();
+}
+
+static bool gxExtractFakeEmissionLight(GXMaterial* mat, QColor& outColor, float& outIntensity, float& outRadius)
+{
+    using PM = GXPrincipledMaterial;
+
+    auto* pm = qobject_cast<PM*>(mat);
+    if (!pm) return false;
+
+    if (pm->emissionLight() != PM::FakeLight) return false;
+
+    const QColor c = pm->emissionColor();
+
+    float strength = pm->emissionStrength();
+    if (strength <= 0.0f) strength = 0.5f;
+
+    float intensity = pm->emissionLightIntensity();
+    if (intensity <= 0.0f) intensity = strength;
+
+    float radius = pm->emissionLightRadius();
+    if (radius <= 0.0f) radius = 6.0f;
+
+    if (intensity <= 0.0f || radius <= 0.0f) return false;
+
+    outColor = c;
+    outIntensity = intensity;
+    outRadius = radius;
+
+    return true;
 }
 
 GXSceneRenderNode::GXSceneRenderNode() = default;
@@ -251,6 +282,7 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
     m_scene->traverse([&](scene::GXNode* n) {
         if (count >= used) return;
 
+        // point light
         if (auto* p = qobject_cast<scene::GXPointLight*>(n)) {
             const QVector3D posWS = p->worldMatrix().map(QVector3D(0, 0, 0));
             const QVector3D col = QVector3D(p->color().redF(), p->color().greenF(), p->color().blueF());
@@ -264,6 +296,7 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
             return;
         }
 
+        // spot light
         if (auto* s = qobject_cast<scene::GXSpotLight*>(n)) {
             const QVector3D posWS = s->worldMatrix().map(QVector3D(0,0,0));
             const QVector3D dirWS = s->directionWS().normalized();
@@ -283,6 +316,13 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
 
             return;
         }
+
+        // qDebug() << n->objectName();
+        // check emission materials
+        // if (auto* m = qobject_cast<GXModel*>(n)) {
+        //     auto mats = m->materials();
+
+        // }
     });
 
     fl.frameParams = QVector4D(float(count), (m_scene && m_scene->debugLighting()) ? 0.15f : 0.0f, 0.0f, 0.0f);

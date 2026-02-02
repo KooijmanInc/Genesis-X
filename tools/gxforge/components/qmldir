@@ -1,0 +1,6 @@
+module components
+EditorState 1.0 EditorState.qml
+GXTabButton 1.0 GXTabButton.qml
+GXTabBar 1.0 GXTabBar.qml
+GXPanelHost 1.0 GXPanelHost.qml
+GXButton 1.0 GXButton.qml

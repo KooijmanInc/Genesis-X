@@ -116,7 +116,7 @@ void GXPrincipledMaterial::setEmissionStrength(float s)
     markDirty();
 }
 
-void GXPrincipledMaterial::setEmissionLight(bool l)
+void GXPrincipledMaterial::setEmissionLight(const EmissionLight& l)
 {
     if (m_emissionLight == l) return;
     m_emissionLight = l;

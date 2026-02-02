@@ -13,8 +13,11 @@
 #include <GenesisX/GX3D/Render/Nodes/GXRenderableNode.h>
 #include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
 #include <GenesisX/GX3D/Render/Resources/GXMesh.h>
+#include <GenesisX/GX3D/Render/Utils/GXMeshData.h>
 
 namespace gx::gx3d::render {
+
+class GXMeshReader;
 
 class GENESISX_GX3D_EXPORT GXModel : public GXRenderableNode
 {
@@ -94,6 +97,11 @@ private:
     QRhiBuffer* m_boundLightingUbo = nullptr;
     bool m_boundHadLighting = false;
 
+    QString m_loadedMeshSource;
+    GXMeshData m_meshCpu;
+    bool m_meshLoaded = false;
+
+    bool ensureMeshLoaded(QString* err = nullptr);
 
     void destroyRhiResources();
     void destroyPipelineResources();

@@ -19,5 +19,29 @@ Module {
             read: "baseColorTexture"
             notify: "baseColorTextureChanged"
         }
+        Property {
+            name: "emissionColor"
+            type: "string"
+            read: "emissionColor"
+            notify: "emissionColorChanged"
+        }
+        Property {
+            name: "emissionStrength"
+            type: "float"
+            read: "emissionStrength"
+            notify: "emissionStrengthChanged"
+        }
+        Property {
+            name: "emissionLightIntensity"
+            type: "float"
+            read: "emissionLightIntensity"
+            notify: "emissionLightIntensityChanged"
+        }
+        Property {
+            name: "emissionLightRadius"
+            type: "float"
+            read: "emissionLightRadius"
+            notify: "emissionLightRadiusChanged"
+        }
     }
 }

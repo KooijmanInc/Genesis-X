@@ -15,5 +15,6 @@
         <file>gxdefaultlitmaterial.qmltypes</file>
         <file>gxprincipledmaterial.qmltypes</file>
         <file>gxtexture2d.qmltypes</file>
+        <file>gxspotlight.qmltypes</file>
     </qresource>
 </RCC>

@@ -7,6 +7,7 @@
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
 #include <GenesisX/GX3D/Render/Resources/GXSubMesh.h>
+#include <GenesisX/GX3D/Render/Utils/GXMeshData.h>
 
 #include <QVector>
 #include <QDebug>
@@ -59,6 +60,9 @@ public:
     void setGeometry(const QVector<Vertex>& v, const QVector<quint32>& i);
 
     // GPU resources
+    void setCpuData(const GXMeshData& data);
+    bool hasCpuData() const { return !m_cpu.vertices.isEmpty(); }
+
     void ensureResources(QRhi* rhi);
     void uploadIfNeeded(QRhi* rhi, QRhiCommandBuffer* cb);
 
@@ -86,6 +90,10 @@ protected:
 
 private:
     QVector<GXSubMesh> m_subMeshes;
+
+    GXMeshData m_cpu;
+    bool m_uploadDirty = false;
+    void syncFromCpuIfNeeded();
 };
 
 }

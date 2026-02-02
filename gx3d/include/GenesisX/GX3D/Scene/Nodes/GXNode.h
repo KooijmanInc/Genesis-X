@@ -13,13 +13,15 @@
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
+#include <GenesisX/GX3D/Render/Materials/GXMaterial.h>
+
 namespace gx::gx3d::scene {
 
 class GENESISX_GX3D_EXPORT GXNode : public QObject
 {
     Q_OBJECT
 
-    Q_CLASSINFO("DefaultProperty", "children")
+    Q_CLASSINFO("DefaultProperty", "data")
 
     Q_PROPERTY(float x READ x WRITE setX NOTIFY positionChanged)
     Q_PROPERTY(float y READ y WRITE setY NOTIFY positionChanged)
@@ -35,7 +37,9 @@ class GENESISX_GX3D_EXPORT GXNode : public QObject
 
     Q_PROPERTY(QUrl sceneSource READ sceneSource WRITE setSceneSource NOTIFY sceneSourceChanged)
 
-    Q_PROPERTY(QQmlListProperty<GXNode> children READ children)
+    Q_PROPERTY(QQmlListProperty<QObject> data READ data)
+    Q_PROPERTY(QQmlListProperty<GXNode> children READ children NOTIFY childrenChanged)
+    Q_PROPERTY(QQmlListProperty<render::GXMaterial> materials READ materials NOTIFY materialsChanged)
 
 public:
     explicit GXNode(QObject* parent = nullptr);
@@ -77,9 +81,14 @@ public:
 
     QVector3D worldPosition() const;
 
-    QQmlListProperty<GXNode> children();
+    QQmlListProperty<QObject> data();
 
-    const QVector<GXNode*> childrenNodes() const { return m_children; }
+    QQmlListProperty<GXNode> children();
+    const QList<GXNode*>& childrenNodes() const { return m_children; }
+    // const QVector<GXNode*> childrenNodes() const { return m_children; }
+
+    QQmlListProperty<render::GXMaterial> materials();
+    const QList<render::GXMaterial*>& materialsList() const { return m_materials; }
 
     void addChild(GXNode* child);
 
@@ -96,18 +105,32 @@ signals:
     void leftChanged();
     void rightChanged();
     void sceneSourceChanged();
+    void childrenChanged();
+    void materialsChanged();
 
 protected:
     void markTransformDirty();
 
 private:
+    static void dataAppend(QQmlListProperty<QObject>* p, QObject* o);
+    static qsizetype dataCount(QQmlListProperty<QObject>* p);
+    static QObject* dataAt(QQmlListProperty<QObject>* p, qsizetype i);
+    static void dataClear(QQmlListProperty<QObject>* p);
+
     static void appendChild(QQmlListProperty<GXNode>* prop, GXNode* child);
     static qsizetype childCount(QQmlListProperty<GXNode>* prop);
     static GXNode* childAt(QQmlListProperty<GXNode>* prop, qsizetype index);
     static void clearChildren(QQmlListProperty<GXNode>* prop);
 
+    static void materialAppend(QQmlListProperty<render::GXMaterial>* p, render::GXMaterial* o);
+    static qsizetype materialCount(QQmlListProperty<render::GXMaterial>* p);
+    static render::GXMaterial* materialAt(QQmlListProperty<render::GXMaterial>* p, qsizetype i);
+    static void materialClear(QQmlListProperty<render::GXMaterial>* p);
+
 private:
-    QVector<GXNode*> m_children;
+    // QVector<GXNode*> m_children;
+    QList<GXNode*> m_children;
+    QList<render::GXMaterial*> m_materials;
 
     QVector3D m_pos {0,0,0};
     QQuaternion m_rotation;

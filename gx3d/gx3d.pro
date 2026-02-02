@@ -53,6 +53,11 @@ android {
 }
 
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/gx3d/include
+INCLUDEPATH += \
+    src \
+    ../core/include
+DEPENDPATH += \
+    ../core/include
 
 HEADERS += $$files($$PWD/include/GenesisX/*.h, true) \
     $$files($$PWD/src/*.h, true)

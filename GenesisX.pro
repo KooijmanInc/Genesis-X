@@ -13,7 +13,9 @@ SUBDIRS += \
     gx3d
 
 !android:!ios:!wasm:!macos {
-    SUBDIRS += tools/gxgen
+    SUBDIRS += \
+        tools/gxgen \
+        tools/gxforge
 }
 
 core.subdir = $$PWD/core
@@ -46,6 +48,7 @@ DISTFILES += \
     LICENSES/GPL-3.0-only.txt \
     mkspecs/features/conf/gx_framework.prf \
     mkspecs/features/conf/gx_gx3d.prf \
+    mkspecs/features/conf/gx_io.prf \
     mkspecs/features/genesisx_app_core.prf \
     mkspecs/features/genesisx_assets.prf \
     mkspecs/features/gx_app_ab.prf \
@@ -117,6 +120,7 @@ DISTFILES += \
     mkspecs/modules/qt_lib_genesisx_assets.pri \
     mkspecs/modules/qt_lib_genesisx_framework \
     mkspecs/modules/qt_lib_genesisx_gx3d.pri \
+    mkspecs/modules/qt_lib_genesisx_io.pri \
     mkspecs/modules/qt_lib_genesisx_settings.pri \
     mkspecs/modules/qt_lib_genesisx_validation.pri \
     scripts/install.bat \
