@@ -22,11 +22,17 @@ class GENESISX_GX3D_EXPORT GXPrincipledMaterial : public GXMaterial
     Q_PROPERTY(GXTexture* baseColorTexture READ baseColorTexture WRITE setBaseColorTexture NOTIFY baseColorTextureChanged)
     Q_PROPERTY(QColor emissionColor READ emissionColor WRITE setEmissionColor NOTIFY emissionColorChanged)
     Q_PROPERTY(float emissionStrength READ emissionStrength WRITE setEmissionStrength NOTIFY emissionStrengthChanged)
-    Q_PROPERTY(bool emissionLight READ emissionLight WRITE setEmissionLight NOTIFY emissionLightChanged)
+    Q_PROPERTY(EmissionLight emissionLight READ emissionLight WRITE setEmissionLight NOTIFY emissionLightChanged)
     Q_PROPERTY(float emissionLightIntensity READ emissionLightIntensity WRITE setEmissionLightIntensity NOTIFY emissionLightIntensityChanged)
     Q_PROPERTY(float emissionLightRadius READ emissionLightRadius WRITE setEmissionLightRadius NOTIFY emissionLightRadiusChanged)
 
 public:
+    enum EmissionLight {
+        None,
+        FakeLight,
+        TrueLight
+    };
+    Q_ENUM(EmissionLight)
     explicit GXPrincipledMaterial(QObject* parent = nullptr);
 
     QShader vertexShader() const override;
@@ -55,8 +61,8 @@ public:
     float emissionStrength() const { return m_emissionStrength; }
     void setEmissionStrength(float s);
 
-    bool emissionLight() const { return m_emissionLight; }
-    void setEmissionLight(bool l);
+    EmissionLight emissionLight() const { return m_emissionLight; }
+    void setEmissionLight(const EmissionLight& l);
 
     float emissionLightIntensity() const { return m_emissionLightIntensity; }
     void setEmissionLightIntensity(float l);
@@ -83,7 +89,7 @@ private:
     float m_emissionLightIntensity = 0.0f;
     float m_emissionLightRadius = 0.0f;
 
-    bool m_emissionLight = false;
+    EmissionLight m_emissionLight = None;
 
     GXTexture2D* m_solidColorTex = nullptr;
 };

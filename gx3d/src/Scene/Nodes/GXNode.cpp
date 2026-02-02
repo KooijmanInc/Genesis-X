@@ -169,6 +169,18 @@ QVector3D GXNode::worldPosition() const
     return worldMatrix().map(QVector3D(0,0,0));
 }
 
+QQmlListProperty<QObject> GXNode::data()
+{
+    return QQmlListProperty<QObject>(
+        this,
+        this,
+        &GXNode::dataAppend,
+        &GXNode::dataCount,
+        &GXNode::dataAt,
+        &GXNode::dataClear
+        );
+}
+
 QQmlListProperty<GXNode> GXNode::children()
 {
     return QQmlListProperty<GXNode>(
@@ -179,6 +191,18 @@ QQmlListProperty<GXNode> GXNode::children()
         &GXNode::childAt,
         &GXNode::clearChildren
     );
+}
+
+QQmlListProperty<gx::gx3d::render::GXMaterial> GXNode::materials()
+{
+    return QQmlListProperty<render::GXMaterial>(
+        this,
+        this,
+        &GXNode::materialAppend,
+        &GXNode::materialCount,
+        &GXNode::materialAt,
+        &GXNode::materialClear
+        );
 }
 
 void GXNode::addChild(GXNode *child)
@@ -192,6 +216,68 @@ void GXNode::addChild(GXNode *child)
 void GXNode::markTransformDirty()
 {
     m_dirty = true;
+}
+
+void GXNode::dataAppend(QQmlListProperty<QObject> *p, QObject *o)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    if (!self || !o) return;
+
+    // Route by type
+    if (auto* n = qobject_cast<GXNode*>(o)) {
+        if (!self->m_children.contains(n)) {
+            self->m_children.append(n);
+            if (!n->parent()) n->setParent(self);
+            emit self->childrenChanged();
+        }
+        return;
+    }
+
+    if (auto* m = qobject_cast<gx::gx3d::render::GXMaterial*>(o)) {
+        if (!self->m_materials.contains(m)) {
+            self->m_materials.append(m);
+            if (!m->parent()) m->setParent(self);
+            emit self->materialsChanged();
+        }
+        return;
+    }
+
+    // Unknown object type: keep ownership to avoid leaks, but otherwise ignore
+    if (!o->parent()) o->setParent(self);
+}
+
+qsizetype GXNode::dataCount(QQmlListProperty<QObject> *p)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    if (!self) return 0;
+    return self->m_children.size() + self->m_materials.size();
+}
+
+QObject *GXNode::dataAt(QQmlListProperty<QObject> *p, qsizetype i)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    if (!self) return nullptr;
+
+    if (i < self->m_children.size())
+        return self->m_children.at(i);
+
+    const qsizetype j = i - self->m_children.size();
+    if (j < self->m_materials.size())
+        return self->m_materials.at(j);
+
+    return nullptr;
+}
+
+void GXNode::dataClear(QQmlListProperty<QObject> *p)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    if (!self) return;
+
+    self->m_children.clear();
+    self->m_materials.clear();
+
+    emit self->childrenChanged();
+    emit self->materialsChanged();
 }
 
 void GXNode::appendChild(QQmlListProperty<GXNode> *prop, GXNode *child)
@@ -220,4 +306,43 @@ void GXNode::clearChildren(QQmlListProperty<GXNode> *prop)
 {
     auto* self = static_cast<GXNode*>(prop->data);
     self->m_children.clear();
+}
+
+void GXNode::materialAppend(QQmlListProperty<render::GXMaterial> *p, render::GXMaterial *m)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    if (!self || !m) return;
+
+    if (self->m_materials.contains(m))
+        return;
+
+    self->m_materials.append(m);
+
+    if (!m->parent())
+        m->setParent(self);
+
+    emit self->materialsChanged();
+}
+
+qsizetype GXNode::materialCount(QQmlListProperty<render::GXMaterial> *p)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    return self ? self->m_materials.size() : 0;
+}
+
+gx::gx3d::render::GXMaterial *GXNode::materialAt(QQmlListProperty<render::GXMaterial> *p, qsizetype i)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    if (!self) return nullptr;
+    if (i < 0 || i >= self->m_materials.size()) return nullptr;
+    return self->m_materials.at(i);
+}
+
+void GXNode::materialClear(QQmlListProperty<render::GXMaterial> *p)
+{
+    auto* self = static_cast<GXNode*>(p->data);
+    if (!self) return;
+
+    self->m_materials.clear();
+    emit self->materialsChanged();
 }

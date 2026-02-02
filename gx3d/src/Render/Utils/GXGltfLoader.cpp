@@ -5,6 +5,8 @@
 
 #include <GenesisX/GX3D/Render/Resources/GXMesh.h>
 #include <GenesisX/GX3D/Render/Nodes/GXModelNode.h>
+#include <GenesisX/GX3D/Scene/Lights/GXPointLight.h>
+#include <GenesisX/GX3D/Scene/Lights/GXSpotLight.h>
 #include <GenesisX/GX3D/Render/Materials/GXPrincipledMaterial.h>
 
 #include <QFile>
@@ -731,6 +733,7 @@ static QVector<int> sceneRootNodes(const QJsonObject& root)
 
 static void buildNodeRecursive(
     const QJsonArray& nodesA,
+    const QJsonObject& extensionsA,
     int nodeIndex,
     const QVector<gx::gx3d::render::GXMesh*>& meshes,
     const QVector<int>& meshToMatIndex,
@@ -789,7 +792,53 @@ static void buildNodeRecursive(
     // Recurse children
     const auto childrenA = n.value("children").toArray();
     for (const auto& c : childrenA)
-        buildNodeRecursive(nodesA, c.toInt(-1), meshes, meshToMatIndex, gltfMaterials, fallbackMat, node, tileCenters);
+        buildNodeRecursive(nodesA, extensionsA, c.toInt(-1), meshes, meshToMatIndex, gltfMaterials, fallbackMat, node, tileCenters);
+
+    if (n.contains("extensions")) {
+        const QJsonObject ext = n.value("extensions").toObject();
+        if (ext.contains("KHR_lights_punctual")) {
+            const QJsonObject lights = ext.value("KHR_lights_punctual").toObject();
+            const QJsonObject khR = extensionsA.value("KHR_lights_punctual").toObject();
+            const QJsonArray lightsA = khR.value("lights").toArray();
+            if (lights.value("light").toDouble() < lightsA.size()) {
+                const QJsonObject lightSpecs = lightsA[lights.value("light").toDouble()].toObject();
+                const QJsonArray color = lightSpecs.value("color").toArray();
+                float intensity = 0;
+                if (lightSpecs.contains("scale")) {
+                    qDebug() << "light intensity" << lightSpecs.value("intensity").toDouble();
+                } else {
+                    intensity = 10;
+                }
+                // if type === spot: get key spot
+                if (lightSpecs.value("type").toString() == "spot") {
+                    QJsonObject cones = lightSpecs.value("spot").toObject();
+                    auto* lighting = new gx::gx3d::scene::GXSpotLight(node);
+                    const float r = float(color.at(0).toDouble());
+                    const float g = float(color.at(1).toDouble());
+                    const float b = float(color.at(2).toDouble());
+
+                    lighting->setColor(QColor::fromRgbF(r, g, b, 1.0f));
+                    lighting->setIntensity(intensity);
+                    lighting->setInnerConeAngle(float(cones.value("innerConeAngle").toDouble() * (360.0f / M_PI)));
+                    lighting->setOuterConeAngle(float(cones.value("outerConeAngle").toDouble() * (360.0f / M_PI)));
+                    qDebug() << cones.value("outerConeAngle").toDouble() * (180.0f / M_PI) << cones.value("innerConeAngle").toDouble() * (180.0f / M_PI);
+                    node->addChild(lighting);
+                } else if (lightSpecs.value("type").toString() == "point") {
+                    auto* lighting = new gx::gx3d::scene::GXPointLight(node);
+                    const float r = float(color.at(0).toDouble());
+                    const float g = float(color.at(1).toDouble());
+                    const float b = float(color.at(2).toDouble());
+
+                    lighting->setColor(QColor::fromRgbF(r, g, b, 1.0f));
+                    lighting->setIntensity(intensity);
+                    node->addChild(lighting);
+                } else {
+                    qDebug() << "light type" << lightSpecs.value("type");
+                    qDebug() << "all light specs" << lightSpecs;
+                }
+            }
+        }
+    }
 }
 
 gx::gx3d::scene::GXNode* GXGltfLoader::loadSceneRoot(const QUrl& source)
@@ -833,6 +882,8 @@ gx::gx3d::scene::GXNode* GXGltfLoader::loadSceneRoot(const QUrl& source)
         qWarning() << "GXGltfLoader: no nodes in" << path;
         return nullptr;
     }
+
+    const QJsonObject extensionsA = root.value("extensions").toObject();
 
     const auto matsA = root.value("materials").toArray();
     // qDebug() << "GLTF materials count =" << matsA.size();
@@ -884,10 +935,6 @@ gx::gx3d::scene::GXNode* GXGltfLoader::loadSceneRoot(const QUrl& source)
                 m->setEmissionStrength(emissionStrength);
             }
         }
-        // for (auto& keys : mo.keys()) {
-        //     qDebug() << "all keys" << keys;
-        // }
-
 
         gltfMaterials.push_back(m);
     }
@@ -910,9 +957,9 @@ gx::gx3d::scene::GXNode* GXGltfLoader::loadSceneRoot(const QUrl& source)
     const auto roots = sceneRootNodes(root);
     if (!roots.isEmpty()) {
         for (int ri : roots)
-            buildNodeRecursive(nodesA, ri, meshes, meshToMatIndex, gltfMaterials, fallbackMat, rootNode, nullptr);
+            buildNodeRecursive(nodesA, extensionsA, ri, meshes, meshToMatIndex, gltfMaterials, fallbackMat, rootNode, nullptr);
     } else {
-        buildNodeRecursive(nodesA, 0, meshes, meshToMatIndex, gltfMaterials, fallbackMat, rootNode, nullptr);
+        buildNodeRecursive(nodesA, extensionsA, 0, meshes, meshToMatIndex, gltfMaterials, fallbackMat, rootNode, nullptr);
     }
 
     return rootNode;

@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/components">
+        <file alias="qmldir">components/qmldir</file>
+        <file alias="GXTabButton.qml">components/GXTabButton.qml</file>
+        <file alias="GXTabBar.qml">components/GXTabBar.qml</file>
+        <file alias="GXPanelHost.qml">components/GXPanelHost.qml</file>
+        <file alias="EditorState.qml">components/EditorState.qml</file>
+        <file alias="GXButton.qml">components/GXButton.qml</file>
+        <file alias="panels/InputPanel.qml">components/panels/InputPanel.qml</file>
+
+    </qresource>
+</RCC>

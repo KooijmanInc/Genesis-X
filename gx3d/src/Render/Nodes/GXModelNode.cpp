@@ -10,7 +10,9 @@
 #include <GenesisX/GX3D/Render/Meshes/GXSphereMesh.h>
 #include <GenesisX/GX3D/Render/Meshes/GXTorusMesh.h>
 #include <GenesisX/GX3D/Render/Utils/GXGltfLoader.h>
+#include <GenesisX/GX3D/Render/Utils/GXMeshReader.h>
 
+#include <QFileInfo>
 #include <QVector4D>
 
 using namespace gx::gx3d::render;
@@ -87,6 +89,11 @@ void GXModel::setSource(QString src)
     m_source = src;
     delete m_mesh;
     m_mesh = nullptr;
+
+    m_meshLoaded = false;
+    m_loadedMeshSource.clear();
+    m_meshCpu = GXMeshData{};
+
     if (src == "#Cone") {
         m_mesh = GXConeMesh::create();
     } else if (src == "#Cube") {
@@ -102,6 +109,8 @@ void GXModel::setSource(QString src)
     } else if (src.endsWith(".glb")) {
         const auto meshes = GXGltfLoader::loadMesh(QUrl(src));
         m_mesh = meshes.isEmpty() ? nullptr : meshes.first();
+    } else if (src.endsWith(".mesh")) {
+        // m_source = src;
     }
 
     emit sourceChanged();
@@ -154,6 +163,13 @@ void GXModel::clearMaterials()
 
 void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer* cb)
 {
+    QString err;
+
+    if (!ensureMeshLoaded(&err)) {
+        qWarning() << "[GXModel] failed to load mesh:" << err;
+        return;
+    }
+
     if (m_pendingRelease) {
         releaseResources();
         m_pendingRelease = false;
@@ -443,6 +459,37 @@ QRhiShaderResourceBindings *GXModel::srbForMaterial(GXMaterial *mat, QRhiCommand
 
     m_materialSrbs.insert(mat, srb);
     return srb;
+}
+
+bool GXModel::ensureMeshLoaded(QString *err)
+{
+    if (!m_source.endsWith(".mesh")) return true;
+
+    if (m_meshLoaded && m_loadedMeshSource == m_source) return true;
+
+    QString e;
+    GXMeshData cpu;
+    GXMeshReader::Options opt{ true, true };
+
+    const QString filePath = m_source;
+
+    if (!GXMeshReader().read(filePath, cpu, &e, opt)) {
+        if (err) *err = e;
+        return false;
+    }
+
+    m_meshCpu = std::move(cpu);
+    m_loadedMeshSource = m_source;
+    m_meshLoaded = true;
+
+    if (!m_mesh) {
+        m_mesh = new GXMesh();
+        emit meshChanged();
+    }
+
+    m_mesh->setCpuData(m_meshCpu);
+
+    return true;
 }
 
 void GXModel::destroyRhiResources()

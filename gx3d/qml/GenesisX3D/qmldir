@@ -3,6 +3,7 @@ typeinfo gxdefaultlitmaterial.qmltypes
 typeinfo gxmodel.qmltypes
 typeinfo gxnode.qmltypes
 typeinfo gxpointlight.qmltypes
+typeinfo gxspotlight.qmltypes
 typeinfo gxperspectivecamera.qmltypes
 typeinfo gxrenderablenode.qmltypes
 typeinfo gxview3d.qmltypes

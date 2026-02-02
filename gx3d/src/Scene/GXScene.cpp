@@ -104,9 +104,6 @@ void GXScene::traverse(const std::function<void (GXNode *)> &visitor) const
 void GXScene::appendItems(QQmlListProperty<QObject> *prop, QObject *obj)
 {
     auto* self = static_cast<GXScene*>(prop->data);
-    // if (!obj || self->m_items.contains(obj)) return;
-
-    // self->m_items.append(obj);
 
     if (auto *n = qobject_cast<GXLight*>(obj)) {
         self->addRootLight(n);

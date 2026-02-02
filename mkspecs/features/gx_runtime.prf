@@ -165,3 +165,7 @@ contains(QT, genesisx_settings) {
 contains(QT, genesisx_3d) {
     include(conf/gx_3d.prf)
 }
+
+contains(QT, genesisx_io) {
+    include(conf/gx_io.prf)
+}
