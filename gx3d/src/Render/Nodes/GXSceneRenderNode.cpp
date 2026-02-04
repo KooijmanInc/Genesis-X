@@ -7,7 +7,11 @@
 #include <GenesisX/GX3D/Render/Materials/GXPrincipledMaterial.h>
 #include <GenesisX/GX3D/Scene/GXScene.h>
 
+#include <GenesisX/GX3D/Query/GXWorldQuery.h>
+#include <GenesisX/GX3D/Query/GXSceneQueryBackend.h>
+
 #include <QObject>
+#include <QSGRendererInterface>
 
 #include <rhi/qrhi_platform.h>
 #include <rhi/qrhi.h>
@@ -83,39 +87,51 @@ static QSize surfacePixelSize(QRhiRenderTarget* rt)
     return rt? rt->pixelSize() : QSize();
 }
 
-static bool gxExtractFakeEmissionLight(GXMaterial* mat, QColor& outColor, float& outIntensity, float& outRadius)
-{
-    using PM = GXPrincipledMaterial;
+// static gx::gx3d::scene::GXNode* pickOwner(gx::gx3d::scene::GXNode* n)
+// {
+//     for (auto* cur = n; cur; cur = qobject_cast<gx::gx3d::scene::GXNode*>(cur->parent())) {
+//         if (cur->pickingId() != 0)
+//             return cur;
+//     }
+//     return n;
+// }
 
-    auto* pm = qobject_cast<PM*>(mat);
-    if (!pm) return false;
 
-    if (pm->emissionLight() != PM::FakeLight) return false;
+// static bool gxExtractFakeEmissionLight(GXMaterial* mat, QColor& outColor, float& outIntensity, float& outRadius)
+// {
+//     using PM = GXPrincipledMaterial;
 
-    const QColor c = pm->emissionColor();
+//     auto* pm = qobject_cast<PM*>(mat);
+//     if (!pm) return false;
 
-    float strength = pm->emissionStrength();
-    if (strength <= 0.0f) strength = 0.5f;
+//     if (pm->emissionLight() != PM::FakeLight) return false;
 
-    float intensity = pm->emissionLightIntensity();
-    if (intensity <= 0.0f) intensity = strength;
+//     const QColor c = pm->emissionColor();
 
-    float radius = pm->emissionLightRadius();
-    if (radius <= 0.0f) radius = 6.0f;
+//     float strength = pm->emissionStrength();
+//     if (strength <= 0.0f) strength = 0.5f;
 
-    if (intensity <= 0.0f || radius <= 0.0f) return false;
+//     float intensity = pm->emissionLightIntensity();
+//     if (intensity <= 0.0f) intensity = strength;
 
-    outColor = c;
-    outIntensity = intensity;
-    outRadius = radius;
+//     float radius = pm->emissionLightRadius();
+//     if (radius <= 0.0f) radius = 6.0f;
 
-    return true;
-}
+//     if (intensity <= 0.0f || radius <= 0.0f) return false;
+
+//     outColor = c;
+//     outIntensity = intensity;
+//     outRadius = radius;
+
+//     return true;
+// }
 
 GXSceneRenderNode::GXSceneRenderNode() = default;
 
 GXSceneRenderNode::~GXSceneRenderNode()
 {
+    // if (m_beforeRenderingConn) QObject::disconnect(m_beforeRenderingConn);
+
     forEachRenderable([](GXRenderableNode* r) {
         r->releaseResources();
     });
@@ -130,6 +146,17 @@ void GXSceneRenderNode::setScene(scene::GXScene *scene)
             QObject::disconnect(r, &GXRenderableNode::renderDirty, m_window, nullptr);
         });
     }
+
+    gx::gx3d::query::GXWorldQuery q;
+    q.setBackend(std::make_unique<gx::gx3d::query::GXSceneQueryBackend>(scene));
+
+    gx::gx3d::query::GXRay ray;
+    ray.originWS = QVector3D(0, 2, 5);
+    ray.dirWS    = QVector3D(0, -0.2f, -1).normalized();
+
+    // auto hit = q.raycast(ray);
+    // qDebug() << "hit?" << hit.hit << "t=" << hit.t << "node=" << (hit.node ? hit.node->objectName() : QString());
+
 
     m_scene = scene;
 
@@ -154,6 +181,11 @@ void GXSceneRenderNode::setScene(scene::GXScene *scene)
 void GXSceneRenderNode::setQuickWindow(QQuickWindow *w)
 {
     if (m_window == w) return;
+
+    // if (m_beforeRenderingConn) {
+    //     QObject::disconnect(m_beforeRenderingConn);
+    //     m_beforeRenderingConn = {};
+    // }
 
     m_window = w;
 
@@ -250,6 +282,8 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
     // }
 
     ensureDepthTarget(rhi, rt);
+    // ensurePickTarget(rhi, rt);
+    // ensurePickPassResources(rhi);
 
     QRhiRenderTarget *useRt = m_rtWithDepth ? static_cast<QRhiRenderTarget*>(m_rtWithDepth) : rt;
 
@@ -335,10 +369,57 @@ void GXSceneRenderNode::render(const RenderState */*state*/)
     forEachRenderable([&](GXRenderableNode *r) {
         r->setViewProj(m_viewProj);
         r->setFrameLightingUbo(m_frameLightUbo);
-        r->syncFromScene();
+        // r->syncFromScene();
         r->ensureResources(rhi, useRt, cb);
         r->recordRender(cb, useRt);
     });
+
+    // if (m_pickRt && m_pickPs && m_pickSrb && m_pickUbuf) {
+    //     // QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
+    //     m_window->beginExternalCommands();
+    //     cb->beginPass(m_pickRt, Qt::transparent, { 1.0f, 0}, nullptr);
+
+    //     const QSize ps = m_pickRt->pixelSize();
+    //     cb->setViewport(QRhiViewport(0, 0, float(ps.width()), float(ps.height())));
+    //     cb->setScissor(QRhiScissor(0, 0, ps.width(), ps.height()));
+
+    //     cb->setGraphicsPipeline(m_pickPs);
+    //     cb->setShaderResources(m_pickSrb);
+
+    //     forEachRenderable([&](GXRenderableNode* rn) {
+    //         auto* model = qobject_cast<GXModel*>(rn);
+    //         if (!model) return;
+
+    //         auto* owner = pickOwner(rn);
+    //         qDebug() << "pick rn" << owner->objectName() << owner->pickingId();
+
+    //         QMatrix4x4 mvp = m_viewProj * model->worldMatrix();
+
+    //         struct PickU {
+    //             float mvp[16];
+    //             quint32 id[4];
+    //         } pu;
+
+    //         const float* mm = mvp.constData();
+    //         for (int i = 0; i < 16; ++i) pu.mvp[i] = mm[i];
+    //         pu.id[0] = owner->pickingId();
+    //         pu.id[1] = 0;
+    //         pu.id[2] = 0;
+    //         pu.id[3] = 0;
+
+    //         QRhiResourceUpdateBatch* ru = rhi->nextResourceUpdateBatch();
+    //         ru->updateDynamicBuffer(m_pickUbuf, 0, sizeof(PickU), &pu);
+    //         cb->resourceUpdate(ru);
+
+    //         cb->setGraphicsPipeline(m_pickPs);
+    //         cb->setShaderResources(m_pickSrb);
+
+    //         model->recordPick(cb);
+    //         qDebug() << "end traverse";
+    //     });
+    //     cb->endPass();
+    //     m_window->endExternalCommands();
+    // }
 
     m_frameLightDirty = false;
 
@@ -511,6 +592,140 @@ void GXSceneRenderNode::destroyFrameLightUbo()
         m_frameLightDirty = true;
     }
 }
+
+// void GXSceneRenderNode::ensurePickTarget(QRhi *rhi, QRhiRenderTarget *rt)
+// {
+//     if (!rhi || !rt) return;
+
+//     const QSize sz = surfacePixelSize(rt);
+//     const int sampleCount = rt->sampleCount();
+
+//     if (sz.isEmpty()) return;
+
+//     const bool sizeChanged = (m_lastPickSize != sz);
+//     const bool sampleChanged = (m_lastPickSampleCount != sampleCount);
+
+//     const int pickSamples = 1;
+
+//     const bool needRebuild = (!m_pickTex) || (!m_pickRt) || sizeChanged || (m_lastPickSampleCount != pickSamples);
+
+//     if (!needRebuild) return;
+
+//     destroyPickTarget();
+
+//     m_lastPickSize = sz;
+//     m_lastPickSampleCount = pickSamples;
+
+//     m_pickTex = rhi->newTexture(QRhiTexture::RGBA8, sz, 1, QRhiTexture::RenderTarget | QRhiTexture::UsedAsTransferSource);
+//     if (!m_pickTex->create()) {
+//         qWarning() << "[GXSceneRenderNode] failed to create pick texture";
+//         destroyPickTarget();
+//         return;
+//     }
+
+//     QRhiTextureRenderTargetDescription rtDesc((QRhiColorAttachment(m_pickTex)));
+//     m_pickRt = rhi->newTextureRenderTarget(rtDesc);
+
+//     m_pickRp = m_pickRt->newCompatibleRenderPassDescriptor();
+//     m_pickRt->setRenderPassDescriptor(m_pickRp);
+
+//     if (!m_pickRt->create()) {
+//         qWarning() << "[GXSceneRenderNode] failed to create pick RT";
+//         destroyPickTarget();
+//         return;
+//     }
+// }
+
+// void GXSceneRenderNode::destroyPickTarget()
+// {
+//     destroyPickPassResources();
+
+//     if (m_pickRt) { m_pickRt->destroy(); delete m_pickRt; m_pickRt = nullptr; }
+//     if (m_pickRp) { m_pickRp->destroy(); delete m_pickRp; m_pickRp = nullptr; }
+//     if (m_pickTex) { m_pickTex->destroy(); delete m_pickTex; m_pickTex = nullptr; }
+
+//     m_lastPickSize = {};
+//     m_lastPickSampleCount = 1;
+// }
+
+// void GXSceneRenderNode::ensurePickPassResources(QRhi *rhi)
+// {
+//     if (!rhi || !m_pickRt || !m_pickRp)
+//         return;
+
+//     if (m_pickPs && m_pickRhi == rhi)
+//         return;
+
+//     destroyPickPassResources();
+//     m_pickRhi = rhi;
+
+//     // --- UBO: mat4 + uvec4 (std140)
+//     const int ubufSize = 64 + 16; // mat4 = 64 bytes, uvec4 = 16 bytes
+//     m_pickUbuf = rhi->newBuffer(QRhiBuffer::Dynamic, QRhiBuffer::UniformBuffer, ubufSize);
+//     if (!m_pickUbuf->create()) {
+//         qWarning() << "PickPass: failed to create uniform buffer";
+//         destroyPickPassResources();
+//         return;
+//     }
+
+//     // --- SRB: binding=0 uniform buffer
+//     m_pickSrb = rhi->newShaderResourceBindings();
+//     m_pickSrb->setBindings({
+//         QRhiShaderResourceBinding::uniformBuffer(0, QRhiShaderResourceBinding::VertexStage | QRhiShaderResourceBinding::FragmentStage, m_pickUbuf)
+//     });
+//     if (!m_pickSrb->create()) {
+//         qWarning() << "PickPass: failed to create SRB";
+//         destroyPickPassResources();
+//         return;
+//     }
+
+//     // --- Shaders
+//     const QRhiShaderStage vs(QRhiShaderStage::Vertex, renderUtils.gxLoadShader(":/gx3d/shaders/pick.vert.qsb")); // adapt your loader
+//     const QRhiShaderStage fs(QRhiShaderStage::Fragment, renderUtils.gxLoadShader(":/gx3d/shaders/pick.frag.qsb"));
+
+//     // --- Pipeline
+//     m_pickPs = rhi->newGraphicsPipeline();
+//     m_pickPs->setShaderStages({ vs, fs });
+
+//     // Vertex layout: MUST match your mesh position attribute location=0.
+//     // If your meshes use a different layout, we adjust.
+//     QRhiVertexInputLayout inputLayout;
+//     inputLayout.setBindings({
+//         QRhiVertexInputBinding(sizeof(float) * 8) // Example stride (pos+normal+uv). Adjust to your actual mesh stride.
+//     });
+//     inputLayout.setAttributes({
+//         // location=0: position
+//         QRhiVertexInputAttribute(0, 0, QRhiVertexInputAttribute::Float3, 0)
+//     });
+
+//     m_pickPs->setVertexInputLayout(inputLayout);
+//     m_pickPs->setShaderResourceBindings(m_pickSrb);
+//     m_pickPs->setRenderPassDescriptor(m_pickRp);
+
+//     // No blending, depth test optional:
+//     // For picking you usually WANT depth test so the front-most object wins.
+//     QRhiGraphicsPipeline::TargetBlend tb;
+//     tb.enable = false;
+//     m_pickPs->setTargetBlends({ tb });
+
+//     m_pickPs->setDepthTest(false);
+//     m_pickPs->setDepthWrite(false);
+//     m_pickPs->setCullMode(QRhiGraphicsPipeline::Back);
+
+//     if (!m_pickPs->create()) {
+//         qWarning() << "PickPass: failed to create pipeline";
+//         destroyPickPassResources();
+//         return;
+//     }
+// }
+
+// void GXSceneRenderNode::destroyPickPassResources()
+// {
+//     delete m_pickPs; m_pickPs = nullptr;
+//     delete m_pickSrb; m_pickSrb = nullptr;
+//     delete m_pickUbuf; m_pickUbuf = nullptr;
+//     m_pickRhi = nullptr;
+// }
 
 void GXSceneRenderNode::ensureDepthTarget(QRhi *rhi, QRhiRenderTarget *windowRt)
 {

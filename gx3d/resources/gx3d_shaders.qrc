@@ -15,10 +15,14 @@
         <file alias="light_gizmo.vert.qsb">../shaders/light_gizmo.vert.qsb</file>
         <file alias="principled.frag.qsb">../shaders/principled.frag.qsb</file>
         <file alias="principled.vert.qsb">../shaders/principled.vert.qsb</file>
+        <file alias="pick.frag.qsb">../shaders/pick.frag.qsb</file>
+        <file alias="pick.vert.qsb">../shaders/pick.vert.qsb</file>
     </qresource>
     <qresource prefix="/gx3d/assets">
         <file alias="checker.jpg">images/checker.jpg</file>
-
         <file alias="WoodFloor.jpg">images/WoodFloor.jpg</file>
+    </qresource>
+    <qresource prefix="/">
+
     </qresource>
 </RCC>

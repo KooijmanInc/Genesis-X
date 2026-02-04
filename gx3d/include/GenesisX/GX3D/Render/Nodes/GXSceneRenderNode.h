@@ -9,6 +9,7 @@
 #include <GenesisX/GX3D/Scene/Lights/GXSpotLight.h>
 #include <GenesisX/GX3D/Scene/Lights/GXPointLight.h>
 #include <GenesisX/GX3D/Render/Lights/GXFrameLighting.h>
+#include <GenesisX/GX3D/Render/Utils/GXShaderUtils.h>
 
 #include <QSGRenderNode>
 #include <QQuickWindow>
@@ -41,6 +42,9 @@ public:
     StateFlags changedStates() const override { return {}; }
     RenderingFlags flags() const override { return BoundedRectRendering; }
     QRectF rect() const override { return m_rect; }
+
+    // QRhiTexture* pickTexture() const { return m_pickTex; }
+    // QRhiTextureRenderTarget* pickRenderTarget() const { return m_pickRt; }
 
 public slots:
     void requestRender();
@@ -85,8 +89,28 @@ private:
 
     void destroyFrameLightUbo();
 
+    // void ensurePickTarget(QRhi* rhi, QRhiRenderTarget* rt);
+    // void destroyPickTarget();
+    // void ensurePickPassResources(QRhi* rhi);
+    // void destroyPickPassResources();
+
     std::atomic_bool m_depthDirty { true };
 
+    // QRhiTexture* m_pickTex = nullptr;
+    // QRhiTextureRenderTarget* m_pickRt = nullptr;
+    // QRhiRenderPassDescriptor* m_pickRp = nullptr;
+    // QMetaObject::Connection m_beforeRenderingConn;
+
+    // QRhiGraphicsPipeline* m_pickPs = nullptr;
+    // QRhiShaderResourceBindings* m_pickSrb = nullptr;
+    // QRhiBuffer* m_pickUbuf = nullptr;
+
+    // QRhi* m_pickRhi = nullptr;
+
+    // QSize m_lastPickSize;
+    // int m_lastPickSampleCount = 1;
+
+    // GXShaderUtils renderUtils;
 };
 
 }

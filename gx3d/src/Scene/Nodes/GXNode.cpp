@@ -14,6 +14,7 @@ static inline bool fuzzyVec3(const QVector3D& a, const QVector3D& b, float eps =
 GXNode::GXNode(QObject *parent)
     : QObject{parent}
 {
+    m_worldMatrix = localMatrix();
 }
 
 void GXNode::setX(float v)
@@ -159,14 +160,28 @@ QMatrix4x4 GXNode::localMatrix() const
 
 QMatrix4x4 GXNode::worldMatrix() const
 {
-    if (auto* p = qobject_cast<GXNode*>(parent())) return p->worldMatrix() * localMatrix();
+    if (!m_dirty)
+        return m_worldMatrix;
 
-    return localMatrix();
+    QMatrix4x4 parentWorld;
+    if (auto* p = qobject_cast<GXNode*>(parent())) {
+        parentWorld = p->worldMatrix(); // parent will lazily update itself too
+    } else {
+        parentWorld.setToIdentity();
+    }
+
+    m_worldMatrix = parentWorld * localMatrix();
+    m_dirty = false;
+    return m_worldMatrix;
+    // if (auto* p = qobject_cast<GXNode*>(parent())) return p->worldMatrix() * localMatrix();
+
+    // return localMatrix();
 }
 
 QVector3D GXNode::worldPosition() const
 {
-    return worldMatrix().map(QVector3D(0,0,0));
+    return m_worldMatrix.map(QVector3D(0, 0, 0));
+    // return worldMatrix().map(QVector3D(0,0,0));
 }
 
 QQmlListProperty<QObject> GXNode::data()
@@ -213,9 +228,30 @@ void GXNode::addChild(GXNode *child)
     m_children.append(child);
 }
 
+void GXNode::updateWorldRecursive(const QMatrix4x4 &parentWorld)
+{
+    m_worldMatrix = parentWorld * localMatrix();
+    m_dirty = false;
+
+    for (GXNode* c : childrenNodes()) {
+        if (c) c->updateWorldRecursive(m_worldMatrix);
+    }
+    // const QMatrix4x4 local = localMatrix();
+    // m_worldMatrix = parentWorld * local;
+
+    // const auto& kids = childrenNodes();
+    // for (GXNode* c : kids) {
+    //     if (c) c->updateWorldRecursive(m_worldMatrix);
+    // }
+}
+
 void GXNode::markTransformDirty()
 {
     m_dirty = true;
+    for (GXNode* c : m_children) {
+        if (c) c->markTransformDirty();
+    }
+    emit changed();
 }
 
 void GXNode::dataAppend(QQmlListProperty<QObject> *p, QObject *o)

@@ -71,6 +71,8 @@ DISTFILES += \
     shaders/default_lit.vert \
     shaders/light_gizmo.frag \
     shaders/light_gizmo.vert \
+    shaders/pick.frag \
+    shaders/pick.vert \
     shaders/principled.frag \
     shaders/principled.vert \
     shaders/solidcolor.frag \

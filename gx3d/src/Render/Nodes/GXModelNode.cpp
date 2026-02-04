@@ -15,7 +15,48 @@
 #include <QFileInfo>
 #include <QVector4D>
 
+#include <limits>
+#include <algorithm>
+
 using namespace gx::gx3d::render;
+
+static inline bool boundsValid(const QVector3D& bmin, const QVector3D& bmax)
+{
+    return !qIsNaN(bmin.x()) && !qIsNaN(bmin.y()) && !qIsNaN(bmin.z()) &&
+           !qIsNaN(bmax.x()) && !qIsNaN(bmax.y()) && !qIsNaN(bmax.z());
+}
+
+static inline void computeBoundsIfMissing(GXMeshData& cpu)
+{
+    if (boundsValid(cpu.boundsMin, cpu.boundsMax))
+        return;
+
+    if (cpu.vertices.isEmpty()) {
+        cpu.boundsMin = QVector3D(-0.5f, -0.5f, -0.5f);
+        cpu.boundsMax = QVector3D( 0.5f,  0.5f,  0.5f);
+        return;
+    }
+
+    QVector3D minV(+std::numeric_limits<float>::infinity(),
+                   +std::numeric_limits<float>::infinity(),
+                   +std::numeric_limits<float>::infinity());
+    QVector3D maxV(-std::numeric_limits<float>::infinity(),
+                   -std::numeric_limits<float>::infinity(),
+                   -std::numeric_limits<float>::infinity());
+
+    for (const auto& v : cpu.vertices) {
+        const QVector3D p = v.position; // <-- you DO have this field (used in syncFromCpuIfNeeded)
+        minV.setX(std::min(minV.x(), p.x()));
+        minV.setY(std::min(minV.y(), p.y()));
+        minV.setZ(std::min(minV.z(), p.z()));
+        maxV.setX(std::max(maxV.x(), p.x()));
+        maxV.setY(std::max(maxV.y(), p.y()));
+        maxV.setZ(std::max(maxV.z(), p.z()));
+    }
+
+    cpu.boundsMin = minV;
+    cpu.boundsMax = maxV;
+}
 
 static void ensureUboForMat(QRhi* rhi, QHash<GXMaterial*, QRhiBuffer*>& map, GXMaterial* mat, int size)
 {
@@ -141,6 +182,45 @@ QQmlListProperty<GXMaterial> GXModel::materials()
             emit self->materialsChanged();
         }
     );
+}
+
+void GXModel::setPickable(bool on)
+{
+    if (m_pickable == on) return;
+    m_pickable = on;
+
+    emit pickableChanged();
+}
+
+void GXModel::setPickPriority(int v)
+{
+    if (m_pickPriority == v) return;
+    m_pickPriority = v;
+
+    emit pickPriorityChanged();
+}
+
+bool GXModel::localBounds(QVector3D &outMinLS, QVector3D &outMaxLS) const
+{
+    // If mesh CPU bounds are valid, use them.
+    // Your GXMeshData uses qQNaN() as "unset".
+    const auto& bmin = m_meshCpu.boundsMin;
+    const auto& bmax = m_meshCpu.boundsMax;
+
+    const bool valid =
+        !qIsNaN(bmin.x()) && !qIsNaN(bmin.y()) && !qIsNaN(bmin.z()) &&
+        !qIsNaN(bmax.x()) && !qIsNaN(bmax.y()) && !qIsNaN(bmax.z());
+
+    if (valid) {
+        outMinLS = bmin;
+        outMaxLS = bmax;
+        return true;
+    }
+
+    // Fallback: unit cube centered at origin (safe for “mesh not loaded yet”)
+    outMinLS = QVector3D(-0.5f, -0.5f, -0.5f);
+    outMaxLS = QVector3D( 0.5f,  0.5f,  0.5f);
+    return false;
 }
 
 void GXModel::addMaterial(GXMaterial *m)
@@ -423,6 +503,24 @@ void GXModel::releaseResources()
     GXRenderableNode::releaseResources();
 }
 
+void GXModel::recordPick(QRhiCommandBuffer *cb)
+{
+    if (!cb || !m_mesh) return;
+
+    QRhiBuffer* vb = m_mesh->vertexBuffer();
+    QRhiBuffer* ib = m_mesh->indexBuffer();   // <-- MUST exist / be correct
+    if (!vb || !ib) return;
+
+    const auto idxFmt = (m_mesh->indexType() == GXMesh::IndexUInt32)
+                            ? QRhiCommandBuffer::IndexUInt32
+                            : QRhiCommandBuffer::IndexUInt16;
+
+    const QRhiCommandBuffer::VertexInput vInput(vb, 0);
+    cb->setVertexInput(0, 1, &vInput, ib, 0, idxFmt);
+
+    cb->drawIndexed(m_mesh->indexCount(), 1, 0, 0, 0);
+}
+
 QRhiShaderResourceBindings *GXModel::srbForMaterial(GXMaterial *mat, QRhiCommandBuffer *cb)
 {
     if (!m_rhi || ! mat) return nullptr;
@@ -477,6 +575,8 @@ bool GXModel::ensureMeshLoaded(QString *err)
         if (err) *err = e;
         return false;
     }
+
+    computeBoundsIfMissing(cpu);
 
     m_meshCpu = std::move(cpu);
     m_loadedMeshSource = m_source;

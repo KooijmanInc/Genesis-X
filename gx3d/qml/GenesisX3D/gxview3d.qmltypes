@@ -34,5 +34,33 @@ Module {
             name: "camera"
             type: "gx::gx3d::GXCamera"
         }
+        Method {
+            name: "pick"
+            type: "QObject"
+            parameter: {
+                name: "x"
+                type: "float"
+            }
+            parameter: {
+                name: "y"
+                type: "float"
+            }
+        }
+        Signal {
+            name: "picked"
+            type: "void"
+            parameter: {
+                name: "node"
+                type: "QObject"
+            }
+            parameter: {
+                name: "positionWS"
+                type: "QVector3D"
+            }
+            parameter: {
+                name: "distance"
+                type: "float"
+            }
+        }
     }
 }

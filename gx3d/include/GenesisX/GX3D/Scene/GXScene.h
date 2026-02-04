@@ -50,7 +50,13 @@ public:
     Q_INVOKABLE void removeRoot(GXNode* node);
     Q_INVOKABLE void clear();
 
+    Q_INVOKABLE QString pickObjectName(int x, int y);
+
     void traverse(const std::function<void(GXNode*)> &visitor) const;
+
+    void updateWorldMatrices();
+
+    GXNode* findNodeBySceneSource(const QUrl& source) const;
 
 signals:
     void sceneChanged();
@@ -65,27 +71,28 @@ private:
     static QObject* itemsAt(QQmlListProperty<QObject>* prop, qsizetype index);
     static void clearItems(QQmlListProperty<QObject>* prop);
 
+    static void qmlAppendRoot(QQmlListProperty<GXNode>* list, GXNode* node);
+    static qsizetype qmlRootCount(QQmlListProperty<GXNode>* list);
+    static GXNode* qmlRootAt(QQmlListProperty<GXNode>* list, qsizetype index);
+    static void qmlClearRoots(QQmlListProperty<GXNode>* list);
+
+    void traverseNode(GXNode* node, const std::function<void(GXNode*)>& visitor) const;
+
 private:
     bool m_debugLighting = false;
     int m_maxLights = 8;
     QList<GXNode*> m_roots;
     QList<GXNode*> m_nodes;
     QList<GXLight*> m_lights;
-    // QList<render::GXMaterial*> m_materials;
     QList<QObject*> m_items;
 
-    static void qmlAppendRoot(QQmlListProperty<GXNode>* list, GXNode* node);
-    static qsizetype qmlRootCount(QQmlListProperty<GXNode>* list);
-    static GXNode* qmlRootAt(QQmlListProperty<GXNode>* list, qsizetype index);
-    static void qmlClearRoots(QQmlListProperty<GXNode>* list);
+    quint32 m_nextPickingId = 1;
+    QHash<quint32, QObject*> m_pickingIdToNode;
 
-    // static void materialsAppend(QQmlListProperty<gx::gx3d::render::GXMaterial>* p, gx::gx3d::render::GXMaterial* m);
-    // static qsizetype materialsCount(QQmlListProperty<gx::gx3d::render::GXMaterial>* p);
-    // static gx::gx3d::render::GXMaterial* materialsAt(QQmlListProperty<gx::gx3d::render::GXMaterial>* p, qsizetype i);
-    // static void materialsClear(QQmlListProperty<gx::gx3d::render::GXMaterial>* p);
-
-    void traverseNode(GXNode* node, const std::function<void(GXNode*)>& visitor) const;
-    // void traverseLight(GXLight* node, const std::function<void(GXLight*)>& visitor) const;
+    quint32 pickIdAtScreenPos(int x, int y) const;
+    quint32 allocatePickingId(QObject* node);
+    void releasePickingId(quint32 id);
+    void assignPickingIdsRecursive(GXNode* n);
 };
 
 }

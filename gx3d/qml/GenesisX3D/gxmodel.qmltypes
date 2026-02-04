@@ -71,5 +71,17 @@ Module {
             read: "z"
             notify: "zChanged"
         }
+        Property {
+            name: "pickable"
+            type: "bool"
+            read: "pickable"
+            notify: "pickableChanged"
+        }
+        Property {
+            name: "pickPriority"
+            type: "int"
+            read: "pickPriority"
+            notify: "pickPriorityChanged"
+        }
     }
 }
