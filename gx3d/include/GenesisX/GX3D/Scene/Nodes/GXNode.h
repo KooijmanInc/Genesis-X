@@ -92,6 +92,11 @@ public:
 
     void addChild(GXNode* child);
 
+    quint32 pickingId() const { return m_pickingId; }
+    void setPickingId(quint32 id) { m_pickingId = id; }
+
+    void updateWorldRecursive(const QMatrix4x4& parentWorld);
+
 signals:
     void xChanged();
     void yChanged();
@@ -107,6 +112,7 @@ signals:
     void sceneSourceChanged();
     void childrenChanged();
     void materialsChanged();
+    void changed();
 
 protected:
     void markTransformDirty();
@@ -132,6 +138,8 @@ private:
     QList<GXNode*> m_children;
     QList<render::GXMaterial*> m_materials;
 
+    mutable QMatrix4x4 m_worldMatrix;
+
     QVector3D m_pos {0,0,0};
     QQuaternion m_rotation;
     QVector3D m_scale {1,1,1};
@@ -140,7 +148,11 @@ private:
     QUrl m_sceneSource;
     GXNode* m_sceneRoot = nullptr;
 
-    bool m_dirty = true;
+    mutable bool m_dirty = true;
+
+    friend class GXScene;
+
+    quint32 m_pickingId = 0;
 };
 
 }

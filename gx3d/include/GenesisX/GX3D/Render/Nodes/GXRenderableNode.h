@@ -6,6 +6,7 @@
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
+#include <GenesisX/GX3D/Scene/GXScene.h>
 #include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
 #include <GenesisX/GX3D/Render/Materials/GXMaterial.h>
 #include <GenesisX/GX3D/Render/Lights/GXFrameLighting.h>
@@ -49,6 +50,8 @@ public:
 
     void markForRelease();
 
+    void setScene(scene::GXScene* s);
+
 signals:
     void materialChanged(gx::gx3d::render::GXMaterial* material);
     void renderDirty();
@@ -71,6 +74,8 @@ protected:
     bool m_pendingRelease = false;
 
     GXPointLightData m_pointLight;
+
+    scene::GXScene* m_scene = nullptr;
 };
 
 }

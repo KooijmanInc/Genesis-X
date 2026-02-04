@@ -7,10 +7,13 @@
 #include <QColor>
 #include <QTimer>
 #include <QPointer>
+#include <QVector3D>
 #include <QQuickItem>
 
 #include <GenesisX/GX3D/Core/GXCamera.h>
 #include <GenesisX/GX3D/Scene/GXScene.h>
+#include <GenesisX/GX3D/Query/GXWorldQuery.h>
+#include <GenesisX/GX3D/Query/GXRay.h>
 
 #include <GenesisX/GX3D/genesisx_gx3d_global.h>
 
@@ -59,12 +62,15 @@ public:
     scene::GXScene* scene() const { return m_scene; }
     void setScene(scene::GXScene* s);
 
+    Q_INVOKABLE QObject* pick(float x, float y);
+
 signals:
     void clearColorChanged();
     void renderModeChanged();
     void targetFpsChanged();
     void cameraChanged();
     void sceneChanged();
+    void picked(QObject* node, QVector3D positionWS, float distance);
 
 protected:
     QSGNode* updatePaintNode(QSGNode* oldNode, UpdatePaintNodeData*) override;
@@ -73,6 +79,10 @@ protected:
 private:
     void applyRenderPolicy();
     bool canRenderContinuously() const;
+    query::GXWorldQuery m_worldQuery;
+
+    query::GXRay makeRayFromItemPos(float x, float y) const;
+    void rebuildQueryBackend();
 
 private:
     QColor m_clearColor = Qt::black;

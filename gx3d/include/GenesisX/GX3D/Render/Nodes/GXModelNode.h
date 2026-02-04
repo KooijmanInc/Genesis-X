@@ -26,6 +26,8 @@ class GENESISX_GX3D_EXPORT GXModel : public GXRenderableNode
     Q_PROPERTY(GXMesh* mesh READ mesh WRITE setMesh NOTIFY meshChanged)
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QQmlListProperty<GXMaterial> materials READ materials NOTIFY materialsChanged)
+    Q_PROPERTY(bool pickable READ pickable WRITE setPickable NOTIFY pickableChanged)
+    Q_PROPERTY(int pickPriority READ pickPriority WRITE setPickPriority NOTIFY pickPriorityChanged)
 
 public:
     explicit GXModel(QObject* parent = nullptr);
@@ -40,6 +42,14 @@ public:
     QQmlListProperty<GXMaterial> materials();
     const QVector<GXMaterial*>& materialsVector() const { return m_materials; }
 
+    bool pickable() const { return m_pickable; }
+    void setPickable(bool on);
+
+    int pickPriority() const { return m_pickPriority; }
+    void setPickPriority(int v);
+
+    bool localBounds(QVector3D& outMinLS, QVector3D& outMaxLS) const;
+
     void addMaterial(GXMaterial* m);
     void clearMaterials();
 
@@ -51,11 +61,14 @@ public:
         m_frameLightingUbo = ubo;
         invalidPipeline();
     }
+    void recordPick(QRhiCommandBuffer *cb);
 
 signals:
     void meshChanged();
     void sourceChanged();
     void materialsChanged();
+    void pickableChanged();
+    void pickPriorityChanged();
 
 // private:
 // #ifdef Q_OS_ANDROID
@@ -100,6 +113,13 @@ private:
     QString m_loadedMeshSource;
     GXMeshData m_meshCpu;
     bool m_meshLoaded = false;
+
+    bool m_pickable = false;
+    int m_pickPriority = 0;
+
+    mutable bool m_boundsValid = false;
+    mutable QVector3D m_boundsMinLS;
+    mutable QVector3D m_boundsMaxLS;
 
     bool ensureMeshLoaded(QString* err = nullptr);
 

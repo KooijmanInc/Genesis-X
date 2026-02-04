@@ -10,28 +10,28 @@ GXCamera::GXCamera(QObject *parent)
 {
 }
 
-void GXCamera::setTarget(const QVector3D &v)
+void GXCamera::setLookAt(const QVector3D &v)
 {
-    if (m_target == v) return;
-    m_target = v;
-    m_useTarget = true;
+    if (m_lookAt == v) return;
+    m_lookAt = v;
+    m_useLookAt = true;
 
-    emit targetChanged();
+    emit lookAtChanged();
 }
 
-void GXCamera::clearTarget()
+void GXCamera::clearLookAt()
 {
-    m_useTarget = false;
+    m_useLookAt = false;
 
-    emit targetChanged();
+    emit lookAtChanged();
 }
 
 QMatrix4x4 GXCamera::viewMatrix() const
 {
-    if (m_useTarget) {
+    if (m_useLookAt) {
         QMatrix4x4 v;
         v.setToIdentity();
-        v.lookAt(worldPosition(), m_target, m_up);
+        v.lookAt(worldPosition(), m_lookAt, m_up);
         return v;
     }
 

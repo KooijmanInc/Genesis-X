@@ -105,3 +105,8 @@ void GXRenderableNode::markForRelease()
     m_pendingRelease = true;
     m_pipelineDirty = true;
 }
+
+void GXRenderableNode::setScene(scene::GXScene *s)
+{
+    m_scene = s;
+}
