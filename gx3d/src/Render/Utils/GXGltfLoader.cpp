@@ -313,9 +313,19 @@ QVector<GXMesh*> GXGltfLoader::loadMeshesFromFilePath(const QString &path)
             continue;
         }
 
-        AccessView posV, nrmV, uvV;
+        AccessView posV, nrmV, uvV, tanV;
+        const bool hasTan = attrs0.contains("TANGENT");
         if (!makeAccessView(root, glb.bin, posAcc, posV, &err)) { qWarning() << "pos:" << err; continue; }
         if (!makeAccessView(root, glb.bin, nrmAcc, nrmV, &err)) { qWarning() << "nrm:" << err; continue; }
+        if (hasTan) {
+            const int tanAcc = attrs0.value("TANGENT").toInt(-1);
+            if (!makeAccessView(root, glb.bin, tanAcc, tanV, &err)) {
+                qWarning() << "tan:" << err << "(continuing without tangents)";
+            } else if (tanV.compType != 5126 || tanV.ncomp != 4) {
+                qWarning() << "GXGltfLoader: TANGENT not float4 (ignored)";
+                tanV = {};
+            }
+        }
 
         // if (!requireFloat3(posV, "POSITION")) continue;
         // if (!requireFloat3(nrmV, "NORMAL")) continue;
@@ -353,7 +363,16 @@ QVector<GXMesh*> GXGltfLoader::loadMeshesFromFilePath(const QString &path)
                 v = readLE<float>(tp + 4);
             }
 
-            verts[i] = GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
+            float tx = 1.0f, ty = 0.0f, tz = 0.0f, tw = 1.0f;
+            if (hasTan && tanV.base) {
+                const uchar* tp = tanV.base + i * tanV.stride;
+                tx = readLE<float>(tp + 0);
+                ty = readLE<float>(tp + 4);
+                tz = readLE<float>(tp + 8);
+                tw = readLE<float>(tp + 12);
+            }
+
+            verts[i] = GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v, tx, ty, tz, tw };
         }
 
         // --- Build combined indices + submeshes for ALL primitives ---
@@ -381,7 +400,7 @@ QVector<GXMesh*> GXGltfLoader::loadMeshesFromFilePath(const QString &path)
                 continue;
             }
 
-            AccessView posV, nrmV, idxV, uvV;
+            AccessView posV, nrmV, idxV, uvV, tanV;
             if (!makeAccessView(root, glb.bin, posAcc, posV, &err)) { qWarning() << "pos:" << err; continue; }
             if (!makeAccessView(root, glb.bin, nrmAcc, nrmV, &err)) { qWarning() << "nrm:" << err; continue; }
             if (!makeAccessView(root, glb.bin, idxAcc, idxV, &err)) { qWarning() << "idx:" << err; continue; }
@@ -390,6 +409,16 @@ QVector<GXMesh*> GXGltfLoader::loadMeshesFromFilePath(const QString &path)
             if (uvAcc >= 0) {
                 if (makeAccessView(root, glb.bin, uvAcc, uvV, &err) && uvV.compType == 5126 && uvV.ncomp == 2)
                     hasUv = true;
+            }
+
+            const bool hasTan = attrs.contains("TANGENT");
+            if (hasTan) {
+                const int tanAcc = attrs.value("TANGENT").toInt(-1);
+                if (!makeAccessView(root, glb.bin, tanAcc, tanV, &err) ||
+                    tanV.compType != 5126 || tanV.ncomp != 4) {
+                    qWarning() << "GXGltfLoader: invalid TANGENT, ignored";
+                    tanV = {};
+                }
             }
 
             if (posV.compType != 5126 || posV.ncomp != 3) { qWarning() << "GXGltfLoader: POSITION not float3"; continue; }
@@ -424,7 +453,16 @@ QVector<GXMesh*> GXGltfLoader::loadMeshesFromFilePath(const QString &path)
                     v = readLE<float>(tp + 4);
                 }
 
-                allVerts[int(baseVertex) + i] = GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
+                float tx = 1.0f, ty = 0.0f, tz = 0.0f, tw = 1.0f;
+                if (hasTan && tanV.base) {
+                    const uchar* tp = tanV.base + i * tanV.stride;
+                    tx = readLE<float>(tp + 0);
+                    ty = readLE<float>(tp + 4);
+                    tz = readLE<float>(tp + 8);
+                    tw = readLE<float>(tp + 12);
+                }
+
+                allVerts[int(baseVertex) + i] = GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v, tx, ty, tz, tw };
             }
 
             // append indices, shifted by baseVertex

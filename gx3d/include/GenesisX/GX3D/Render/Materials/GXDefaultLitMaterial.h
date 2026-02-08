@@ -61,6 +61,7 @@ public:
     void fillFS(void* dst) const override;
 
     void ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer* cb) override;
+    void ensureNormalMapResources(QRhi* rhi, QRhiCommandBuffer* cb) override;
 
 signals:
     void baseColorChanged();

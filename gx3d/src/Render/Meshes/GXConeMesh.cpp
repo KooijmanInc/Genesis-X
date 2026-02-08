@@ -8,9 +8,9 @@
 
 using namespace gx::gx3d::render;
 
-static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz, float u, float v)
+static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz, float u, float v, float tx, float ty, float tz, float tw)
 {
-    return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
+    return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v, tx, ty, tz, tw };
 }
 
 GXMesh *GXConeMesh::create()
@@ -48,6 +48,7 @@ GXMesh *GXConeMesh::create()
     // For a right cone, side normal direction is proportional to (x, radius/height, z).
     // Normalize with y component = radius/height.
     const float nyUn = radius / height;
+    float tx = 1.0f, ty = 0.0f, tz = 0.0f, tw = 1.0f;
 
     // --- Side ring vertices (y = 0) ---
     for (int s = 0; s < sectors; ++s) {
@@ -60,15 +61,15 @@ GXMesh *GXConeMesh::create()
         QVector3D n(x, nyUn, z);
         n.normalize();
 
-        verts << makeV(x, yBase, z, n.x(), n.y(), n.z(), u, 0.0f);
+        verts << makeV(x, yBase, z, n.x(), n.y(), n.z(), u, 0.0f, tx, ty, tz, tw);
     }
 
     // --- Tip vertex (y = height) ---
     // Normal at the tip is undefined; give it a reasonable up-ish normal.
-    verts << makeV(0.0f, yTip, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+    verts << makeV(0.0f, yTip, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, tx, ty, tz, tw);
 
     // --- Base center vertex (cap) ---
-    verts << makeV(0.0f, yBase, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 0.5f);
+    verts << makeV(0.0f, yBase, 0.0f, 0.0f, -1.0f, 0.0f, 0.5f, 0.5f, tx, ty, tz, tw);
 
     // --- Base ring vertices (cap) ---
     for (int s = 0; s < sectors; ++s) {
@@ -81,7 +82,7 @@ GXMesh *GXConeMesh::create()
         const float capU = (x / (2.0f * radius)) + 0.5f;
         const float capV = (z / (2.0f * radius)) + 0.5f;
 
-        verts << makeV(x, yBase, z, 0.0f, -1.0f, 0.0f, capU, capV);
+        verts << makeV(x, yBase, z, 0.0f, -1.0f, 0.0f, capU, capV, tx, ty, tz, tw);
     }
 
     // --- Side triangles ---

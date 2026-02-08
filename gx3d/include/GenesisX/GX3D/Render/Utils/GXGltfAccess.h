@@ -31,8 +31,10 @@ public:
     // ── attribute + accessor decoding helpers
     QVector<QVector3D> readPositionsFromPrimitive(const QJsonObject &primitive) const;
     QVector<quint32>   readIndicesFromPrimitive(const QJsonObject &primitive) const;
+    QVector<QVector4D> readTangentsFromPrimitive(const QJsonObject &primitive) const;
 
     // If you need normals/uvs later:
+    QVector<QVector4D> readVec4Accessor(int accessorIndex) const;
     QVector<QVector3D> readVec3Accessor(int accessorIndex) const;
     QVector<QVector2D> readVec2Accessor(int accessorIndex) const;
 

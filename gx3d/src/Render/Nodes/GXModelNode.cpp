@@ -311,8 +311,16 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer
     inputLayout.setAttributes({
                                QRhiVertexInputAttribute(0, 0, QRhiVertexInputAttribute::Float3, offsetof(GXMesh::Vertex, px)),
         QRhiVertexInputAttribute(0, 1, QRhiVertexInputAttribute::Float3, offsetof(GXMesh::Vertex, nx)),
-        QRhiVertexInputAttribute(0, 2, QRhiVertexInputAttribute::Float2,  offsetof(GXMesh::Vertex, u))
+        QRhiVertexInputAttribute(0, 2, QRhiVertexInputAttribute::Float2,  offsetof(GXMesh::Vertex, u)),
+        QRhiVertexInputAttribute(0, 3, QRhiVertexInputAttribute::Float4,  offsetof(GXMesh::Vertex, tx))
     });
+
+    // qDebug() << "Vertex sizeof =" << sizeof(GXMesh::Vertex)
+    //          << "px" << offsetof(GXMesh::Vertex, px)
+    //          << "nx" << offsetof(GXMesh::Vertex, nx)
+    //          << "u"  << offsetof(GXMesh::Vertex, u)
+    //          << "tx" << offsetof(GXMesh::Vertex, tx);
+
 
     QRhiShaderResourceBindings* layoutSrb = srbForMaterial(defaultMat, cb);
     if (!layoutSrb) {
@@ -547,6 +555,10 @@ QRhiShaderResourceBindings *GXModel::srbForMaterial(GXMaterial *mat, QRhiCommand
     }
 
     bindings.append(QRhiShaderResourceBinding::sampledTexture(3, QRhiShaderResourceBinding::FragmentStage, mat->baseColorTex(), mat->baseColorSampler()));
+
+    if (mat->normalTex() && mat->normalSampler()) {
+        bindings.append(QRhiShaderResourceBinding::sampledTexture(4, QRhiShaderResourceBinding::FragmentStage, mat->normalTex(), mat->normalSampler()));
+    }
 
     srb->setBindings(bindings.cbegin(), bindings.cend());
     if (!srb->create()) {

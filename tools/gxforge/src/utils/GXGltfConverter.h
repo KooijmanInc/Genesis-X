@@ -63,7 +63,7 @@ public:
 
     void writeQmlFiles(const QJsonObject& doc, const QVector<QString>& meshSources, const QVector<QVector<QString>>& meshMaterialIds, const QVector<QString>& gltfMatQmlId);
     void writeNodeRecursive(QTextStream& ts, const QJsonArray& nodes, const QVector<QString>& meshSources, const QVector<QVector<QString>>& meshMaterialIds, int nodeIndex, const QJsonObject& extensions, int level);
-    void writeMaterials(QTextStream& ts, const QJsonArray& mats, const QVector<QString>& gltfMatQmlId, int level);
+    void writeMaterials(QTextStream& ts, const QJsonArray& mats, const QVector<QString>& gltfMatQmlId, int level, const QJsonObject& doc);
 
 signals:
     void currentDirectoryChanged();

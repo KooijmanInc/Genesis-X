@@ -83,6 +83,108 @@ static QVector<QVector2D> readUv0OrEmpty(const QJsonObject& prim, gx::gx3d::rend
     return (acc >= 0) ? access.readVec2Accessor(acc) : QVector<QVector2D>{};
 }
 
+static QVector<QVector4D> readTangentsOrEmpty(const QJsonObject& prim, gx::gx3d::render::GXGltfAccess& access)
+{
+    // Implement this in GXGltfAccess (recommended), or parse accessor here.
+    // In glTF, tangents are VEC4 float: xyz + w sign.
+    if (!prim.value("attributes").toObject().contains("TANGENT"))
+        return {};
+    return access.readTangentsFromPrimitive(prim); // you add this method
+}
+
+
+struct GxGltfSamplerInfo {
+    int wrapS = 10497;   // REPEAT
+    int wrapT = 10497;   // REPEAT
+    int minFilter = -1;
+    int magFilter = -1;
+};
+
+// static GxGltfSamplerInfo readSamplerInfo(const QJsonObject& doc, int samplerIndex)
+// {
+//     GxGltfSamplerInfo s;
+//     const QJsonArray samplers = doc.value("samplers").toArray();
+//     if (samplerIndex < 0 || samplerIndex >= samplers.size())
+//         return s;
+
+//     const QJsonObject so = samplers.at(samplerIndex).toObject();
+//     s.wrapS = so.value("wrapS").toInt(10497);
+//     s.wrapT = so.value("wrapT").toInt(10497);
+//     s.minFilter = so.value("minFilter").toInt(-1);
+//     s.magFilter = so.value("magFilter").toInt(-1);
+//     return s;
+// }
+
+struct GxGltfTextureBinding {
+    int textureIndex = -1;   // index into textures[]
+    int imageIndex = -1;     // index into images[]
+    int samplerIndex = -1;   // index into samplers[]
+    GxGltfSamplerInfo sampler;
+};
+
+// static GxGltfTextureBinding resolveBaseColorTextureBinding(const QJsonObject& doc, const QJsonObject& material)
+// {
+//     GxGltfTextureBinding out;
+
+//     const QJsonObject pbr = material.value("pbrMetallicRoughness").toObject();
+//     const QJsonObject baseColorTexture = pbr.value("baseColorTexture").toObject();
+//     const int texIndex = baseColorTexture.value("index").toInt(-1);
+//     out.textureIndex = texIndex;
+
+//     const QJsonArray textures = doc.value("textures").toArray();
+//     if (texIndex < 0 || texIndex >= textures.size())
+//         return out;
+
+//     const QJsonObject texObj = textures.at(texIndex).toObject();
+//     out.imageIndex = texObj.value("source").toInt(-1);
+//     out.samplerIndex = texObj.value("sampler").toInt(-1);
+//     out.sampler = readSamplerInfo(doc, out.samplerIndex);
+//     return out;
+// }
+
+// static QString glWrapToString(int wrap)
+// {
+//     switch (wrap) {
+//     case 33071: return "CLAMP_TO_EDGE";
+//     case 33648: return "MIRRORED_REPEAT";
+//     case 10497: return "REPEAT";
+//     default:    return QString("UNKNOWN(%1)").arg(wrap);
+//     }
+// }
+
+static void logUv0AccessorMeta(QString& status,
+                               const QJsonObject& docJson,
+                               const QJsonObject& prim,
+                               int meshIdx,
+                               int primIdx)
+{
+    const QJsonObject attrs = prim.value("attributes").toObject();
+    const int accIndex = attrs.value("TEXCOORD_0").toInt(-1);
+    if (accIndex < 0) {
+        status.append(QString("mesh=%1 prim=%2 UV0 accessor: <missing>\n").arg(meshIdx).arg(primIdx));
+        return;
+    }
+
+    const QJsonArray accessors = docJson.value("accessors").toArray();
+    if (accIndex >= accessors.size()) {
+        status.append(QString("mesh=%1 prim=%2 UV0 accessor: <out of range %3>\n").arg(meshIdx).arg(primIdx).arg(accIndex));
+        return;
+    }
+
+    const QJsonObject acc = accessors.at(accIndex).toObject();
+    const int componentType = acc.value("componentType").toInt(-1);
+    const bool normalized   = acc.value("normalized").toBool(false);
+    const QString type      = acc.value("type").toString();
+    const int count         = acc.value("count").toInt(-1);
+
+    status.append(QString("mesh=%1 prim=%2 UV0 accessor=%3 type=%4 componentType=%5 normalized=%6 count=%7\n")
+                      .arg(meshIdx).arg(primIdx).arg(accIndex)
+                      .arg(type).arg(componentType)
+                      .arg(normalized ? "true" : "false")
+                      .arg(count));
+}
+
+
 GXGltfConverter::GXGltfConverter(QObject *parent)
     : QObject{parent}
 {
@@ -153,7 +255,8 @@ void GXGltfConverter::convertToMesh()
 
     auto doc = gx::gx3d::render::GXGltfDocument::fromFile(m_file, &errors);
     if (!doc.isValid()) {
-        for (const auto &e : errors)
+        const auto& errs = errors;
+        for (const auto &e : errs)
             m_status.append("Error: " + e.message + "\n");
         emit statusChanged();
         return;
@@ -229,7 +332,8 @@ void GXGltfConverter::convertToMesh()
         // }
     }
 
-    for (const auto &e : errors)
+    const auto& errs = errors;
+    for (const auto &e : errs)
         m_status.append("Warn: " + e.message + "\n");
 
     emit statusChanged();
@@ -288,7 +392,7 @@ void GXGltfConverter::writeQmlFiles(const QJsonObject &doc, const QVector<QStrin
     ts << "    id: node\n";
     ts << "    objectName: \"" + objectName + "\"\n";
 
-    writeMaterials(ts, mats, gltfMatQmlId, 1);
+    writeMaterials(ts, mats, gltfMatQmlId, 1, doc);
 
     ts << "    GXNode {\n";
     // Write root nodes
@@ -424,33 +528,38 @@ void GXGltfConverter::writeNodeRecursive(QTextStream &ts, const QJsonArray &node
     ts << indent(level) << "}\n";
 }
 
-void GXGltfConverter::writeMaterials(QTextStream &ts, const QJsonArray &mats, const QVector<QString>& gltfMatQmlId, int level)
-{
+void GXGltfConverter::writeMaterials(QTextStream &ts, const QJsonArray &mats, const QVector<QString>& gltfMatQmlId, int level, const QJsonObject& doc)
+{//qDebug() << doc;
+    QString normals;
+    QString normalNames;
+    QString textureNames;
+    QString textures;
+    QString materials;
     for (int i = 0; i < mats.size(); ++i) {
         const QJsonObject ma = mats.at(i).toObject();
-
+        // qDebug() << "\n" << ma;
         QString name = ma.value("name").toString();
         int j = 0;
         const QString idName = gltfMatQmlId.at(i);
         QString objectName;
-        for (auto l : name) {
+        const auto& nms = name;
+        for (auto l : nms) {
             if (j == 0) {
-                // idName.append(l.toLower());
                 objectName.append(l.toUpper());
             } else {
-                // idName.append(l);
                 objectName.append(l);
             }
             j++;
         }
 
-
         const QJsonObject pbr = ma.value("pbrMetallicRoughness").toObject();
-        const auto bc = pbr.value("baseColorFactor").toArray();
 
-        ts << indent(level) << "GXPrincipledMaterial { \n";
-        ts << indent(level + 1) << "id: " << idName << "\n";
-        ts << indent(level + 1) << "objectName: \"" << objectName << "\"\n";
+        // ts << indent(level) << "GXPrincipledMaterial { \n";
+        // ts << indent(level + 1) << "id: " << idName << "\n";
+        // ts << indent(level + 1) << "objectName: \"" << objectName << "\"\n";
+        materials.append(indent(level) + "GXPrincipledMaterial { \n");
+        materials.append(indent(level + 1) + "id: " + idName + "\n");
+        materials.append(indent(level + 1) + "objectName: \"" + objectName + "\"\n");
 
         const QMap<QString, QVariant> mat = gx::gx3d::utils::GXMeshHelper::materials(ma);
 
@@ -465,7 +574,9 @@ void GXGltfConverter::writeMaterials(QTextStream &ts, const QJsonArray &mats, co
             if (v.metaType().id() == QMetaType::QString && v.toString().trimmed().isEmpty())
                 continue;
 
-            ts << indent(level + 1) << key << ": " << v.toString() << "\n";
+            // ts << indent(level + 1) << key << ": " << v.toString() << "\n";
+            materials.append(indent(level + 1) + key + ": " + v.toString() + "\n");
+
             // if (!i.value().isNull() && i.value() != "") {
             //     ts << indent(level + 1) << qPrintable(i.key()) << ": " + i.value().toString() + "\n";
             // } else {
@@ -473,14 +584,77 @@ void GXGltfConverter::writeMaterials(QTextStream &ts, const QJsonArray &mats, co
             // }
         }
 
-        // if (bc.size() >= 3) {
-        //     const float r = float(bc.at(0).toDouble());
-        //     const float g = float(bc.at(1).toDouble());
-        //     const float b = float(bc.at(2).toDouble());
-        //     // if your setBaseColor accepts QColor:
-        //     ts << indent(level + 1) << "baseColor: \"" + QColor::fromRgbF(r, g, b, 1.0f).name() + "\"\n";
-        // }
+        if (pbr.contains("baseColorTexture")) {
+            const QJsonObject bct = pbr.value("baseColorTexture").toObject();
+            const QJsonArray tex = doc.value("images").toArray();
 
+            if (bct.value("index").toInt() < tex.count()) {
+                const QJsonObject image = tex[bct.value("index").toInt()].toObject();
+                auto ext = image.value("mimeType").toString().split("/");
+                QString idName;
+                int k = 0;
+                for (auto n : image.value("name").toString()) {
+                    if (k == 0) idName.append(n.toLower());
+                    else idName.append(n);
+                }
+
+                textureNames.append(indent(level) + "property url " + image.value("name").toString() + "Img: \"textures/" + image.value("name").toString() + "." + ext[1] + "\"\n");
+                textures.append(indent(level) + "GXTexture2D {\n");
+                textures.append(indent(level + 1) + "id: " + idName + "Tex\n");
+                textures.append(indent(level + 1) + "objectName: \"" + image.value("name").toString() + "Tex\"\n");
+                textures.append(indent(level + 1) + "source: " + image.value("name").toString() + "Img\n");
+                textures.append(indent(level) + "}\n");
+                materials.append(indent(level + 1) + "baseColorTexture: " + idName + "Tex\n");
+                // qDebug() << tex[bct.value("index").toInt()];
+                // const auto binding = resolveBaseColorTextureBinding(doc, ma);
+                // m_status.append(QString("mat[%1] baseColorTexture: tex=%2 img=%3 sampler=%4 wrapS=%5 wrapT=%6\n")
+                //                     .arg(i)
+                //                     .arg(binding.textureIndex)
+                //                     .arg(binding.imageIndex)
+                //                     .arg(binding.samplerIndex)
+                //                     .arg(glWrapToString(binding.sampler.wrapS))
+                //                     .arg(glWrapToString(binding.sampler.wrapT)));
+            }
+        }
+
+        if (ma.contains("normalTexture")) {
+            const QJsonObject nt = ma.value("normalTexture").toObject();
+            const QJsonArray tex = doc.value("images").toArray();
+
+            if (nt.value("index").toInt() < tex.count()) {
+                const QJsonObject image = tex[nt.value("index").toInt()].toObject();
+                auto ext = image.value("mimeType").toString().split("/");
+                QString idName;
+                int k = 0;
+                for (auto n : image.value("name").toString()) {
+                    if (k == 0) idName.append(n.toLower());
+                    else idName.append(n);
+                }
+
+                normalNames.append(indent(level) + "property url " + image.value("name").toString() + "Img: \"textures/" + image.value("name").toString() + "." + ext[1] + "\"\n");
+                normals.append(indent(level) + "GXTexture2D {\n");
+                normals.append(indent(level + 1) + "id: " + idName + "Nrm\n");
+                normals.append(indent(level + 1) + "objectName: \"" + image.value("name").toString() + "Nrm\"\n");
+                normals.append(indent(level + 1) + "source: " + image.value("name").toString() + "Img\n");
+                normals.append(indent(level + 1) + "scale: " + QString::number(nt.value("scale").toDouble()) + "\n");
+                normals.append(indent(level) + "}\n");
+                materials.append(indent(level + 1) + "normalTexture: " + idName + "Nrm\n");
+            }
+        }
+
+        materials.append(indent(level + 1) + "alphaMode: GXPrincipledMaterial.");
+        if (ma.contains("alphaMode")) {
+            QString alphaMode;
+            int k = 0;
+            for (auto a : ma.value("alphaMode").toString()) {
+                if (k != 0) alphaMode.append(a.toLower());
+                else alphaMode.append(a);
+            }
+            materials.append(alphaMode);
+        } else {
+            materials.append("Opaque");
+        }
+        materials.append("\n");
         // const auto emf = ma.value("emissiveFactor").toArray();
 
         // if (emf.size() >= 3) {
@@ -500,8 +674,14 @@ void GXGltfConverter::writeMaterials(QTextStream &ts, const QJsonArray &mats, co
         //     }
         // }
 
-        ts << indent(level) << "}\n\n";
+        materials.append(indent(level) + "}\n");
     }
+    ts << "\n";
+    ts << normalNames;
+    ts << textureNames;
+    ts << normals;
+    ts << textures;
+    ts << materials << "\n";
 }
 
 void GXGltfConverter::writeMeshFiles(const QJsonObject &docJson, gx::gx3d::render::GXGltfAccess &access, const QString &outDirPath, const QString &baseName, const QVector<QString>& gltfMatQmlId, QVector<QString> &outMeshSources, QVector<QVector<QString> > &outMeshMaterialIds)
@@ -577,6 +757,31 @@ void GXGltfConverter::writeMeshFiles(const QJsonObject &docJson, gx::gx3d::rende
 
             const auto normals = readNormalsOrEmpty(prim, access);
             const auto uv0 = readUv0OrEmpty(prim, access);
+            const auto tangents = readTangentsOrEmpty(prim, access);
+            auto logUvRange = [&](const QVector<QVector2D>& uv0, int meshIdx, int primIdx) {
+                if (uv0.isEmpty()) {
+                    m_status.append(QString("mesh=%1 prim=%2 UV0: <empty>\n").arg(meshIdx).arg(primIdx));
+                    return;
+                }
+
+                float minU =  1e9f, minV =  1e9f;
+                float maxU = -1e9f, maxV = -1e9f;
+
+                for (const auto& uv : uv0) {
+                    minU = std::min(minU, uv.x());
+                    minV = std::min(minV, uv.y());
+                    maxU = std::max(maxU, uv.x());
+                    maxV = std::max(maxV, uv.y());
+                }
+
+                m_status.append(QString("mesh=%1 prim=%2 UV0 range: U[%3..%4] V[%5..%6]\n")
+                                    .arg(meshIdx).arg(primIdx)
+                                    .arg(minU, 0, 'g', 6).arg(maxU, 0, 'g', 6)
+                                    .arg(minV, 0, 'g', 6).arg(maxV, 0, 'g', 6));
+            };
+            logUvRange(uv0, m, p);
+            logUv0AccessorMeta(m_status, docJson, prim, m, p);
+
 
             // Resolve material index (global glTF)
             const int globalMat = prim.value("material").toInt(-1);
@@ -625,7 +830,20 @@ void GXGltfConverter::writeMeshFiles(const QJsonObject &docJson, gx::gx3d::rende
                 gx::gx3d::render::GXVertex vx;
                 vx.position = positions[v];
                 vx.normal   = (v < normals.size()) ? normals[v] : QVector3D(0, 1, 0);
-                vx.uv0      = (v < uv0.size())     ? uv0[v]     : QVector2D(0, 0);
+
+                QVector2D uv = (v < uv0.size()) ? uv0[v] : QVector2D(0, 0);
+
+                // bake proper glTF->engine V flip
+                uv.setY(1.0f - uv.y());
+
+                // handle tiny float noise like -1.19209e-07 that would become >1.0
+                if (uv.y() < 0.0f) uv.setY(0.0f);
+                if (uv.y() > 1.0f) uv.setY(1.0f);
+
+                vx.uv0 = uv;
+
+                vx.tangent = (v < tangents.size()) ? tangents[v] : QVector4D(1, 0, 0, 1);
+
                 meshData.vertices.push_back(vx);
             }
 
@@ -635,7 +853,8 @@ void GXGltfConverter::writeMeshFiles(const QJsonObject &docJson, gx::gx3d::rende
 
             // Append indices (rebased)
             meshData.indices.reserve(meshData.indices.size() + indices.size());
-            for (quint32 idx : indices)
+            const auto& idxs = indices;
+            for (quint32 idx : idxs)
                 meshData.indices.push_back(baseVertex + idx);
 
             gx::gx3d::render::GXSubMeshData sm;

@@ -16,12 +16,20 @@ static constexpr quint32 kChunkSUBM = 0x4D425553u; // 'S''U''B''M'
 static constexpr quint32 kChunkBND0 = 0x30444E42u; // 'B''N''D''0'
 
 // On-disk vertex layout (must match writer DiskVertexV1)
-struct DiskVertexV1
+struct DiskVertexV2
 {
     float px, py, pz;
     float nx, ny, nz;
     float u0, v0;
+    float tx, ty, tz, tw;
 };
+
+static_assert(sizeof(DiskVertexV2) == 48, "DiskVertexV2 must be 8 floats (48 bytes)");
+static_assert(offsetof(DiskVertexV2, px) == 0,  "px offset");
+static_assert(offsetof(DiskVertexV2, nx) == 12, "nx offset");
+static_assert(offsetof(DiskVertexV2, u0) == 24, "u0 offset");
+static_assert(offsetof(DiskVertexV2, v0) == 28, "v0 offset");
+static_assert(offsetof(DiskVertexV2, tx) == 32, "tx offset");
 
 static inline bool fail(QString* err, const QString& msg)
 {
@@ -29,12 +37,13 @@ static inline bool fail(QString* err, const QString& msg)
     return false;
 }
 
-static inline GXVertex fromDiskVertex(const DiskVertexV1& d)
+static inline GXVertex fromDiskVertex(const DiskVertexV2& d)
 {
     GXVertex v{};
     v.position = QVector3D(d.px, d.py, d.pz);
     v.normal   = QVector3D(d.nx, d.ny, d.nz);
     v.uv0      = QVector2D(d.u0, d.v0);
+    v.tangent  = QVector4D(d.tx, d.ty, d.tz, d.tw);
     return v;
 }
 
@@ -103,7 +112,7 @@ bool GXMeshReader::read(const QString &filePath, GXMeshData &outMesh, QString *e
         return fail(errorString, QString("[GXMeshReader] bad magic (not a GXMS .mesh file"));
     }
 
-    if (version != 1u) return fail(errorString, QString("[GXMeshReader] unsupported version %1").arg(version));
+    if (version != 2u) return fail(errorString, QString("[GXMeshReader] unsupported version %1").arg(version));
 
     bool haveVERT = false;
     bool haveINDX = false;
@@ -126,24 +135,40 @@ bool GXMeshReader::read(const QString &filePath, GXMeshData &outMesh, QString *e
             return fail(errorString, "GXMeshReader: truncated chunk payload");
 
         if (chunkId == kChunkVERT) {
-            if (chunkSize % quint32(sizeof(DiskVertexV1)) != 0) {
+            if (chunkSize % quint32(sizeof(DiskVertexV2)) != 0) {
                 if (opt.strict)
                     return fail(errorString, "GXMeshReader: VERT chunk size is not multiple of DiskVertexV1");
             }
 
-            const int vCount = int(chunkSize / quint32(sizeof(DiskVertexV1)));
+            const int vCount = int(chunkSize / quint32(sizeof(DiskVertexV2)));
             outMesh.vertices.clear();
             outMesh.vertices.reserve(vCount);
 
             for (int i = 0; i < vCount; ++i) {
-                DiskVertexV1 dv{};
+                DiskVertexV2 dv{};
                 if (!readF32(dv.px) || !readF32(dv.py) || !readF32(dv.pz) ||
                     !readF32(dv.nx) || !readF32(dv.ny) || !readF32(dv.nz) ||
-                    !readF32(dv.u0) || !readF32(dv.v0)) {
+                    !readF32(dv.u0) || !readF32(dv.v0) ||
+                    !readF32(dv.tx) || !readF32(dv.ty) || !readF32(dv.tz) || !readF32(dv.tw)) {
                     return fail(errorString, "GXMeshReader: truncated VERT data");
                 }
                 outMesh.vertices.push_back(fromDiskVertex(dv));
             }
+            // --- DEBUG: UV0 range check (temporary) ---
+            float minU =  1e9f, minV =  1e9f;
+            float maxU = -1e9f, maxV = -1e9f;
+
+            for (const auto& v : outMesh.vertices) {
+                minU = std::min(minU, v.uv0.x());
+                minV = std::min(minV, v.uv0.y());
+                maxU = std::max(maxU, v.uv0.x());
+                maxV = std::max(maxV, v.uv0.y());
+            }
+
+            // qDebug() << "[GXMeshReader] VERT UV0 range"
+            //          << "U[" << minU << ".." << maxU << "]"
+            //          << "V[" << minV << ".." << maxV << "]";
+            // --- end DEBUG ---
             haveVERT = true;
         }
         else if (chunkId == kChunkINDX) {

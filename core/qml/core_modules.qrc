@@ -8,8 +8,8 @@
         <file>GenesisX/Core/Notifications/qmldir</file>
         <file>GenesisX/Core/Navigation/navigation.qmltypes</file>
         <file>GenesisX/App/Biometrics/qmldir</file>
-        <file>GenesisX/Core/SystemInfo/qmldir</file>
-        <file>GenesisX/Core/SystemInfo/systeminfo.qmltypes</file>
+        <file>GenesisX/SystemInfo/qmldir</file>
+        <file>GenesisX/SystemInfo/systeminfo.qmltypes</file>
         <file>GenesisX/App/Biometrics/biometrics.qmltypes</file>
         <file>GenesisX/App/Permissions/qmldir</file>
         <file>GenesisX/App/Permissions/permissions.qmltypes</file>

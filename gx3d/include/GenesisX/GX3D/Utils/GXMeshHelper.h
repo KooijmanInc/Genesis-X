@@ -20,9 +20,11 @@ public:
     GXMeshHelper();
 
     static QMap<QString, QVariant> materials(const QJsonObject& obj);
+// static QMap<QString, QVariant> textures(const QJsonObject& obj, const QJson)
 
 private:
     static QMap<QString, QVariant> baseColor(const QJsonObject& bc);
+    static QMap<QString, QVariant> baseColorTexture(const QJsonObject& bct);
     static QMap<QString, QVariant> emissionColor(const QJsonObject& ec);
     static QMap<QString, QVariant> extensions(const QJsonObject& ex);
     static QMap<QString, QVariant> emissionStrength(const QJsonObject& em);

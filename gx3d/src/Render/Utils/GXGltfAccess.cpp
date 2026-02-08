@@ -170,6 +170,30 @@ GXGltfAccess::AccessorInfo GXGltfAccess::accessorInfo(int accessorIndex) const
 // ─────────────────────────────────────────────
 // Public high-level readers
 // ─────────────────────────────────────────────
+QVector<QVector4D> GXGltfAccess::readVec4Accessor(int accessorIndex) const
+{
+    const AccessorInfo a = accessorInfo(accessorIndex);
+    QVector<QVector4D> out;
+
+    if (!a.data)
+        return out;
+
+    if (a.componentType != 5126 || a.components != 4) { // FLOAT + VEC4
+        pushError("Expected FLOAT VEC4 accessor");
+        return out;
+    }
+
+    out.reserve(a.count);
+
+    for (int i = 0; i < a.count; ++i) {
+        const uchar *p = a.data + i * a.byteStride;
+        const float *f = reinterpret_cast<const float*>(p);
+        out.push_back(QVector4D(f[0], f[1], f[2], f[3]));
+    }
+
+    return out;
+}
+
 QVector<QVector3D> GXGltfAccess::readVec3Accessor(int accessorIndex) const
 {
     const AccessorInfo a = accessorInfo(accessorIndex);
@@ -269,6 +293,21 @@ QVector<quint32> GXGltfAccess::readIndicesFromPrimitive(const QJsonObject &primi
         }
     }
 
+    return out;
+}
+
+QVector<QVector4D> GXGltfAccess::readTangentsFromPrimitive(const QJsonObject &primitive) const
+{
+    QVector<QVector4D> out;
+
+    const QJsonObject attrs = primitive.value("attributes").toObject();
+    const int accIndex = attrs.value("TANGENT").toInt(-1);
+    if (accIndex < 0) {
+        // Tangents are optional in glTF; return empty and let caller fallback.
+        return out;
+    }
+
+    out = readVec4Accessor(accIndex);
     return out;
 }
 

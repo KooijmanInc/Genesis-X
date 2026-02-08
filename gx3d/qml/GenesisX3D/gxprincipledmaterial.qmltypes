@@ -7,6 +7,15 @@ Module {
         className: "gx::gx3d::render::GXPrincipledMaterial"
         prototype: "QObject"
         exports: ["GenesisX3D/GXPrincipledMaterial 1.0"]
+        Enum {
+            name: "AlphaMode"
+            values: [
+                "Default",
+                "Opaque",
+                "Mask",
+                "Blend"
+            ]
+        }
         Property {
             name: "baseColor"
             type: "string"
@@ -18,6 +27,12 @@ Module {
             type: "string"
             read: "baseColorTexture"
             notify: "baseColorTextureChanged"
+        }
+        Property {
+            name: "normalTexture"
+            type: "string"
+            read: "normalTexture"
+            notify: "normalTextureChanged"
         }
         Property {
             name: "emissionColor"
@@ -42,6 +57,24 @@ Module {
             type: "float"
             read: "emissionLightRadius"
             notify: "emissionLightRadiusChanged"
+        }
+        Property {
+            name: "alphaMode"
+            type: "AlphaMode"
+            read: "alphaMode"
+            notify: "alphaModeChanged"
+        }
+        Property {
+            name: "gamma"
+            type: "QVector3D"
+            read: "gamma"
+            notify: "gammaChanged"
+        }
+        Property {
+            name: "normalScale"
+            type: "double"
+            read: "normalScale"
+            notify: "normalScaleChanged"
         }
     }
 }

@@ -20,6 +20,7 @@ void GXMesh::setGeometry(const QVector<Vertex> &v, const QVector<quint16> &i)
     m_indices16 = i;
     m_indices32.clear();
     m_indexType = IndexUInt16;
+    m_uploadDirty = true;
     m_dirty = true;
 }
 
@@ -29,6 +30,7 @@ void GXMesh::setGeometry(const QVector<Vertex> &v, const QVector<quint32> &i)
     m_indices32 = i;
     m_indices16.clear();
     m_indexType = IndexUInt32;
+    m_uploadDirty = true;
     m_dirty = true;
 }
 
@@ -159,6 +161,11 @@ void GXMesh::syncFromCpuIfNeeded()
 
         o.u  = float(v.uv0.x());
         o.v  = float(v.uv0.y());
+
+        o.tx = float(v.tangent.x());
+        o.ty = float(v.tangent.y());
+        o.tz = float(v.tangent.z());
+        o.tw = float(v.tangent.w());
     }
 
     // 2) indices (choose 16 vs 32)
@@ -167,7 +174,8 @@ void GXMesh::syncFromCpuIfNeeded()
 
     if (canUseU16) {
         // also ensure indices fit
-        for (quint32 idx : m_cpu.indices) {
+        const auto& idxs = m_cpu.indices;
+        for (quint32 idx : idxs) {
             if (idx > 65535u) { canUseU16 = false; break; }
         }
     }
@@ -175,7 +183,8 @@ void GXMesh::syncFromCpuIfNeeded()
     if (canUseU16) {
         m_indices16.clear();
         m_indices16.reserve(m_cpu.indices.size());
-        for (quint32 idx : m_cpu.indices)
+        const auto& idxs = m_cpu.indices;
+        for (quint32 idx : idxs)
             m_indices16.push_back(quint16(idx));
         m_indices32.clear();
         m_indexType = IndexUInt16;
@@ -188,7 +197,8 @@ void GXMesh::syncFromCpuIfNeeded()
     // 3) submeshes: copy into GXSubMesh list (your GXSubMesh class/struct)
     m_subMeshes.clear();
     m_subMeshes.reserve(m_cpu.subMeshes.size());
-    for (const auto &sm : m_cpu.subMeshes) {
+    const auto& sms = m_cpu.subMeshes;
+    for (const auto &sm : sms) {
         GXSubMesh out;
         out.indexOffset    = sm.firstIndex;
         out.indexCount     = sm.indexCount;
