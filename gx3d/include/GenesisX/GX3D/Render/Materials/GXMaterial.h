@@ -19,6 +19,9 @@ class GENESISX_GX3D_EXPORT GXMaterial : public QObject
     Q_PROPERTY(bool doubleSided READ doubleSided WRITE setDoubleSided NOTIFY renderStateChanged)
     Q_PROPERTY(bool depthTest READ depthTest WRITE setDepthTest NOTIFY renderStateChanged)
     Q_PROPERTY(bool depthWrite READ depthWrite WRITE setDepthWrite NOTIFY renderStateChanged)
+    Q_PROPERTY(float alphaCutoff READ alphaCutoff WRITE setAlphaCutoff NOTIFY alphaCutoffChanged)
+    Q_PROPERTY(AlphaMode alphaMode READ alphaMode WRITE setAlphaMode NOTIFY alphaModeChanged)
+    Q_PROPERTY(QVector3D gamma READ gamma WRITE setGamma NOTIFY gammaChanged)
 
 public:
     enum CullMode {
@@ -33,6 +36,19 @@ public:
         FrontCW
     };
     Q_ENUM(FrontFace)
+
+    enum AlphaMode {
+        Default,
+        Opaque,
+        Mask,
+        Blend
+    };
+    Q_ENUM(AlphaMode)
+
+    enum ShadingVariant {
+        Lit,
+        UiSafe
+    };
 
     explicit GXMaterial(QObject* parent = nullptr);
 
@@ -60,17 +76,28 @@ public:
     bool depthWrite() const { return m_state.depthWrite; }
     void setDepthWrite(bool on);
 
+    float alphaCutoff() const { return m_alphaCutoff; }
+    void setAlphaCutoff(float a);
+
     CullMode cullMode() const;
     void setCullMode(CullMode m);
 
     FrontFace frontFace() const;
     void setFrontFace(FrontFace f);
 
+    AlphaMode alphaMode() const { return m_alphaMode; }
+    void setAlphaMode(AlphaMode a);
+
+    QVector3D gamma() const { return m_gamma; }
+    void setGamma(QVector3D a);
+
     bool isDirty() const { return m_dirty; }
     bool consumeDirty();
 
     QRhiTexture* baseColorTex() const { return m_baseColorTex; }
     QRhiSampler* baseColorSampler() const { return m_baseColorSampler; }
+    QRhiTexture* normalTex() const { return m_normalTex; }
+    QRhiSampler* normalSampler() const { return m_normalSampler; }
 
     void ensureRhi(QRhi* rhi, QRhiCommandBuffer* cb);
 
@@ -79,20 +106,32 @@ public:
 signals:
     void renderStateChanged();
     void materialChanged();
+    void alphaModeChanged();
+    void alphaCutoffChanged();
+    void gammaChanged();
 
 protected:
     GXShaderUtils m_shaderUtils;
     void markDirty();
 
     virtual void ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer* cb) = 0;
+    virtual void ensureNormalMapResources(QRhi* rhi, QRhiCommandBuffer* cb) = 0;
     virtual void destroyRhiResources();
+
+    virtual quint32 variantKey() const { return 0; }
 
     QRhi* m_rhi = nullptr;
     QRhiTexture* m_baseColorTex = nullptr;
     QRhiSampler* m_baseColorSampler = nullptr;
+    QRhiTexture* m_normalTex = nullptr;
+    QRhiSampler* m_normalSampler = nullptr;
+
+    QVector3D m_gamma = {0.45454545,0.45454545,0.45454545};
 
 private:
     GXRenderState m_state;
+    AlphaMode m_alphaMode = Default;
+    float m_alphaCutoff = 0.5f;
 
     bool m_dirty = true;
 

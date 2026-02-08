@@ -7,6 +7,7 @@ CONFIG += ordered
 
 SUBDIRS += \
     core \
+    gx_glb_exporter \
     physics \
     orm \
     framework \

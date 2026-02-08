@@ -25,6 +25,8 @@ class GENESISX_GX3D_EXPORT GXPrincipledMaterial : public GXMaterial
     Q_PROPERTY(EmissionLight emissionLight READ emissionLight WRITE setEmissionLight NOTIFY emissionLightChanged)
     Q_PROPERTY(float emissionLightIntensity READ emissionLightIntensity WRITE setEmissionLightIntensity NOTIFY emissionLightIntensityChanged)
     Q_PROPERTY(float emissionLightRadius READ emissionLightRadius WRITE setEmissionLightRadius NOTIFY emissionLightRadiusChanged)
+    Q_PROPERTY(GXTexture* normalTexture READ normalTexture WRITE setNormalTexture NOTIFY normalTextureChanged)
+    Q_PROPERTY(float normalScale READ normalScale WRITE setNormalScale NOTIFY normalScaleChanged)
 
 public:
     enum EmissionLight {
@@ -33,6 +35,7 @@ public:
         TrueLight
     };
     Q_ENUM(EmissionLight)
+
     explicit GXPrincipledMaterial(QObject* parent = nullptr);
 
     QShader vertexShader() const override;
@@ -48,6 +51,9 @@ public:
     void fillFS(void* dst) const override;
 
     void ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer* cb) override;
+    void ensureNormalMapResources(QRhi* rhi, QRhiCommandBuffer* cb) override;
+
+    quint32 variantKey() const override;
 
     QColor baseColor() const { return m_baseColor; }
     void setBaseColor(const QColor& c);
@@ -70,6 +76,12 @@ public:
     float emissionLightRadius() const { return m_emissionLightRadius; }
     void setEmissionLightRadius(float l);
 
+    GXTexture* normalTexture() const { return m_normalTexure; }
+    void setNormalTexture(GXTexture* tex);
+
+    float normalScale() const { return m_normalScale; }
+    void setNormalScale(float s);
+
 signals:
     void baseColorChanged();
     void baseColorTextureChanged();
@@ -78,16 +90,20 @@ signals:
     void emissionLightChanged();
     void emissionLightIntensityChanged();
     void emissionLightRadiusChanged();
+    void normalTextureChanged();
+    void normalScaleChanged();
 
 private:
     QShader m_vs, m_fs;
     QColor m_baseColor = Qt::white;
     GXTexture* m_baseColorTexture = nullptr;
+    GXTexture* m_normalTexure = nullptr;
     QColor m_emissionColor = Qt::black;
 
     float m_emissionStrength = 0.0f;
     float m_emissionLightIntensity = 0.0f;
     float m_emissionLightRadius = 0.0f;
+    float m_normalScale = 0.0f;
 
     EmissionLight m_emissionLight = None;
 

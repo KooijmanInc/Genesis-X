@@ -93,8 +93,9 @@ GXCubeNode::GXCubeNode(QObject *parent)
     QVector<GXMesh::Vertex> verts;
     verts.reserve(24);
     float u = 0.0f, uv = 0.0f;
+    float tx = 1.0f, ty = 0.0f, tz = 0.0f, tw = 1.0f;
     for (const auto &v : kCubeVerts)
-        verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz, u, uv };
+        verts << GXMesh::Vertex{ v.px,v.py,v.pz, v.nx,v.ny,v.nz, u, uv, tx, ty, tz, tw };
 
     QVector<quint16> idx;
     idx.reserve(36);

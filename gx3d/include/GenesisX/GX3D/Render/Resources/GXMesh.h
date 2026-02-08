@@ -25,6 +25,7 @@ public:
         float px, py, pz;
         float nx, ny, nz;
         float u, v;
+        float tx, ty, tz, tw;
     };
 
     enum IndexType {

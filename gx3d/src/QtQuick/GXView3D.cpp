@@ -63,7 +63,7 @@ void GXView3D::setCamera(GXCamera *cam)
 
     if (m_camera) {
         connect(m_camera, &GXCamera::positionChanged, this, &GXView3D::update);
-        connect(m_camera, &GXCamera::targetChanged, this, &GXView3D::update);
+        connect(m_camera, &GXCamera::lookAtChanged, this, &GXView3D::update);
         connect(m_camera, &GXCamera::upChanged, this, &GXView3D::update);
         connect(m_camera, &GXCamera::changed, this, [this]() { update(); });
     }
@@ -241,7 +241,7 @@ query::GXRay GXView3D::makeRayFromItemPos(float x, float y) const
     const QVector3D camPos = m_camera->worldMatrix().map(QVector3D(0,0,0));
 
     // Camera forward (prefer target if usable)
-    QVector3D camFwd = (m_camera->target() - camPos);
+    QVector3D camFwd = (m_camera->lookAt() - camPos);
     if (camFwd.lengthSquared() < 1e-8f) {
         // Fallback: derive from view matrix (camera looks down -Z in view space)
         // Inverse(view) * (0,0,-1,0) gives forward direction

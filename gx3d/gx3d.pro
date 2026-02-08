@@ -75,6 +75,12 @@ DISTFILES += \
     shaders/pick.vert \
     shaders/principled.frag \
     shaders/principled.vert \
+    shaders/principled_blend.frag \
+    shaders/principled_blend.vert \
+    shaders/principled_mask.frag \
+    shaders/principled_mask.vert \
+    shaders/principled_opaque.frag \
+    shaders/principled_opaque.vert \
     shaders/solidcolor.frag \
     shaders/solidcolor.vert \
     shaders/test.vert \

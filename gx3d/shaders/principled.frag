@@ -22,12 +22,6 @@ layout(binding = 1) uniform FSUBO {
 layout(binding = 2) uniform FrameLightingUBO {
     vec4 frameParams;
     GXLightGPU lights[GX_MAX_LIGHTS];
-    // vec4 lightPos;
-    // vec4 lightDir;
-    // vec4 lightColor;
-    // vec4 lightParams;
-    // float cosInner;
-    // float cosOuter;
 } fl;
 
 layout(binding = 3) uniform sampler2D baseColorTex;
@@ -151,70 +145,11 @@ void main(void)
 
     vec3 emissionColor = fsu.emission.rgb * fsu.emission.a;
 
-    vec3 linear = ambient + diffuseSum + emissionColor;
-    linear = min(linear, vec3(4.0));
+    vec3 litLinear = ambient + diffuseSum + emissionColor;
+    vec3 linear = min(litLinear, vec3(4.0));
+
     vec3 color = pow(clamp(linear, 0.0, 1.0), vec3(1.0/2.2));
 
     float alpha = fsu.baseColor.a * tex.a; // respect alpha
     fragColor = vec4(color, alpha);
-
-    // vec3 N = normalize(vWorldN);
-
-    // // light vector (fragment-facing)
-    // vec3 Lvec = fl.lightPos.xyz - vWorldPos;
-    // float dist = length(Lvec);
-    // vec3 L = (dist >1e-5) ? (Lvec / dist) : vec3(0.0, 0.0, 1.0);
-
-    // float ndot1 = max(dot(N, L), 0.0);
-
-    // // Attenuation
-    // float range = max(fl.lightParams.x, 1e-4);
-    // float x = clamp(1.0 - dist / range, 0.0, 1.0);
-    // float att = x * x;
-    // // float att = 1.0;
-
-    // // Intensity
-    // float intensity = fl.lightColor.a;
-    // // float intensity = 1.0;
-
-    // // Spotlight cone
-    // float spot = 1.0;
-    // if (fl.cosOuter > -0.5) { // spotlight enabled
-    //     vec3 D = (length(fl.lightDir.xyz) > 1e-6) ? normalize(fl.lightDir.xyz) : vec3(0, 0, -1);
-    //     vec3 V = normalize(vWorldPos - fl.lightPos.xyz);
-
-    //     float a0 = dot(D, V);
-    //     float a1 = dot(-D, V);
-    //     float angleCos = max(a0, a1);
-
-    //     float cIn = max(fl.cosInner, fl.cosOuter);
-    //     float cOut = min(fl.cosInner, fl.cosOuter);
-
-    //     spot = smoothstep(cOut, cIn, dot(D, V));
-    // }
-
-    // // Material
-    // vec4 tex = texture(baseColorTex, vUv);
-    // vec3 albedo = fsu.baseColor.rgb * tex.rgb;
-
-    // // Ambient + emission
-    // vec3 ambient = albedo * fl.lightParams.y;
-    // vec3 emissionColor = fsu.emission.rgb * fsu.emission.a;
-
-    // // Diffuse
-    // vec3 diffuse = albedo * fl.lightColor.rgb * (ndot1 * att * intensity * spot);
-
-    // // HDR-ish clamp + gamma
-    // vec3 linear = ambient + diffuse + emissionColor;
-    // linear = min(linear, vec3(4.0));
-    // vec3 color = pow(clamp(linear, 0.0, 1.0), vec3(1.0/2.2));
-    // // vec3 color = clamp(ambient + diffuse + emissionColor, 0.0, 1.0);
-    // // vec3 color = pow(clamp(linear / 4.0, 0.0, 1.0), vec3(1.0/2.2)); // base hdr settings
-    // // color *= 4.0; // base hdr settings
-
-    // // vec3 color = pow(clamp(linear, 0.0, 4.0) / 4.0, vec3(1.0/2.2)); // low emission
-
-    // float alpha = fsu.baseColor.a * tex.a; // respect alpha
-    // // float alpha = max(base.a * tex.a, clamp(emission.a, 0.0, 1.0)); // boost alpha
-    // fragColor = vec4(color, alpha);
 }

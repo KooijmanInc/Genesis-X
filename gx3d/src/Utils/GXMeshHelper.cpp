@@ -43,6 +43,15 @@ QMap<QString, QVariant> GXMeshHelper::baseColor(const QJsonObject &bc)
     return m;
 }
 
+QMap<QString, QVariant> GXMeshHelper::baseColorTexture(const QJsonObject &bct)
+{
+    QMap<QString, QVariant> m;
+    const QJsonObject pbr = bct.value("pbrMetallicRoughness").toObject();
+    const auto c = pbr.value("baseColorTexture").toArray();
+
+    return m;
+}
+
 QMap<QString, QVariant> GXMeshHelper::emissionColor(const QJsonObject &ec)
 {
     QMap<QString, QVariant> m;

@@ -55,6 +55,8 @@ GXMesh *GXSphereMesh::create()
         const float y = qCos(phi);                        // -1..1? actually cos(0)=1, cos(pi)=-1
         const float sinPhi = qSin(phi);
 
+        float tx = 1.0f, ty = 0.0f, tz = 0.0f, tw = 1.0f;
+
         for (int s = 0; s <= sectors; ++s) {
             const float uCoord = float(s) / float(sectors);    // 0..1
             const float theta = float(2.0 * M_PI) * uCoord;    // 0..2pi
@@ -65,7 +67,7 @@ GXMesh *GXSphereMesh::create()
             const Vertex vv = makeSphereVertex(x * radius, y * radius, z * radius);
             const float uv_u = uCoord;
             const float uv_v = 1.0f - vCoord;
-            verts << GXMesh::Vertex{ vv.px, vv.py, vv.pz, vv.nx, vv.ny, vv.nz, uv_u, uv_v };
+            verts << GXMesh::Vertex{ vv.px, vv.py, vv.pz, vv.nx, vv.ny, vv.nz, uv_u, uv_v, tx, ty, tz, tw };
         }
     }
 

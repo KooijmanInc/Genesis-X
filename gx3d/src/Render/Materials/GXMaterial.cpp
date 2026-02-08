@@ -53,6 +53,16 @@ void GXMaterial::setDepthWrite(bool on)
     markDirty();
 }
 
+void GXMaterial::setAlphaCutoff(float a)
+{
+    if (m_alphaCutoff == a) return;
+    m_alphaCutoff = a;
+
+    emit alphaCutoffChanged();
+
+    markDirty();
+}
+
 GXMaterial::CullMode GXMaterial::cullMode() const
 {
     switch (m_state.cullMode) {
@@ -90,6 +100,44 @@ void GXMaterial::setFrontFace(FrontFace f)
     markDirty();
 }
 
+void GXMaterial::setAlphaMode(AlphaMode a)
+{
+    if (m_alphaMode == a) return;
+    m_alphaMode = a;
+
+    switch (a) {
+    case GXMaterial::Opaque:
+        m_state.blending = false;
+        m_state.depthWrite = true;
+        break;
+    case GXMaterial::Mask:
+        m_state.blending = false;
+        m_state.depthWrite = true;
+        break;
+    case AlphaMode::Blend:
+        m_state.blending = true;
+        m_state.depthWrite = false;
+        break;
+    default:
+        m_state.blending = true;
+        m_state.depthWrite = false;
+    }
+
+    emit alphaModeChanged();
+
+    markDirty();
+}
+
+void GXMaterial::setGamma(QVector3D g)
+{
+    if (m_gamma == g) return;
+    m_gamma = g;
+
+    emit gammaChanged();
+
+    markDirty();
+}
+
 bool GXMaterial::consumeDirty()
 {
     const bool was = m_dirty;
@@ -108,6 +156,7 @@ void GXMaterial::ensureRhi(QRhi *rhi, QRhiCommandBuffer *cb)
     }
 
     ensureBaseColorResources(rhi, cb);
+    ensureNormalMapResources(rhi, cb);
 }
 
 QColor GXMaterial::gxParseColor(const QString &s)
@@ -167,5 +216,21 @@ void GXMaterial::applyTo(QRhiGraphicsPipeline *ps) const
 
     QRhiGraphicsPipeline::TargetBlend blend;
     blend.enable = m_state.blending;
+    if (blend.enable) {
+        // Premultiplied alpha: out.rgb already multiplied by out.a
+        blend.srcColor = QRhiGraphicsPipeline::One;
+        blend.dstColor = QRhiGraphicsPipeline::OneMinusSrcAlpha;
+        blend.opColor  = QRhiGraphicsPipeline::Add;
+
+        blend.srcAlpha = QRhiGraphicsPipeline::One;
+        blend.dstAlpha = QRhiGraphicsPipeline::OneMinusSrcAlpha;
+        blend.opAlpha  = QRhiGraphicsPipeline::Add;
+    }
+    // qDebug() << "blend.enable" << blend.enable
+    //          << "srcColor" << blend.srcColor
+    //          << "dstColor" << blend.dstColor
+    //          << "srcAlpha" << blend.srcAlpha
+    //          << "dstAlpha" << blend.dstAlpha;
+
     ps->setTargetBlends({ blend });
 }

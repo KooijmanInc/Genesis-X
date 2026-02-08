@@ -20,17 +20,25 @@ static constexpr quint32 kChunkBND0 = 0x30444E42u; // "BND0"
 // Keep the on-disk vertex layout explicit and stable.
 // (Even if GXVertex changes later.)
 #pragma pack(push, 1)
-struct DiskVertexV1
+struct DiskVertexV2
 {
     float px, py, pz;
     float nx, ny, nz;
     float u0, v0;
+     float tx, ty, tz, tw;
 };
 #pragma pack(pop)
 
-static DiskVertexV1 toDiskVertex(const GXVertex &v)
+static_assert(sizeof(DiskVertexV2) == 48, "DiskVertexV2 must be 8 floats (48 bytes)");
+static_assert(offsetof(DiskVertexV2, px) == 0,  "px offset");
+static_assert(offsetof(DiskVertexV2, nx) == 12, "nx offset");
+static_assert(offsetof(DiskVertexV2, u0) == 24, "u0 offset");
+static_assert(offsetof(DiskVertexV2, v0) == 28, "v0 offset");
+static_assert(offsetof(DiskVertexV2, tx) == 32, "tx offset");
+
+static DiskVertexV2 toDiskVertex(const GXVertex &v)
 {
-    DiskVertexV1 d{};
+    DiskVertexV2 d{};
     d.px = float(v.position.x());
     d.py = float(v.position.y());
     d.pz = float(v.position.z());
@@ -39,6 +47,10 @@ static DiskVertexV1 toDiskVertex(const GXVertex &v)
     d.nz = float(v.normal.z());
     d.u0 = float(v.uv0.x());
     d.v0 = float(v.uv0.y());
+    d.tx = float(v.tangent.x());
+    d.ty = float(v.tangent.y());
+    d.tz = float(v.tangent.z());
+    d.tw = float(v.tangent.w());
     return d;
 }
 
@@ -109,7 +121,7 @@ static bool validateMesh(const GXMeshData &mesh, QString *err)
 
 bool GXMeshWriter::write(const GXMeshData &mesh, const QString &filePath, QString *errorString) const
 {
-    return writeVersioned(mesh, filePath, /*version*/ 1u, errorString);
+    return writeVersioned(mesh, filePath, /*version*/ 2u, errorString);
 }
 
 bool GXMeshWriter::writeVersioned(const GXMeshData &mesh, const QString &filePath, quint32 version, QString *errorString) const
@@ -133,7 +145,7 @@ bool GXMeshWriter::writeVersioned(const GXMeshData &mesh, const QString &filePat
     }
 
     // ─────────────────────────────
-    // VERT chunk (DiskVertexV1[])
+    // VERT chunk (DiskVertexV2[])
     // ─────────────────────────────
     {
         const auto cref = fw.beginChunk(kChunkVERT);
@@ -145,12 +157,13 @@ bool GXMeshWriter::writeVersioned(const GXMeshData &mesh, const QString &filePat
 
         // Stream vertices one by one to avoid a large temporary buffer.
         for (const GXVertex& v : mesh.vertices) {
-            const DiskVertexV1 dv = toDiskVertex(v);
+            const DiskVertexV2 dv = toDiskVertex(v);
 
             // Use primitive writes so endianness is guaranteed
             if (!fw.writeF32(dv.px) || !fw.writeF32(dv.py) || !fw.writeF32(dv.pz) ||
                 !fw.writeF32(dv.nx) || !fw.writeF32(dv.ny) || !fw.writeF32(dv.nz) ||
-                !fw.writeF32(dv.u0) || !fw.writeF32(dv.v0)) {
+                !fw.writeF32(dv.u0) || !fw.writeF32(dv.v0) ||
+                !fw.writeF32(dv.tx) || !fw.writeF32(dv.ty) || !fw.writeF32(dv.tz) || !fw.writeF32(dv.tw)) {
                 if (errorString) *errorString = fw.errorString();
                 fw.close();
                 return false;

@@ -8,9 +8,9 @@
 
 using namespace gx::gx3d::render;
 
-static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz, float u, float v)
+static inline GXMesh::Vertex makeV(float px, float py, float pz, float nx, float ny, float nz, float u, float v, float tx, float ty, float tz, float tw)
 {
-    return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v };
+    return GXMesh::Vertex{ px, py, pz, nx, ny, nz, u, v, tx, ty, tz, tw };
 }
 
 GXMesh *GXTorusMesh::create()
@@ -70,7 +70,9 @@ GXMesh *GXTorusMesh::create()
             const float uu = u;
             const float vv = 1.0f - v;
 
-            verts << makeV(pos.x(), pos.y(), pos.z(), n.x(), n.y(), n.z(), uu, vv);
+            float tx = 1.0f, ty = 0.0f, tz = 0.0f, tw = 1.0f;
+
+            verts << makeV(pos.x(), pos.y(), pos.z(), n.x(), n.y(), n.z(), uu, vv, tx, ty, tz, tw);
         }
     }
 

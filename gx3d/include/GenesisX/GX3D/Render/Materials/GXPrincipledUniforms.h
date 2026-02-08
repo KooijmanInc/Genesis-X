@@ -22,6 +22,9 @@ struct alignas(16) PrincipledFSUBO {
     float baseColor[4];
     float emission[4];
     float emissionLight[4];
+    float alphaParams[4];
+    float gamma[4];
+    float normalScale[4];
 };
 
 }

@@ -86,8 +86,10 @@ QShader GXDefaultLitMaterial::fragmentShader() const
 
 void GXDefaultLitMaterial::applyTo(QRhiGraphicsPipeline *ps) const
 {
+
     ps->setCullMode(QRhiGraphicsPipeline::Back);
     ps->setFrontFace(QRhiGraphicsPipeline::CCW);
+    GXMaterial::applyTo(ps);
     ps->setDepthOp(QRhiGraphicsPipeline::LessOrEqual);
     ps->setDepthTest(true);
     ps->setDepthWrite(true);
@@ -212,4 +214,10 @@ void GXDefaultLitMaterial::ensureBaseColorResources(QRhi* rhi, QRhiCommandBuffer
         m_baseColorTex = m_baseColorTexture->rhiTexture();
         m_baseColorSampler = m_baseColorTexture->rhiSampler();
     }
+}
+
+void GXDefaultLitMaterial::ensureNormalMapResources(QRhi *rhi, QRhiCommandBuffer *cb)
+{
+    Q_UNUSED(rhi);
+    Q_UNUSED(cb);
 }

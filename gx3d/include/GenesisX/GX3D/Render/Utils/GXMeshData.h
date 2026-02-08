@@ -17,6 +17,7 @@ struct GXVertex
     QVector3D position;
     QVector3D normal;
     QVector2D uv0;
+    QVector4D tangent;
 };
 
 struct GXSubMeshData

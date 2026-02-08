@@ -15,13 +15,42 @@ GXPrincipledMaterial::GXPrincipledMaterial(QObject *parent)
 
 QShader GXPrincipledMaterial::vertexShader() const
 {
-    static QShader s_vs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled.vert.qsb");
+    QShader s_vs;
+    switch (alphaMode()) {
+    case GXMaterial::Opaque:
+        s_vs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled_opaque.vert.qsb");
+        break;
+    case GXMaterial::Mask:
+        s_vs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled_mask.vert.qsb");
+        break;
+    case GXMaterial::Blend:
+        s_vs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled_blend.vert.qsb");
+        break;
+    default:
+        s_vs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled.vert.qsb");
+    }
+
     return s_vs;
 }
 
 QShader GXPrincipledMaterial::fragmentShader() const
 {
-    static QShader s_fs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled.frag.qsb");
+    QShader s_fs;
+    switch (alphaMode()) {
+    case GXMaterial::Opaque:
+        s_fs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled_opaque.frag.qsb");
+        break;
+    case GXMaterial::Mask:
+        s_fs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled_mask.frag.qsb");
+        break;
+    case GXMaterial::Blend:
+        s_fs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled_blend.frag.qsb");
+        break;
+    default:
+        s_fs = m_shaderUtils.gxLoadShader(":/gx3d/shaders/principled.frag.qsb");
+        break;
+    }
+
     return s_fs;
 }
 
@@ -29,6 +58,7 @@ void GXPrincipledMaterial::applyTo(QRhiGraphicsPipeline *ps) const
 {
     ps->setCullMode(QRhiGraphicsPipeline::Back);
     ps->setFrontFace(QRhiGraphicsPipeline::CCW);
+    GXMaterial::applyTo(ps);
     ps->setDepthOp(QRhiGraphicsPipeline::LessOrEqual);
     ps->setDepthTest(true);
     ps->setDepthWrite(true);
@@ -58,6 +88,21 @@ void GXPrincipledMaterial::fillFS(void* dst) const
     out.emissionLight[1] = float(m_emissionLightRadius);
     out.emissionLight[2] = float(m_emissionLight ? 1.0f : 0.0f);
     out.emissionLight[3] = 0.0f;
+
+    out.alphaParams[0] = alphaCutoff();
+    out.alphaParams[1] = 0.0f;
+    out.alphaParams[2] = 0.0f;
+    out.alphaParams[3] = 0.0f;
+
+    out.gamma[0] = m_gamma.x();
+    out.gamma[1] = m_gamma.y();
+    out.gamma[2] = m_gamma.z();
+    out.gamma[3] = 1.0f;
+
+    out.normalScale[0] = m_normalScale;
+    out.normalScale[1] = 0.0f;
+    out.normalScale[2] = 0.0f;
+    out.normalScale[3] = 0.0f;
 }
 
 void GXPrincipledMaterial::ensureBaseColorResources(QRhi *rhi, QRhiCommandBuffer *cb)
@@ -74,6 +119,30 @@ void GXPrincipledMaterial::ensureBaseColorResources(QRhi *rhi, QRhiCommandBuffer
         m_baseColorTex = m_baseColorTexture->rhiTexture();
         m_baseColorSampler = m_baseColorTexture->rhiSampler();
     }
+}
+
+void GXPrincipledMaterial::ensureNormalMapResources(QRhi *rhi, QRhiCommandBuffer *cb)
+{
+    if (!rhi) return;
+
+    if (m_normalTexure) {
+        m_normalTexure->ensureRhi(rhi, cb);
+        m_normalTex = m_normalTexure->rhiTexture();
+        m_normalSampler = m_normalTexure->rhiSampler();
+    } else {
+        m_normalTexure = nullptr;
+        m_normalTex = nullptr;
+        m_normalSampler = nullptr;
+    }
+}
+
+quint32 GXPrincipledMaterial::variantKey() const
+{
+    quint32 k = 0;
+    k |= (quint32(alphaMode()) & 0x3u);
+    if (m_baseColorTexture) k |= (1u << 2);
+
+    return k;
 }
 
 void GXPrincipledMaterial::setBaseColor(const QColor &c)
@@ -100,7 +169,7 @@ void GXPrincipledMaterial::setEmissionColor(const QColor &c)
 {
     if (m_emissionColor == c) return;
     m_emissionColor = c;
-    qDebug() << "emCol" << m_emissionColor;
+    // qDebug() << "emCol" << m_emissionColor;
     m_emissionStrength = 1.0;
     emit emissionColorChanged();
     markDirty();
@@ -111,7 +180,7 @@ void GXPrincipledMaterial::setEmissionStrength(float s)
     s = qMax(0.0f, s);
     if (qFuzzyCompare(m_emissionStrength, s)) return;
     m_emissionStrength = s;
-    qDebug() << "emStr" << m_emissionStrength;
+    // qDebug() << "emStr" << m_emissionStrength;
     emit emissionStrengthChanged();
     markDirty();
 }
@@ -140,5 +209,23 @@ void GXPrincipledMaterial::setEmissionLightRadius(float l)
     m_emissionLightIntensity = l;
 
     emit emissionLightIntensityChanged();
+    markDirty();
+}
+
+void GXPrincipledMaterial::setNormalTexture(GXTexture *tex)
+{
+    if (m_normalTexure == tex) return;
+    m_normalTexure = tex;
+
+    emit normalTextureChanged();
+    markDirty();
+}
+
+void GXPrincipledMaterial::setNormalScale(float s)
+{
+    if (m_normalScale == s) return;
+    m_normalScale = s;
+
+    emit normalScaleChanged();
     markDirty();
 }
