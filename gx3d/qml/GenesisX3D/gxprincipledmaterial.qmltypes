@@ -65,16 +65,50 @@ Module {
             notify: "alphaModeChanged"
         }
         Property {
-            name: "gamma"
-            type: "QVector3D"
-            read: "gamma"
-            notify: "gammaChanged"
+            name: "roughness"
+            type: "float"
+            read: "roughness"
+            notify: "roughnessChanged"
+        }
+        Property {
+            name: "metallic"
+            type: "float"
+            read: "metallic"
+            notify: "metallicChanged"
         }
         Property {
             name: "normalScale"
             type: "double"
             read: "normalScale"
             notify: "normalScaleChanged"
+        }
+        Property {
+            name: "fresnelBias"
+            type: "float"
+            read: "fresnelBias"
+            notify: "fresnelBiasChanged"
+        }
+        Property {
+            name: "fresnelPower"
+            type: "float"
+            read: "fresnelPower"
+            notify: "fresnelPowerChanged"
+        }
+        Property {
+            name: "fresnelScale"
+            type: "float"
+            read: "fresnelScale"
+            notify: "fresnelScaleChanged"
+        }
+        Property {
+            name: "specularAmount"
+            type: "float"
+            read: "specularAmount"
+            notify: "specularAmountChanged"
+        }
+        Property {
+            name: "colorCorrection"
+            type: "float"
         }
     }
 }

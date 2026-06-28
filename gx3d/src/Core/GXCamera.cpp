@@ -11,23 +11,24 @@ GXCamera::GXCamera(QObject *parent)
 }
 
 void GXCamera::setLookAt(const QVector3D &v)
-{
+{//qDebug() << "default = " << m_lookAt;
     if (m_lookAt == v) return;
     m_lookAt = v;
     m_useLookAt = true;
+    //qDebug() << "useLookAt in setLookAt" << m_useLookAt;
 
     emit lookAtChanged();
 }
 
 void GXCamera::clearLookAt()
-{
+{//qDebug() << "clearLookAt activated??";
     m_useLookAt = false;
 
     emit lookAtChanged();
 }
 
 QMatrix4x4 GXCamera::viewMatrix() const
-{
+{//qDebug() << "useLookAt" << m_useLookAt;
     if (m_useLookAt) {
         QMatrix4x4 v;
         v.setToIdentity();

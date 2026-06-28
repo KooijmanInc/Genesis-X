@@ -12,6 +12,7 @@ DISTFILES += \
     $$files(../config/*, true) \
     $$files(../scripts/*, true) \
     $$files(../installer/*, true) \
+    ../3rdparty/firebase_cpp_sdk/Android/firebase_dependencies.gradle \
     ../.github/FUNDING.yml \
     ../.github/PULL_REQUEST_TEMPLATE.md \
     ../.github/ISSUE_TEMPLATE/bug_report.md \

@@ -7,6 +7,7 @@
 #include <GenesisX/GX3D/Render/Utils/GXMeshWriter.h>
 #include <GenesisX/GX3D/Utils/GXMeshHelper.h>
 
+#include <QQuaternion>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QFileInfo>
@@ -53,7 +54,8 @@ static QString safeIdFromName(QString name)
     // keep letters/digits/underscore only
     QString out;
     out.reserve(name.size());
-    for (QChar c : name) {
+    const auto names = name;
+    for (QChar c : names) {
         if (c.isLetterOrNumber() || c == '_')
             out.append(c);
         else
@@ -80,7 +82,17 @@ static QVector<QVector2D> readUv0OrEmpty(const QJsonObject& prim, gx::gx3d::rend
 {
     const QJsonObject attrs = prim.value("attributes").toObject();
     const int acc = attrs.value("TEXCOORD_0").toInt(-1);
-    return (acc >= 0) ? access.readVec2Accessor(acc) : QVector<QVector2D>{};
+    if (acc >= 0) {
+        auto uv = access.readVec2Accessor(acc);
+
+        // debug first few
+        // for (int i = 0; i < 5 && i < uv.size(); ++i)
+            // qDebug() << "TEXCOORD_0 acc" << acc << "UV" << i << uv[i].x() << uv[i].y();
+
+        return uv;
+    }
+    return {};
+    // return (acc >= 0) ? access.readVec2Accessor(acc) : QVector<QVector2D>{};
 }
 
 static QVector<QVector4D> readTangentsOrEmpty(const QJsonObject& prim, gx::gx3d::render::GXGltfAccess& access)
@@ -92,6 +104,100 @@ static QVector<QVector4D> readTangentsOrEmpty(const QJsonObject& prim, gx::gx3d:
     return access.readTangentsFromPrimitive(prim); // you add this method
 }
 
+static void autoUvPlanarXY(gx::gx3d::render::GXMeshData& md)
+{
+    if (md.vertices.isEmpty())
+        return;
+
+    float minX =  1e9f, minY =  1e9f;
+    float maxX = -1e9f, maxY = -1e9f;
+
+    for (const auto& v : md.vertices) {
+        minX = std::min(minX, v.position.x());
+        minY = std::min(minY, v.position.y());
+        maxX = std::max(maxX, v.position.x());
+        maxY = std::max(maxY, v.position.y());
+    }
+
+    const float dx = std::max(1e-6f, maxX - minX);
+    const float dy = std::max(1e-6f, maxY - minY);
+
+    for (auto& v : md.vertices) {
+        const float u = (v.position.x() - minX) / dx;
+        const float w = (v.position.y() - minY) / dy;
+        v.uv0 = QVector2D(u, w);
+    }
+}
+
+static void autoUvPlanarXY_WithRotation(gx::gx3d::render::GXMeshData& md, const QQuaternion& rot)
+{
+    if (md.vertices.isEmpty())
+        return;
+
+    float minX= 1e9f, minY= 1e9f;
+    float maxX=-1e9f, maxY=-1e9f;
+
+    // bounds in rotated space
+    for (const auto& v : md.vertices) {
+        const QVector3D p = rot.isNull() ? v.position : rot.rotatedVector(v.position);
+        minX = std::min(minX, p.x());
+        minY = std::min(minY, p.y());
+        maxX = std::max(maxX, p.x());
+        maxY = std::max(maxY, p.y());
+    }
+
+    const float dx = std::max(1e-6f, maxX - minX);
+    const float dy = std::max(1e-6f, maxY - minY);
+
+    for (auto& v : md.vertices) {
+        const QVector3D p = rot.isNull() ? v.position : rot.rotatedVector(v.position);
+        const float u = (p.x() - minX) / dx;
+        const float w = (p.y() - minY) / dy;
+        v.uv0 = QVector2D(u, w);
+    }
+}
+
+static bool isUvDegenerate(const gx::gx3d::render::GXMeshData& md)
+{
+    if (md.vertices.isEmpty())
+        return true;
+
+    float minU =  1e9f, minV =  1e9f;
+    float maxU = -1e9f, maxV = -1e9f;
+
+    for (const auto& v : md.vertices) {
+        minU = std::min(minU, v.uv0.x());
+        minV = std::min(minV, v.uv0.y());
+        maxU = std::max(maxU, v.uv0.x());
+        maxV = std::max(maxV, v.uv0.y());
+    }
+
+    const float du = maxU - minU;
+    const float dv = maxV - minV;
+
+    // If either axis is almost constant, we call it degenerate
+    return (du < 1e-3f) || (dv < 1e-3f);
+}
+
+static QQuaternion findFirstNodeRotationForMesh(const QJsonObject& docJson, int meshIndex)
+{
+    const QJsonArray nodes = docJson.value("nodes").toArray();
+    for (int i = 0; i < nodes.size(); ++i) {
+        const QJsonObject n = nodes.at(i).toObject();
+        if (n.value("mesh").toInt(-1) == meshIndex) {
+            const QJsonArray r = n.value("rotation").toArray();
+            if (r.size() == 4) {
+                // glTF rotation is [x,y,z,w]
+                return QQuaternion(float(r[3].toDouble()),
+                                   float(r[0].toDouble()),
+                                   float(r[1].toDouble()),
+                                   float(r[2].toDouble()));
+            }
+            break;
+        }
+    }
+    return QQuaternion(); // identity
+}
 
 struct GxGltfSamplerInfo {
     int wrapS = 10497;   // REPEAT
@@ -636,7 +742,7 @@ void GXGltfConverter::writeMaterials(QTextStream &ts, const QJsonArray &mats, co
                 normals.append(indent(level + 1) + "id: " + idName + "Nrm\n");
                 normals.append(indent(level + 1) + "objectName: \"" + image.value("name").toString() + "Nrm\"\n");
                 normals.append(indent(level + 1) + "source: " + image.value("name").toString() + "Img\n");
-                normals.append(indent(level + 1) + "scale: " + QString::number(nt.value("scale").toDouble()) + "\n");
+                materials.append(indent(level + 1) + "normalScale: " + QString::number(nt.value("scale").toDouble()) + "\n");
                 normals.append(indent(level) + "}\n");
                 materials.append(indent(level + 1) + "normalTexture: " + idName + "Nrm\n");
             }
@@ -837,10 +943,19 @@ void GXGltfConverter::writeMeshFiles(const QJsonObject &docJson, gx::gx3d::rende
                 uv.setY(1.0f - uv.y());
 
                 // handle tiny float noise like -1.19209e-07 that would become >1.0
-                if (uv.y() < 0.0f) uv.setY(0.0f);
-                if (uv.y() > 1.0f) uv.setY(1.0f);
+                // if (uv.y() < 0.0f) uv.setY(0.0f);
+                // if (uv.y() > 1.0f) uv.setY(1.0f);
+                auto snapEps = [](float x) {
+                    constexpr float eps = 1e-6f;
+                    if (std::abs(x) < eps) return 0.0f;
+                    return x;
+                };
+                uv.setX(snapEps(uv.x()));
+                uv.setY(snapEps(uv.y()));
 
                 vx.uv0 = uv;
+
+                m_status.append(QString("    tangents=%1 normals=%2 uv0=%3\n").arg(tangents.size()).arg(normals.size()).arg(uv0.size()));
 
                 vx.tangent = (v < tangents.size()) ? tangents[v] : QVector4D(1, 0, 0, 1);
 
@@ -854,8 +969,13 @@ void GXGltfConverter::writeMeshFiles(const QJsonObject &docJson, gx::gx3d::rende
             // Append indices (rebased)
             meshData.indices.reserve(meshData.indices.size() + indices.size());
             const auto& idxs = indices;
-            for (quint32 idx : idxs)
+            for (quint32 idx : idxs) {
+                if (idx >= quint32(positions.size())) {
+                    m_status.append(QString("    WARNING: index %1 out of range (pos=%2)\n").arg(idx).arg(positions.size()));
+                    continue;
+                }
                 meshData.indices.push_back(baseVertex + idx);
+            }
 
             gx::gx3d::render::GXSubMeshData sm;
             sm.firstIndex = firstIndex;
@@ -911,6 +1031,33 @@ void GXGltfConverter::writeMeshFiles(const QJsonObject &docJson, gx::gx3d::rende
             emit statusChanged();
             continue;
         }
+
+        if (isUvDegenerate(meshData)) {
+            const QQuaternion rot = findFirstNodeRotationForMesh(docJson, m);
+            m_status.append(QString("AutoUV: planar XY applied (degenerate UVs) (node-rotated space)\n"));
+            autoUvPlanarXY_WithRotation(meshData, rot);
+            // for (auto &v : meshData.vertices)
+                // v.uv0 = QVector2D(0.25f, 0.75f);
+
+        }
+        // auto uvRange = [&](const gx::gx3d::render::GXMeshData& md) {
+        //     float minU= 1e9f, minV= 1e9f, maxU=-1e9f, maxV=-1e9f;
+        //     for (const auto& v : md.vertices) {
+        //         minU = std::min(minU, v.uv0.x());
+        //         minV = std::min(minV, v.uv0.y());
+        //         maxU = std::max(maxU, v.uv0.x());
+        //         maxV = std::max(maxV, v.uv0.y());
+        //     }
+        //     return QString("U[%1..%2] V[%3..%4]")
+        //         .arg(minU,0,'g',6).arg(maxU,0,'g',6)
+        //         .arg(minV,0,'g',6).arg(maxV,0,'g',6);
+        // };
+
+        // m_status.append("Before AutoUV: " + uvRange(meshData) + "\n");
+        // autoUvPlanarXY(meshData);
+        // m_status.append("After  AutoUV: " + uvRange(meshData) + "\n");
+
+
         QString err;
         if (!writer.write(meshData, absPath, &err)) {
             m_status.append(QString("Error writing mesh %1: %2\n").arg(absPath, err));

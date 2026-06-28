@@ -20,12 +20,25 @@
         <file alias="principled_opaque.vert.qsb">../shaders/principled_opaque.vert.qsb</file>
         <file alias="pick.frag.qsb">../shaders/pick.frag.qsb</file>
         <file alias="pick.vert.qsb">../shaders/pick.vert.qsb</file>
-
+        <file alias="prefilter_spec.frag.qsb">../shaders/prefilter_spec.frag.qsb</file>
+        <file alias="prefilter_spec.vert.qsb">../shaders/prefilter_spec.vert.qsb</file>
     </qresource>
     <qresource prefix="/gx3d/assets">
         <file alias="checker.jpg">images/checker.jpg</file>
         <file alias="WoodFloor.jpg">images/WoodFloor.jpg</file>
+        <file alias="brdf_lut_64.png">images/brdf_lut_64.png</file>
+        <file alias="envcube/negx.png">images/envcube/negx.png</file>
+        <file alias="envcube/negy.png">images/envcube/negy.png</file>
+        <file alias="envcube/negz.png">images/envcube/negz.png</file>
+        <file alias="envcube/posx.png">images/envcube/posx.png</file>
+        <file alias="envcube/posy.png">images/envcube/posy.png</file>
+        <file alias="envcube/posz.png">images/envcube/posz.png</file>
 
-
+        <file alias="envcube/irr_negx.png">images/envcube/irr_negx.png</file>
+        <file alias="envcube/irr_negy.png">images/envcube/irr_negy.png</file>
+        <file alias="envcube/irr_negz.png">images/envcube/irr_negz.png</file>
+        <file alias="envcube/irr_posx.png">images/envcube/irr_posx.png</file>
+        <file alias="envcube/irr_posy.png">images/envcube/irr_posy.png</file>
+        <file alias="envcube/irr_posz.png">images/envcube/irr_posz.png</file>
     </qresource>
 </RCC>

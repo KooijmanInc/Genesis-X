@@ -9,6 +9,61 @@ struct GXLightGPU {
     vec4 params;
 };
 
+const float PI = 3.14159265359;
+const int GX_SPEC_NONE = 0;
+const int GX_SPEC_LIGHTCARD = 1;
+const int GX_SPEC_SKYGRADIENT = 2;
+const int GX_SPEC_SKYBOX = 3;
+const int GX_SPEC_IBL = 4;
+
+float DistributionGGX(vec3 N, vec3 H, float roughness)
+{
+    float a  = roughness * roughness;
+    float a2 = a * a;
+    float NdotH  = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH * NdotH;
+
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    return a2 / max(PI * denom * denom, 1e-6);
+}
+
+float GeometrySchlickGGX(float NdotV, float roughness)
+{
+    float r = roughness + 1.0;
+    float k = (r * r) / 8.0;
+    return NdotV / max(NdotV * (1.0 - k) + k, 1e-6);
+}
+
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+{
+    float NdotV = max(dot(N, V), 0.0);
+    float NdotL = max(dot(N, L), 0.0);
+    float ggxV = GeometrySchlickGGX(NdotV, roughness);
+    float ggxL = GeometrySchlickGGX(NdotL, roughness);
+    return ggxV * ggxL;
+}
+
+float luma(vec3 c) {
+    return dot(c, vec3(0.2126, 0.7152, 0.0722));
+}
+
+vec3 tonemap_reinhard_luma(vec3 c, float k)
+{
+    float Y = luma(c);
+    float Yt = Y / (Y + k);
+    return (Y > 1e-6) ? c * (Yt / Y) : vec3(0.0);
+}
+
+vec3 fresnelSchlick(float cosTheta, vec3 F0)
+{
+    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+
+vec3 srgbToLinear(vec3 c)
+{
+    return pow(c, vec3(2.2));
+}
+
 layout(location = 0) in vec3 vWorldPos;
 layout(location = 1) in vec3 vWorldN;
 layout(location = 2) in vec2 vUv;
@@ -21,15 +76,25 @@ layout(binding = 1) uniform FSUBO {
     vec4 alphaParams;
     vec4 gamma;
     vec4 normalScale;
+    vec4 metallicFactor;
+    vec4 roughnessFactor;
 } fsu;
 
 layout(binding = 2) uniform FrameLightingUBO {
     vec4 frameParams;
+    vec4 cameraWorldPos;
     GXLightGPU lights[GX_MAX_LIGHTS];
 } fl;
 
 layout(binding = 3) uniform sampler2D baseColorTex;
 layout(binding = 4) uniform sampler2D normalTex;
+
+layout(binding = 5) uniform FrameEnvironmentUBO {
+    vec4 ambient_ao;
+    vec4 aoParams;
+    vec4 envSkyDirStr;
+    vec4 envSpecularParams;
+} fe;
 
 layout(location = 0) out vec4 fragColor;
 
@@ -37,8 +102,9 @@ void main(void)
 {
     vec3 N = normalize(vWorldN);
 
+    vec3 base = srgbToLinear(fsu.baseColor.rgb);
     vec4 tex = texture(baseColorTex, vUv);
-    vec3 albedo = fsu.baseColor.rgb * tex.rgb;
+    vec3 albedo = base * tex.rgb;
 
     if (fsu.normalScale.x > 0.0) {
         vec3 tN = texture(normalTex, vUv).xyz * 2.0 - 1.0;
@@ -92,9 +158,9 @@ void main(void)
     vec3 linear = ambient + diffuseSum + emissionColor;
     linear = min(linear, vec3(4.0));
 
-    vec3 color = pow(clamp(linear, 0.0, 1.0), fsu.gamma.xyz);
+    // vec3 color = pow(clamp(linear, 0.0, 1.0), fsu.gamma.xyz);
+    vec3 color = clamp(linear, 0.0, 1.0);
 
     float alpha = fsu.baseColor.a * tex.a;
-
     fragColor = vec4(color * alpha, alpha);
 }

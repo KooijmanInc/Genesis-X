@@ -41,7 +41,7 @@ signals:
     void changed();
 
 protected:
-    QVector3D m_lookAt { 0.0f, 0.0f, 0.0f };
+    QVector3D m_lookAt { 1024.0f, 1024.0f, 1024.0f };
     QVector3D m_up { 0.0f, 1.0f, 0.0f };
 
     bool m_useLookAt = false;

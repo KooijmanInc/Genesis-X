@@ -1,0 +1,69 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXEnvironment"
+        className: "gx::gx3d::render::GXEnvironment"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXEnvironment 1.0"]
+        Enum {
+            name: "GXSpecularSource"
+            values: [
+                "None",
+                "LightCard",
+                "SkyGradient",
+                "SkyBox",
+                "IBL"
+            ]
+        }
+        Property {
+            name: "ambientIntensity"
+            type: "int"
+            read: "ambientIntensity"
+            notify: "ambientIntensityChanged"
+        }
+        Property {
+            name: "ambientColor"
+            type: "string"
+            read: "ambientColor"
+            notify: "ambientColorChanged"
+        }
+        Property {
+            name: "aoStrength"
+            type: "float"
+            read: "aoStrength"
+            notify: "aoStrengthChanged"
+        }
+        Property {
+            name: "aoRadius"
+            type: "float"
+            read: "aoRadius"
+            notify: "aoRadiusChanged"
+        }
+        Property {
+            name: "aoSoftness"
+            type: "float"
+            read: "aoSoftness"
+            notify: "aoSoftnessChanged"
+        }
+        Property {
+            name: "skySpecularIntensity"
+            type: "float"
+            read: "skySpecularIntensity"
+            notify: "skySpecularIntensityChanged"
+        }
+        Property {
+            name: "skySpecularDirection"
+            type: "QVector3D"
+            read: "skySpecularDirection"
+            notify: "skySpecularDirectionChanged"
+        }
+        Property {
+            name: "specularSource"
+            type: "GXSpecularSource"
+            read: "specularSource"
+            notify: "specularSourceChanged"
+        }
+    }
+}

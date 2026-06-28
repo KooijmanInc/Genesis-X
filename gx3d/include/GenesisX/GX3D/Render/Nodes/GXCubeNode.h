@@ -46,7 +46,7 @@ public:
     void setScale(const QVector3D& s);
 
     void ensureResources(QRhi* rhi, QRhiRenderTarget* rt, QRhiCommandBuffer* cb) override;
-    void recordRender(QRhiCommandBuffer* cb, QRhiRenderTarget* rt) override;
+    void recordRender(QRhiCommandBuffer* cb, QRhiRenderTarget* rt, const QRect &scissor) override;
     void releaseResources() override;
 
 signals:

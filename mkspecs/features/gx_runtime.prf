@@ -22,6 +22,10 @@ contains(QT, genesisx_app_ab) {
     include(gx_app_ab.prf)
 }
 
+contains(QT, genesisx_app_ads) {
+    include(gx_app_ads.prf)
+}
+
 contains(QT, genesisx_app_analytics) {
     include(gx_app_analytics.prf)
 }
@@ -168,4 +172,8 @@ contains(QT, genesisx_3d) {
 
 contains(QT, genesisx_io) {
     include(conf/gx_io.prf)
+}
+
+contains(QT, genesisx_web) {
+    include(conf/gx_web.prf)
 }

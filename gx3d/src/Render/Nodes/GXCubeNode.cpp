@@ -223,7 +223,7 @@ void GXCubeNode::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuf
     m_pipelineDirty = false;
 }
 
-void GXCubeNode::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
+void GXCubeNode::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt, const QRect &/*scissor*/)
 {
     if (!cb || !rt) return;
 

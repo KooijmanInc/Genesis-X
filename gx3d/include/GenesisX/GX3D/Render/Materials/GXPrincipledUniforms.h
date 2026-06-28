@@ -25,6 +25,10 @@ struct alignas(16) PrincipledFSUBO {
     float alphaParams[4];
     float gamma[4];
     float normalScale[4];
+    float metallicFactor[4];
+    float roughnessFactor[4];
+    float fresnel[4];
+    float specular[4];
 };
 
 }

@@ -11,6 +11,8 @@ GXPrincipledMaterial::GXPrincipledMaterial(QObject *parent)
 {
     m_solidColorTex = new GXTexture2D(this);
     m_solidColorTex->setDefaultImage(Qt::white);
+    m_solidNormalTex = new GXTexture2D(this);
+    m_solidNormalTex->setDefaultNormalImage();
 }
 
 QShader GXPrincipledMaterial::vertexShader() const
@@ -60,8 +62,8 @@ void GXPrincipledMaterial::applyTo(QRhiGraphicsPipeline *ps) const
     ps->setFrontFace(QRhiGraphicsPipeline::CCW);
     GXMaterial::applyTo(ps);
     ps->setDepthOp(QRhiGraphicsPipeline::LessOrEqual);
-    ps->setDepthTest(true);
-    ps->setDepthWrite(true);
+    // ps->setDepthTest(depthTest());
+    // ps->setDepthWrite(depthWrite());
 }
 
 void GXPrincipledMaterial::fillVS(void* dst, const QMatrix4x4 &mvp, const QMatrix4x4 &model) const
@@ -94,15 +96,35 @@ void GXPrincipledMaterial::fillFS(void* dst) const
     out.alphaParams[2] = 0.0f;
     out.alphaParams[3] = 0.0f;
 
-    out.gamma[0] = m_gamma.x();
-    out.gamma[1] = m_gamma.y();
-    out.gamma[2] = m_gamma.z();
-    out.gamma[3] = 1.0f;
+    out.gamma[0] = m_gammaVec.x();
+    out.gamma[1] = m_gammaVec.y();
+    out.gamma[2] = m_gammaVec.z();
+    out.gamma[3] = m_textureMap ? 1.0f : 0.0f;
 
     out.normalScale[0] = m_normalScale;
-    out.normalScale[1] = 0.0f;
+    out.normalScale[1] = m_normalMap ? 1.0f : 0.0f;
     out.normalScale[2] = 0.0f;
     out.normalScale[3] = 0.0f;
+
+    out.metallicFactor[0] = m_metallic;
+    out.metallicFactor[1] = 0.0f;
+    out.metallicFactor[2] = 0.0f;
+    out.metallicFactor[3] = 0.0f;
+
+    out.roughnessFactor[0] = m_roughness;
+    out.roughnessFactor[1] = 0.0f;
+    out.roughnessFactor[2] = 0.0f;
+    out.roughnessFactor[3] = 0.0f;
+
+    out.fresnel[0] = m_fresnelBias;
+    out.fresnel[1] = m_fresnelPower;
+    out.fresnel[2] = m_fresnelScale;
+    out.fresnel[3] = 0.0f;
+
+    out.specular[0] = m_specularAmount;
+    out.specular[1] = float(m_specularChannel);
+    out.specular[2] = 0.0f;
+    out.specular[3] = 0.0f;
 }
 
 void GXPrincipledMaterial::ensureBaseColorResources(QRhi *rhi, QRhiCommandBuffer *cb)
@@ -126,13 +148,17 @@ void GXPrincipledMaterial::ensureNormalMapResources(QRhi *rhi, QRhiCommandBuffer
     if (!rhi) return;
 
     if (m_normalTexure) {
+        m_normalTexure->setIsNormalMap(true);
         m_normalTexure->ensureRhi(rhi, cb);
         m_normalTex = m_normalTexure->rhiTexture();
         m_normalSampler = m_normalTexure->rhiSampler();
     } else {
-        m_normalTexure = nullptr;
-        m_normalTex = nullptr;
-        m_normalSampler = nullptr;
+        m_normalTexure = m_solidNormalTex;
+        m_normalMap = true;
+        m_normalTexure->setIsNormalMap(true);
+        m_normalTexure->ensureRhi(rhi, cb);
+        m_normalTex = m_normalTexure->rhiTexture();
+        m_normalSampler = m_normalTexure->rhiSampler();
     }
 }
 
@@ -160,6 +186,7 @@ void GXPrincipledMaterial::setBaseColorTexture(GXTexture* tex)
 {
     if (m_baseColorTexture == tex) return;
     m_baseColorTexture = tex;
+    m_textureMap = true;
 
     emit baseColorTextureChanged();
     markDirty();
@@ -216,6 +243,7 @@ void GXPrincipledMaterial::setNormalTexture(GXTexture *tex)
 {
     if (m_normalTexure == tex) return;
     m_normalTexure = tex;
+    m_normalMap = true;
 
     emit normalTextureChanged();
     markDirty();
@@ -228,4 +256,73 @@ void GXPrincipledMaterial::setNormalScale(float s)
 
     emit normalScaleChanged();
     markDirty();
+}
+
+void GXPrincipledMaterial::setMetallic(float m)
+{
+    if (m_metallic == m) return;
+    m_metallic = m;
+
+    emit metallicChanged();
+    markDirty();
+}
+
+void GXPrincipledMaterial::setRoughness(float r)
+{
+    if (m_roughness == r) return;
+    m_roughness = r;
+
+    emit roughnessChanged();
+    markDirty();
+}
+
+void GXPrincipledMaterial::setFresnelBias(float fb)
+{
+    if (m_fresnelBias == fb) return;
+    m_fresnelBias = fb;
+
+    emit fresnelBiasChanged();
+}
+
+void GXPrincipledMaterial::setFresnelPower(float fp)
+{
+    if (m_fresnelPower == fp) return;
+    m_fresnelPower = fp;
+
+    emit fresnelPowerChanged();
+}
+
+void GXPrincipledMaterial::setFresnelScale(float fs)
+{
+    if (m_fresnelScale == fs) return;
+    m_fresnelScale = fs;
+
+    emit fresnelScaleChanged();
+}
+
+void GXPrincipledMaterial::setSpecularAmount(float sa)
+{
+    if (m_specularAmount == sa) return;
+    m_specularAmount = qBound(0.0, sa, 1.0);
+
+    emit specularAmountChanged();
+}
+
+void GXPrincipledMaterial::setSpecularChannel(SpecularChannel c)
+{
+    if (m_specularChannel == c) return;
+
+    switch (c) {
+    case SpecularChannel::R:
+    case SpecularChannel::G:
+    case SpecularChannel::B:
+    case SpecularChannel::A:
+        m_specularChannel = c;
+        break;
+    default:
+        m_specularChannel = SpecularChannel::R;
+        break;
+    }
+
+    emit specularChannelChanged();
 }

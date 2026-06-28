@@ -1,0 +1,8 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+!defined(__GX_ADS_PRF_INCLUDED__, var) {
+    __GX_ADS_PRF_INCLUDED__
+
+    message([genesisx app ads] module loaded from $$PWD)
+}

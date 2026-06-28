@@ -27,6 +27,8 @@ Control {
 
     property real borderOpacity: 0.25
 
+    signal clicked()
+
     implicitWidth: label.implicitWidth + 40
     implicitHeight: 50
 
@@ -88,5 +90,14 @@ Control {
 
     transitions: Transition {
         NumberAnimation { properties: "scale,opacity"; duration: 120; easing.type: Easing.OutCubic }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onClicked: {
+            root.clicked()
+        }
     }
 }

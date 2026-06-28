@@ -58,6 +58,13 @@ QImage GXTexture::makeWhiteFallback()
     return img;
 }
 
+QImage GXTexture::makeNormalFallback()
+{
+    QImage img(256, 256, QImage::Format_RGBA8888);
+    img.fill(QColor(128, 128, 255, 255)); // (0.5,0.5,1.0)
+    return img;
+}
+
 void GXTexture::destroyTexture()
 {
     if (m_texture) {

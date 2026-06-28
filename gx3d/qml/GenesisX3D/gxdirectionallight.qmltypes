@@ -1,0 +1,49 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "GXDirectionalLight"
+        className: "gx::gx3d::render::GXDirectionalLight"
+        prototype: "QObject"
+        exports: ["GenesisX3D/GXDirectionalLight 1.0"]
+        Property {
+            name: "objectName"
+            type: "string"
+        }
+        Property {
+            name: "color"
+            type: "QColor"
+        }
+        Property {
+            name: "position"
+            type: "QVector3D"
+        }
+        Property {
+            name: "direction"
+            type: "QVector3D"
+        }
+        Property {
+            name: "intensity"
+            type: "float"
+        }
+        Property {
+            name: "x"
+            type: "float"
+            read: "x"
+            notify: "xChanged"
+        }
+        Property {
+            name: "y"
+            type: "float"
+            read: "y"
+            notify: "yChanged"
+        }
+        Property {
+            name: "z"
+            type: "float"
+            read: "z"
+            notify: "zChanged"
+        }
+    }
+}

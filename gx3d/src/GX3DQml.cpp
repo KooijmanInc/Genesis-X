@@ -10,6 +10,7 @@
 #include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
 #include <GenesisX/GX3D/Scene/Lights/GXPointLight.h>
 #include <GenesisX/GX3D/Scene/Lights/GXSpotLight.h>
+#include <GenesisX/GX3D/Scene/Lights/GXDirectionalLight.h>
 
 #include <GenesisX/GX3D/Render/Nodes/GXModelNode.h>
 #include <GenesisX/GX3D/Render/Nodes/GXRenderableNode.h>
@@ -21,6 +22,8 @@
 
 #include <GenesisX/GX3D/Render/Texture/GXTexture.h>
 #include <GenesisX/GX3D/Render/Texture/GXTexture2D.h>
+
+#include <GenesisX/GX3D/Render/Environment/GXEnvironment.h>
 
 #include <QQmlEngine>
 
@@ -51,6 +54,7 @@ void registerEnabledQmlModules(QQmlEngine *engine)
 
     qmlRegisterType<gx::gx3d::scene::GXPointLight>("GenesisX3D", 1, 0, "GXPointLight");
     qmlRegisterType<gx::gx3d::scene::GXSpotLight>("GenesisX3D", 1, 0, "GXSpotLight");
+    qmlRegisterType<gx::gx3d::scene::GXDirectionalLight>("GenesisX3D", 1, 0, "GXDirectionalLight");
 
     qmlRegisterType<gx::gx3d::render::GXModel>("GenesisX3D", 1, 0, "GXModel");
 
@@ -59,6 +63,8 @@ void registerEnabledQmlModules(QQmlEngine *engine)
     qmlRegisterType<gx::gx3d::render::GXPrincipledMaterial>("GenesisX3D", 1, 0, "GXPrincipledMaterial");
 
     qmlRegisterType<gx::gx3d::render::GXTexture2D>("GenesisX3D", 1, 0, "GXTexture2D");
+
+    qmlRegisterType<gx::gx3d::render::GXEnvironment>("GenesisX3D", 1, 0, "GXEnvironment");
 }
 
 }

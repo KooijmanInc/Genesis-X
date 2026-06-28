@@ -14,6 +14,7 @@
 #include <GenesisX/GX3D/Scene/Nodes/GXNode.h>
 #include <GenesisX/GX3D/Render/Resources/GXMesh.h>
 #include <GenesisX/GX3D/Render/Utils/GXMeshData.h>
+// #include <GenesisX/GX3D/Render/Materials/GXMaterial.h>
 
 namespace gx::gx3d::render {
 
@@ -54,13 +55,59 @@ public:
     void clearMaterials();
 
     void ensureResources(QRhi* rhi, QRhiRenderTarget* rt, QRhiCommandBuffer* cb) override;
-    void recordRender(QRhiCommandBuffer* cb, QRhiRenderTarget* rt) override;
+    void recordRender(QRhiCommandBuffer* cb, QRhiRenderTarget* rt, const QRect &scissor) override;
     void releaseResources() override;
     void setFrameLightingUbo(QRhiBuffer* ubo) override {
         if (m_frameLightingUbo == ubo) return;
         m_frameLightingUbo = ubo;
         invalidPipeline();
     }
+    void setFrameEnvironmentUbo(QRhiBuffer* ubo) override {
+        if (m_environmentUbo == ubo) return;
+        m_environmentUbo = ubo;
+        invalidPipeline();
+    }
+    void setBrdfLutTex(QRhiTexture* tex) override {
+        if (m_brdfLutTex == tex) return;
+        m_brdfLutTex = tex;
+        invalidPipeline();
+    }
+    void setBrdfLutSampler(QRhiSampler* sampler) override {
+        if (m_brdfLutSampler == sampler) return;
+        m_brdfLutSampler = sampler;
+        invalidPipeline();
+    }
+    void setEnvCubeTex(QRhiTexture* tex) override {
+        if (m_envCubeTex == tex) return;
+        m_envCubeTex = tex;
+        invalidPipeline();
+    }
+    void setEnvCubeSampler(QRhiSampler* sampler) override {
+        if (m_envCubeSampler == sampler) return;
+        m_envCubeSampler = sampler;
+        invalidPipeline();
+    }
+    void setPrefilterSpecCubeTex(QRhiTexture* tex) override {
+        if (m_prefilterSpecCubeTex == tex) return;
+        m_prefilterSpecCubeTex = tex;
+        invalidPipeline();
+    }
+    void setPrefilterSpecCubeSampler(QRhiSampler* sampler) override {
+        if (m_prefilterSpecCubeSampler == sampler) return;
+        m_prefilterSpecCubeSampler = sampler;
+        invalidPipeline();
+    }
+    void setIrradianceCubeTex(QRhiTexture* tex) override {
+        if (m_irradianceCubeTex == tex) return;
+        m_irradianceCubeTex = tex;
+        invalidPipeline();
+    }
+    void setIrradianceCubeSampler(QRhiSampler* sampler) override {
+        if (m_irradianceCubeSampler == sampler) return;
+        m_irradianceCubeSampler = sampler;
+        invalidPipeline();
+    }
+
     void recordPick(QRhiCommandBuffer *cb);
 
 signals:
@@ -101,6 +148,13 @@ private:
     QHash<GXMaterial*, QRhiShaderResourceBindings*> m_materialSrbs;
     QHash<GXMaterial*, QRhiBuffer*> m_vsUbufPerMat;
     QHash<GXMaterial*, QRhiBuffer*> m_fsUbufPerMat;
+    QByteArray m_vsScratch;
+    QByteArray m_fsScratch;
+
+    // QPointer<GXMaterial*> m_defaultMat;
+
+    QRhiRenderPassDescriptor* m_lastRp = nullptr;
+    int m_lastSampleCount = 0;
 
     QRhiShaderResourceBindings* srbForMaterial(GXMaterial* mat, QRhiCommandBuffer* cb);
 

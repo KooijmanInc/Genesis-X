@@ -1,5 +1,6 @@
 # 3rdparty
 3rdparty/firebase_cpp_sdk
+3rdparty/firebase_cpp_sdk_new
 3rdparty/firebase_ios_sdk
 !3rdparty/.keep
 

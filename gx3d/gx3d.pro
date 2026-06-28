@@ -73,12 +73,15 @@ DISTFILES += \
     shaders/light_gizmo.vert \
     shaders/pick.frag \
     shaders/pick.vert \
+    shaders/prefilter_spec.frag \
+    shaders/prefilter_spec.vert \
     shaders/principled.frag \
     shaders/principled.vert \
     shaders/principled_blend.frag \
     shaders/principled_blend.vert \
     shaders/principled_mask.frag \
     shaders/principled_mask.vert \
+    shaders/principled_old.frag \
     shaders/principled_opaque.frag \
     shaders/principled_opaque.vert \
     shaders/solidcolor.frag \
