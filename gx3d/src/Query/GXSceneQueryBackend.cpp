@@ -54,7 +54,7 @@ GXRayHit GXSceneQueryBackend::raycast(const GXRay &ray, int minPriority) const
     GXRayHit best;
     float bestT = std::numeric_limits<float>::infinity();
     // float bestVol = std::numeric_limits<float>::infinity();
-    // int bestPriority = std::numeric_limits<int>::min();
+    int bestPriority = std::numeric_limits<int>::min();
 
     if (!m_scene) return best;
 
@@ -77,8 +77,12 @@ GXRayHit GXSceneQueryBackend::raycast(const GXRay &ray, int minPriority) const
         QVector3D nrm;
         if (!intersectRayAabb(ray, box, tHit, nrm)) return;
 
-        if (!best.hit || tHit < bestT) {
+        const int prio = model->pickPriority();
+
+        if (!best.hit || prio > bestPriority || (prio == bestPriority && tHit < bestT)) {
+        // if (!best.hit || tHit < bestT) {
             best.hit = true;
+            bestPriority = prio;
             bestT = tHit;
             best.t = tHit;
             best.positionWS = ray.originWS + ray.dirWS * tHit;

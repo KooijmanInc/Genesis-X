@@ -11,7 +11,8 @@ SUBDIRS += \
     physics \
     orm \
     framework \
-    gx3d
+    gx3d \
+    web
 
 !android:!ios:!wasm:!macos {
     SUBDIRS += \
@@ -50,9 +51,11 @@ DISTFILES += \
     mkspecs/features/conf/gx_framework.prf \
     mkspecs/features/conf/gx_gx3d.prf \
     mkspecs/features/conf/gx_io.prf \
+    mkspecs/features/conf/gx_web.prf \
     mkspecs/features/genesisx_app_core.prf \
     mkspecs/features/genesisx_assets.prf \
     mkspecs/features/gx_app_ab.prf \
+    mkspecs/features/gx_app_ads.prf \
     mkspecs/features/gx_app_analytics.prf \
     mkspecs/features/gx_app_audiorecorder.prf \
     mkspecs/features/gx_app_auth.prf \
@@ -86,6 +89,7 @@ DISTFILES += \
     mkspecs/features/gx_validation.prf \
     mkspecs/gx_app_calendar.prf \
     mkspecs/modules/qt_lib_genesisx_app_ab.pri \
+    mkspecs/modules/qt_lib_genesisx_app_ads.pri \
     mkspecs/modules/qt_lib_genesisx_app_analytics.pri \
     mkspecs/modules/qt_lib_genesisx_app_audiorecorder.pri \
     mkspecs/modules/qt_lib_genesisx_app_auth.pri \
@@ -124,8 +128,10 @@ DISTFILES += \
     mkspecs/modules/qt_lib_genesisx_io.pri \
     mkspecs/modules/qt_lib_genesisx_settings.pri \
     mkspecs/modules/qt_lib_genesisx_validation.pri \
+    mkspecs/modules/qt_lib_genesisx_web.pri \
     scripts/install.bat \
     scripts/install.sh \
+    scripts/packages/webview2.sh \
     tools/qtcreator-wizard/install-wizard.sh
 
 

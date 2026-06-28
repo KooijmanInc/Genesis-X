@@ -8,7 +8,59 @@
 
 #include <rhi/qrhi.h>
 
-using namespace gx::gx3d::render;
+namespace gx::gx3d::render {
+
+static QRhiSampler::AddressMode toRhi(GXTexture2D::TilingMode m)
+{
+    switch (m) {
+    case GXTexture2D::TilingMode::Repeat:
+        return QRhiSampler::Repeat;
+    case GXTexture2D::TilingMode::ClampToEdge:
+        return QRhiSampler::ClampToEdge;
+    case GXTexture2D::TilingMode::MirroredRepeat:
+        return QRhiSampler::Mirror;
+    }
+    return QRhiSampler::Repeat;
+}
+
+static QRhiSampler::Filter toRhiMag(GXTexture2D::MagFilter m)
+{
+    switch (m) {
+    case GXTexture2D::MagFilter::None:
+        return QRhiSampler::None;
+    case GXTexture2D::MagFilter::Linear:
+        return QRhiSampler::Linear;
+    case GXTexture2D::MagFilter::Nearest:
+        return QRhiSampler::Nearest;
+    }
+    return QRhiSampler::Linear;
+}
+
+static QRhiSampler::Filter toRhiMin(GXTexture2D::MinFilter m)
+{
+    switch (m) {
+    case GXTexture2D::MinFilter::None:
+        return QRhiSampler::None;
+    case GXTexture2D::MinFilter::Linear:
+        return QRhiSampler::Linear;
+    case GXTexture2D::MinFilter::Nearest:
+        return QRhiSampler::Nearest;
+    }
+    return QRhiSampler::Linear;
+}
+
+static QRhiSampler::Filter toRhiMip(GXTexture2D::MipFilter m)
+{
+    switch (m) {
+    case GXTexture2D::MipFilter::None:
+        return QRhiSampler::None;
+    case GXTexture2D::MipFilter::Linear:
+        return QRhiSampler::Linear;
+    case GXTexture2D::MipFilter::Nearest:
+        return QRhiSampler::Nearest;
+    }
+    return QRhiSampler::Linear;
+}
 
 GXTexture2D::GXTexture2D(QObject *parent)
     : GXTexture{parent}
@@ -51,9 +103,58 @@ void GXTexture2D::setImage(const QImage &img)
     markDirty();
 }
 
+void GXTexture2D::setWrapU(TilingMode w)
+{
+    if (m_wrapU == w) return;
+    m_wrapU = w;
+
+    emit wrapChanged();
+}
+
+void GXTexture2D::setWrapV(TilingMode w)
+{
+    if (m_wrapV == w) return;
+    m_wrapV = w;
+
+    emit wrapChanged();
+}
+
+void GXTexture2D::setMagFilter(MagFilter mf)
+{
+    if (m_magFilter == mf) return;
+    m_magFilter = mf;
+
+    emit magFilterChanged();
+}
+
+void GXTexture2D::setMinFilter(MinFilter mf)
+{
+    if (m_minFilter == mf) return;
+    m_minFilter = mf;
+
+    emit minFilterChanged();
+}
+
+void GXTexture2D::setMipFilter(MipFilter mf)
+{
+    if (m_mipFilter == mf) return;
+    m_mipFilter = mf;
+
+    emit mipFilterChanged();
+}
+
+
+
 void GXTexture2D::setDefaultImage(const QColor &color)
 {
     m_image = GXTexture::makeFallback(color);
+    setImage(m_image);
+    markDirty();
+}
+
+void GXTexture2D::setDefaultNormalImage()
+{
+    m_image = GXTexture::makeNormalFallback();
     setImage(m_image);
     markDirty();
 }
@@ -68,11 +169,11 @@ void GXTexture2D::ensureTexture(QRhi *rhi, QRhiCommandBuffer *cb)
 
     if (!m_sampler) {
         m_sampler = rhi->newSampler(
-            QRhiSampler::Linear,
-            QRhiSampler::Linear,
-            QRhiSampler::None,
-            QRhiSampler::Repeat,
-            QRhiSampler::Repeat
+            toRhiMag(m_magFilter),
+            toRhiMin(m_minFilter),
+            toRhiMip(m_mipFilter),
+            toRhi(m_wrapU),
+            toRhi(m_wrapV)
         );
         if (!m_sampler->create()) {
             qWarning() << "[GXTexture2D] sampler create failed";
@@ -87,6 +188,12 @@ void GXTexture2D::ensureTexture(QRhi *rhi, QRhiCommandBuffer *cb)
     const QSize sz = uploadImg.size();
     if (sz.isEmpty()) return;
 
+    QRhiTexture::Flags flags = {};
+
+    if (m_colorSpace == ColorSpace::SRGB && !isNormalMap()) {
+        flags |= QRhiTexture::sRGB;
+    }
+
     if (!m_texture || m_texture->pixelSize() != sz) {
         if (m_texture) {
             m_texture->destroy();
@@ -94,7 +201,7 @@ void GXTexture2D::ensureTexture(QRhi *rhi, QRhiCommandBuffer *cb)
             m_texture = nullptr;
         }
 
-        m_texture = rhi->newTexture(QRhiTexture::RGBA8, sz, 1);
+        m_texture = rhi->newTexture(QRhiTexture::RGBA8, sz, 1, flags);
         if (!m_texture->create()) {
             qWarning() << "GXTexture2D: texture create failed";
             return;
@@ -165,4 +272,6 @@ QImage GXTexture2D::preparedForUpload() const
     if (m_flipVertical) img = img.flipped(Qt::Vertical);
 
     return img;
+}
+
 }

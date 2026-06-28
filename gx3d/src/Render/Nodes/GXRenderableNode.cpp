@@ -12,6 +12,7 @@ GXRenderableNode::GXRenderableNode(QObject *parent)
 
 GXRenderableNode::~GXRenderableNode()
 {
+    // qDebug() << "~GXRenderableNode" << this << "thread" << QThread::currentThread();
     releaseResourcesBase();
 }
 
@@ -39,7 +40,7 @@ void GXRenderableNode::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiComm
     }
 }
 
-void GXRenderableNode::recordRender(QRhiCommandBuffer */*cb*/, QRhiRenderTarget */*rt*/)
+void GXRenderableNode::recordRender(QRhiCommandBuffer */*cb*/, QRhiRenderTarget */*rt*/, const QRect &/*scissor*/)
 {
 
 }
@@ -53,6 +54,78 @@ void GXRenderableNode::setFrameLightingUbo(QRhiBuffer *ubo)
 {
     if (m_frameLightingUbo == ubo) return;
     m_frameLightingUbo = ubo;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setFrameEnvironmentUbo(QRhiBuffer *ubo)
+{
+    if (m_environmentUbo == ubo) return;
+    m_environmentUbo = ubo;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setBrdfLutTex(QRhiTexture *tex)
+{
+    if (m_brdfLutTex == tex) return;
+    m_brdfLutTex = tex;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setBrdfLutSampler(QRhiSampler *sampler)
+{
+    if (m_brdfLutSampler == sampler) return;
+    m_brdfLutSampler = sampler;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setEnvCubeTex(QRhiTexture *tex)
+{
+    if (m_envCubeTex == tex) return;
+    m_envCubeTex = tex;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setEnvCubeSampler(QRhiSampler *sampler)
+{
+    if (m_envCubeSampler == sampler) return;
+    m_envCubeSampler = sampler;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setPrefilterSpecCubeTex(QRhiTexture *tex)
+{
+    if (m_prefilterSpecCubeTex == tex) return;
+    m_prefilterSpecCubeTex = tex;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setPrefilterSpecCubeSampler(QRhiSampler *sampler)
+{
+    if (m_prefilterSpecCubeSampler == sampler) return;
+    m_prefilterSpecCubeSampler = sampler;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setIrradianceCubeTex(QRhiTexture *tex)
+{
+    if (m_irradianceCubeTex == tex) return;
+    m_irradianceCubeTex = tex;
+
+    invalidPipeline();
+}
+
+void GXRenderableNode::setIrradianceCubeSampler(QRhiSampler *sampler)
+{
+    if (m_irradianceCubeSampler == sampler) return;
+    m_irradianceCubeSampler = sampler;
 
     invalidPipeline();
 }

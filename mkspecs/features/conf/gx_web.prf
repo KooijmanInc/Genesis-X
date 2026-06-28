@@ -1,0 +1,61 @@
+# SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
+# Copyright (c) 2025 Kooijman Incorporate Holding B.V.
+
+!defined(__GX_WEB_PRF_INCLUDED__, var) {
+    __GX_WEB_PRF_INCLUDED__ = 1
+
+    message([genesisx_web] module loaded from $$PWD)
+
+    GX_WEB_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/web/include)
+
+    QML_IMPORT_PATH += $$PWD/../../../web/qml
+    INCLUDEPATH += $$GX_WEB_INC_ROOT $$clean_path($$GENESISX_BUILD_ROOT/core/include)
+    QMAKE_LIBDIR += $$LIBDIRS
+
+    GX_ABI = $$QT_ARCH
+    isEmpty(GX_ABI): GX_ABI = arm64-v8a
+    contains(GX_ABI, arm64) {
+        GX_ABI = arm64-v8a
+    } else: contains(GX_ABI, x86_64) {
+        GX_ABI = x86_64
+    }
+
+    android {
+        # !contains(LIBS, -lgenesisx_$${GX_ABI}) {
+        LIBS += -lgenesisx_web_$${GX_ABI}
+
+        message([genesisx_web] setting web lib -lgenesisx_web_$${GX_ABI})
+        # }
+    } else {
+        # !contains(LIBS, -lgenesisx) {
+        #     LIBS += -lgenesisx
+        #     include(gx_core_sub.prf)
+        #     message(here arrived $$GX_SO)
+        # }
+        LIBS += -lgenesisx_web
+
+        message([genesisx_web] setting web lib -lgenesisx_web)
+    }
+
+    win32 {
+        GX_DLL_WEB = $$shell_path($$LIBDIRS/genesisx_web.dll)
+        GX_DLL_WEB_DEST = $$shell_path($$DEST_LIBDIRS/genesisx_web.dll)
+        GX_A_WEB = $$shell_path($$LIBDIRS/libgenesisx_web.a)
+        GX_A_WEB_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_web.a)
+        GX_DLL_WEBVIEW2 = $$shell_path($$GENESISX_BUILD_ROOT/3rdparty/webview2/loader/WebView2Loader.dll)
+        GX_DLL_WEBVIEW2_DEST = $$shell_path($$DEST_LIBDIRS/WebView2Loader.dll)
+
+        exists($$GX_DLL_WEB) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_WEB) $$shell_quote($$GX_DLL_WEB_DEST)
+            message([genesisx_web core] web library .dll file copied to $$DEST_LIBDIRS)
+        }
+        exists($$GX_A_WEB) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_A_WEB) $$shell_quote($$GX_A_WEB_DEST)
+            message([genesisx_web web] web library $$GX_A_WEB $$GX_WEB_A file copied to $$DEST_LIBDIRS)
+        }
+        exists($$GX_DLL_WEBVIEW2) {
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)$(COPY_FILE) $$shell_quote($$GX_DLL_WEBVIEW2) $$shell_quote($$GX_DLL_WEBVIEW2_DEST)
+            message([genesisx_web addition] web library $$GX_DLL_WEBVIEW2 file copied to $$DEST_LIBDIRS)
+        }
+    }
+}

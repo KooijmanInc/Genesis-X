@@ -1,12 +1,17 @@
 {
     "firebase": {
-        "version": "13.2.0",
-        "url": "https://dl.google.com/firebase/sdk/cpp/firebase_cpp_sdk_13.2.0.zip",
-        "sha256": "13fe274d5409bb1c0d7de932bfedd0a525f976a77714e21d168a79f0405d7ca0"
+        "version": "13.8.0",
+        "url": "https://dl.google.com/firebase/sdk/cpp/firebase_cpp_sdk_13.8.0.zip",
+        "sha256": "c8e4c812978a53fd35f024333abbbd9711889bedd1edf061dfc1f1dab58cec5f"
     },
     "firebase_ios": {
-        "version": "12.6.0",
-        "url": "https://github.com/firebase/firebase-ios-sdk/releases/download/12.6.0/Firebase.zip",
+        "version": "12.14.0",
+        "url": "https://github.com/firebase/firebase-ios-sdk/releases/download/12.14.0/Firebase.zip",
+        "sha256": "c8e4c812978a53fd35f024333abbbd9711889bedd1edf061dfc1f1dab58cec5f"
+    },
+    "webview2": {
+        "version": "",
+        "url": "",
         "sha256": ""
     }
 }

@@ -15,10 +15,20 @@
 #include <QFileInfo>
 #include <QVector4D>
 
+#include <QElapsedTimer>
+
 #include <limits>
 #include <algorithm>
+// #include <atomic>
+
 
 using namespace gx::gx3d::render;
+
+// static std::atomic<int> g_pipelinesCreatedThisSecond{0};
+// static std::atomic<int> g_srbsCreatedThisSecond{0};
+// static std::atomic<int>   g_ruBatchesThisSecond{0};
+// static std::atomic<int>   g_dynUpdatesThisSecond{0};
+// static std::atomic<qint64> g_dynBytesThisSecond{0};
 
 static inline bool boundsValid(const QVector3D& bmin, const QVector3D& bmax)
 {
@@ -44,8 +54,9 @@ static inline void computeBoundsIfMissing(GXMeshData& cpu)
                    -std::numeric_limits<float>::infinity(),
                    -std::numeric_limits<float>::infinity());
 
-    for (const auto& v : cpu.vertices) {
-        const QVector3D p = v.position; // <-- you DO have this field (used in syncFromCpuIfNeeded)
+    auto& ve = cpu.vertices;
+    for (const auto& v : ve) {
+        const QVector3D p = v.position;
         minV.setX(std::min(minV.x(), p.x()));
         minV.setY(std::min(minV.y(), p.y()));
         minV.setZ(std::min(minV.z(), p.z()));
@@ -244,6 +255,8 @@ void GXModel::clearMaterials()
 void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer* cb)
 {
     QString err;
+    QRhiRenderPassDescriptor* rp = rt->renderPassDescriptor();
+    const int sc = rt->sampleCount();
 
     if (!ensureMeshLoaded(&err)) {
         qWarning() << "[GXModel] failed to load mesh:" << err;
@@ -264,7 +277,7 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer
 
     GXRenderableNode::ensureResources(rhi, rt, cb);
 
-    if (m_rhi == rhi && m_ps && m_vsUbuf && m_fsUbuf && !m_pipelineDirty && m_boundLightingUbo == m_frameLightingUbo) return;
+    if (m_rhi == rhi && m_ps && m_vsUbuf && m_fsUbuf && !m_pipelineDirty && m_boundLightingUbo == m_frameLightingUbo && m_lastRp == rp && m_lastSampleCount == sc) return;
 
     destroyPipelineResources();
     m_rhi = rhi;
@@ -299,6 +312,7 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer
     defaultMat->ensureRhi(rhi, cb);
 
     m_ps = m_rhi->newGraphicsPipeline();
+    // g_pipelinesCreatedThisSecond.fetch_add(1, std::memory_order_relaxed);
 
     GXMaterial* matPtr = defaultMat;
     m_ps->setShaderStages({
@@ -350,15 +364,22 @@ void GXModel::ensureResources(QRhi *rhi, QRhiRenderTarget *rt, QRhiCommandBuffer
     }
 
     m_pipelineDirty = false;
+    m_boundHadLighting = (m_frameLightingUbo != nullptr);
+    m_boundLightingUbo = m_frameLightingUbo;
+    m_lastRp = rp;
+    m_lastSampleCount = sc;
 }
 
-void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
+void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt, const QRect &scissor)
 {
     if (!cb || !rt) return;
 
     QRhi* rhi = cb->rhi();
+    QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
+    // bool anyUboUpdates = false;
+    // auto t0 = GXClock::now();
     ensureResources(rhi, rt, cb);
-
+    // auto t1 = GXClock::now();
     if (m_mesh) m_mesh->uploadIfNeeded(rhi, cb);
 
     if (!m_ps) return;
@@ -372,45 +393,125 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
 
     QMatrix4x4 model = worldMatrix();
 
-    QMatrix4x4 mvp = rhi->clipSpaceCorrMatrix() * (m_viewProj * model);
+    // QMatrix4x4 mvp = rhi->clipSpaceCorrMatrix() * (m_viewProj * model);
 
-    auto updateUbosFor = [&](GXMaterial* m, const QMatrix4x4& mvpIn, const QMatrix4x4& modelIn) -> QVector4D {
+    auto updateUbosFor = [&](GXMaterial* m, const QMatrix4x4& mvpIn, const QMatrix4x4& modelIn, QRhiResourceUpdateBatch* u) -> bool {
 
-        QByteArray vsData;
-        vsData.resize(m->vsUboSize());
-        if (!vsData.isEmpty())
-            m->fillVS(vsData.data(), mvpIn, modelIn);
+        bool wrote = false;
 
-        QByteArray fsData;
-        fsData.resize(m->fsUboSize());
-        if (!fsData.isEmpty())
-            m->fillFS(fsData.data());
-
-        QVector4D preview(0, 0, 0, 0);
-        if (fsData.size() >= 16) {
-            const float *f = reinterpret_cast<const float*>(fsData.constData());
-            preview = QVector4D(f[0], f[1], f[2], f[3]);
+        m_vsScratch.resize(m->vsUboSize());
+        if (!m_vsScratch.isEmpty()) {
+            m->fillVS(m_vsScratch.data(), mvpIn, modelIn);
+            if (auto* vsBuf = m_vsUbufPerMat.value(m, nullptr))
+                u->updateDynamicBuffer(vsBuf, 0, m_vsScratch.size(), m_vsScratch.constData()),
+                    wrote = true;
         }
 
-        QRhiBuffer* vsBuf = m_vsUbufPerMat.value(m, nullptr);
-        QRhiBuffer* fsBuf = m_fsUbufPerMat.value(m, nullptr);
-
-        if (!vsBuf || !fsBuf) {
-            qWarning() << "GXModel: missing per-mat UBO for" << m;
-            return preview;
+        m_fsScratch.resize(m->fsUboSize());
+        if (!m_fsScratch.isEmpty()) {
+            m->fillFS(m_fsScratch.data());
+            if (auto* fsBuf = m_fsUbufPerMat.value(m, nullptr))
+                u->updateDynamicBuffer(fsBuf, 0, m_fsScratch.size(), m_fsScratch.constData()),
+                    wrote = true;
         }
 
-        {
-            QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
-            if (!vsData.isEmpty())
-                u->updateDynamicBuffer(vsBuf, 0, vsData.size(), vsData.constData());
-            if (!fsData.isEmpty())
-                u->updateDynamicBuffer(fsBuf, 0, fsData.size(), fsData.constData());
-            cb->resourceUpdate(u);
-        }
+        // QByteArray vsData;
+        // m_vsScratch.resize(m->vsUboSize());
+        // if (!m_vsScratch.isEmpty())
+        //     m->fillVS(m_vsScratch.data(), mvpIn, modelIn);
 
-        return preview;
+        // // QByteArray fsData;
+        // m_fsScratch.resize(m->fsUboSize());
+        // if (!m_fsScratch.isEmpty())
+        //     m->fillFS(m_fsScratch.data());
+
+        // QVector4D preview(0, 0, 0, 0);
+        // if (m_fsScratch.size() >= 16) {
+        //     const float *f = reinterpret_cast<const float*>(m_fsScratch.constData());
+        //     preview = QVector4D(f[0], f[1], f[2], f[3]);
+        // }
+
+        // QRhiBuffer* vsBuf = m_vsUbufPerMat.value(m, nullptr);
+        // QRhiBuffer* fsBuf = m_fsUbufPerMat.value(m, nullptr);
+
+        // if (!vsBuf || !fsBuf) {
+        //     qWarning() << "GXModel: missing per-mat UBO for" << m;
+        //     return false;
+        // }
+
+        // {
+        //     // QRhiResourceUpdateBatch* u = rhi->nextResourceUpdateBatch();
+        //     // g_ruBatchesThisSecond.fetch_add(1, std::memory_order_relaxed);
+        //     if (!m_vsScratch.isEmpty()) {
+        //         u->updateDynamicBuffer(vsBuf, 0, m_vsScratch.size(), m_vsScratch.constData());
+        //         // anyUboUpdates = true;
+        //         // g_dynUpdatesThisSecond.fetch_add(1, std::memory_order_relaxed);
+        //         // g_dynBytesThisSecond.fetch_add(vsData.size(), std::memory_order_relaxed);
+        //     }
+        //     if (!m_fsScratch.isEmpty()) {
+        //         u->updateDynamicBuffer(fsBuf, 0, m_fsScratch.size(), m_fsScratch.constData());
+        //         // anyUboUpdates = true;
+        //         // g_dynUpdatesThisSecond.fetch_add(1, std::memory_order_relaxed);
+        //         // g_dynBytesThisSecond.fetch_add(fsData.size(), std::memory_order_relaxed);
+        //     }
+        //     // cb->resourceUpdate(u);
+        // }
+
+        return wrote;
     };
+
+    const QSize ps = rt->pixelSize();
+    if (ps.isEmpty()) return;
+    // cb->setViewport(QRhiViewport(0, 0, float(ps.width()), float(ps.height())));
+    // cb->setScissor(QRhiScissor(0, 0, ps.width(), ps.height()));
+
+    // QRect r = scissor;
+    // if (!r.isValid() || r.isEmpty()) {
+    //     r = QRect(0, 0, ps.width(), ps.height());
+    // }
+    // r = r.intersected(QRect(0, 0, ps.width(), ps.height()));
+    // const bool yUp = rhi->isYUpInFramebuffer();
+    // if (yUp) {
+    //     r.setY(ps.height() - (r.y() + r.height()));
+    // }
+
+    QRect r = scissor.intersected(QRect(0, 0, ps.width(), ps.height()));
+
+    const int yFlipped = ps.height() - (r.y() + r.height());
+
+    cb->setViewport(QRhiViewport(float(r.x()), float(yFlipped),
+                                 float(r.width()), float(r.height())));
+    cb->setScissor(QRhiScissor(r.x(), yFlipped, r.width(), r.height()));
+
+
+    // r.x() = r.width();
+    // cb->setViewport(QRhiViewport(float(r.x()), float(r.y()), float(r.width()), float(r.height())));
+    // cb->setScissor(QRhiScissor(r.x(), r.y(), r.width(), r.height()));
+
+    // const float sx = float(r.width())  / float(ps.width());
+    // const float sy = float(r.height()) / float(ps.height());
+
+    // // yUp is false in your logs, so NDC Y is top-to-bottom in window coords.
+    // // This formula places the viewport correctly.
+    // const float tx = (2.0f * float(r.x()) + float(r.width()))  / float(ps.width())  - 1.0f;
+    // float ty;
+    // // const float ty = 1.0f - (2.0f * float(r.y()) + float(r.height())) / float(ps.height());
+    // if (yUp) {
+    //     // r.y is now bottom-left based because we flipped it
+    //     ty = (2.0f * float(r.y()) + float(r.height())) / float(ps.height()) - 1.0f;
+    // } else {
+    //     // r.y is top-left based
+    //     ty = 1.0f - (2.0f * float(r.y()) + float(r.height())) / float(ps.height());
+    // }
+
+    // QMatrix4x4 viewportNdc;
+    // viewportNdc.setToIdentity();
+    // viewportNdc(0,0) = sx;
+    // viewportNdc(1,1) = sy;
+    // viewportNdc(0,3) = tx;
+    // viewportNdc(1,3) = ty;
+
+    QMatrix4x4 mvp = rhi->clipSpaceCorrMatrix() * (m_viewProj * model);
 
     cb->setGraphicsPipeline(m_ps);
 
@@ -436,12 +537,17 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
 
     cb->setVertexInput(0, 1, &vbufBinding, m_mesh->indexBuffer(), 0, idxFmt);
 
-    const QSize ps = rt->pixelSize();
-    cb->setViewport(QRhiViewport(0, 0, float(ps.width()), float(ps.height())));
-    cb->setScissor(QRhiScissor(0, 0, ps.width(), ps.height()));
-
     const auto &subs = m_mesh->subMeshes();
     const auto& mats = materialsVector();
+
+    if (!subs.isEmpty()) {
+
+        struct DrawCmd { const GXSubMesh* sm; GXMaterial* mat; QRhiShaderResourceBindings* srb; };
+        QVector<DrawCmd> draws;
+        draws.reserve(subs.size());
+
+        bool anyUboUpdates = false;
+
     for (int i = 0; i < subs.size(); ++i) {
         const GXSubMesh &sm = subs[i];
 
@@ -479,13 +585,54 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
         QRhiShaderResourceBindings* useSrb = srbForMaterial(useMat, cb);
         if (!useSrb) continue;
 
-        updateUbosFor(useMat, mvp, model);
+        anyUboUpdates |= updateUbosFor(useMat, mvp, model, u);
 
-        cb->setShaderResources(useSrb);
-        cb->drawIndexed(int(sm.indexCount), 1, int(sm.indexOffset), int(sm.baseVertex), 0);
+
+        draws.push_back({ &sm, useMat, useSrb });
+
+        // cb->setShaderResources(useSrb);
+        // cb->resourceUpdate(u);
+        // cb->drawIndexed(int(sm.indexCount), 1, int(sm.indexOffset), int(sm.baseVertex), 0);
+
+        // static QElapsedTimer s_timer;
+        // static bool s_started = false;
+
+        // if (!s_started) {
+        //     s_timer.start();
+        //     s_started = true;
+        // }
+
+        // if (s_timer.elapsed() >= 1000) {
+        //     qDebug() << "[GX3D created/sec]"
+        //              << "pipelines" << g_pipelinesCreatedThisSecond.exchange(0)
+        //              << "srbs"      << g_srbsCreatedThisSecond.exchange(0);
+        // //     const int created = g_pipelinesCreatedThisSecond.exchange(0, std::memory_order_relaxed);
+        // //     qDebug() << "[GX3D] subs pipelinesCreated/sec =" << created;
+        // //     const int batches = g_ruBatchesThisSecond.exchange(0, std::memory_order_relaxed);
+        // //     const int updates = g_dynUpdatesThisSecond.exchange(0, std::memory_order_relaxed);
+        // //     const qint64 bytes = g_dynBytesThisSecond.exchange(0, std::memory_order_relaxed);
+
+        // //     qDebug() << "[GX3D] subs UBO updates/sec:"
+        // //              << "batches=" << batches
+        // //              << "updates=" << updates
+        // //              << "bytes=" << bytes;
+
+        // //     // keep your pipeline print too if you want
+        // //     s_timer.restart();
+        // //     // s_timer.restart();
+
+        // }
+    }
+    if (anyUboUpdates)
+        cb->resourceUpdate(u);
+
+    for (const auto& dc : draws) {
+        cb->setShaderResources(dc.srb);
+        cb->drawIndexed(int(dc.sm->indexCount), 1,
+                        int(dc.sm->indexOffset), int(dc.sm->baseVertex), 0);
     }
 
-    if (subs.isEmpty()) {
+    } else {
         GXMaterial *useMat0 = nullptr;
         if (!mats.isEmpty()) useMat0 = mats[0];
         if (!useMat0) useMat0 = material();
@@ -497,12 +644,51 @@ void GXModel::recordRender(QRhiCommandBuffer *cb, QRhiRenderTarget *rt)
         if (useMat0->fsUboSize() > int(m_fsUbuf->size()))
             qWarning() << "FS UBO too large for buffer";
 
-        updateUbosFor(useMat0, mvp, model);
+        updateUbosFor(useMat0, mvp, model, u);
+        cb->resourceUpdate(u);
+
         QRhiShaderResourceBindings* useSrb0 = srbForMaterial(useMat0, cb);
         if (!useSrb0) return;
+
         cb->setShaderResources(useSrb0);
         cb->drawIndexed(m_mesh->indexCount());
+
+        // static QElapsedTimer s_timer;
+        // static bool s_started = false;
+
+        // if (!s_started) {
+        //     s_timer.start();
+        //     s_started = true;
+        // }
+
+        // if (s_timer.elapsed() >= 1000) {
+        //     const int created = g_pipelinesCreatedThisSecond.exchange(0, std::memory_order_relaxed);
+        //     qDebug() << "[GX3D] no subs pipelinesCreated/sec =" << created;
+        //     const int batches = g_ruBatchesThisSecond.exchange(0, std::memory_order_relaxed);
+        //     const int updates = g_dynUpdatesThisSecond.exchange(0, std::memory_order_relaxed);
+        //     const qint64 bytes = g_dynBytesThisSecond.exchange(0, std::memory_order_relaxed);
+
+        //     qDebug() << "[GX3D] no subs UBO updates/sec:"
+        //              << "batches=" << batches
+        //              << "updates=" << updates
+        //              << "bytes=" << bytes;
+
+        //     // keep your pipeline print too if you want
+        //     s_timer.restart();
+        //     // s_timer.restart();
+        // }
     }
+
+    // const int created1 = g_pipelinesCreatedThisSecond.exchange(0, std::memory_order_relaxed);
+    // qDebug() << "[GX3D] outside no subs pipelinesCreated/sec =" << created1;
+    // const int batches1 = g_ruBatchesThisSecond.exchange(0, std::memory_order_relaxed);
+    // const int updates1 = g_dynUpdatesThisSecond.exchange(0, std::memory_order_relaxed);
+    // const qint64 bytes1 = g_dynBytesThisSecond.exchange(0, std::memory_order_relaxed);
+
+    // qDebug() << "[GX3D] no subs UBO updates/sec:"
+    //          << "batches=" << batches1
+    //          << "updates=" << updates1
+    //          << "bytes=" << bytes1;
 }
 
 void GXModel::releaseResources()
@@ -527,6 +713,31 @@ void GXModel::recordPick(QRhiCommandBuffer *cb)
     cb->setVertexInput(0, 1, &vInput, ib, 0, idxFmt);
 
     cb->drawIndexed(m_mesh->indexCount(), 1, 0, 0, 0);
+
+    // static QElapsedTimer s_timer;
+    // static bool s_started = false;
+
+    // if (!s_started) {
+    //     s_timer.start();
+    //     s_started = true;
+    // }
+
+    // if (s_timer.elapsed() >= 1000) {
+    //     // const int created = g_pipelinesCreatedThisSecond.exchange(0, std::memory_order_relaxed);
+    //     // qDebug() << "[GX3D] record pick pipelinesCreated/sec =" << created;
+    //     // const int batches = g_ruBatchesThisSecond.exchange(0, std::memory_order_relaxed);
+    //     // const int updates = g_dynUpdatesThisSecond.exchange(0, std::memory_order_relaxed);
+    //     // const qint64 bytes = g_dynBytesThisSecond.exchange(0, std::memory_order_relaxed);
+
+    //     // qDebug() << "[GX3D] record pick UBO updates/sec:"
+    //     //          << "batches=" << batches
+    //     //          << "updates=" << updates
+    //     //          << "bytes=" << bytes;
+
+    //     // keep your pipeline print too if you want
+    //     s_timer.restart();
+    //     s_timer.restart();
+    // }
 }
 
 QRhiShaderResourceBindings *GXModel::srbForMaterial(GXMaterial *mat, QRhiCommandBuffer *cb)
@@ -543,6 +754,7 @@ QRhiShaderResourceBindings *GXModel::srbForMaterial(GXMaterial *mat, QRhiCommand
     QRhiBuffer* vsBuf = m_vsUbufPerMat.value(mat, nullptr);
     QRhiBuffer* fsBuf = m_fsUbufPerMat.value(mat, nullptr);
 
+    // g_srbsCreatedThisSecond.fetch_add(1, std::memory_order_relaxed);
     auto* srb = m_rhi->newShaderResourceBindings();
     QVector<QRhiShaderResourceBinding> bindings;
     bindings.reserve(4);
@@ -558,6 +770,26 @@ QRhiShaderResourceBindings *GXModel::srbForMaterial(GXMaterial *mat, QRhiCommand
 
     if (mat->normalTex() && mat->normalSampler()) {
         bindings.append(QRhiShaderResourceBinding::sampledTexture(4, QRhiShaderResourceBinding::FragmentStage, mat->normalTex(), mat->normalSampler()));
+    }
+
+    if (m_environmentUbo) {
+        bindings.append(QRhiShaderResourceBinding::uniformBuffer(5, QRhiShaderResourceBinding::FragmentStage, m_environmentUbo));
+    }
+
+    if (m_brdfLutTex && m_brdfLutSampler) {
+        bindings.append(QRhiShaderResourceBinding::sampledTexture(6, QRhiShaderResourceBinding::FragmentStage, m_brdfLutTex, m_brdfLutSampler));
+    }
+
+    if (m_envCubeTex && m_envCubeSampler) {
+        bindings.append(QRhiShaderResourceBinding::sampledTexture(7, QRhiShaderResourceBinding::FragmentStage, m_envCubeTex, m_envCubeSampler));
+    }
+
+    if (m_prefilterSpecCubeTex && m_prefilterSpecCubeSampler) {
+        bindings.append(QRhiShaderResourceBinding::sampledTexture(8, QRhiShaderResourceBinding::FragmentStage, m_prefilterSpecCubeTex, m_prefilterSpecCubeSampler));
+    }
+
+    if (m_irradianceCubeTex && m_irradianceCubeSampler) {
+        bindings.append(QRhiShaderResourceBinding::sampledTexture(9, QRhiShaderResourceBinding::FragmentStage, m_irradianceCubeTex, m_irradianceCubeSampler));
     }
 
     srb->setBindings(bindings.cbegin(), bindings.cend());

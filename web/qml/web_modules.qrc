@@ -1,0 +1,9 @@
+<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
+<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
+
+<RCC>
+    <qresource prefix="/qt/qml">
+        <file>GenesisX/Web/qmldir</file>
+        <file>GenesisX/Web/website.qmltypes</file>
+    </qresource>
+</RCC>

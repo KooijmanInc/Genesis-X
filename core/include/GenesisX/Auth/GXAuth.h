@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-#ifndef AUTH_H
-#define AUTH_H
+#ifndef GXAUTH_H
+#define GXAUTH_H
 
 #include <QObject>
 
@@ -10,15 +10,15 @@
 
 namespace gx::app::auth {
 
-class GENESISX_CORE_EXPORT Auth : public QObject
+class GENESISX_CORE_EXPORT GXAuth : public QObject
 {
     Q_OBJECT
 public:
-    explicit Auth(QObject *parent = nullptr);
+    explicit GXAuth(QObject *parent = nullptr);
 
 signals:
 };
 
 }
 
-#endif // AUTH_H
+#endif // GXAUTH_H

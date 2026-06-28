@@ -27,6 +27,15 @@ class GENESISX_GX3D_EXPORT GXPrincipledMaterial : public GXMaterial
     Q_PROPERTY(float emissionLightRadius READ emissionLightRadius WRITE setEmissionLightRadius NOTIFY emissionLightRadiusChanged)
     Q_PROPERTY(GXTexture* normalTexture READ normalTexture WRITE setNormalTexture NOTIFY normalTextureChanged)
     Q_PROPERTY(float normalScale READ normalScale WRITE setNormalScale NOTIFY normalScaleChanged)
+    Q_PROPERTY(float metallic READ metallic WRITE setMetallic NOTIFY metallicChanged)
+    Q_PROPERTY(float roughness READ roughness WRITE setRoughness NOTIFY roughnessChanged)
+
+    Q_PROPERTY(float fresnelBias READ fresnelBias WRITE setFresnelBias NOTIFY fresnelBiasChanged)
+    Q_PROPERTY(float fresnelPower READ fresnelPower WRITE setFresnelPower NOTIFY fresnelPowerChanged)
+    Q_PROPERTY(float fresnelScale READ fresnelScale WRITE setFresnelScale NOTIFY fresnelScaleChanged)
+
+    Q_PROPERTY(float specularAmount READ specularAmount WRITE setSpecularAmount NOTIFY specularAmountChanged)
+    Q_PROPERTY(SpecularChannel specularChannel READ specularChannel WRITE setSpecularChannel NOTIFY specularChannelChanged)
 
 public:
     enum EmissionLight {
@@ -82,6 +91,27 @@ public:
     float normalScale() const { return m_normalScale; }
     void setNormalScale(float s);
 
+    float metallic() const { return m_metallic; }
+    void setMetallic(float m);
+
+    float roughness() const { return m_roughness; }
+    void setRoughness(float r);
+
+    float fresnelBias() const { return m_fresnelBias; }
+    void setFresnelBias(float fb);
+
+    float fresnelPower() const { return m_fresnelPower; }
+    void setFresnelPower(float fp);
+
+    float fresnelScale() const { return m_fresnelScale; }
+    void setFresnelScale(float fs);
+
+    float specularAmount() const { return m_specularAmount; }
+    void setSpecularAmount(float sa);
+
+    SpecularChannel specularChannel() const { return m_specularChannel; }
+    void setSpecularChannel(SpecularChannel r);
+
 signals:
     void baseColorChanged();
     void baseColorTextureChanged();
@@ -92,6 +122,13 @@ signals:
     void emissionLightRadiusChanged();
     void normalTextureChanged();
     void normalScaleChanged();
+    void metallicChanged();
+    void roughnessChanged();
+    void fresnelBiasChanged();
+    void fresnelPowerChanged();
+    void fresnelScaleChanged();
+    void specularAmountChanged();
+    void specularChannelChanged();
 
 private:
     QShader m_vs, m_fs;
@@ -104,10 +141,21 @@ private:
     float m_emissionLightIntensity = 0.0f;
     float m_emissionLightRadius = 0.0f;
     float m_normalScale = 0.0f;
+    float m_metallic = 0.0f;
+    float m_roughness = 0.5f;
+    float m_fresnelBias = 0.02f;
+    float m_fresnelPower = 4.0f;
+    float m_fresnelScale = 0.15f;
+    float m_specularAmount = 0.25f;
+    SpecularChannel m_specularChannel = R;
+
+    bool m_textureMap = false;
+    bool m_normalMap = false;
 
     EmissionLight m_emissionLight = None;
 
     GXTexture2D* m_solidColorTex = nullptr;
+    GXTexture2D* m_solidNormalTex = nullptr;
 };
 
 }

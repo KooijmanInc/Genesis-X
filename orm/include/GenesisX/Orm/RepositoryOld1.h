@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-#ifndef REPOSITORY_H
-#define REPOSITORY_H
+#ifndef REPOSITORYOLD1_H
+#define REPOSITORYOLD1_H
 
 #include <GenesisX/Orm/genesisx_orm_global.h>
 
@@ -69,4 +69,4 @@ protected:
 
 }
 
-#endif // REPOSITORY_H
+#endif // REPOSITORYOLD1_H

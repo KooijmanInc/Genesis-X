@@ -7,6 +7,15 @@ Module {
         className: "gx::gx3d::GXView3D"
         prototype: "QObject"
         exports: ["GenesisX3D/GXView3D 1.0"]
+        Enum {
+            name: "RenderMode"
+            values: [
+                "OnDemand",
+                "Continuous",
+                "Throttled"
+            ]
+        }
+
         Property {
             name: "objectName"
             type: "string"
@@ -18,21 +27,52 @@ Module {
             isPointer: true
         }
         Property {
+            name: "width"
+            type: "QQuickWidth"
+            isReadonly: true
+            // isPointer: true
+        }
+        Property {
+            name: "height"
+            type: "QQuickHeight"
+            isReadonly: true
+            // isPointer: true
+        }
+        Property {
             name: "clearColor"
             type: "string"
         }
 
         Property {
             name: "renderMode"
-            type: "gx::gx3d::GXView3D"
+            type: "RenderMode"
+            read: "renderMode"
+            notify: "renderModeChanged"
         }
+        Property {
+            name: "targetFps"
+            type: "int"
+            read: "targetFps"
+            notify: "targetFpsChanged"
+        }
+
         Property {
             name: "scene"
             type: "gx::gx3d::scene::GXScene"
+            read: "scene"
+            notify: "sceneChanged"
         }
         Property {
             name: "camera"
             type: "gx::gx3d::GXCamera"
+            read: "camera"
+            notify: "cameraChanged"
+        }
+        Property {
+            name: "environment"
+            type: "gx::gx3d::render::GXEnvironment"
+            read: "environment"
+            notify: "environmentChanged"
         }
         Method {
             name: "pick"

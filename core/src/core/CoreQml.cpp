@@ -146,6 +146,7 @@ void registerEnabledQmlModules(QQmlEngine* engine, QString features)
     requested.remove(QStringLiteral("genesisx_orm"));
     requested.remove(QStringLiteral("genesisx_app_imagepicker"));
     requested.remove(QStringLiteral("genesisx_framework"));
+    requested.remove(QStringLiteral("genesisx_3d"));
 
     qInfo().noquote() << "[GX] QML modules requested:" << include.values().join(',');
     qInfo().noquote() << "[GX] QML modules registered:" << registered.join(',');

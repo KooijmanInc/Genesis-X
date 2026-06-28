@@ -3,16 +3,16 @@
 
 <RCC>
     <qresource prefix="/qt/qml">
-        <file>GenesisX/Core/Navigation/qmldir</file>
-        <file>GenesisX/Core/Notifications/notifications.qmltypes</file>
-        <file>GenesisX/Core/Notifications/qmldir</file>
-        <file>GenesisX/Core/Navigation/navigation.qmltypes</file>
+        <file>GenesisX/Navigation/qmldir</file>
+        <file>GenesisX/Notifications/notifications.qmltypes</file>
+        <file>GenesisX/Notifications/qmldir</file>
+        <file>GenesisX/Navigation/navigation.qmltypes</file>
         <file>GenesisX/App/Biometrics/qmldir</file>
         <file>GenesisX/SystemInfo/qmldir</file>
         <file>GenesisX/SystemInfo/systeminfo.qmltypes</file>
         <file>GenesisX/App/Biometrics/biometrics.qmltypes</file>
-        <file>GenesisX/App/Permissions/qmldir</file>
-        <file>GenesisX/App/Permissions/permissions.qmltypes</file>
+        <file>GenesisX/Permissions/qmldir</file>
+        <file>GenesisX/Permissions/permissions.qmltypes</file>
         <file>GenesisX/Core/SettingsManager/settingsmanager.qmltypes</file>
         <file>GenesisX/Core/SettingsManager/qmldir</file>
     </qresource>

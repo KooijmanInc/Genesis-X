@@ -7,11 +7,73 @@ Module {
         className: "gx::gx3d::render::GXTexture2D"
         prototype: "QObject"
         exports: ["GenesisX3D/GXTexture2D 1.0"]
+        Enum {
+            name: "TilingMode"
+            values: [
+                "Repeat",
+                "ClampToEdge",
+                "MirroredRepeat"
+            ]
+        }
+        Enum {
+            name: "MagFilter"
+            values: [
+                "None",
+                "Linear",
+                "Nearest"
+            ]
+        }
+        Enum {
+            name: "MinFilter"
+            values: [
+                "None",
+                "Linear",
+                "Nearest"
+            ]
+        }
+        Enum {
+            name: "MipFilter"
+            values: [
+                "None",
+                "Linear",
+                "Nearest"
+            ]
+        }
         Property {
             name: "source"
             type: "string"
             read: "source"
             notify: "sourceChanged"
+        }
+        Property {
+            name: "wrapU"
+            type: "TilingMode"
+            read: "wrapU"
+            notify: "wrapChanged"
+        }
+        Property {
+            name: "wrapV"
+            type: "TilingMode"
+            read: "wrapV"
+            notify: "wrapChanged"
+        }
+        Property {
+            name: "magFilter"
+            type: "MagFilter"
+            read: "magFilter"
+            notify: "magFilterChanged"
+        }
+        Property {
+            name: "minFilter"
+            type: "MinFilter"
+            read: "minFilter"
+            notify: "minFilterChanged"
+        }
+        Property {
+            name: "mipFilter"
+            type: "MipFilter"
+            read: "mipFilter"
+            notify: "mipFilterChanged"
         }
     }
 }

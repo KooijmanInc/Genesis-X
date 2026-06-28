@@ -248,7 +248,8 @@ void GXNode::updateWorldRecursive(const QMatrix4x4 &parentWorld)
 void GXNode::markTransformDirty()
 {
     m_dirty = true;
-    for (GXNode* c : m_children) {
+    auto& child = m_children;
+    for (GXNode* c : child) {
         if (c) c->markTransformDirty();
     }
     emit changed();

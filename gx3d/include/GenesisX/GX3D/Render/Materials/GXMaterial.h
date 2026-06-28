@@ -21,7 +21,7 @@ class GENESISX_GX3D_EXPORT GXMaterial : public QObject
     Q_PROPERTY(bool depthWrite READ depthWrite WRITE setDepthWrite NOTIFY renderStateChanged)
     Q_PROPERTY(float alphaCutoff READ alphaCutoff WRITE setAlphaCutoff NOTIFY alphaCutoffChanged)
     Q_PROPERTY(AlphaMode alphaMode READ alphaMode WRITE setAlphaMode NOTIFY alphaModeChanged)
-    Q_PROPERTY(QVector3D gamma READ gamma WRITE setGamma NOTIFY gammaChanged)
+    Q_PROPERTY(float colorCorrection READ colorCorrection WRITE setColorCorrection NOTIFY colorCorrectionChanged)
 
 public:
     enum CullMode {
@@ -44,6 +44,14 @@ public:
         Blend
     };
     Q_ENUM(AlphaMode)
+
+    enum SpecularChannel {
+        R,
+        G,
+        B,
+        A
+    };
+    Q_ENUM(SpecularChannel)
 
     enum ShadingVariant {
         Lit,
@@ -88,8 +96,8 @@ public:
     AlphaMode alphaMode() const { return m_alphaMode; }
     void setAlphaMode(AlphaMode a);
 
-    QVector3D gamma() const { return m_gamma; }
-    void setGamma(QVector3D a);
+    float colorCorrection() const { return m_colorCorrection; }
+    void setColorCorrection(float a);
 
     bool isDirty() const { return m_dirty; }
     bool consumeDirty();
@@ -108,7 +116,7 @@ signals:
     void materialChanged();
     void alphaModeChanged();
     void alphaCutoffChanged();
-    void gammaChanged();
+    void colorCorrectionChanged();
 
 protected:
     GXShaderUtils m_shaderUtils;
@@ -126,11 +134,12 @@ protected:
     QRhiTexture* m_normalTex = nullptr;
     QRhiSampler* m_normalSampler = nullptr;
 
-    QVector3D m_gamma = {0.45454545,0.45454545,0.45454545};
+    float m_colorCorrection = 0;
+    QVector3D m_gammaVec = {0.45454545,0.45454545,0.45454545};
 
 private:
     GXRenderState m_state;
-    AlphaMode m_alphaMode = Default;
+    AlphaMode m_alphaMode = Opaque;
     float m_alphaCutoff = 0.5f;
 
     bool m_dirty = true;

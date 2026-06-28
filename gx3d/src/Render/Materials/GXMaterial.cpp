@@ -128,12 +128,13 @@ void GXMaterial::setAlphaMode(AlphaMode a)
     markDirty();
 }
 
-void GXMaterial::setGamma(QVector3D g)
+void GXMaterial::setColorCorrection(float g)
 {
-    if (m_gamma == g) return;
-    m_gamma = g;
+    if (m_colorCorrection == g) return;
+    m_colorCorrection = qBound(0.0, g, 2.0);
+    m_gammaVec = QVector3D(g, g, g);
 
-    emit gammaChanged();
+    emit colorCorrectionChanged();
 
     markDirty();
 }

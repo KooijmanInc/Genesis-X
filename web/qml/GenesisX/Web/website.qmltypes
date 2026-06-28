@@ -1,0 +1,28 @@
+import QtQuick.tooling 1.2
+
+Module {
+    dependencies: ["QtQml 6.0", "QtQuick 6.0"]
+    Component {
+        name: "Website"
+        prototype: "QQuickItem"
+        exports: ["GenesisX.Web/Website 1.0"]
+        Property {
+            name: "url"
+            type: "QUrl"
+            read: "url"
+            notify: "urlChanged"
+        }
+        Property {
+            name: "currentUrl"
+            type: "QUrl"
+            read: "currentUrl"
+            notify: "currentUrlChanged"
+        }
+        Property {
+            name: "devToolsWindow"
+            type: "bool"
+            read: "devToolsWindow"
+            notify: "devToolsWindowChanged"
+        }
+    }
+}

@@ -75,12 +75,12 @@ GXDefaultLitMaterial::GXDefaultLitMaterial(QObject *parent)
 }
 
 QShader GXDefaultLitMaterial::vertexShader() const
-{
+{qDebug() << "default lit vert also?";
     return m_shaderUtils.gxLoadShader(":/gx3d/shaders/default_lit.vert.qsb");
 }
 
 QShader GXDefaultLitMaterial::fragmentShader() const
-{
+{qDebug() << "default lit frag also?";
     return m_shaderUtils.gxLoadShader(":/gx3d/shaders/default_lit.frag.qsb");
 }
 

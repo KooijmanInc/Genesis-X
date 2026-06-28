@@ -17,6 +17,9 @@
                     </section>
                 </section>
                 <section ref="io-genesisx-app-qmlmodule.html" title="App">
+                    <section ref="qml-io-genesisx-app-ads.html" title="Ads Type Reference">
+                        <section ref="qml-io-genesisx-app-ads-members.html" title="List of all members"/>
+                    </section>
                     <section ref="qml-io-genesisx-app-background.html" title="Background Type Reference">
                         <section ref="qml-io-genesisx-app-background-members.html" title="List of all members"/>
                     </section>
@@ -49,9 +52,10 @@
             <keyword name="ACCESS_COARSE_LOCATION" id="Permissions::ACCESS_COARSE_LOCATION" ref="qml-io-genesisx-app-permissions.html#ACCESS_COARSE_LOCATION-prop"/>
             <keyword name="ACCESS_FINE_LOCATION" id="Permissions::ACCESS_FINE_LOCATION" ref="qml-io-genesisx-app-permissions.html#ACCESS_FINE_LOCATION-prop"/>
             <keyword name="ACTIVITY_RECOGNITION" id="Permissions::ACTIVITY_RECOGNITION" ref="qml-io-genesisx-app-permissions.html#ACTIVITY_RECOGNITION-prop"/>
+            <keyword name="Ads" id="QML.Ads" ref="qml-io-genesisx-app-ads.html"/>
+            <keyword name="Ads" id="QML.io.genesisx.app.Ads" ref="qml-io-genesisx-app-ads.html"/>
             <keyword name="Analytics" id="analytics::Analytics" ref="gx-app-analytics-analytics.html"/>
             <keyword name="AudioRecorder" id="audiorecorder::AudioRecorder" ref="gx-app-audiorecorder-audiorecorder.html"/>
-            <keyword name="Auth" id="auth::Auth" ref="gx-app-auth-auth.html"/>
             <keyword name="BLUETOOTH_CONNECT" id="Permissions::BLUETOOTH_CONNECT" ref="qml-io-genesisx-app-permissions.html#BLUETOOTH_CONNECT-prop"/>
             <keyword name="BLUETOOTH_SCAN" id="Permissions::BLUETOOTH_SCAN" ref="qml-io-genesisx-app-permissions.html#BLUETOOTH_SCAN-prop"/>
             <keyword name="BODY_SENSORS" id="Permissions::BODY_SENSORS" ref="qml-io-genesisx-app-permissions.html#BODY_SENSORS-prop"/>
@@ -73,12 +77,14 @@
             <keyword name="ConnectionController" id="orm::ConnectionController" ref="gx-orm-connectioncontroller.html"/>
             <keyword name="ConnectionController" id="QML.ConnectionController" ref="qml-io-genesisx-orm-connectioncontroller.html"/>
             <keyword name="ConnectionController" id="QML.io.genesisx.orm.ConnectionController" ref="qml-io-genesisx-orm-connectioncontroller.html"/>
+            <keyword name="GXAds" id="ads::GXAds" ref="gx-app-ads-gxads.html"/>
             <keyword name="Genesis-X App C++ Classes" id="Genesis-X App C++ Classes" ref="app-classes.html"/>
             <keyword name="Genesis-X Assets" id="Genesis-X Assets" ref="assets.html"/>
             <keyword name="Genesis-X Core C++ Classes" id="Genesis-X Core C++ Classes" ref="core-classes.html"/>
             <keyword name="Genesis-X Documentation" id="Genesis-X Documentation" ref="index.html"/>
             <keyword name="Genesis-X Orm C++ Classes" id="Genesis-X Orm C++ Classes" ref="orm-classes.html"/>
             <keyword name="Genesis-X Physics" id="Genesis-X Physics" ref="physics.html"/>
+            <keyword name="GenesisX.Ads" id="QML.Ads.GenesisX" ref="genesisx-ads-qmlmodule.html"/>
             <keyword name="GenesisX.App.Biometrics" id="QML.Biometrics.App.GenesisX" ref="genesisx-app-biometrics-qmlmodule.html"/>
             <keyword name="GenesisX.Background" id="QML.Background.GenesisX" ref="genesisx-background-qmlmodule.html"/>
             <keyword name="GenesisX.Cast" id="QML.Cast.GenesisX" ref="genesisx-cast-qmlmodule.html"/>
@@ -109,6 +115,7 @@
             <keyword name="SystemInfo" id="QML.SystemInfo" ref="qml-io-genesisx-core-systeminfo.html"/>
             <keyword name="SystemInfo" id="QML.io.genesisx.core1.SystemInfo" ref="qml-io-genesisx-core-systeminfo.html"/>
             <keyword name="ab" id="app::ab" ref="gx-app-ab.html"/>
+            <keyword name="ads" id="app::ads" ref="gx-app-ads-sub-genesisx.html"/>
             <keyword name="analytics" id="app::analytics" ref="gx-app-analytics.html"/>
             <keyword name="app" id="gx::app" ref="gx-app.html"/>
             <keyword name="audiorecorder" id="app::audiorecorder" ref="gx-app-audiorecorder.html"/>
@@ -183,6 +190,7 @@
             <file>codegen-h.html</file>
             <file>core-classes.html</file>
             <file>coreqml-h.html</file>
+            <file>genesisx-ads-qmlmodule.html</file>
             <file>genesisx-app-biometrics-qmlmodule.html</file>
             <file>genesisx-background-qmlmodule.html</file>
             <file>genesisx-cast-qmlmodule.html</file>
@@ -195,11 +203,12 @@
             <file>getting-started.html</file>
             <file>gx-app-ab-abtesting.html</file>
             <file>gx-app-ab.html</file>
+            <file>gx-app-ads-gxads.html</file>
+            <file>gx-app-ads-sub-genesisx.html</file>
             <file>gx-app-analytics-analytics.html</file>
             <file>gx-app-analytics.html</file>
             <file>gx-app-audiorecorder-audiorecorder.html</file>
             <file>gx-app-audiorecorder.html</file>
-            <file>gx-app-auth-auth.html</file>
             <file>gx-app-auth.html</file>
             <file>gx-app-background-backgroundmediarouter.html</file>
             <file>gx-app-background.html</file>
@@ -231,6 +240,8 @@
             <file>namespaces.html</file>
             <file>orm-classes.html</file>
             <file>physics.html</file>
+            <file>qml-io-genesisx-app-ads-members.html</file>
+            <file>qml-io-genesisx-app-ads.html</file>
             <file>qml-io-genesisx-app-background-members.html</file>
             <file>qml-io-genesisx-app-background.html</file>
             <file>qml-io-genesisx-app-biometrics-members.html</file>

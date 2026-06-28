@@ -409,7 +409,7 @@ if  [[ $HAS_THIRDPARTY -eq 1 ]]; then
     echo "====================================="
     echo
     echo "Open project Genesis-X in Qt"
-    echo -e "Go to: \033[1mcore - Other files - ../3rdparty/firebase_cpp_sdk/Andoird\033[0m"
+    echo -e "Go to: \033[1mcore - Other files - ../3rdparty/firebase_cpp_sdk/Android\033[0m"
     echo -e "Open the file: \033[1mfirebase_dependencies.gradle\033[0m"
     echo -e "Go to line: \033[1m108\033[0m"
     echo -e "Encapsule \033[1mproject.extensions.create('firebaseCpp', FirebaseCppExtension)\033[0m e.g."
