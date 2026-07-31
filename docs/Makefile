@@ -744,12 +744,12 @@ distclean: release-distclean debug-distclean  FORCE
 	-$(DEL_FILE) .qmake.stash
 
 docs:
-	rmdir /S /Q D:\projects\qt\libs\Genesis-X\docs\out 2>nul & mkdir D:\projects\qt\libs\Genesis-X\docs\out & "D:/Qt/6.11.1/llvm-mingw_64/bin/qdoc" "D:\projects\qt\libs\Genesis-X\docs\genesisx.qdocconf"
+	rmdir /S /Q D:\projectsQt\development\libs\Genesis-X\docs\out 2>nul & mkdir D:\projectsQt\development\libs\Genesis-X\docs\out & "D:/Qt/6.11.1/llvm-mingw_64/bin/qdoc" "D:\projectsQt\development\libs\Genesis-X\docs\genesisx.qdocconf"
 
 arrange: docs
 
 help: arrange
-	"D:\Qt\6.11.1\llvm-mingw_64\bin\qhelpgenerator" "D:\projects\qt\libs\Genesis-X\docs\out\GenesisX.qhp" -o "D:\projects\qt\libs\Genesis-X\docs\out\GenesisX.qch"
+	"D:\Qt\6.11.1\llvm-mingw_64\bin\qhelpgenerator" "D:\projectsQt\development\libs\Genesis-X\docs\out\GenesisX.qhp" -o "D:\projectsQt\development\libs\Genesis-X\docs\out\GenesisX.qch"
 
 check: first
 

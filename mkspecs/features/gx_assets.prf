@@ -7,6 +7,7 @@
     message([genesisx_assets] module loaded from $$PWD)
 
     RESOURCES += $$PWD/../../assets/gx_assets.qrc
+    RESOURCES += $$PWD/../../translations/translations.qrc
     QML_IMPORT_PATH += $$PWD/../../assets/qml
     message(import paths from library: $$QML_IMPORT_PATH and resources: $$RESOURCES)
 }

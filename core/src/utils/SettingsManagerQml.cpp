@@ -12,5 +12,5 @@ void registerGenesisXSettingsManager(QQmlEngine *engine)
 {
     Q_UNUSED(engine);
 
-    qmlRegisterSingletonType<gx::utils::SettingsManager>("GenesisX.System", 1, 0, "Settings", [](QQmlEngine*, QJSEngine*) -> QObject* { return new SettingsManager; });
+    qmlRegisterSingletonType<gx::utils::SettingsManager>("GenesisX.System", 1, 0, "GXSettings", [](QQmlEngine*, QJSEngine*) -> QObject* { return new SettingsManager; });
 }

@@ -12,6 +12,7 @@ SUBDIRS += \
     orm \
     framework \
     gx3d \
+    translations \
     web
 
 !android:!ios:!wasm:!macos {

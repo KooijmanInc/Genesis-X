@@ -1,17 +1,47 @@
-<!-- SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only) -->
-<!-- Copyright (c) 2025 Kooijman Incorporate Holding B.V. -->
-
 <RCC>
     <qresource prefix="/qt/qml/GenesisX/Assets">
         <file alias="qmldir">qml/GenesisX/Assets/qmldir</file>
-        <file alias="GXButton.qml">qml/GenesisX/Assets/GXButton.qml</file>
-        <file alias="GXCard.qml">qml/GenesisX/Assets/GXCard.qml</file>
-        <file alias="GXInput.qml">qml/GenesisX/Assets/GXInput.qml</file>
-        <file alias="GXTextArea.qml">qml/GenesisX/Assets/GXTextArea.qml</file>
+        <file alias="logo.ico">../core/resources/logo.ico</file>
+        <file alias="Style.qml">qml/GenesisX/Assets/Style.qml</file>
+        <file alias="fontawesome.ttf">qml/GenesisX/Assets/fontawesome-webfont.ttf</file>
+        <file alias="Controls/Button/GXButton.qml">qml/GenesisX/Assets/Controls/Button/GXButton.qml</file>
+        <file alias="Controls/Display/GXCard.qml">qml/GenesisX/Assets/Controls/Display/GXCard.qml</file>
+        <file alias="Icon/GXIcon.qml">qml/GenesisX/Assets/Icon/GXIcon.qml</file>
+        <file alias="Controls/Input/GXInput.qml">qml/GenesisX/Assets/Controls/Input/GXInput.qml</file>
+        <file alias="Controls/Input/GXTextArea.qml">qml/GenesisX/Assets/Controls/Input/GXTextArea.qml</file>
         <file alias="GXMultiTumblerPicker.qml">qml/GenesisX/Assets/GXMultiTumblerPicker.qml</file>
-        <file alias="GXRadialSpinner.qml">qml/GenesisX/Assets/GXRadialSpinner.qml</file>
+        <file alias="Controls/Feedback/GXRadialSpinner.qml">qml/GenesisX/Assets/Controls/Feedback/GXRadialSpinner.qml</file>
         <file alias="GXAlbumCameraChooser.qml">qml/GenesisX/Assets/GXAlbumCameraChooser.qml</file>
         <file alias="GXImageCropper.qml">qml/GenesisX/Assets/GXImageCropper.qml</file>
-        <file alias="GXConfirm.qml">qml/GenesisX/Assets/GXConfirm.qml</file>
+        <file alias="Controls/Feedback/GXConfirm.qml">qml/GenesisX/Assets/Controls/Feedback/GXConfirm.qml</file>
+        <file alias="Controls/Layout/GXSplitter.qml">qml/GenesisX/Assets/Controls/Layout/GXSplitter.qml</file>
+        <file alias="Controls/Layout/GXSplitterHandle.qml">qml/GenesisX/Assets/Controls/Layout/GXSplitterHandle.qml</file>
+        <file alias="Controls/Layout/GXSettingsNavigationModel.qml">qml/GenesisX/Assets/Controls/Layout/GXSettingsNavigationModel.qml</file>
+        <file alias="Controls/Layout/GXSettingsNavigation.qml">qml/GenesisX/Assets/Controls/Layout/GXSettingsNavigation.qml</file>
+        <file alias="Window/GXWindowFrame.qml">qml/GenesisX/Assets/Window/GXWindowFrame.qml</file>
+        <file alias="Window/GXWindowHeader.qml">qml/GenesisX/Assets/Window/GXWindowHeader.qml</file>
+        <file alias="Window/GXWindowHeaderToolbar.qml">qml/GenesisX/Assets/Window/GXWindowHeaderToolbar.qml</file>
+        <file alias="Window/GXWindowHeaderToolbarMenu.qml">qml/GenesisX/Assets/Window/GXWindowHeaderToolbarMenu.qml</file>
+        <file alias="Window/GXWindowHeaderToolbarMenuItem.qml">qml/GenesisX/Assets/Window/GXWindowHeaderToolbarMenuItem.qml</file>
+        <file alias="Window/GXWindowHeaderToolbarButton.qml">qml/GenesisX/Assets/Window/GXWindowHeaderToolbarButton.qml</file>
+        <file alias="Window/GXWindowIdentity.qml">qml/GenesisX/Assets/Window/GXWindowIdentity.qml</file>
+        <file alias="Window/GXWindowHeaderDrag.qml">qml/GenesisX/Assets/Window/GXWindowHeaderDrag.qml</file>
+        <file alias="Window/GXWindowControls.qml">qml/GenesisX/Assets/Window/GXWindowControls.qml</file>
+        <file alias="Window/GXWindowControlButton.qml">qml/GenesisX/Assets/Window/GXWindowControlButton.qml</file>
+        <file alias="Window/GXWindowLeftBar.qml">qml/GenesisX/Assets/Window/GXWindowLeftBar.qml</file>
+        <file alias="Window/GXWindowRightBar.qml">qml/GenesisX/Assets/Window/GXWindowRightBar.qml</file>
+        <file alias="Window/GXWindowStatusBar.qml">qml/GenesisX/Assets/Window/GXWindowStatusBar.qml</file>
+        <file alias="Icon/window-minimize.svg">qml/GenesisX/Assets/Icon/window-minimize.svg</file>
+        <file alias="Icon/window-maximize.svg">qml/GenesisX/Assets/Icon/window-maximize.svg</file>
+        <file alias="Icon/window-restore.svg">qml/GenesisX/Assets/Icon/window-restore.svg</file>
+        <file alias="Icon/window-close.svg">qml/GenesisX/Assets/Icon/window-close.svg</file>
+        <file alias="SettingsWindow/GXSettingsWindow.qml">qml/GenesisX/Assets/SettingsWindow/GXSettingsWindow.qml</file>
+        <file alias="SettingsWindow/GXSettingsContent.qml">qml/GenesisX/Assets/SettingsWindow/GXSettingsContent.qml</file>
+        <file alias="SettingsWindow/GXAppearanceBehaviorPage.qml">qml/GenesisX/Assets/SettingsWindow/GXAppearanceBehaviorPage.qml</file>
+        <file alias="SettingsWindow/GXSettingsSectionCard.qml">qml/GenesisX/Assets/SettingsWindow/GXSettingsSectionCard.qml</file>
+        <file alias="SettingsWindow/GXAppearancePage.qml">qml/GenesisX/Assets/SettingsWindow/GXAppearancePage.qml</file>
+        <file alias="SettingsWindow/GXSettingsGroup.qml">qml/GenesisX/Assets/SettingsWindow/GXSettingsGroup.qml</file>
+        <file>qml/GenesisX/Assets/Window/GXPopupLayer.qml</file>
+
     </qresource>
 </RCC>

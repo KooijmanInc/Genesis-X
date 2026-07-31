@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/translations_source">
+        <file alias="genesisx_de.ts">i18n/genesisx_de.ts</file>
+        <file alias="genesisx_en.ts">i18n/genesisx_en.ts</file>
+        <file alias="genesisx_es.ts">i18n/genesisx_es.ts</file>
+        <file alias="genesisx_fr.ts">i18n/genesisx_fr.ts</file>
+        <file alias="genesisx_nl.ts">i18n/genesisx_nl.ts</file>
+    </qresource>
+</RCC>

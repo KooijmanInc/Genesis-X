@@ -64,6 +64,8 @@
             }
         }
 
+        # message(hiho $$GX_ANDROID_GRADLE_DST)
+        !isEmpty(GX_ANDROID_GRADLE_DST) {
         # Copy Gradle include into the app's android/ dir
         GX_ANDROID_GRADLE_SRC = $$clean_path($$GENESISX_BUILD_ROOT/core/android-template)
         GX_ANDROID_GRADLE_DST = $$GENESISX_APP_ROOT/android
@@ -80,6 +82,7 @@
         } else: exists($$GX_ANDROID_GRADLE_SRC/AndroidManifest.xml) {
             GX_GAFEST_SRC = $$clean_path($$GX_ANDROID_GRADLE_SRC/AndroidManifest.xml)
         }
+
         GX_GAFEST_DST = $$clean_path($$GX_ANDROID_GRADLE_DST/AndroidManifest.xml)
         GX_GBUILD_SRC = $$GX_ANDROID_GRADLE_SRC/build.gradle
         GX_GBUILD_DST = $$GX_ANDROID_GRADLE_DST/build.gradle
@@ -118,6 +121,7 @@
             message([genesisx] will copy AndroidManifest.xml from: $$GX_GAFEST_SRC to: $$GX_GAFEST_DST)
         } else {
             message([genesisx] WARNING: AndroidManifest.xml not found in template or existing in app to: $$GX_GAFEST_DST)
+        }
         }
     }
 

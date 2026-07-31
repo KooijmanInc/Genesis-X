@@ -7,7 +7,7 @@
     "firebase_ios": {
         "version": "12.14.0",
         "url": "https://github.com/firebase/firebase-ios-sdk/releases/download/12.14.0/Firebase.zip",
-        "sha256": "c8e4c812978a53fd35f024333abbbd9711889bedd1edf061dfc1f1dab58cec5f"
+        "sha256": ""
     },
     "webview2": {
         "version": "",

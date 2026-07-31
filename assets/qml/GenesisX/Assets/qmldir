@@ -1,10 +1,30 @@
 module GenesisX.Assets
-GXButton 1.0 GXButton.qml
-GXCard 1.0 GXCard.qml
-GXInput 1.0 GXInput.qml
-GXTextArea 1.0 GXTextArea.qml
+singleton Style 1.0 Style.qml
+GXButton 1.0 Controls/Button/GXButton.qml
+GXCard 1.0 Controls/Feedback/GXCard.qml
+GXInput 1.0 Controls/Input/GXInput.qml
+GXIcon 1.0 Icon/GXIcon.qml
+GXTextArea 1.0 Controls/Input/GXTextArea.qml
 GXMultiTumblerPicker 1.0 GXMultiTumblerPicker.qml
-GXRadialSpinner 1.0 GXRadialSpinner.qml
+GXRadialSpinner 1.0 Controls/Feedback/GXRadialSpinner.qml
 GXAlbumCameraChooser 1.0 GXAlbumCameraChooser.qml
 GXImageCropper 1.0 GXImageCropper.qml
-GXConfirm 1.0 GXConfirm.qml
+GXConfirm 1.0 Controls/Feedback/GXConfirm.qml
+GXWindowFrame 1.0 Window/GXWindowFrame.qml
+GXWindowHeader 1.0 Window/GXWindowHeader.qml
+GXWindowHeaderToolbar 1.0 Window/GXWindowHeaderToolbar.qml
+GXWindowHeaderToolbarMenu 1.0 Window/GXWindowHeaderToolbarMenu.qml
+GXWindowHeaderToolbarMenuItem 1.0 Window/GXWindowHeaderToolbarMenuItem.qml
+GXWindowHeaderToolbarButton 1.0 Window/GXWindowHeaderToolbarButton.qml
+GXWindowHeaderDrag 1.0 Window/GXWindowHeaderDrag.qml
+GXWindowIdentity 1.0 Window/GXWindowIdentity.qml
+GXWindowLeftBar 1.0 Window/GXWindowLeftBar.qml
+GXWindowRightBar 1.0 Window/GXWindowRightBar.qml
+GXWindowStatusBar 1.0 Window/GXWindowStatusBar.qml
+GXWindowControls 1.0 Window/GXWindowControls.qml
+GXWindowControlButton 1.0 Window/GXWindowControlButton.qml
+GXSettingsWindow 1.0 SettingsWindow/GXSettingsWindow.qml
+GXSplitter 1.0 Controls/Layout/GXSplitter.qml
+GXSplitterHandle 1.0 Controls/Layout/GXSplitterHandle.qml
+GXSettingsNavigation 1.0 Controls/Layout/GXSettingsNavigation.qml
+GXSettingsNavigationModel 1.0 Controls/Layout/GXSettingsNavigationModel.qml
