@@ -1,37 +1,86 @@
 // SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 // Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-#include <GenesisX/Orm/AbstractEntity.h>
+#include <GenesisX/Orm/Entity/AbstractEntity.h>
+#include <GenesisX/Orm/Repository/AbstractRepository.h>
 
-#include <QFile>
+#include <map>
 
-using namespace gx::orm::entity;
+#include <QJsonArray>
 
+namespace gx::orm {
 
-AbstractEntity::AbstractEntity(QObject *parent)
+class AbstractEntity::Implementation
+{
+public:
+    Implementation(AbstractEntity* _entity, const QString& _key)
+        : abstractEntity{_entity}
+        , key{_key}
+        , id(QUuid::createUuid().toString())
+    {}
+
+    AbstractEntity* abstractEntity{nullptr};
+    AbstractRepository* repository{nullptr};
+
+    QString key;
+    QString id;
+    GXOrm::StringDecorator* primaryKey{nullptr};
+
+    std::map<QString, DataDecorator*> dataDecorators;
+};
+
+AbstractEntity::AbstractEntity(QObject *parent, const QString &key)
     : QObject{parent}
 {
+    implementation.reset(new Implementation(this, key));
 }
 
-QString AbstractEntity::fileToBase64(const QUrl &fileUrl, QString *outError)
+AbstractEntity::AbstractEntity(QObject *parent, const QString &key, const QJsonObject &jsonObject)
+    : AbstractEntity{parent, key}
 {
-    const QString path = fileUrl.isLocalFile() ? fileUrl.toLocalFile() : fileUrl.toString();
-    return fileToBase64Path(path, outError);
+    update(jsonObject);
 }
 
-QString AbstractEntity::fileToBase64Path(const QString &filePath, QString *outError)
+AbstractEntity::~AbstractEntity()
+{}
+
+const QString &AbstractEntity::id() const
 {
-    QFile f(filePath);
-    if (!f.open(QIODevice::ReadOnly)) {
-        if (outError) *outError = QStringLiteral("Failed to open file: %1").arg(filePath);
-        return {};
+    if (implementation->primaryKey != nullptr && !implementation->primaryKey->value().isEmpty()) {
+        return implementation->primaryKey->value();
     }
 
-    const QByteArray bytes = f.readAll();
-    if (bytes.isEmpty()) {
-        if (outError) *outError = QStringLiteral("File is empty: %1").arg(filePath);
-        return {};
+    return implementation->id;
+}
+
+const QString &AbstractEntity::key() const
+{
+    return implementation->key;
+}
+
+void AbstractEntity::update(const QJsonObject &jsonObject)
+{
+    if (jsonObject.contains("id")) {
+        implementation->id = jsonObject.value("id").toString();
+    }
+}
+
+void AbstractEntity::setRepository(AbstractRepository *repository)
+{
+    implementation->repository = repository;
+}
+
+DataDecorator *AbstractEntity::addDataItem(DataDecorator *dataDecorator)
+{
+    if (implementation->dataDecorators.find(dataDecorator->key()) == std::end(implementation->dataDecorators)) {
+        implementation->dataDecorators[dataDecorator->key()] = dataDecorator;
+
+        emit dataDecoratorsChanged();
     }
 
-    return QString::fromLatin1(bytes.toBase64());
+    return dataDecorator;
+}
+
+
+
 }

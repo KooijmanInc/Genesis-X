@@ -9,36 +9,20 @@ CONFIG += console c++23
 include(../../common/qmake-target-platform.pri)
 include(../../common/qmake-destination-path.pri)
 
-# GX_CFG = debug
-# CONFIG(release, debug|release): GX_CFG = release
-# CONFIG(profile, debug|release|profile): GX_CFG = profile
-GX_CFG = release
-
-CONFIG(debug, debug|release) {
-    GX_CFG = debug
-}
-
-contains(CONFIG, profile) {
-    GX_CFG = profile
-}
+GX_CFG = debug
+CONFIG(release, debug|release): GX_CFG = release
+CONFIG(profile, debug|release|profile): GX_CFG = profile
 
 GENESISX_BUILD_ROOT = $$clean_path($$PWD/../..)
 GENESISX_LIBDIR = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/$$GX_CFG
 
-message([gxgen] configuration: $$GX_CFG)
-message([gxgen] library directory: $$GENESISX_LIBDIR)
+SOURCES += \
+    main.cpp
 
-LIBS += \
-    -L$$GENESISX_LIBDIR \
-    -lgenesisx_orm \
-    -lgenesisx
+INCLUDEPATH += ../../orm/include
+DEPENDPATH += ../../orm/include
 
-INCLUDEPATH += \
-    ../../orm/include
-DEPENDPATH += \
-    ../../orm/include
-
-# LIBS += -L$$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/$$GX_CFG -lgenesisx_orm -lgenesisx
+LIBS += -L$$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/$$GX_CFG -lgenesisx_orm -lgenesisx
 
 win32 {
     PRE_TARGETDEPS += $$GENESISX_LIBDIR/libgenesisx_orm.a \
@@ -53,7 +37,7 @@ win32 {
                       $$GENESISX_LIBDIR/libgenesisx.$$QMAKE_EXTENSION_SHLIB
 }
 
-DESTDIR = $$PWD/bin/$$GX_CFG
+DESTDIR = $$PWD/$$GX_CFG
 
 win32 {
     GX_DLL_ORM = $$shell_path($$GENESISX_LIBDIR/genesisx_orm.dll)
@@ -85,35 +69,4 @@ win32 {
     }
 }
 
-linux {
-    # make it global debug
-    # mkdir -p bin/debug
-    # cd bin/debug
-    # ~/Qt/6.11.1/gcc_64/bin/qmake6 ../../gxgen.pro CONFIG+=debug CONFIG-=release
-    # make -j$(nproc)
-    # sudo make install
-    # sudo ldconfig
-
-    # make it global release
-    # mkdir -p bin/release
-    # cd bin/release
-    # ~/Qt/6.11.1/gcc_64/bin/qmake6 ../../gxgen.pro CONFIG+=release CONFIG-=debug
-    # make -j$(nproc)
-    # sudo make install
-    # sudo ldconfig
-    target.path = /usr/local/bin
-    INSTALLS += target
-}
-
-HEADERS += \
-    src/ConfigLocator.h \
-    src/ConsoleQuestions.h \
-    src/JsonFile.h \
-    src/ProjectConfig.h
-
-SOURCES += \
-    src/ConfigLocator.cpp \
-    src/ConsoleQuestions.cpp \
-    src/JsonFile.cpp \
-    src/ProjectConfig.cpp \
-    src/main.cpp
+# DESTDIR = $$GENESISX_BUILD_ROOT/bin/$$PLATFORM_PATH/$$COMPILER_PATH/$$PROCESSOR_PATH/$$GX_CFG
