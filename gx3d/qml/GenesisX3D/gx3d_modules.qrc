@@ -12,7 +12,7 @@
         <file>gxdefaultlitmaterial.qmltypes</file>
         <file>gxprincipledmaterial.qmltypes</file>
         <file>gxtexture2d.qmltypes</file>
-        <file>gxspotlight.qmltypes</file>
+<!--        <file>gxspotlight.qmltypes</file>-->
         <file>gxdirectionallight.qmltypes</file>
         <file>GXEnvironment.qmltypes</file>
     </qresource>

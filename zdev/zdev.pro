@@ -22,4 +22,5 @@ DISTFILES += \
     ../.github/workflows/collect-traffic.yml \
     ../.gitlab-ci.yml \
     ../.gitignore \
-    ../.gitattributes
+    ../.gitattributes \
+    ../orm-legacy

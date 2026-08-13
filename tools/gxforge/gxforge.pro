@@ -81,6 +81,11 @@ win32 {
     }
 }
 
+linux {
+    target.path = /usr/local/bin
+    INSTALLS += target
+}
+
 QML_IMPORT_PATH += $$PWD
 QML2_IMPORT_PATH += $$PWD
 

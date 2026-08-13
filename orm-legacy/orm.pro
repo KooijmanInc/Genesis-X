@@ -1,6 +1,7 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
+QT += network sql qml
 TEMPLATE = lib
 TARGET = genesisx_orm
 CONFIG += c++23
@@ -48,11 +49,12 @@ android {
         LIBS += -lgenesisx_x86_64
     }
 } else {
-    LIBS += -lgenesisx -lcrypto
+    LIBS += -lgenesisx
 }
 
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/orm/include
 
-HEADERS += $$files($$PWD/include/GenesisX/*.h, true)
+HEADERS += $$files($$PWD/include/GenesisX/*.h, true) \
+    $$files($$PWD/src/*.h, true)
 
 SOURCES += $$files($$PWD/src/*.cpp, true)

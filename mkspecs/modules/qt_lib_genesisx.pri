@@ -10,6 +10,8 @@ GENESISX_BUILD_ROOT = $$clean_path($$PWD/../..)
 include($$GENESISX_BUILD_ROOT/common/qmake-target-platform.pri)
 include($$GENESISX_BUILD_ROOT/common/qmake-destination-path.pri)
 DEFINES += GX_LOADED_FEATURES
+# GX_ANDROID_GRADLE_DST = ANDROID_PACKAGE_SOURCE_DIR
+# message(hallooooooooo $$GX_ANDROID_GRADLE_DST)
 # GX_LOADED_FEATURES = $$QT
 # QML_IMPORT_PATH += $$GENESISX_BUILD_ROOT/core/qml
 #     GX_CORE_INC_ROOT = $$clean_path($$GENESISX_BUILD_ROOT/core/include)

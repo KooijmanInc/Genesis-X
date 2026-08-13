@@ -62,4 +62,19 @@
 
         ANDROID_EXTRA_LIBS += $$GX_ORM_SO
     }
+
+    linux:!android {
+        # Embed a runpath that points to the exe directory at runtime
+        QMAKE_LFLAGS += -Wl,-rpath,\$$ORIGIN
+        # (Optional) also add specific config dirs if you want:
+        QMAKE_RPATHDIR += $$DEST_LIBDIRS
+
+        SO_LIST = $$files($$LIBDIRS/libgenesisx_orm.so*)
+        message([genesisx] Linux copy libs: $$SO_LIST to: $$DEST_LIBDIRS)
+
+        for (f, SO_LIST) {
+            # message(file is: f)
+            QMAKE_POST_LINK += $$escape_expand(\\n\\t)cp -f $$shell_quote($$f) $$shell_quote($$DEST_LIBDIRS)/
+        }
+    }
 }
