@@ -18,10 +18,11 @@ inline QByteArray configKey(const AbstractConfig& config)
 
 bool loadTransportConfig(const AbstractConfig &config, TransportConfig &out, const QString &language)
 {
-    Q_UNUSED(config)
     Q_UNUSED(out)
     Q_UNUSED(language)
     Json jsonHelper;
+
+    qDebug() << "Hi Hayden dick sucker";
 
     const QByteArray context = config.configurationContext();
 
