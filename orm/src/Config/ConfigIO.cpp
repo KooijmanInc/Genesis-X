@@ -16,13 +16,11 @@ inline QByteArray configKey(const AbstractConfig& config)
     return config.configurationKey();
 }
 
-bool loadTransportConfig(const AbstractConfig &config, TransportConfig &out, const QString &language)
+bool loadTransportConfig(const AbstractConfig &config, TransportConfig &out, const QString& env, const QString &language)
 {
     Q_UNUSED(out)
     Q_UNUSED(language)
     Json jsonHelper;
-
-    qDebug() << "Hi Hayden dick sucker";
 
     const QByteArray context = config.configurationContext();
 
@@ -41,7 +39,6 @@ bool loadTransportConfig(const AbstractConfig &config, TransportConfig &out, con
 
                 return false;
             }
-            qDebug() << apiValue;
             const QByteArray encryptedApiPayload = QByteArray::fromBase64(apiValue.toString().toLatin1());
             if (encryptedApiPayload.isEmpty()) {
                 qCritical()

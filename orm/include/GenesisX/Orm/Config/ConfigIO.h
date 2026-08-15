@@ -16,7 +16,7 @@ namespace gx::orm {
 
 struct TransportConfig;
 
-GENESISX_ORM_EXPORT bool loadTransportConfig(const AbstractConfig& config, TransportConfig& out, const QString& language = "");
+GENESISX_ORM_EXPORT bool loadTransportConfig(const AbstractConfig& config, TransportConfig& out, const QString& env = "prod", const QString& language = "");
 
 // Json jsonHelper;
 
