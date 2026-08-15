@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
+QT += network sql
+
 TEMPLATE = lib
 TARGET = genesisx_orm
 CONFIG += c++23
@@ -38,6 +40,16 @@ message([orm] DESTDIR = $$DESTDIR)
 
 # Put import lib in the same central bin dir
 win32-g++: QMAKE_LFLAGS_SHLIB += -Wl,--out-implib,$$DESTDIR/lib$${TARGET}.a
+win32 {
+    OPENSSL_ROOT = D:/Qt/Tools/OpenSSLv3/Win_x64
+
+      INCLUDEPATH += $$OPENSSL_ROOT/include
+
+      # LIBS += \
+          # -L$$OPENSSL_ROOT/lib \
+          # -lcrypto
+    LIBS += $$quote($$OPENSSL_ROOT/lib/libcrypto.lib)
+}
 
 # ORM links to core; search same central dir
 QMAKE_LIBDIR += $$DESTDIR
@@ -48,7 +60,11 @@ android {
         LIBS += -lgenesisx_x86_64
     }
 } else {
-    LIBS += -lgenesisx -lcrypto
+    LIBS += -lgenesisx
+}
+
+linux {
+    LIBS += -lcrypto
 }
 
 INCLUDEPATH += $$GENESISX_BUILD_ROOT/orm/include

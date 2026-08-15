@@ -266,4 +266,50 @@ std::optional<QByteArray> ConfigCrypto::decrypt(const EncryptionResult &encrypte
     return plaintext;
 }
 
+QByteArray ConfigCrypto::serialize(const EncryptionResult &encrypted)
+{
+    QByteArray payload;
+
+    payload.reserve(
+        encrypted.nonce.size()
+        + encrypted.ciphertext.size()
+        + encrypted.tag.size()
+        );
+
+    payload.append(encrypted.nonce);
+    payload.append(encrypted.ciphertext);
+    payload.append(encrypted.tag);
+
+    return payload;
+}
+
+std::optional<EncryptionResult> ConfigCrypto::deserialize(const QByteArray &payload)
+{
+    const qsizetype minimumSize =
+        NonceSize + TagSize;
+
+    if (payload.size() <= minimumSize) {
+        return std::nullopt;
+    }
+
+    EncryptionResult result;
+
+    result.nonce =
+        payload.first(NonceSize);
+
+    result.ciphertext =
+        payload.sliced(
+            NonceSize,
+            payload.size()
+                - NonceSize
+                - TagSize
+            );
+
+    result.tag =
+        payload.last(TagSize);
+
+    return result;
+}
+
+
 }

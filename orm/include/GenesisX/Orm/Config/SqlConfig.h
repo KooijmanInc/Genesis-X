@@ -10,7 +10,12 @@ namespace gx::orm {
 
 struct GENESISX_ORM_EXPORT SqlConfig
 {
-
+    QString driver;
+    QString database;
+    QString host;
+    int port;
+    QString user;
+    QString password;
 };
 
 }
