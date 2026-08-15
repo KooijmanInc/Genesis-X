@@ -40,60 +40,120 @@ elif qmake6 -v >/dev/null 2>&1; then
 fi
 
 detect_qmake() {
-    # 1) Explicit override
-    if [ -n "${QMAKE_BIN:-}" ]; then
-        if [ -x "$QMAKE_BIN" ]; then
-            echo "$QMAKE_BIN"
-            return 0
-        else
-            echo "Warning: QMAKE_BIN is set but not executable: $QMAKE_BIN" >&2
-        fi
-    fi
-
-    # Helper to check "is this qmake a Qt 6 qmake?"
     is_qt6_qmake() {
-        QT_VER="$("$1" -v 2>/dev/null | grep -i 'Qt version' | awk '{print $4}')"
-        # Expect something like 6.10.0
-        case "$QT_VER" in
+        local candidate="$1"
+        local qt_version
+
+        qt_version="$(
+            "$candidate" -v 2>&1 |
+            awk '/Using Qt version/ { print $4; exit }'
+        )"
+
+        case "$qt_version" in
             6.*) return 0 ;;
             *)   return 1 ;;
         esac
     }
 
-    # 2) Try common Qt6 names first
-    for CAND in qmake6 qmake-qt6; do
-        if command -v "$CAND" >/dev/null 2>&1; then
-            if is_qt6_qmake "$(command -v "$CAND")"; then
-                command -v "$CAND"
-                return 0
-            fi
+    # Explicit override
+    if [ -n "${QMAKE_BIN:-}" ]; then
+        if [ -x "$QMAKE_BIN" ] && is_qt6_qmake "$QMAKE_BIN"; then
+            printf '%s\n' "$QMAKE_BIN"
+            return 0
+        fi
+
+        echo "Warning: QMAKE_BIN is not a working Qt 6 qmake: $QMAKE_BIN" >&2
+    fi
+
+    # Commands available through PATH
+    local name
+    local candidate
+
+    for name in qmake.exe qmake6.exe qmake qmake6 qmake-qt6; do
+        candidate="$(command -v "$name" 2>/dev/null || true)"
+
+        if [ -n "$candidate" ] && is_qt6_qmake "$candidate"; then
+            printf '%s\n' "$candidate"
+            return 0
         fi
     done
 
-    # 3) Try plain qmake but only accept Qt 6
-    if command -v qmake >/dev/null 2>&1; then
-        Q="$(command -v qmake)"
-        if is_qt6_qmake "$Q"; then
-            echo "$Q"
-            return 0
-        fi
-    fi
+    # Common installation locations
+    local base
 
-    # 4) Look in typical Qt installer directories (Qt Online Installer)
-    for base in "$HOME/Qt" "/opt/Qt"; do
-        if [ -d "$base" ]; then
-            CANDIDATE="$(find "$base" -maxdepth 4 -type f -name qmake 2>/dev/null | head -n1)"
-            if [ -n "$CANDIDATE" ]; then
-                if is_qt6_qmake "$CANDIDATE"; then
-                    echo "$CANDIDATE"
-                    return 0
-                fi
+    for base in /c/Qt "$HOME/Qt" /opt/Qt; do
+        [ -d "$base" ] || continue
+
+        while IFS= read -r candidate; do
+            if is_qt6_qmake "$candidate"; then
+                printf '%s\n' "$candidate"
+                return 0
             fi
-        fi
+        done < <(
+            find "$base" -maxdepth 5 -type f \
+                \( -iname 'qmake.exe' -o -name 'qmake' \) \
+                2>/dev/null
+        )
     done
 
     return 1
 }
+
+#detect_qmake() {
+#    # 1) Explicit override
+#    if [ -n "${QMAKE_BIN:-}" ]; then
+#        if [ -x "$QMAKE_BIN" ]; then
+#            echo "$QMAKE_BIN"
+#            return 0
+#        else
+#            echo "Warning: QMAKE_BIN is set but not executable: $QMAKE_BIN" >&2
+#        fi
+#    fi
+
+#    # Helper to check "is this qmake a Qt 6 qmake?"
+#    is_qt6_qmake() {
+#        QT_VER="$("$1" -v 2>/dev/null | grep -i 'Qt version' | awk '{print $4}')"
+#        # Expect something like 6.10.0
+#        case "$QT_VER" in
+#            6.*) return 0 ;;
+#            *)   return 1 ;;
+#        esac
+#    }
+
+#    # 2) Try common Qt6 names first
+#    for CAND in qmake6 qmake-qt6; do
+#        if command -v "$CAND" >/dev/null 2>&1; then
+#            if is_qt6_qmake "$(command -v "$CAND")"; then
+#                command -v "$CAND"
+#                return 0
+#            fi
+#        fi
+#    done
+
+#    # 3) Try plain qmake but only accept Qt 6
+#    if command -v qmake >/dev/null 2>&1; then
+#        Q="$(command -v qmake)"
+#        if is_qt6_qmake "$Q"; then
+#            echo "$Q"
+#            return 0
+#        fi
+#    fi
+
+#    # 4) Look in typical Qt installer directories (Qt Online Installer)
+#    for base in "$HOME/Qt" "/opt/Qt"; do
+#        if [ -d "$base" ]; then
+#            CANDIDATE="$(find "$base" -maxdepth 4 -type f -name qmake 2>/dev/null | head -n1)"
+#            if [ -n "$CANDIDATE" ]; then
+#                if is_qt6_qmake "$CANDIDATE"; then
+#                    echo "$CANDIDATE"
+#                    return 0
+#                fi
+#            fi
+#        fi
+#    done
+
+#    return 1
+#}
 
 if mingw32-make.exe -v >/dev/null 2>&1; then
     MAKE_CMD="mingw32-make.exe"
