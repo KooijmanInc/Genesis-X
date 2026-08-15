@@ -99,19 +99,19 @@ detect_qmake() {
     return 1
 }
 
-if command -v mingw32-make.exe >/dev/null 2>&1; then
-    MAKE_CMD="$(command -v mingw32-make.exe)"
-elif command -v mingw32-make >/dev/null 2>&1; then
-    MAKE_CMD="$(command -v mingw32-make)"
-elif command -v make >/dev/null 2>&1; then
-    MAKE_CMD="$(command -v make)"
-else
-    echo "Error hiho: Could not find a compatible make command." >&2
-    exit 1
-fi
+#if command -v mingw32-make.exe >/dev/null 2>&1; then
+#    MAKE_CMD="$(command -v mingw32-make.exe)"
+#elif command -v mingw32-make >/dev/null 2>&1; then
+#    MAKE_CMD="$(command -v mingw32-make)"
+#elif command -v make >/dev/null 2>&1; then
+#    MAKE_CMD="$(command -v make)"
+#else
+#    echo "Error hiho: Could not find a compatible make command." >&2
+#    exit 1
+#fi
 
-echo "Using make: $MAKE_CMD"
-"$MAKE_CMD" --version
+#echo "Using make: $MAKE_CMD"
+#"$MAKE_CMD" --version
 
 #detect_qmake() {
 #    # 1) Explicit override
@@ -187,6 +187,7 @@ if [[ $QMAKE_CMD == "null" ]]; then
         echo "  - Install Qt 6 and ensure its qmake is in PATH," >&2
         echo "  - Or run this script with an explicit QMAKE_BIN, for example:" >&2
         echo "      QMAKE_BIN=\$HOME/Qt/6.10.0/gcc_64/bin/qmake ./scripts/install.sh" >&2
+        echo "      or: \"C:\Program Files\Git\bin\bash.exe\" scripts/install.sh"
         exit 1
     else
     #    echo "Using qmake: $QMAKE_BIN"
@@ -234,6 +235,10 @@ HAS_THIRDPARTY=0
 case "$CHOICE" in
     a|A)
         FEATURES=("docs" "snippets" "wizard" "thirdparty")
+        HAS_DOCS=1
+        HAS_SNIPPET=1
+        HAS_WIZARD=1
+        HAS_THIRDPARTY=1
         ;;
     c|C)
         echo
@@ -388,18 +393,35 @@ register_docs() {
         echo "QtCreator.ini not found at: $QT_CREATOR_INI"
         echo "You need to register Genesis-X docs in Qt yourself"
     else
-        local SCRIPT_DIR
+#        local SCRIPT_DIR
+#        SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+#        local SRC_DOCS_QCH="$SCRIPT_DIR/../docs/out/GenesisX.qch"
         SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-        local SRC_DOCS_QCH="$SCRIPT_DIR/../docs/out/GenesisX.qch"
+        SRC_DOCS_QCH="$SCRIPT_DIR/../docs/out/GenesisX.qch"
+        QTC_DOCS_QCH="$SRC_DOCS_QCH"
+
+        # Qt Creator is a native Windows application, so convert
+        # WSL/Git Bash paths to Windows paths before writing the INI.
+        if command -v wslpath >/dev/null 2>&1; then
+            QTC_DOCS_QCH="$(wslpath -w "$SRC_DOCS_QCH")"
+            QTC_DOCS_QCH="${QTC_DOCS_QCH//\\//}"
+        elif command -v cygpath >/dev/null 2>&1; then
+            QTC_DOCS_QCH="$(cygpath -w "$SRC_DOCS_QCH")"
+            QTC_DOCS_QCH="${QTC_DOCS_QCH//\\//}"
+        fi
 #        local SRC_DOCS_QCH="$(dirname "$0")/../docs/out/GenesisX.qch"
-        if ! grep -q "InstalledDocumentation=$SRC_DOCS_QCH" "$QT_CREATOR_INI"; then
+#        if ! grep -q "InstalledDocumentation=$SRC_DOCS_QCH" "$QT_CREATOR_INI"; then
+        if ! grep -Fq "$QTC_DOCS_QCH" "$QT_CREATOR_INI"; then
             echo "Registering Genesis-X docs in Qt Creator:"
             echo "  INI: $QT_CREATOR_INI"
-            echo "  QCH: $SRC_DOCS_QCH"
+#            echo "  QCH: $SRC_DOCS_QCH"
+            echo "  Source QCH: $SRC_DOCS_QCH"
+            echo "  Qt Creator QCH: $QTC_DOCS_QCH"
 
             tmp="$(mktemp)"
 
-            awk -v qch="$SRC_DOCS_QCH" '
+#            awk -v qch="$SRC_DOCS_QCH" '
+            awk -v qch="$QTC_DOCS_QCH" '
                 BEGIN {
                     in_help = 0
                     installed_seen = 0

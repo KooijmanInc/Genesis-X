@@ -46,14 +46,8 @@
             <namespace name="navigation" fullname="gx::navigation" href="gx-navigation.html" status="active" access="public" location="genesisx_global.h" filepath="D:/projectsQt/development/libs/Genesis-X/core/include/GenesisX/genesisx_global.h" lineno="29" documented="true" module="GenesisX" brief="Navigation facilities">
                 <class name="GxRouter" fullname="gx::navigation::GxRouter" href="gx-navigation-gxrouter.html" status="active" access="public" location="GxRouter.h" filepath="D:/projectsQt/development/libs/Genesis-X/core/include/GenesisX/Navigation/GxRouter.h" lineno="29" since="Qt 6.10" documented="true" groups="core-classes" module="io.genesisx.core" brief="Handles navigation for QML views"/>
             </namespace>
-            <namespace name="orm" fullname="gx::orm" href="gx-orm.html" status="active" access="public" location="genesisx_orm_global.h" filepath="D:/projectsQt/development/libs/Genesis-X/orm/include/GenesisX/Orm/genesisx_orm_global.h" lineno="24" documented="true" module="GenesisX" brief="Orm facilities">
-                <namespace name="codegen" fullname="gx::orm::codegen" href="gx-orm-codegen.html" status="active" access="public" location="genesisx_orm_global.h" filepath="D:/projectsQt/development/libs/Genesis-X/orm/include/GenesisX/Orm/genesisx_orm_global.h" lineno="29" documented="true" module="GenesisX.Orm" brief="Code generator facilities for creating entities in app"/>
-                <class name="CommandController" fullname="gx::orm::CommandController" href="gx-orm-commandcontroller.html" status="active" access="public" location="CommandController.h" filepath="D:/projectsQt/development/libs/Genesis-X/orm/include/GenesisX/Orm/CommandController.h" lineno="19" since="6.10" documented="true" groups="orm-classes" module="GenesisX" brief="Use CommandController for getting database record via sql connection or api"/>
-                <class name="ConnectionController" fullname="gx::orm::ConnectionController" href="gx-orm-connectioncontroller.html" status="active" access="public" location="ConnectionController.h" filepath="D:/projectsQt/development/libs/Genesis-X/orm/include/GenesisX/Orm/ConnectionController.h" lineno="21" since="6.10" documented="true" groups="orm-classes" module="GenesisX" brief="Connects to https"/>
-            </namespace>
             <namespace name="utils" fullname="gx::utils" href="gx-utils.html" status="active" access="public" location="genesisx_global.h" filepath="D:/projectsQt/development/libs/Genesis-X/core/include/GenesisX/genesisx_global.h" lineno="31" documented="true" module="GenesisX" brief="Utilities"/>
         </namespace>
-        <header name="Codegen.h" href="codegen-h.html" status="active" since="Qt 6.10" documented="true" groups="orm-genesisx" module="GenesisX" brief="This creates entities of the table from the selected database" title="Codegen.h" fulltitle="Codegen.h" subtitle=""/>
         <header name="CoreQml.h" href="coreqml-h.html" status="active" since="Qt 6.10" documented="true" module="io.genesisx.core" brief="Register all enabled GenesisX QML modules on engine" title="Core qml register types" fulltitle="CoreQml.h - Core qml register types" subtitle="">
             <contents name="code-snippet-setting-modules-list-in-qmake" title="code snippet setting modules list in qmake:" level="2"/>
             <contents name="and-set-in-main-cpp" title="And set in main.cpp." level="2"/>
@@ -116,37 +110,6 @@
             <function name="scanningChanged" fullname="io.genesisx.app.Cast.scanningChanged" href="qml-io-genesisx-app-cast.html#scanningChanged-signal" status="active" access="public" documented="true" meta="qmlsignal"/>
             <function name="selectedDeviceChanged" fullname="io.genesisx.app.Cast.selectedDeviceChanged" href="qml-io-genesisx-app-cast.html#selectedDeviceChanged-signal" status="active" access="public" documented="true" meta="qmlsignal"/>
         </qmlclass>
-        <qmlclass name="CommandController" qml-module-name="io.genesisx.orm" fullname="io.genesisx.orm.CommandController" href="qml-io-genesisx-orm-commandcontroller.html" status="active" access="public" since="Qt 6.10" documented="true" brief="Handles API and database commands">
-            <function name="cmdLogin" fullname="io.genesisx.orm.CommandController.cmdLogin" href="qml-io-genesisx-orm-commandcontroller.html#cmdLogin-method" status="active" access="public" documented="true" meta="qmlmethod" type="void">
-                <parameter type="string" name="user" default=""/>
-                <parameter type="string" name="pass" default=""/>
-            </function>
-            <function name="cmdPing" fullname="io.genesisx.orm.CommandController.cmdPing" href="qml-io-genesisx-orm-commandcontroller.html#cmdPing-method" status="active" access="public" documented="true" meta="qmlmethod" type="void"/>
-            <function name="cmdPostJson" fullname="io.genesisx.orm.CommandController.cmdPostJson" href="qml-io-genesisx-orm-commandcontroller.html#cmdPostJson-method" status="active" access="public" documented="true" meta="qmlmethod">
-                <parameter type="string" name="path" default=""/>
-                <parameter type="var" name="vm" default=""/>
-            </function>
-            <function name="cmdPostJsonBoolAsync" fullname="io.genesisx.orm.CommandController.cmdPostJsonBoolAsync" href="qml-io-genesisx-orm-commandcontroller.html#cmdPostJsonBoolAsync-method" status="active" access="public" documented="true" meta="qmlmethod">
-                <parameter type="string" name="path" default=""/>
-                <parameter type="object" name="body" default=""/>
-            </function>
-            <function name="cmdPostJsonBoolAsync" fullname="io.genesisx.orm.CommandController.cmdPostJsonBoolAsync" href="qml-io-genesisx-orm-commandcontroller.html#cmdPostJsonBoolAsync-method" status="active" access="public" documented="true" meta="qmlmethod">
-                <parameter type="string" name="path" default=""/>
-                <parameter type="object" name="body" default=""/>
-            </function>
-            <function name="cmdRegister" fullname="io.genesisx.orm.CommandController.cmdRegister" href="qml-io-genesisx-orm-commandcontroller.html#cmdRegister-method" status="active" access="public" documented="true" meta="qmlmethod">
-                <parameter type="string" name="email" default=""/>
-                <parameter type="string" name="password" default=""/>
-            </function>
-            <function name="requestFinished" fullname="io.genesisx.orm.CommandController.requestFinished" href="qml-io-genesisx-orm-commandcontroller.html#requestFinished-signal" status="active" access="public" documented="true" meta="qmlsignal">
-                <parameter type="string" name="path" default=""/>
-                <parameter type="bool" name="ok" default=""/>
-                <parameter type="int" name="status" default=""/>
-                <parameter type="string" name="error" default=""/>
-                <parameter type="object" name="obj" default=""/>
-            </function>
-        </qmlclass>
-        <qmlclass name="ConnectionController" qml-module-name="io.genesisx.orm" fullname="io.genesisx.orm.ConnectionController" href="qml-io-genesisx-orm-connectioncontroller.html" status="active" access="public" since="Qt 6.10" documented="true" brief="Handles API and database commands"/>
         <qmlclass name="NotificationHandler" qml-module-name="io.genesisx.app" fullname="io.genesisx.app.NotificationHandler" href="qml-io-genesisx-app-notificationhandler.html" status="active" access="public" since="Qt 6.10" documented="true" brief="Handles local and push notifications with a unified API">
             <contents name="example" title="Example" level="2"/>
             <function name="initialize" fullname="io.genesisx.app.NotificationHandler.initialize" href="qml-io-genesisx-app-notificationhandler.html#initialize-method" status="active" access="public" documented="true" meta="qmlmethod" type="void">
@@ -247,10 +210,7 @@
         <group name="core-classes" href="core-classes.html" status="internal" seen="false" title=""/>
         <group name="genesisx-core" href="genesisx-core.html" status="internal" seen="false" title=""/>
         <group name="genesisx-orm" href="genesisx-orm.html" status="internal" seen="false" title=""/>
-        <group name="orm-classes" href="orm-classes.html" status="internal" seen="false" title=""/>
-        <group name="orm-genesisx" href="orm-genesisx.html" status="internal" seen="false" title=""/>
         <module name="GenesisX" href="genesisx-module.html" status="internal" seen="false" title=""/>
-        <module name="GenesisX.Orm" href="genesisx-orm-module.html" status="internal" seen="false" title=""/>
         <module name="io.genesisx.app" href="io-genesisx-app-module.html" status="internal" seen="false" title=""/>
         <module name="io.genesisx.core" href="io-genesisx-core-module.html" status="internal" seen="false" title=""/>
         <module name="io.genesisx.orm" href="io-genesisx-orm-module.html" status="internal" seen="false" title=""/>
@@ -258,8 +218,6 @@
         <qmlmodule name="GenesisX.App.Biometrics" qml-module-name="GenesisX.App.Biometrics" href="genesisx-app-biometrics-qmlmodule.html" status="active" documented="true" seen="true" title="Genesis-X Biometrics (QML)" brief="QML APIs for biometrics"/>
         <qmlmodule name="GenesisX.Background" qml-module-name="GenesisX.Background" href="genesisx-background-qmlmodule.html" status="active" since="Qt 6.10" documented="true" seen="true" title="Genesis-X Background (QML)" brief="QML APIs for background"/>
         <qmlmodule name="GenesisX.Cast" qml-module-name="GenesisX.Cast" href="genesisx-cast-qmlmodule.html" status="active" since="Qt 6.10" documented="true" seen="true" title="Genesis-X Cast (QML)" brief="Handles the ability to cast"/>
-        <qmlmodule name="GenesisX.CommandController" qml-module-name="GenesisX.CommandController" href="genesisx-commandcontroller-qmlmodule.html" status="active" since="Qt 6.10" documented="true" seen="true" title="Genesis-X CommandController (QML)" brief="QML APIs for setting commands to remote API via json or database"/>
-        <qmlmodule name="GenesisX.ConnectionController" qml-module-name="GenesisX.ConnectionController" href="genesisx-connectioncontroller-qmlmodule.html" status="active" since="Qt 6.10" documented="true" seen="true" title="Genesis-X ConnectionController (QML)" brief="QML APIs for setting commands to remote API via json or database"/>
         <qmlmodule name="GenesisX.Navigation" qml-module-name="GenesisX.Navigation" href="genesisx-navigation-qmlmodule.html" status="active" since="Qt 6.10" documented="true" seen="true" title="Genesis-X Navigation (QML)" brief="Handles navigation for QML views"/>
         <qmlmodule name="GenesisX.Notifications" qml-module-name="GenesisX.Notifications" href="genesisx-notifications-qmlmodule.html" status="active" since="Qt 6.10" documented="true" seen="true" title="Genesis-X Notifications (QML)" brief="QML APIs for local and push notifications"/>
         <qmlmodule name="GenesisX.Permissions" qml-module-name="GenesisX.Permissions" href="genesisx-permissions-qmlmodule.html" status="active" since="Qt 6.10" documented="true" seen="true" title="Genesis-X Permissions (QML)" brief="QML APIs for permissions"/>

@@ -36,14 +36,7 @@
                         <section ref="qml-io-genesisx-app-permissions-members.html" title="List of all members"/>
                     </section>
                 </section>
-                <section ref="io-genesisx-orm-qmlmodule.html" title="Orm">
-                    <section ref="qml-io-genesisx-orm-commandcontroller.html" title="CommandController Type Reference">
-                        <section ref="qml-io-genesisx-orm-commandcontroller-members.html" title="List of all members"/>
-                    </section>
-                    <section ref="qml-io-genesisx-orm-connectioncontroller.html" title="ConnectionController Type Reference">
-                        <section ref="qml-io-genesisx-orm-connectioncontroller-members.html" title="List of all members"/>
-                    </section>
-                </section>
+                <section ref="io-genesisx-orm-qmlmodule.html" title="Orm"/>
             </section>
         </toc>
         <keywords>
@@ -71,12 +64,6 @@
             <keyword name="Cast" id="cast::Cast" ref="gx-app-cast-cast.html"/>
             <keyword name="Cast" id="QML.Cast" ref="qml-io-genesisx-app-cast.html"/>
             <keyword name="Cast" id="QML.io.genesisx.app.Cast" ref="qml-io-genesisx-app-cast.html"/>
-            <keyword name="CommandController" id="orm::CommandController" ref="gx-orm-commandcontroller.html"/>
-            <keyword name="CommandController" id="QML.CommandController" ref="qml-io-genesisx-orm-commandcontroller.html"/>
-            <keyword name="CommandController" id="QML.io.genesisx.orm.CommandController" ref="qml-io-genesisx-orm-commandcontroller.html"/>
-            <keyword name="ConnectionController" id="orm::ConnectionController" ref="gx-orm-connectioncontroller.html"/>
-            <keyword name="ConnectionController" id="QML.ConnectionController" ref="qml-io-genesisx-orm-connectioncontroller.html"/>
-            <keyword name="ConnectionController" id="QML.io.genesisx.orm.ConnectionController" ref="qml-io-genesisx-orm-connectioncontroller.html"/>
             <keyword name="GXAds" id="ads::GXAds" ref="gx-app-ads-gxads.html"/>
             <keyword name="Genesis-X App C++ Classes" id="Genesis-X App C++ Classes" ref="app-classes.html"/>
             <keyword name="Genesis-X Assets" id="Genesis-X Assets" ref="assets.html"/>
@@ -88,8 +75,6 @@
             <keyword name="GenesisX.App.Biometrics" id="QML.Biometrics.App.GenesisX" ref="genesisx-app-biometrics-qmlmodule.html"/>
             <keyword name="GenesisX.Background" id="QML.Background.GenesisX" ref="genesisx-background-qmlmodule.html"/>
             <keyword name="GenesisX.Cast" id="QML.Cast.GenesisX" ref="genesisx-cast-qmlmodule.html"/>
-            <keyword name="GenesisX.CommandController" id="QML.CommandController.GenesisX" ref="genesisx-commandcontroller-qmlmodule.html"/>
-            <keyword name="GenesisX.ConnectionController" id="QML.ConnectionController.GenesisX" ref="genesisx-connectioncontroller-qmlmodule.html"/>
             <keyword name="GenesisX.Navigation" id="QML.Navigation.GenesisX" ref="genesisx-navigation-qmlmodule.html"/>
             <keyword name="GenesisX.Notifications" id="QML.Notifications.GenesisX" ref="genesisx-notifications-qmlmodule.html"/>
             <keyword name="GenesisX.Permissions" id="QML.Permissions.GenesisX" ref="genesisx-permissions-qmlmodule.html"/>
@@ -130,12 +115,6 @@
             <keyword name="canScheduleExactAlarms" id="Permissions::canScheduleExactAlarms" ref="qml-io-genesisx-app-permissions.html#canScheduleExactAlarms-method"/>
             <keyword name="cast" id="app::cast" ref="gx-app-cast.html"/>
             <keyword name="clearRoutes" id="Router::clearRoutes" ref="qml-io-genesisx-core-router.html#clearRoutes-method"/>
-            <keyword name="cmdLogin" id="CommandController::cmdLogin" ref="qml-io-genesisx-orm-commandcontroller.html#cmdLogin-method"/>
-            <keyword name="cmdPing" id="CommandController::cmdPing" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPing-method"/>
-            <keyword name="cmdPostJson" id="CommandController::cmdPostJson" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPostJson-method"/>
-            <keyword name="cmdPostJsonBoolAsync" id="CommandController::cmdPostJsonBoolAsync" ref="qml-io-genesisx-orm-commandcontroller.html#cmdPostJsonBoolAsync-method"/>
-            <keyword name="cmdRegister" id="CommandController::cmdRegister" ref="qml-io-genesisx-orm-commandcontroller.html#cmdRegister-method"/>
-            <keyword name="codegen" id="orm::codegen" ref="gx-orm-codegen.html"/>
             <keyword name="core" id="gx::core" ref="gx-core.html"/>
             <keyword name="currentChanged" id="Router::currentChanged" ref="qml-io-genesisx-core-router.html#currentChanged-signal"/>
             <keyword name="currentComponent" id="Router::currentComponent" ref="qml-io-genesisx-core-router.html#currentComponent-prop"/>
@@ -164,12 +143,10 @@
             <keyword name="openAppSettings" id="Permissions::openAppSettings" ref="qml-io-genesisx-app-permissions.html#openAppSettings-method"/>
             <keyword name="openDeepLink" id="Router::openDeepLink" ref="qml-io-genesisx-core-router.html#openDeepLink-method"/>
             <keyword name="openNotificationSettings" id="Permissions::openNotificationSettings" ref="qml-io-genesisx-app-permissions.html#openNotificationSettings-method"/>
-            <keyword name="orm" id="gx::orm" ref="gx-orm.html"/>
             <keyword name="permissions" id="app::permissions" ref="gx-app-permissions.html"/>
             <keyword name="registerRoute" id="Router::registerRoute" ref="qml-io-genesisx-core-router.html#registerRoute-method"/>
             <keyword name="replace" id="Router::replace" ref="qml-io-genesisx-core-router.html#replace-method"/>
             <keyword name="request" id="Permissions::request" ref="qml-io-genesisx-app-permissions.html#request-method"/>
-            <keyword name="requestFinished" id="CommandController::requestFinished" ref="qml-io-genesisx-orm-commandcontroller.html#requestFinished-signal"/>
             <keyword name="requestNotifications" id="Permissions::requestNotifications" ref="qml-io-genesisx-app-permissions.html#requestNotifications-method"/>
             <keyword name="requestScheduleExactAlarms" id="Permissions::requestScheduleExactAlarms" ref="qml-io-genesisx-app-permissions.html#requestScheduleExactAlarms-method"/>
             <keyword name="requestignoreBatteryOptimizations" id="Permissions::requestignoreBatteryOptimizations" ref="qml-io-genesisx-app-permissions.html#requestignoreBatteryOptimizations-method"/>
@@ -187,15 +164,12 @@
             <file>app-classes.html</file>
             <file>assets.html</file>
             <file>classes.html</file>
-            <file>codegen-h.html</file>
             <file>core-classes.html</file>
             <file>coreqml-h.html</file>
             <file>genesisx-ads-qmlmodule.html</file>
             <file>genesisx-app-biometrics-qmlmodule.html</file>
             <file>genesisx-background-qmlmodule.html</file>
             <file>genesisx-cast-qmlmodule.html</file>
-            <file>genesisx-commandcontroller-qmlmodule.html</file>
-            <file>genesisx-connectioncontroller-qmlmodule.html</file>
             <file>genesisx-navigation-qmlmodule.html</file>
             <file>genesisx-notifications-qmlmodule.html</file>
             <file>genesisx-permissions-qmlmodule.html</file>
@@ -224,10 +198,6 @@
             <file>gx-core.html</file>
             <file>gx-navigation-gxrouter.html</file>
             <file>gx-navigation.html</file>
-            <file>gx-orm-codegen.html</file>
-            <file>gx-orm-commandcontroller.html</file>
-            <file>gx-orm-connectioncontroller.html</file>
-            <file>gx-orm.html</file>
             <file>gx-utils.html</file>
             <file>gx.html</file>
             <file>images/arrow.png</file>
@@ -256,10 +226,6 @@
             <file>qml-io-genesisx-core-router.html</file>
             <file>qml-io-genesisx-core-systeminfo-members.html</file>
             <file>qml-io-genesisx-core-systeminfo.html</file>
-            <file>qml-io-genesisx-orm-commandcontroller-members.html</file>
-            <file>qml-io-genesisx-orm-commandcontroller.html</file>
-            <file>qml-io-genesisx-orm-connectioncontroller-members.html</file>
-            <file>qml-io-genesisx-orm-connectioncontroller.html</file>
             <file>style/style.css</file>
             <file>systeminfo-h.html</file>
         </files>
