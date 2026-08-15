@@ -40,6 +40,7 @@ bool loadTransportConfig(const AbstractConfig &config, TransportConfig &out, con
 
                 return false;
             }
+            qDebug() << apiValue;
             const QByteArray encryptedApiPayload = QByteArray::fromBase64(apiValue.toString().toLatin1());
             if (encryptedApiPayload.isEmpty()) {
                 qCritical()
