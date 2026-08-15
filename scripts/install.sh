@@ -99,6 +99,18 @@ detect_qmake() {
     return 1
 }
 
+QMAKE_CMD="$(detect_qmake || true)"
+
+if [ -z "$QMAKE_CMD" ]; then
+    echo "Error: Could not find a working Qt 6 qmake." >&2
+    echo "Use an explicit path if necessary:" >&2
+    echo "  QMAKE_BIN=/c/Qt/6.8.x/llvm-mingw_64/bin/qmake.exe ./scripts/install.sh" >&2
+    exit 1
+fi
+
+echo "Using qmake: $QMAKE_CMD"
+"$QMAKE_CMD" -v
+
 #detect_qmake() {
 #    # 1) Explicit override
 #    if [ -n "${QMAKE_BIN:-}" ]; then
