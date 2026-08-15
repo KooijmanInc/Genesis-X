@@ -27,6 +27,11 @@ public:
     static std::optional<EncryptionResult> encrypt(const QByteArray& plaintext, const QByteArray& key, const QByteArray& context);
 
     static std::optional<QByteArray> decrypt(const EncryptionResult& encrypted, const QByteArray& key, const QByteArray& context);
+
+    static QByteArray serialize(const EncryptionResult &encrypted);
+
+    static std::optional<EncryptionResult> deserialize(const QByteArray &payload);
+
 };
 
 }

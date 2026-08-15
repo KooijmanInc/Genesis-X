@@ -6,8 +6,11 @@
 
 #include <GenesisX/Orm/Core/genesisx_orm_global.h>
 #include <GenesisX/Orm/Config/TransportConfig.h>
+// #include <GenesisX/Orm/Config/ConfigIO.h>
 
 namespace gx::orm {
+
+class ConfigIO;
 
 class GENESISX_ORM_EXPORT AbstractConfig
 {
@@ -16,6 +19,18 @@ public:
     virtual ~AbstractConfig() = default;
 
     [[nodiscard]] virtual GXOrm::Backend backend() const = 0;
+    [[nodiscard]] virtual QByteArray configurationPayload() const = 0;
+    [[nodiscard]] virtual QByteArray configurationContext() const = 0;
+
+private:
+    [[nodiscard]] virtual QByteArray configurationKey() const = 0;
+
+    friend QByteArray configKey(const AbstractConfig &config);
+    // friend bool loadTransportConfig(
+    //     const AbstractConfig &config,
+    //     TransportConfig &out,
+    //     const QString &language
+    //     );
 };
 
 }

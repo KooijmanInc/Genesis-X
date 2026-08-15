@@ -28,6 +28,14 @@ bool ProjectConfig::loadConfigurationPayload()
             "{\n"
             "public:\n"
             "    GXOrm::Backend backend() const override;\n\n"
+            "    QByteArray configurationPayload() const override\n"
+            "    {\n"
+            "        return m_configurationPayload;\n"
+            "    }\n\n"
+            "    QByteArray configurationContext() const override\n"
+            "    {\n"
+            "        return QByteArrayLiteral(\"Genesis-X|AgeGap|schema=1\");\n"
+            "    }\n\n"
             "private:\n"
             "};\n\n"
             "#endif // CONFIGOLD_H"
@@ -83,55 +91,139 @@ bool ProjectConfig::createConfigurationPayload(const QString& currentContent)
     QTextStream input(stdin);
     QTextStream output(stdout);
     QByteArray byte;
-    const QByteArray context = "Genesis-X|AgeGap|schema=1";
+    // const QByteArray context = "Genesis-X|AgeGap|schema=1";
 
-    const QByteArray key = gx::orm::crypto::ConfigCrypto::generateKey();
+    // const QByteArray key = gx::orm::crypto::ConfigCrypto::generateKey();
+
+    const QByteArray context =
+        QByteArrayLiteral(
+            "Genesis-X|AgeGap|schema=1"
+            );
+
+    const QByteArray key =
+        gx::orm::crypto::ConfigCrypto::generateKey();
+
+    auto encryptAndEncode =
+        [&key, &context](
+            const QByteArray &plaintext
+            ) -> std::optional<QString> {
+        const auto encrypted =
+            gx::orm::crypto::ConfigCrypto::encrypt(
+                plaintext,
+                key,
+                context
+                );
+
+        if (!encrypted.has_value()) {
+            return std::nullopt;
+        }
+
+        const QByteArray payload =
+            gx::orm::crypto::ConfigCrypto::serialize(
+                *encrypted
+                );
+
+        return QString::fromLatin1(
+            payload.toBase64()
+            );
+    };
 
     output << "--- Setup configuration payload ---\n";
     output << "-- Set http settings\n" << Qt::flush;
 
     byte = jsonHelper.getByteArrayFromJsonObject(api());
-    const auto apiBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
-    base.insert("api", QString::fromLatin1(apiBytes->ciphertext.toBase64()));
+    // const auto apiBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
+    const auto apiBytes = encryptAndEncode(byte);
+    base.insert("api", *apiBytes);
+    // base.insert("api", QString::fromLatin1(apiBytes->ciphertext.toBase64()));
 
     output << "-- Set sql settings\n" << Qt::flush;
     byte.clear();
     byte = jsonHelper.getByteArrayFromJsonObject(sql());
-    const auto sqlBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
-    base.insert("sql", QString::fromLatin1(sqlBytes->ciphertext.toBase64()));
+    const auto sqlBytes = encryptAndEncode(byte);
+    base.insert("sql", *sqlBytes);
+    // const auto sqlBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
+    // base.insert("sql", QString::fromLatin1(sqlBytes->ciphertext.toBase64()));
 
     output << Qt::flush << "-- Set http settings for staging\n" << Qt::flush;
     byte.clear();
     byte = jsonHelper.getByteArrayFromJsonObject(api(true));
-    const auto apiStagingBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
-    staging.insert("api", QString::fromLatin1(apiStagingBytes->ciphertext.toBase64()));
+    const auto apiStagingBytes = encryptAndEncode(byte);
+    staging.insert("api", *apiStagingBytes);
+    // const auto apiStagingBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
+    // staging.insert("api", QString::fromLatin1(apiStagingBytes->ciphertext.toBase64()));
     output << "-- Set sql settings for staging\n" << Qt::flush;
     byte.clear();
     byte = jsonHelper.getByteArrayFromJsonObject(sql(true));
-    const auto sqlStagingBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
-    staging.insert("sql", QString::fromLatin1(sqlStagingBytes->ciphertext.toBase64()));
+    const auto sqlStagingBytes = encryptAndEncode(byte);
+    staging.insert("sql", *sqlStagingBytes);
+    // const auto sqlStagingBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
+    // staging.insert("sql", QString::fromLatin1(sqlStagingBytes->ciphertext.toBase64()));
 
     overrides.insert("staging", staging);
 
     output << Qt::flush << "-- Set  http settings for development\n" << Qt::flush;
     byte.clear();
     byte = jsonHelper.getByteArrayFromJsonObject(api(true));
-    const auto apiDevBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
-    dev.insert("api", QString::fromLatin1(apiDevBytes->ciphertext.toBase64()));
+    const auto apiDevBytes = encryptAndEncode(byte);
+    dev.insert("api", *apiDevBytes);
+    // const auto apiDevBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
+    // dev.insert("api", QString::fromLatin1(apiDevBytes->ciphertext.toBase64()));
     output << "-- Set sql settings for development\n" << Qt::flush;
     byte.clear();
     byte = jsonHelper.getByteArrayFromJsonObject(sql(true));
-    const auto sqlDevBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
-    dev.insert("sql", QString::fromLatin1(sqlDevBytes->ciphertext.toBase64()));
+    const auto sqlDevBytes = encryptAndEncode(byte);
+    dev.insert("api", *sqlDevBytes);
+    // const auto sqlDevBytes = gx::orm::crypto::ConfigCrypto::encrypt(byte, key, context);
+    // dev.insert("sql", QString::fromLatin1(sqlDevBytes->ciphertext.toBase64()));
 
     overrides.insert("dev", dev);
 
     base.insert("overrides", overrides);
 
-    const QString property = QString(
+    // const QString property = QString(
+    //     "\n"
+    //     "    QByteArray m_configurationPayload = R\"GX(%1)GX\";\n"
+    // ).arg(jsonHelper.getByteArrayFromJsonObject(base));
+    // const QString encodedKey =
+    //     QString::fromLatin1(
+    //         key.toBase64()
+    //         );
+    // const QString pKey = QString(
+    //     "\n\n"
+    //     "    QByteArray m_configurationKey = QByteArrayLiteral(\"%1\");"
+    // ).arg(key);
+
+    const QString encodedKey =
+        QString::fromLatin1(
+            key.toBase64()
+            );
+
+    const QString encodedPayload =
+        QString::fromUtf8(
+            jsonHelper.getByteArrayFromJsonObject(
+                base
+                )
+            );
+
+    const QString properties = QString(
         "\n"
-        "    QByteArray m_configurationPayload = R\"GX(%1)GX\";\n"
-    ).arg(jsonHelper.getByteArrayFromJsonObject(base));
+        "    QByteArray configurationKey() const override\n"
+        "    {\n"
+        "        return QByteArray::fromBase64(\n"
+        "            m_configurationKey\n"
+        "        );\n"
+        "    }\n"
+        "\n"
+        "    const QByteArray m_configurationKey =\n"
+        "        QByteArrayLiteral(\"%1\");\n"
+        "\n"
+        "    const QByteArray m_configurationPayload =\n"
+        "        R\"GX(%2)GX\";\n"
+        ).arg(
+            encodedKey,
+            encodedPayload
+            );
 
     QString updatedContent = currentContent;
 
@@ -142,7 +234,7 @@ bool ProjectConfig::createConfigurationPayload(const QString& currentContent)
         const qsizetype insertionPosition =
             privatePosition + QStringLiteral("private:").size();
 
-        updatedContent.insert(insertionPosition, property);
+        updatedContent.insert(insertionPosition, properties);
     } else {
         const qsizetype classEnd = updatedContent.lastIndexOf("};");
 
@@ -154,7 +246,7 @@ bool ProjectConfig::createConfigurationPayload(const QString& currentContent)
 
         updatedContent.insert(
             classEnd,
-            QString("\nprivate:%1").arg(property)
+            QString("\nprivate:%1").arg(properties)
             );
     }
 
