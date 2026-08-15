@@ -99,17 +99,19 @@ detect_qmake() {
     return 1
 }
 
-QMAKE_CMD="$(detect_qmake || true)"
-
-if [ -z "$QMAKE_CMD" ]; then
-    echo "Error: Could not find a working Qt 6 qmake." >&2
-    echo "Use an explicit path if necessary:" >&2
-    echo "  QMAKE_BIN=/c/Qt/6.8.x/llvm-mingw_64/bin/qmake.exe ./scripts/install.sh" >&2
+if command -v mingw32-make.exe >/dev/null 2>&1; then
+    MAKE_CMD="$(command -v mingw32-make.exe)"
+elif command -v mingw32-make >/dev/null 2>&1; then
+    MAKE_CMD="$(command -v mingw32-make)"
+elif command -v make >/dev/null 2>&1; then
+    MAKE_CMD="$(command -v make)"
+else
+    echo "Error hiho: Could not find a compatible make command." >&2
     exit 1
 fi
 
-echo "Using qmake: $QMAKE_CMD"
-"$QMAKE_CMD" -v
+echo "Using make: $MAKE_CMD"
+"$MAKE_CMD" --version
 
 #detect_qmake() {
 #    # 1) Explicit override
