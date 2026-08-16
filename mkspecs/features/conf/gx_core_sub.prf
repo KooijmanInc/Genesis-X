@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-isEmpty(GX_SO) {message(and arrived here????)
+isEmpty(GX_SO) {
     GX_SO = $$shell_path($$LIBDIRS/libgenesisx_$${GX_ABI}.so)
     GX_SO_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_$${GX_ABI}.so)
 
@@ -27,6 +27,7 @@ isEmpty(GX_SO) {message(and arrived here????)
     # Copy Gradle include into the app's android/ dir
     GX_ANDROID_GRADLE_SRC = $$clean_path($$GENESISX_BUILD_ROOT/core/android-template)
     GX_ANDROID_GRADLE_DST = $$GENESISX_APP_ROOT/android
+    message($$GX_ANDROID_GRADLE_DST togh!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!)
 
     GX_GSERV_SRC =
     exists($$GX_ANDROID_GRADLE_DST/google-services.json) {

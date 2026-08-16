@@ -53,17 +53,73 @@ win32 {
 
 # ORM links to core; search same central dir
 QMAKE_LIBDIR += $$DESTDIR
+# android {
+#     ANDROID_OPENSSL_ROOT = D:/Android/Sdk/android_openssl
+
+#     INCLUDEPATH += $$ANDROID_OPENSSL_ROOT/ssl_3/include
+
+#     contains(QT_ARCH, arm64-v8a) {
+#         LIBS += -lgenesisx_arm64-v8a
+#         # LIBS += -L$$ANDROID_OPENSSL_ROOT/ssl_3/arm64-v8a -lcrypto
+#         # LIBS += -L$$ANDROID_OPENSSL_ROOT/ssl_3/arm64-v8a -lcrypto_3
+#         OPENSSL_CRYPTO = \
+#                 $$ANDROID_OPENSSL_ROOT/ssl_3/arm64-v8a/libcrypto_3.so
+#     } else: contains(QT_ARCH, x86_64) {
+#         LIBS += -lgenesisx_x86_64
+#         # LIBS += -L$$ANDROID_OPENSSL_ROOT/ssl_3/x86_64 -lcrypto
+#         # LIBS += -L$$ANDROID_OPENSSL_ROOT/ssl_3/x86_64 -lcrypto_3
+#         OPENSSL_CRYPTO = \
+#                 $$ANDROID_OPENSSL_ROOT/ssl_3/x86_64/libcrypto_3.so
+#     }
+#     !exists($$OPENSSL_CRYPTO) {
+#         message([genesisx_orm] OpenSSL crypto library not found: $$OPENSSL_CRYPTO)
+#     }
+#     LIBS += $$OPENSSL_CRYPTO
+
+#     # exists($$ANDROID_OPENSSL_ROOT/openssl.pri) {
+#     #     include($$ANDROID_OPENSSL_ROOT/openssl.pri)
+#     #     message([genesisx_orm] Android OpenSSL: $$ANDROID_OPENSSL_ROOT)
+#     # } else {
+#     #     error([genesisx_orm] Android OpenSSL not found at $$ANDROID_OPENSSL_ROOT)
+#     # }
 android {
+    ANDROID_OPENSSL_ROOT = D:/Android/Sdk/android_openssl
+
+    OPENSSL_INCLUDE_DIR = \
+        $$ANDROID_OPENSSL_ROOT/ssl_3/include
+
+    !exists($$OPENSSL_INCLUDE_DIR/openssl/evp.h) {
+        error([genesisx_orm] OpenSSL headers not found: $$OPENSSL_INCLUDE_DIR)
+    }
+
+    INCLUDEPATH += $$OPENSSL_INCLUDE_DIR
+
     contains(QT_ARCH, arm64-v8a) {
         LIBS += -lgenesisx_arm64-v8a
+
+        OPENSSL_CRYPTO = \
+            $$ANDROID_OPENSSL_ROOT/ssl_3/arm64-v8a/libcrypto_3.so
     } else: contains(QT_ARCH, x86_64) {
         LIBS += -lgenesisx_x86_64
+
+        OPENSSL_CRYPTO = \
+            $$ANDROID_OPENSSL_ROOT/ssl_3/x86_64/libcrypto_3.so
+    } else {
+        error([genesisx_orm] Unsupported Android architecture: $$QT_ARCH)
     }
+
+    !exists($$OPENSSL_CRYPTO) {
+        error([genesisx_orm] OpenSSL crypto library not found: $$OPENSSL_CRYPTO)
+    }
+
+    LIBS += $$quote($$OPENSSL_CRYPTO)
+
+    message([genesisx_orm] OpenSSL crypto library: $$OPENSSL_CRYPTO)
 } else {
     LIBS += -lgenesisx
 }
 
-linux {
+linux:!android {
     LIBS += -lcrypto
 }
 

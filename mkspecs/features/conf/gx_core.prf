@@ -43,6 +43,7 @@
     }
 
     contains(QMAKE_PLATFORM, android) {
+        GX_ANDROID_GRADLE_DST = $$GENESISX_BUILD_ROOT/android
         GX_SO = $$shell_path($$LIBDIRS/libgenesisx_$${GX_ABI}.so)
         GX_SO_DEST = $$shell_path($$DEST_LIBDIRS/libgenesisx_$${GX_ABI}.so)
 
@@ -65,9 +66,7 @@
             }
         }
 
-        # message(hiho in setting all $$GX_ANDROID_GRADLE_DST)
-
-        !isEmpty(GX_ANDROID_GRADLE_DST) {message(has gradle?? $$GX_ANDROID_GRADLE_DST)
+        !isEmpty(GX_ANDROID_GRADLE_DST) {
             # Copy Gradle include into the app's android/ dir
             GX_ANDROID_GRADLE_SRC = $$clean_path($$GENESISX_BUILD_ROOT/core/android-template)
             GX_ANDROID_GRADLE_DST = $$GENESISX_APP_ROOT/android
@@ -95,12 +94,14 @@
             GX_ANDROID_GRADLE_DST = $$shell_path($$GX_ANDROID_GRADLE_DST)
             GX_GSERV_SRC = $$shell_path($$GX_GSERV_SRC)
             GX_GSERV_DST = $$shell_path($$GX_GSERV_DST)
+            GX_GAFEST_SRC = $$shell_path($$GX_GAFEST_SRC)
+            GX_GAFEST_DST = $$shell_path($$GX_GAFEST_DST)
             GX_GBUILD_SRC = $$shell_path($$GX_GBUILD_SRC)
             GX_GBUILD_DST = $$shell_path($$GX_GBUILD_DST)
             GX_GPROPERTIES_SRC = $$shell_path($$GX_GPROPERTIES_SRC)
             GX_GPROPERTIES_DST = $$shell_path($$GX_GPROPERTIES_DST)
 
-            if (!exists($$GX_ANDROID_GRADLE_DST)) {message(why here in create mkdir????? $$GX_ANDROID_GRADLE_DST)
+            if (!exists($$GX_ANDROID_GRADLE_DST)) {
                 QMAKE_PRE_LINK += \
                     $$escape_expand(\\n\\t)$(MKDIR) $$shell_quote($$GX_ANDROID_GRADLE_DST)
             }
