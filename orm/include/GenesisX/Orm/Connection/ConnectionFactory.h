@@ -32,6 +32,8 @@ public:
     HttpConnection* http() const;
     SqlConnection* sql() const;
 
+    void clear();
+
 private:
     ConnectionFactory() = default;
     ~ConnectionFactory() = default;

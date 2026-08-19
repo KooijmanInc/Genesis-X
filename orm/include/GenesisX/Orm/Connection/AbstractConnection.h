@@ -21,6 +21,8 @@ public:
     ~AbstractConnection() override = default;
 
     virtual QFuture<ConnectionResult> ping() = 0;
+
+    // virtual QFuture<ConnectionResult> execute(const QString& statement, const QVariantMap& bindings = {}, bool select = true) = 0;
 };
 
 }

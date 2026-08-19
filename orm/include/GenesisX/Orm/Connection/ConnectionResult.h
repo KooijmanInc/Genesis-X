@@ -11,6 +11,12 @@
 
 namespace gx::orm {
 
+struct QueryResult
+{
+    QStringList columns;
+    std::vector<QVariantMap> rows;
+};
+
 struct GENESISX_ORM_EXPORT ConnectionResult
 {
     Backend backend = Backend::Http;
@@ -18,6 +24,8 @@ struct GENESISX_ORM_EXPORT ConnectionResult
     int latencyMs = -1;
     int statusCode = 0;
     QString message;
+
+    QueryResult result = {};
 };
 
 }

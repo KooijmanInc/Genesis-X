@@ -12,12 +12,46 @@
 
 #include <QString>
 
+#include <cstdint>
+
 namespace gx::orm {
 
 struct TransportConfig;
 
-GENESISX_ORM_EXPORT bool loadTransportConfig(const AbstractConfig& config, TransportConfig& out, const QString& env = "prod", const QString& language = "");
+enum class Env
+{
+    Production,
+    Staging,
+    Development
+};
 
+enum class Authentication
+{
+    None,
+    UsernamePassword,
+    Certificate
+};
+
+struct DatabaseConnection
+{
+    std::string name;
+    std::string engine;
+    std::string driver;
+    std::string host;
+    std::uint16_t port = 3306;
+    std::string user;
+    std::string pass;
+    std::string charset;
+    std::string ca;
+    std::string client;
+    std::string key;
+    Authentication authentication;
+};
+
+GENESISX_ORM_EXPORT bool loadTransportConfig(const AbstractConfig* config, TransportConfig& out, const Env& env = Env::Production, const QString& language = "");
+
+GENESISX_ORM_EXPORT void setBackend(const GXOrm::Backend& backend);
+GENESISX_ORM_EXPORT void setConnections(const DatabaseConnection& connection);
 // Json jsonHelper;
 
 }

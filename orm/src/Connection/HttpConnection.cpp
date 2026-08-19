@@ -4,6 +4,9 @@
 #include <GenesisX/Orm/Connection/HttpConnection.h>
 #include <GenesisX/Orm/Connection/HttpRequestState.h>
 
+#include <QtConcurrent>
+#include <QMultiHash>
+
 // #include <QElapsedTimer>
 // #include <QNetworkReply>
 // #include <QNetworkRequest>
@@ -33,6 +36,19 @@ QFuture<ConnectionResult> gx::orm::HttpConnection::ping()
             };
         });
 }
+
+// QFuture<ConnectionResult> HttpConnection::execute(const QString &statement, const QVariantMap &bindings)
+// {
+//     return QtConcurrent::run(
+//         [statement, bindings]() -> ConnectionResult
+//         {
+//             return {
+//                 .successful = true,
+//                 .statusCode = 0,
+//                 .message = "HTTP execution successful"
+//             };
+//         });
+// }
 
 QUrl HttpConnection::resolveUrl(const QString &path) const
 {
@@ -71,6 +87,7 @@ QFuture<HttpResponse> HttpConnection::get(const QString &path)
 
     if (!url.isValid()) {
         state->promise.addResult(HttpResponse{
+            .body = "",
             .errorString = QStringLiteral("Invalid request URL"),
         });
 

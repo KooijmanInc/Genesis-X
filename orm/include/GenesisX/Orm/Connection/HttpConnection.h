@@ -22,6 +22,8 @@ public:
 
     QFuture<ConnectionResult> ping() override;
 
+    // QFuture<ConnectionResult> execute(const QString& statement, const QVariantMap& bindings = {}) override;
+
 private:
     QUrl resolveUrl(const QString &path) const;
     QFuture<HttpResponse> get(const QString& path);

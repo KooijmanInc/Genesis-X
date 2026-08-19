@@ -25,7 +25,7 @@ public:
 private:
     [[nodiscard]] virtual QByteArray configurationKey() const = 0;
 
-    friend QByteArray configKey(const AbstractConfig &config);
+    friend QByteArray configKey(const AbstractConfig *config);
     // friend bool loadTransportConfig(
     //     const AbstractConfig &config,
     //     TransportConfig &out,

@@ -34,6 +34,8 @@ void gx::orm::ConnectionFactory::configure(const TransportConfig &config)
         m_http = std::make_unique<HttpConnection>(config.http);
         m_sql = std::make_unique<SqlConnection>(config.sql);
         break;
+    case Backend::None:
+        break;
     }
 }
 
@@ -64,4 +66,10 @@ HttpConnection *ConnectionFactory::http() const
 SqlConnection *ConnectionFactory::sql() const
 {
     return m_sql.get();
+}
+
+void ConnectionFactory::clear()
+{
+    m_sql.reset();
+    m_http.reset();
 }

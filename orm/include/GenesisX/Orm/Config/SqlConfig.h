@@ -15,7 +15,11 @@ struct GENESISX_ORM_EXPORT SqlConfig
     QString host;
     int port;
     QString user;
-    QString password;
+    QString pass;
+    QString charset;
+    QString ca;
+    QString client;
+    QString key;
 };
 
 }
