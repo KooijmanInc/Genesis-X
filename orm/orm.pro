@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: (LicenseRef-KooijmanInc-Commercial OR GPL-3.0-only)
 # Copyright (c) 2025 Kooijman Incorporate Holding B.V.
 
-QT += network sql
+QT += network sql concurrent
 
 TEMPLATE = lib
 TARGET = genesisx_orm

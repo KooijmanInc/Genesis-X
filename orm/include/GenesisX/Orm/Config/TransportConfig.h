@@ -13,7 +13,8 @@ namespace gx::orm {
 enum class Backend : quint8 {
     Http,
     Sql,
-    Synchronized
+    Synchronized,
+    None
 };
 
 struct GENESISX_ORM_EXPORT TransportConfig {
