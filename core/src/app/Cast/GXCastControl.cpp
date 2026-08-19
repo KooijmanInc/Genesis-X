@@ -3,6 +3,7 @@
 
 #include "GXCastControl.h"
 
+#include <QJsonDocument>
 #include <QCoreApplication>
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
